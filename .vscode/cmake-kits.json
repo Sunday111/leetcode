@@ -1,0 +1,10 @@
+[
+    {
+        "name": "LLVM from sources, main",
+        "compilers": {
+            "c": "/home/sunday/llvm/llvm-install/bin/clang",
+            "cxx": "/home/sunday/llvm/llvm-install/bin/clang++"
+        },
+        "toolchainFile": "/home/sunday/llvm/generated/llvm-toolchain.cmake"
+    }
+]

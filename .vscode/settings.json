@@ -1,0 +1,27 @@
+{
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.path": "/home/sunday/llvm/llvm-install/bin/clangd",
+    "clang-format.executable": "/home/sunday/llvm/llvm-install/bin/clang-format",
+
+    "[cpp]": {
+        "editor.formatOnSave": true,
+    },
+
+    // CMake
+    "cmake.configureOnEdit": true,
+    "cmake.generator": "Ninja",
+
+    // Python
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true
+    },
+    "black-formatter.args": [
+        "--line-length", "120", "--target-version", "py36"
+    ],
+
+    // JSON
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    }
+}
