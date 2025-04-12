@@ -53,3 +53,4 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googlebench)
 
 add_subdirectory(code/001_two_sum)
+add_subdirectory(code/680_valid_palindrome)
