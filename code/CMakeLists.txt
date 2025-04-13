@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-add_subdirectory(953_verifying_an_alien_dictionary)
-add_subdirectory(680_valid_palindrome)
+add_subdirectory(0953_verifying_an_alien_dictionary)
+add_subdirectory(0680_valid_palindrome)
 add_subdirectory(1249_minimum_remove_to_make_valid_parentheses)
-add_subdirectory(001_two_sum)
+add_subdirectory(0001_two_sum)

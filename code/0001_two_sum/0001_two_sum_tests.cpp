@@ -1,7 +1,7 @@
-#include "001_two_sum.hpp"
+#include "0001_two_sum.hpp"
 #include "gtest/gtest.h"
 
-TEST(s001_two_sum, test_1)
+TEST(s0001_two_sum, test_1)
 {
     Solution s{};
 
@@ -10,7 +10,7 @@ TEST(s001_two_sum, test_1)
     ASSERT_EQ(s.twoSum(input, 9), expected);
 }
 
-TEST(s001_two_sum, test_2)
+TEST(s0001_two_sum, test_2)
 {
     Solution s{};
 
@@ -19,7 +19,7 @@ TEST(s001_two_sum, test_2)
     ASSERT_EQ(s.twoSum(input, 6), expected);
 }
 
-TEST(s001_two_sum, test_3)
+TEST(s0001_two_sum, test_3)
 {
     Solution s{};
 
