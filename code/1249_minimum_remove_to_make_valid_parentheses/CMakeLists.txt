@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.25)
+
+include(set_compiler_options)
+
+add_executable(1249_minimum_remove_to_make_valid_parentheses_tests
+    1249_minimum_remove_to_make_valid_parentheses.hpp
+    1249_minimum_remove_to_make_valid_parentheses_tests.cpp
+)
+
+target_link_libraries(1249_minimum_remove_to_make_valid_parentheses_tests PUBLIC gtest_main)
+set_generic_compiler_options(1249_minimum_remove_to_make_valid_parentheses_tests PUBLIC)
+
+enable_testing()
+include(GoogleTest)
+gtest_discover_tests(1249_minimum_remove_to_make_valid_parentheses_tests)
