@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
 
+add_subdirectory(953_verifying_an_alien_dictionary)
 add_subdirectory(680_valid_palindrome)
 add_subdirectory(001_two_sum)
