@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 add_subdirectory(0238_product_of_array_except_self)
+add_subdirectory(0301_remove_invalid_parentheses)
 add_subdirectory(0973_k_closest_points_to_origin)
 add_subdirectory(0953_verifying_an_alien_dictionary)
 add_subdirectory(1249_minimum_remove_to_make_valid_parentheses)
