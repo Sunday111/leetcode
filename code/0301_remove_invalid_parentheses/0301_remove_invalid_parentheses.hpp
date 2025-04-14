@@ -80,6 +80,7 @@ public:
     constexpr static void impl(
         const std::string_view& str,
         const Bitset& view,
+        Bitset iter,
         uint8_t l,
         uint8_t r,
         std::unordered_set<Bitset>& results)
@@ -91,8 +92,6 @@ public:
         }
 
         std::optional<char> prev_char;
-
-        auto iter = view;
 
         uint8_t i = 0;
 
@@ -122,14 +121,16 @@ public:
 
             // Discard if number of orphaned symbols does not improve
             auto [l2, r2] = countOrphans(str, alt);
-            if ((l2 < l || r2 < r)) impl(str, alt, l2, r2, results);
+            if ((l2 < l || r2 < r)) impl(str, alt, iter, l2, r2, results);
         }
     }
 
     [[nodiscard]] static constexpr std::vector<std::string>
     removeInvalidParentheses(std::string_view s)
     {
-        Bitset view = ~Bitset{};
+        Bitset view;
+        for (uint8_t i = 0; i != s.size(); ++i) view[i] = true;
+
         // Remove leading ')'
         [&]
         {
@@ -168,7 +169,7 @@ public:
 
         std::unordered_set<Bitset> views;
         auto [l, r] = countOrphans(s, view);
-        impl(s, view, l, r, views);
+        impl(s, view, view, l, r, views);
 
         return std::ranges::to<std::vector>(
             views | std::views::transform([&](const Bitset& view)
