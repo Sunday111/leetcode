@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
+add_subdirectory(0560_subarray_sum_equals_k)
 add_subdirectory(0238_product_of_array_except_self)
 add_subdirectory(0301_remove_invalid_parentheses)
 add_subdirectory(0973_k_closest_points_to_origin)
