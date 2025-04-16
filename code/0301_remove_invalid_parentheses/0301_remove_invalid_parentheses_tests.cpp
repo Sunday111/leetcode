@@ -53,3 +53,27 @@ TEST(t0301_remove_invalid_parentheses, test_5)
 
     ASSERT_EQ(result, expected);
 }
+
+TEST(t0301_remove_invalid_parentheses, test_6)
+{
+    Solution s{};
+    std::vector<std::string> expected{"()(()m)"};
+    std::ranges::sort(expected);
+
+    auto result = s.removeInvalidParentheses("()(()m)");
+    std::ranges::sort(result);
+
+    ASSERT_EQ(result, expected);
+}
+
+TEST(t0301_remove_invalid_parentheses, test_7)
+{
+    Solution s{};
+    std::vector<std::string> expected{"()(()m)"};
+    std::ranges::sort(expected);
+
+    auto result = s.removeInvalidParentheses("())(((()m)(");
+    std::ranges::sort(result);
+
+    ASSERT_EQ(result, expected);
+}
