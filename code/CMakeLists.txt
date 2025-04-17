@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 add_subdirectory(0273_integer_to_english_words)
+add_subdirectory(0124_binary_tree_maximum_path_sum)
 add_subdirectory(0560_subarray_sum_equals_k)
 add_subdirectory(0238_product_of_array_except_self)
 add_subdirectory(0301_remove_invalid_parentheses)
