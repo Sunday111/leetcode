@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.25)
+
+include(set_compiler_options)
+
+add_executable(0297_srialize_and_desrialize_binary_tree_tests
+    0297_srialize_and_desrialize_binary_tree.hpp
+    0297_srialize_and_desrialize_binary_tree_tests.cpp
+)
+
+target_link_libraries(0297_srialize_and_desrialize_binary_tree_tests PUBLIC gtest_main)
+set_generic_compiler_options(0297_srialize_and_desrialize_binary_tree_tests PUBLIC)
+
+enable_testing()
+include(GoogleTest)
+gtest_discover_tests(0297_srialize_and_desrialize_binary_tree_tests)
