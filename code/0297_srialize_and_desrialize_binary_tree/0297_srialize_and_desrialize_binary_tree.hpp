@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cassert>
-#include <optional>
 #include <queue>
 #include <sstream>
 
@@ -23,43 +22,43 @@ public:
 
         std::queue<TreeNode*> queue;
         std::stringstream s;
-        s << root->val;
 
-        queue.push(root);
-
-        size_t none_counter = 0;
-
-        auto write_node = [&](TreeNode* node)
+        auto handle_node = [&](TreeNode* node)
         {
-            if (node)
-            {
-                if (none_counter)
-                {
-                    s << ',';
-                    s << none_counter;
-                    s << 'x';
-                    none_counter = 0;
-                }
+            s << node->val;
 
-                s << ',';
-                s << node->val;
-            }
-            else
+            switch (static_cast<int>(node->left != nullptr) << 1 |
+                    static_cast<int>(node->right != nullptr))
             {
-                ++none_counter;
+            case 0b00:
+                s << 'n';
+                break;
+
+            case 0b01:
+                s << 'r';
+                queue.push(node->right);
+                break;
+
+            case 0b10:
+                s << 'l';
+                queue.push(node->left);
+                break;
+
+            case 0b11:
+                s << 'b';
+                queue.push(node->left);
+                queue.push(node->right);
+                break;
             }
         };
 
+        handle_node(root);
+
         while (!queue.empty())
         {
-            auto node = queue.front();
+            s << ',';
+            handle_node(queue.front());
             queue.pop();
-
-            write_node(node->left);
-            if (node->left) queue.push(node->left);
-
-            write_node(node->right);
-            if (node->right) queue.push(node->right);
         }
 
         return std::move(s).str();
@@ -70,10 +69,10 @@ public:
     {
         if (data.empty()) return nullptr;
 
-        std::queue<TreeNode*> queue;
+        std::queue<std::pair<TreeNode*, char>> queue;
         size_t i = 0;
 
-        auto read_number = [&]()
+        auto read_number = [&]() -> std::pair<int, char>
         {
             int value = 0;
 
@@ -92,67 +91,58 @@ public:
                 value = value * 10 + (data[i++] - '0');
             } while (i < data.size() && std::isdigit(data[i]));
 
-            return negative ? -value : value;
+            return {negative ? -value : value, data[i++]};
         };
 
-        std::optional<size_t> current_none_block;
-
-        auto read_node_value = [&]() -> std::optional<int>
+        auto enqueue = [&](TreeNode* node, char c)
         {
-            if (current_none_block)
-            {
-                size_t& count = *current_none_block;
-                assert(count > 0);
-                if (--count == 0)
-                {
-                    current_none_block = std::nullopt;
-                }
-                return std::nullopt;
-            }
+            if (c != 'n') queue.emplace(node, c);
+        };
 
-            if (i >= data.size()) return std::nullopt;
+        auto [root_value, root_c] = read_number();
+        TreeNode* root = new TreeNode(root_value);  // NOLINT
+        enqueue(root, root_c);
 
+        while (!queue.empty())
+        {
             assert(data[i] == ',');
-            i++;
+            ++i;
 
-            int value = read_number();
-
-            if (i < data.size() && data[i] == 'x')
-            {
-                ++i;
-                assert(value > 0);
-                if (--value)
-                {
-                    current_none_block = value;
-                }
-
-                return std::nullopt;
-            }
-            else
-            {
-                return value;
-            }
-        };
-
-        TreeNode* root = new TreeNode(read_number());  // NOLINT
-
-        queue.push(root);
-
-        while (i < data.size())
-        {
-            auto node = queue.front();
+            auto [parent, parent_c] = queue.front();
             queue.pop();
 
-            if (auto opt = read_node_value())
+            switch (parent_c)
             {
-                node->left = new TreeNode(*opt);  // NOLINT
-                queue.push(node->left);
+            case 'l':
+            {
+                auto [v, c] = read_number();
+                parent->left = new TreeNode(v);  // NOLINT
+                enqueue(parent->left, c);
+                break;
             }
-
-            if (auto opt = read_node_value())
+            case 'r':
             {
-                node->right = new TreeNode(*opt);  // NOLINT
-                queue.push(node->right);
+                auto [v, c] = read_number();
+                parent->right = new TreeNode(v);  // NOLINT
+                enqueue(parent->right, c);
+                break;
+            }
+            case 'b':
+            {
+                {
+                    auto [v, c] = read_number();
+                    parent->left = new TreeNode(v);  // NOLINT
+                    enqueue(parent->left, c);
+                }
+                assert(data[i] == ',');
+                ++i;
+                {
+                    auto [v, c] = read_number();
+                    parent->right = new TreeNode(v);  // NOLINT
+                    enqueue(parent->right, c);
+                }
+                break;
+            }
             }
         }
 
