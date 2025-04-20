@@ -15,6 +15,14 @@ struct TreeNode
 class Codec
 {
 public:
+    template <typename E, typename C>
+    [[nodiscard]] static E queuePop(std::queue<E, C>& q)
+    {
+        auto value = q.front();
+        q.pop();
+        return value;
+    }
+
     // Encodes a tree to a single string.
     static std::string serialize(TreeNode* root)
     {
@@ -57,8 +65,7 @@ public:
         while (!queue.empty())
         {
             s << ',';
-            handle_node(queue.front());
-            queue.pop();
+            handle_node(queuePop(queue));
         }
 
         return std::move(s).str();
@@ -94,55 +101,43 @@ public:
             return {negative ? -value : value, data[i++]};
         };
 
-        auto enqueue = [&](TreeNode* node, char c)
+        auto make_node_and_enqueue = [&]()
         {
+            auto [value, c] = read_number();
+            TreeNode* node = new TreeNode(value);  // NOLINT
             if (c != 'n') queue.emplace(node, c);
+            return node;
         };
 
-        auto [root_value, root_c] = read_number();
-        TreeNode* root = new TreeNode(root_value);  // NOLINT
-        enqueue(root, root_c);
-
-        while (!queue.empty())
+        auto skip_comma = [&]()
         {
             assert(data[i] == ',');
             ++i;
+        };
 
-            auto [parent, parent_c] = queue.front();
-            queue.pop();
+        TreeNode* root = make_node_and_enqueue();
+
+        while (!queue.empty())
+        {
+            skip_comma();
+
+            auto [parent, parent_c] = queuePop(queue);
 
             switch (parent_c)
             {
             case 'l':
-            {
-                auto [v, c] = read_number();
-                parent->left = new TreeNode(v);  // NOLINT
-                enqueue(parent->left, c);
+                parent->left = make_node_and_enqueue();
                 break;
-            }
+
             case 'r':
-            {
-                auto [v, c] = read_number();
-                parent->right = new TreeNode(v);  // NOLINT
-                enqueue(parent->right, c);
+                parent->right = make_node_and_enqueue();
                 break;
-            }
+
             case 'b':
-            {
-                {
-                    auto [v, c] = read_number();
-                    parent->left = new TreeNode(v);  // NOLINT
-                    enqueue(parent->left, c);
-                }
-                assert(data[i] == ',');
-                ++i;
-                {
-                    auto [v, c] = read_number();
-                    parent->right = new TreeNode(v);  // NOLINT
-                    enqueue(parent->right, c);
-                }
+                parent->left = make_node_and_enqueue();
+                skip_comma();
+                parent->right = make_node_and_enqueue();
                 break;
-            }
             }
         }
 
