@@ -52,4 +52,5 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googlebench)
 
+add_subdirectory(test_utility)
 add_subdirectory(code)

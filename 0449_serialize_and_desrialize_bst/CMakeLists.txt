@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.25)
+
+include(set_compiler_options)
+
+add_executable(0449_serialize_and_desrialize_bst_tests
+    0449_serialize_and_desrialize_bst.hpp
+    0449_serialize_and_desrialize_bst_tests.cpp
+)
+
+target_link_libraries(0449_serialize_and_desrialize_bst_tests PUBLIC gtest_main)
+set_generic_compiler_options(0449_serialize_and_desrialize_bst_tests PUBLIC)
+
+enable_testing()
+include(GoogleTest)
+gtest_discover_tests(0449_serialize_and_desrialize_bst_tests)

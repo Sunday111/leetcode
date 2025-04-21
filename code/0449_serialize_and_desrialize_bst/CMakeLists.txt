@@ -2,11 +2,11 @@ cmake_minimum_required(VERSION 3.25)
 
 include(set_compiler_options)
 
-set(target_name ____problem_name_____tests)
+set(target_name 0449_serialize_and_desrialize_bst_tests)
 
 add_executable(${target_name}
-    ____problem_name____.hpp
-    ____problem_name_____tests.cpp
+    0449_serialize_and_desrialize_bst.hpp
+    0449_serialize_and_desrialize_bst_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

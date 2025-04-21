@@ -56,7 +56,7 @@ def update_projects_list():
 
     with open(file=projects_list_file, mode='wt', encoding='utf-8') as f:
         f.write('cmake_minimum_required(VERSION 3.25)\n\n')
-        for path in CODE_DIR.glob('*'):
+        for path in sorted(CODE_DIR.glob('*')):
             if path.is_dir():
                 f.write(f'add_subdirectory({path.name})\n')
 
