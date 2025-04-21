@@ -1,29 +1,32 @@
 #include "0297_srialize_and_desrialize_binary_tree.hpp"
 #include "gtest/gtest.h"
 
+bool TestCase(std::string_view s)
+{
+    return Codec::serialize(Codec::deserialize(s)) == s;
+}
+
 TEST(t0297_srialize_and_desrialize_binary_tree, test_1)
 {
-    std::println("{}", Codec::serialize(Codec::deserialize("1b,2n,3b,4n,5n")));
+    TestCase("1b,2n,3b,4n,5n");
 }
 
 TEST(t0297_srialize_and_desrialize_binary_tree, test_2)
 {
-    std::println("{}", Codec::serialize(Codec::deserialize("")));
+    TestCase("");
 }
 
 TEST(t0297_srialize_and_desrialize_binary_tree, test_3)
 {
-    std::println(
-        "{}",
-        Codec::serialize(Codec::deserialize("1b,2n,-13b,4n,5n")));
+    TestCase("1b,2n,-13b,4n,5n");
 }
 
 TEST(t0297_srialize_and_desrialize_binary_tree, test_4)
 {
-    std::println("{}", Codec::serialize(Codec::deserialize("1l,2n")));
+    TestCase("1l,2n");
 }
 
 TEST(t0297_srialize_and_desrialize_binary_tree, test_5)
 {
-    std::println("{}", Codec::serialize(Codec::deserialize("1n")));
+    TestCase("1n");
 }

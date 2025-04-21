@@ -54,3 +54,5 @@ FetchContent_MakeAvailable(googlebench)
 
 add_subdirectory(test_utility)
 add_subdirectory(code)
+
+enable_testing()
