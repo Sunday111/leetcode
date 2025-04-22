@@ -7,7 +7,7 @@ add_executable(0124_binary_tree_maximum_path_sum_tests
     0124_binary_tree_maximum_path_sum_tests.cpp
 )
 
-target_link_libraries(0124_binary_tree_maximum_path_sum_tests PUBLIC gtest_main)
+target_link_libraries(0124_binary_tree_maximum_path_sum_tests PUBLIC test_utility)
 set_generic_compiler_options(0124_binary_tree_maximum_path_sum_tests PUBLIC)
 
 enable_testing()
