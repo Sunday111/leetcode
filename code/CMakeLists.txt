@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.25)
 
 add_subdirectory(0001_two_sum)
 add_subdirectory(0124_binary_tree_maximum_path_sum)
+add_subdirectory(0199_binary_tree_right_side_view)
 add_subdirectory(0238_product_of_array_except_self)
 add_subdirectory(0273_integer_to_english_words)
 add_subdirectory(0297_srialize_and_desrialize_binary_tree)
