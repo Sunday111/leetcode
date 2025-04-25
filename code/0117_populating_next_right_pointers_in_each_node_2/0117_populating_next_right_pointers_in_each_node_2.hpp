@@ -32,36 +32,28 @@ public:
         std::queue<Node*> q;
         if (root) q.push(root);
 
+        auto enqueue = [&](Node* n)
+        {
+            if (n) q.push(n);
+        };
+
         while (!q.empty())
         {
             auto* prev = q.front();
             q.pop();
             size_t k = q.size();
 
-            if (prev->left)
+            enqueue(prev->left);
+            enqueue(prev->right);
+            for (size_t i = 0; i != k; ++i)
             {
-                q.push(prev->left);
-                q.push(prev->right);
-                for (size_t i = 0; i != k; ++i)
-                {
-                    auto* node = q.front();
-                    q.pop();
-                    q.push(node->left);
-                    q.push(node->right);
+                auto* node = q.front();
+                q.pop();
+                enqueue(node->left);
+                enqueue(node->right);
 
-                    prev->next = node;
-                    prev = node;
-                }
-            }
-            else
-            {
-                for (size_t i = 0; i != k; ++i)
-                {
-                    auto* n = q.front();
-                    q.pop();
-                    prev->next = n;
-                    prev = n;
-                }
+                prev->next = node;
+                prev = node;
             }
         }
 
