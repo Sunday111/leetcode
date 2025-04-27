@@ -49,14 +49,19 @@ function(set_generic_compiler_options target_name access)
             -Wcast-qual
             -Wzero-as-null-pointer-constant
             -Wsign-conversion # (Clang all versions, GCC >= 4.3) warn on sign conversions
+            -Wformat=2 # warn on security issues around functions that format output (ie printf)
+            -Wimplicit-fallthrough # warn on statements that fallthrough without an explicit annotation
         )
 
         if(CMAKE_CXX_COMPILER_ID STREQUAL "GCC")
             list(APPEND cpp_compile_opts
-                -Wduplicated-cond # (only in GCC >= 6.0) warn if if / else chain has duplicated conditions
-                -Wduplicated-branches # (only in GCC >= 7.0) warn if if / else branches have duplicated code
-                -Wlogical-op # (only in GCC) warn about logical operations being used where bitwise were probably wanted
+                -Wduplicated-cond # warn if if / else chain has duplicated conditions
+                -Wduplicated-branches # warn if if / else branches have duplicated code
+                -Wlogical-op # warn about logical operations being used where bitwise were probably wanted
                 -Wstrict-null-sentinel
+                -Wmisleading-indentation # warn if indentation implies blocks where blocks do not exist
+                -Wuseless-cast # warn if you perform a cast to the same type
+                -Wsuggest-override # warn if an overridden member function is not marked 'override' or 'final'
             )
         elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
             # only special branch of Clang currently but it is really helpful
