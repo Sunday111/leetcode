@@ -6,19 +6,23 @@
 #include <span>
 #include <sstream>
 
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
-template <typename BinaryTreeNode>
-bool CompareBinaryTrees(BinaryTreeNode* root_a, BinaryTreeNode* root_b)
+template <typename T>
+concept BinaryTreeNodeConcept = requires(T a, int x) {
+    // Has left and right properties convertible to pointers of the same type
+    { a.left } -> std::convertible_to<T*>;
+    { a.right } -> std::convertible_to<T*>;
+
+    // Has integral val property
+    requires std::integral<std::remove_cvref_t<decltype(a.val)>>;
+
+    // constructible from integral
+    T{x};
+};
+
+template <BinaryTreeNodeConcept TNode>
+bool CompareBinaryTrees(TNode* root_a, TNode* root_b)
 {
-    std::queue<std::pair<BinaryTreeNode*, BinaryTreeNode*>> q{{root_a, root_b}};
+    std::queue<std::pair<TNode*, TNode*>> q{{root_a, root_b}};
 
     while (!q.empty())
     {
@@ -36,49 +40,62 @@ bool CompareBinaryTrees(BinaryTreeNode* root_a, BinaryTreeNode* root_b)
     return true;
 }
 
-template <typename BinaryTreeNode>
+template <BinaryTreeNodeConcept TNode>
 struct LeetCodeBinaryTree
 {
-    std::deque<BinaryTreeNode> nodes;
-    std::vector<uint64_t> free_nodes;
-    BinaryTreeNode* root = nullptr;
+    std::deque<TNode> nodes;
+    TNode* root = nullptr;
+
+    [[nodiscard]] TNode* AllocNode(int value)
+    {
+        nodes.emplace_back(value);
+        return &nodes.back();
+    }
 
     [[nodiscard]] static LeetCodeBinaryTree FromArray(
         std::span<std::optional<int>> values)
     {
-        LeetCodeBinaryTree<BinaryTreeNode> tree;
+        LeetCodeBinaryTree<TNode> tree;
 
-        assert(!values.empty());
-        assert(values.front().has_value());
+        if (!values.front()) return tree;
 
-        tree.root = &tree.nodes.emplace_back(BinaryTreeNode{*values.front()});
-        std::vector<std::pair<BinaryTreeNode*, size_t>> queue{
-            {tree.root, 0},
+        tree.root = tree.AllocNode(*values.front());
+
+        std::vector<TNode*> queue{tree.root};
+        size_t next_value_index = 1;
+
+        auto try_assign_and_enqueue_child = [&](TNode*& child)
+        {
+            if (auto& opt = values[next_value_index])
+            {
+                child = tree.AllocNode(*opt);
+                queue.push_back(child);
+            }
         };
 
-        while (!queue.empty())
+        while (next_value_index < values.size())
         {
-            auto [node, iroot] = queue.back();
-            queue.pop_back();
+            // The number of nodes at the current tree depth
+            size_t k = queue.size();
 
-            if (size_t ileft = iroot * 2 + 1; ileft < values.size())
+            for (size_t i = 0; i != k && next_value_index < values.size(); ++i)
             {
-                if (const auto& opt = values[ileft])
+                auto node = queue[i];
+                try_assign_and_enqueue_child(node->left);
+                ++next_value_index;
+
+                if (next_value_index < values.size())
                 {
-                    node->left = &tree.nodes.emplace_back(BinaryTreeNode{*opt});
-                    queue.push_back({node->left, ileft});
+                    try_assign_and_enqueue_child(node->right);
                 }
+
+                ++next_value_index;
             }
 
-            if (size_t iright = iroot * 2 + 2; iright < values.size())
-            {
-                if (const auto& opt = values[iright])
-                {
-                    node->right =
-                        &tree.nodes.emplace_back(BinaryTreeNode{*opt});
-                    queue.push_back({node->right, iright});
-                }
-            }
+            // Erase k handled nodes from the beginning of the queue
+            queue.erase(
+                queue.begin(),
+                std::next(queue.begin(), static_cast<int64_t>(k)));
         }
 
         return tree;
