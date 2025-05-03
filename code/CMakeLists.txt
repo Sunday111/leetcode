@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 add_subdirectory(0001_two_sum)
+add_subdirectory(0049_group_anagrams)
 add_subdirectory(0112_path_sum)
 add_subdirectory(0113_path_sum_2)
 add_subdirectory(0116_populating_next_right_pointers_in_each_node)
