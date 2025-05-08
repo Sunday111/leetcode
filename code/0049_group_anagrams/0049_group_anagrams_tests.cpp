@@ -1,12 +1,6 @@
 #include "0049_group_anagrams.hpp"
 #include "gtest/gtest.h"
-
-inline static constexpr auto sorted = [](Groups& groups) -> Groups&
-{
-    std::ranges::for_each(groups, std::ranges::sort);
-    std::ranges::sort(groups);
-    return groups;
-};
+#include "test_utility.hpp"
 
 TEST(t0049_group_anagrams, test_1)
 {

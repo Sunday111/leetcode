@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <cassert>
 #include <optional>
 #include <queue>
@@ -117,10 +118,10 @@ struct LeetCodeBinaryTree
             }
             else
             {
-                int c0 = stream.get();
-                int c1 = stream.get();
-                int c2 = stream.get();
-                int c3 = stream.get();
+                [[maybe_unused]] int c0 = stream.get();
+                [[maybe_unused]] int c1 = stream.get();
+                [[maybe_unused]] int c2 = stream.get();
+                [[maybe_unused]] int c3 = stream.get();
 
                 assert(c0 == 'n');
                 assert(c1 == 'u');
@@ -141,4 +142,22 @@ struct LeetCodeBinaryTree
         auto array = StringToArray(str);
         return FromArray(array);
     }
+};
+
+template <size_t extent>
+static constexpr size_t spanHash(std::span<const uint8_t, extent> s)
+{
+    size_t hash = 14695981039346656037ULL;
+    for (uint8_t c : s)
+    {
+        hash = (hash ^ c) * 1099511628211ULL;
+    }
+    return hash;
+}
+
+inline static constexpr auto sorted = [](auto& groups) -> decltype(auto)
+{
+    std::ranges::for_each(groups, std::ranges::sort);
+    std::ranges::sort(groups);
+    return groups;
 };
