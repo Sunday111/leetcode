@@ -60,6 +60,7 @@ private:
     std::array<Word, words_count> m_data{};
 };
 
+template <size_t segment_size = 64 * 8>
 class PrimesStorage
 {
 public:
@@ -181,7 +182,6 @@ private:
     }
 
 private:
-    static constexpr size_t segment_size = 64 * 8;
     StaticBitset<segment_size> m_segment;
     std::vector<uint64_t> m_primes;
     std::vector<size_t> m_segments;
@@ -193,7 +193,7 @@ public:
     int32_t countPrimes(int32_t n)
     {
         // Make it static if you feel sneaky today 😏
-        PrimesStorage storage;
+        PrimesStorage<64 * 8> storage;
 
         auto v = static_cast<uint64_t>(n);
         storage.cache_primes_less_than(v);
