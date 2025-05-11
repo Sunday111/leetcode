@@ -6,23 +6,23 @@
 #include <vector>
 
 template <size_t Size, typename Word = uint64_t>
-class StaticBitset
+class Bitset
 {
 public:
-    static constexpr size_t word_bits = sizeof(Word) * 8;
-    static constexpr size_t full_words = Size / word_bits;
-    static constexpr size_t words_count =
-        (Size % word_bits) ? full_words + 1 : full_words;
+    static constexpr size_t kBitsInWord = sizeof(Word) * 8;
+    static constexpr size_t kNumFullWords = Size / kBitsInWord;
+    static constexpr size_t kNumWords =
+        (Size % kBitsInWord) ? kNumFullWords + 1 : kNumFullWords;
 
 public:
-    constexpr StaticBitset() {}
+    constexpr Bitset() {}
 
     constexpr void reset(bool value) noexcept
     {
         const auto k = value ? ~uint64_t{1} : 0;
-        for (size_t i = 0; i < words_count; ++i)
+        for (size_t i = 0; i < kNumWords; ++i)
         {
-            m_data[i] = k;
+            words[i] = k;
         }
     }
 
@@ -31,7 +31,7 @@ public:
         size_t i = idx / 64;
         size_t j = idx % 64;
         auto mask = make_bit_mask(j);
-        bool r = (m_data[i] & mask);
+        bool r = (words[i] & mask);
         return r;
     }
 
@@ -42,11 +42,11 @@ public:
         auto mask = make_bit_mask(j);
         if (new_value)
         {
-            m_data[i] |= mask;
+            words[i] |= mask;
         }
         else
         {
-            m_data[i] &= ~mask;
+            words[i] &= ~mask;
         }
     }
 
@@ -57,7 +57,7 @@ private:
     }
 
 private:
-    std::array<Word, words_count> m_data{};
+    std::array<Word, kNumWords> words{};
 };
 
 template <size_t segment_size = 64 * 8>
@@ -182,7 +182,7 @@ private:
     }
 
 private:
-    StaticBitset<segment_size> m_segment;
+    Bitset<segment_size> m_segment;
     std::vector<uint64_t> m_primes;
     std::vector<size_t> m_segments;
 };
