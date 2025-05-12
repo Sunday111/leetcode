@@ -1,6 +1,6 @@
 #include "0257_binary_tree_paths.hpp"
 #include "gtest/gtest.h"
-#include "test_utility.hpp"
+#include "leet_code_binary_tree.hpp"
 
 using Tree = LeetCodeBinaryTree<TreeNode>;
 

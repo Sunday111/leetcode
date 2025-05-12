@@ -69,7 +69,7 @@ public:
     PrimesStorage(const PrimesStorage&) = delete;
     PrimesStorage& operator=(const PrimesStorage&) = delete;
 
-    constexpr void cache_primes_less_than(uint64_t value) noexcept
+    constexpr void cache_primes_up_to(uint64_t value) noexcept
     {
         while (m_primes.back() < value)
         {
@@ -196,7 +196,7 @@ public:
         PrimesStorage<64 * 8> storage;
 
         auto v = static_cast<uint64_t>(n);
-        storage.cache_primes_less_than(v);
+        storage.cache_primes_up_to(v);
         auto primes = storage.get_cached_primes_view();
 
         return static_cast<int32_t>(

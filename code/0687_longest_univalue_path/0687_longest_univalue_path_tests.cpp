@@ -1,6 +1,6 @@
 #include "0687_longest_univalue_path.hpp"
 #include "gtest/gtest.h"
-#include "test_utility.hpp"
+#include "leet_code_binary_tree.hpp"
 
 using Tree = LeetCodeBinaryTree<TreeNode>;
 

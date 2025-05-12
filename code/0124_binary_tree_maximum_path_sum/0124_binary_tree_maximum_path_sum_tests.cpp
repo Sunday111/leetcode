@@ -2,7 +2,7 @@
 
 #include "0124_binary_tree_maximum_path_sum.hpp"
 #include "gtest/gtest.h"
-#include "test_utility.hpp"
+#include "leet_code_binary_tree.hpp"
 
 using Tree = LeetCodeBinaryTree<TreeNode>;
 

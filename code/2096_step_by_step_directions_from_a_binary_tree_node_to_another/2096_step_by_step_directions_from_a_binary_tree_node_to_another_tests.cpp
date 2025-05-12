@@ -1,6 +1,6 @@
 #include "2096_step_by_step_directions_from_a_binary_tree_node_to_another.hpp"
 #include "gtest/gtest.h"
-#include "test_utility.hpp"
+#include "leet_code_binary_tree.hpp"
 
 using Tree = LeetCodeBinaryTree<TreeNode>;
 
