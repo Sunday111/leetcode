@@ -2,11 +2,11 @@ cmake_minimum_required(VERSION 3.25)
 
 include(set_compiler_options)
 
-set(target_name 567_permutation_in_string_tests)
+set(target_name 0567_permutation_in_string_tests)
 
 add_executable(${target_name}
-    567_permutation_in_string.hpp
-    567_permutation_in_string_tests.cpp
+    0567_permutation_in_string.hpp
+    0567_permutation_in_string_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)
