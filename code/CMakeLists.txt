@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 add_subdirectory(0001_two_sum)
+add_subdirectory(0015_3sum)
 add_subdirectory(0039_combination_sum)
 add_subdirectory(0049_group_anagrams)
 add_subdirectory(0112_path_sum)
