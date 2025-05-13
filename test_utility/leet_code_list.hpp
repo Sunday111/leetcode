@@ -1,6 +1,9 @@
+#pragma once
+
 #include <cassert>
 #include <concepts>
 #include <deque>
+#include <format>
 #include <ranges>
 #include <span>
 #include <sstream>
@@ -87,4 +90,19 @@ template <ListNodeConcept TNode>
     }
 
     return !a == !b;
+}
+
+template <ListNodeConcept TNode>
+[[nodiscard]] inline constexpr std::string ListToString(TNode* head)
+{
+    std::string r;
+    auto i = std::back_inserter(r);
+    while (head)
+    {
+        std::format_to(i, "{},", head->val);
+        head = head->next;
+    }
+
+    if (!r.empty()) r.pop_back();
+    return r;
 }
