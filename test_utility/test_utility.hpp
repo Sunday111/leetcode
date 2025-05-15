@@ -42,3 +42,5 @@ inline static constexpr auto sorted = [](auto& groups) -> decltype(auto)
 
 // #define ATTRS __attribute__((no_sanitize("all")))
 // __attribute__((always_inline))
+
+// __attribute__((optimize("O3")))
