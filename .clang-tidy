@@ -17,6 +17,8 @@ modernize-*\
 -cppcoreguidelines-pro-type-static-cast-downcast,\
 -google-readability-avoid-underscore-in-googletest-name,\
 -cppcoreguidelines-avoid-do-while,\
+-cert-msc51-cpp,\
+-cert-msc32-c,\
 "
 WarningsAsErrors: '*'
 # Use clang-format

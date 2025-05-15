@@ -37,3 +37,8 @@ inline static constexpr auto sorted = [](auto& groups) -> decltype(auto)
 
     return x0;
 }
+
+// #pragma GCC optimize("O3")
+
+// #define ATTRS __attribute__((no_sanitize("all")))
+// __attribute__((always_inline))
