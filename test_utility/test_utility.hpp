@@ -38,6 +38,19 @@ inline static constexpr auto sorted = [](auto& groups) -> decltype(auto)
     return x0;
 }
 
+template <std::integral To, std::integral From>
+[[nodiscard]] static constexpr To cast(From from) noexcept
+{
+    if constexpr (sizeof(To) == sizeof(From))
+    {
+        return std::bit_cast<To>(from);
+    }
+    else
+    {
+        return static_cast<To>(from);
+    }
+}
+
 // #pragma GCC optimize("O3")
 
 // #define ATTRS __attribute__((no_sanitize("all")))
