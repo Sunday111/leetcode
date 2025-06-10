@@ -8,9 +8,9 @@ class Solution
 public:
     using u64 = uint64_t;
 
-    [[nodiscard]] static constexpr u64 findKthNumber(u64 n, u64 K) noexcept
+    [[nodiscard]] static constexpr u64 findKthNumber(u64 n, u64 k) noexcept
     {
-        return solve(0, n, K);
+        return solve(0, n, k);
     }
 
     [[nodiscard]] static constexpr u64 solve(u64 current, u64 n, u64 k) noexcept
