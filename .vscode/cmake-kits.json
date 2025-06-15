@@ -1,10 +1,26 @@
 [
     {
-        "name": "LLVM from sources, main",
+        "name": "LLVM from sources, main: Static libc++",
         "compilers": {
             "c": "/home/sunday/llvm/llvm-install/bin/clang",
             "cxx": "/home/sunday/llvm/llvm-install/bin/clang++"
         },
-        "toolchainFile": "/home/sunday/llvm/generated/llvm-toolchain.cmake"
+        "toolchainFile": "/home/sunday/llvm/generated/llvm-toolchain-static-libcxx.cmake"
+    },
+    {
+        "name": "LLVM from sources, main: Static libstdc++",
+        "compilers": {
+            "c": "/home/sunday/llvm/llvm-install/bin/clang",
+            "cxx": "/home/sunday/llvm/llvm-install/bin/clang++"
+        },
+        "toolchainFile": "/home/sunday/llvm/generated/llvm-toolchain-static-libstdcxx.cmake"
+    },
+    {
+        "name": "LLVM from sources, main: Dynamic libstdc++",
+        "compilers": {
+            "c": "/home/sunday/llvm/llvm-install/bin/clang",
+            "cxx": "/home/sunday/llvm/llvm-install/bin/clang++"
+        },
+        "toolchainFile": "/home/sunday/llvm/generated/llvm-toolchain-dynamic-libstdcxx.cmake"
     }
 ]
