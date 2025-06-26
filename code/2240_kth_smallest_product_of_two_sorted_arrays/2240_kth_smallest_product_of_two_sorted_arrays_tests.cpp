@@ -185,6 +185,30 @@ TEST(t2240_kth_smallest_product_of_two_sorted_arrays, test_3)
     ASSERT_EQ(Solution{}.kthSmallestProduct(nums1, nums2, k), expected);
 }
 
+TEST(t2240_kth_smallest_product_of_two_sorted_arrays, test_4)
+{
+    std::vector nums1{-2, -1, 0, 1, 2};
+    std::vector nums2{-3, -1, 2, 4, 5};
+
+    constexpr u64 k = 3;
+    constexpr i64 expected = -6;
+
+    print_prods(nums1, nums2);
+    ASSERT_EQ(Solution{}.kthSmallestProduct(nums1, nums2, k), expected);
+}
+
+TEST(t2240_kth_smallest_product_of_two_sorted_arrays, test_5)
+{
+    std::vector nums1{-5};
+    std::vector nums2{1};
+
+    constexpr u64 k = 1;
+    constexpr i64 expected = -5;
+
+    print_prods(nums1, nums2);
+    ASSERT_EQ(Solution{}.kthSmallestProduct(nums1, nums2, k), expected);
+}
+
 // TEST(t2240_kth_smallest_product_of_two_sorted_arrays, test_3)
 // {
 //     std::vector<int> nums1;

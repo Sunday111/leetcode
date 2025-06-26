@@ -1,5 +1,3 @@
-#pragma once
-
 #include <algorithm>
 #include <ranges>
 #include <vector>
@@ -18,58 +16,183 @@ public:
         const std::vector<i32>& nums2,
         u64 k) noexcept
     {
+        auto zero_begin_1 = std::ranges::lower_bound(nums1, 0);
+        auto zero_end_1 = std::ranges::upper_bound(nums1, 0);
+        auto zero_begin_2 = std::ranges::lower_bound(nums2, 0);
+        auto zero_end_2 = std::ranges::upper_bound(nums2, 0);
+        u64 num_zeroes_1 =
+            static_cast<u64>(std::distance(zero_begin_1, zero_end_1));
+
+        [[maybe_unused]] const u64 num_positive_1 =
+            static_cast<u64>(nums1.end() - zero_end_1);
+        [[maybe_unused]] const u64 num_positive_2 =
+            static_cast<u64>(nums2.end() - zero_end_2);
+        [[maybe_unused]] const u64 num_negative_1 =
+            static_cast<u64>(zero_begin_1 - nums1.begin());
+        [[maybe_unused]] const u64 num_negative_2 =
+            static_cast<u64>(zero_begin_2 - nums2.begin());
+
         auto count_products_less_eq_than = [&](i64 x)
         {
             auto i = nums1.begin();
 
             u64 total = 0;
-            while (i != nums1.end() && *i < 0)
+
+            if (x < 0)
             {
-                const i64 v = *i;
+                auto start = zero_end_2;
+                while (i != zero_begin_1 && start != nums2.end())
+                {
+                    // v < 0, x < 0
+                    const i64 v = *i;
 
-                auto j = i;
-                while (i != nums1.end() && *i == v) ++i;
+                    auto j = i;
+                    while (i != nums1.end() && *i == v) ++i;
 
-                // Sequence of products is descending
-                auto it = std::ranges::upper_bound(
-                    nums2,
-                    x,
-                    std::greater{},
-                    [&](int v2) { return i64{v2} * v; });
+                    // Sequence of products is descending
+                    i64 limit = x / v;
+                    while (start != nums2.end() && i64{*start} <= limit)
+                    {
+                        ++start;
+                    }
 
-                auto cnt1 = static_cast<u64>(std::distance(j, i));
-                u64 cnt2 = static_cast<u64>(std::distance(it, nums2.end()));
+                    auto cnt1 = static_cast<u64>(std::distance(j, i));
+                    u64 cnt2 =
+                        static_cast<u64>(std::distance(start, nums2.end()));
 
-                total += cnt1 * cnt2;
+                    total += cnt1 * cnt2;
+                }
+
+                i = zero_begin_1;
+            }
+            else
+            {
+                // v < 0, x >= 0
+                // Need to make negative numbers from negative numbers
+                // Any positive v2 is good
+                total += num_negative_1 * num_positive_2;
+
+                if (x > 0 && (nums2.size() - num_positive_2))
+                {
+                    auto start_2 = zero_end_2 - 1;
+                    auto end_2 = nums2.begin() - 1;
+                    while (i != zero_begin_1 && start_2 != end_2)
+                    {
+                        const i64 v = *i;
+
+                        auto j = i;
+                        while (i != nums1.end() && *i == v) ++i;
+
+                        // Sequence of products is descending
+                        while (start_2 != end_2 && i64{*start_2} * v < x)
+                        {
+                            --start_2;
+                        }
+
+                        auto cnt1 = static_cast<u64>(std::distance(j, i));
+                        u64 cnt2 = static_cast<u64>(
+                                       std::distance(start_2, zero_end_2)) -
+                                   1;
+
+                        total += cnt1 * cnt2;
+                    }
+
+                    auto cnt1 =
+                        static_cast<u64>(std::distance(i, zero_begin_1));
+                    u64 cnt2 =
+                        static_cast<u64>(std::distance(start_2, zero_end_2)) -
+                        1;
+                    total += cnt1 * cnt2;
+                    i = zero_begin_1;
+                }
             }
 
-            if (i != nums1.end() && *i == 0)
+            if (i != zero_end_1)
             {
-                auto j = i;
-                while (i != nums1.end() && *i == 0) ++i;
-                u64 cnt1 = static_cast<u64>(std::distance(j, i));
-                u64 cnt2 = x > 0 ? nums2.size() : 0;
-                total += cnt1 * cnt2;
+                i = zero_end_1;
+                if (x > 0) total += num_zeroes_1 * nums2.size();
             }
 
-            while (i != nums1.end())
+            if (x < 0)
             {
-                i64 v = *i;
+                // V > 0; x < 0: consider only negative from nums 2
+                auto start_2 = nums2.begin();
+                while (i != nums1.end() && start_2 != zero_begin_2)
+                {
+                    i64 v = *i;
 
-                auto j = i;
-                while (i != nums1.end() && *i == v) ++i;
+                    auto j = i;
+                    while (i != nums1.end() && *i == v) ++i;
 
-                // Sequence of products is ascending
-                auto it = std::ranges::lower_bound(
-                    nums2,
-                    x,
-                    std::less{},
-                    [&](int v2) { return i64{v2} * v; });
+                    // Sequence of products is ascending
+                    while (start_2 != zero_begin_2 && i64{*start_2} * v < x)
+                    {
+                        ++start_2;
+                    }
 
-                auto cnt1 = static_cast<u64>(std::distance(j, i));
-                u64 cnt2 = static_cast<u64>(std::distance(nums2.begin(), it));
+                    auto cnt1 = static_cast<u64>(std::distance(j, i));
+                    u64 cnt2 =
+                        static_cast<u64>(std::distance(nums2.begin(), start_2));
 
+                    total += cnt1 * cnt2;
+                }
+                auto cnt1 = static_cast<u64>(std::distance(i, nums1.end()));
+                u64 cnt2 =
+                    static_cast<u64>(std::distance(nums2.begin(), start_2));
                 total += cnt1 * cnt2;
+            }
+            else
+            {
+                // v > 0; x >= 0
+                // Any negative v2 is good
+                total += num_positive_1 * num_negative_2;
+
+                if (x > 0)
+                {
+                    // auto start_2 = nums2.end() - 1;
+                    // auto end_2 = zero_end_2 - 1;
+                    // while (i != nums1.end())
+                    // {
+                    //     i64 v = *i;
+
+                    //     auto j = i;
+                    //     while (i != nums1.end() && *i == v) ++i;
+
+                    //     while (start_2 != end_2 && i64{*start_2} * v > x)
+                    //     {
+                    //         --start_2;
+                    //     }
+
+                    //     auto cnt1 = static_cast<u64>(std::distance(j, i));
+                    //     u64 cnt2 = static_cast<u64>(
+                    //         std::distance(zero_end_2, start_2));
+
+                    //     total += cnt1 * cnt2;
+                    // }
+
+                    auto it = nums2.end();
+                    while (i != nums1.end())
+                    {
+                        i64 v = *i;
+
+                        auto j = i;
+                        while (i != nums1.end() && *i == v) ++i;
+
+                        // Sequence of products is ascending
+                        it = std::ranges::lower_bound(
+                            zero_begin_2,
+                            it,
+                            x,
+                            std::less{},
+                            [&](int v2) { return i64{v2} * v; });
+
+                        auto cnt1 = static_cast<u64>(std::distance(j, i));
+                        u64 cnt2 =
+                            static_cast<u64>(std::distance(zero_begin_2, it));
+
+                        total += cnt1 * cnt2;
+                    }
+                }
             }
 
             return total;
