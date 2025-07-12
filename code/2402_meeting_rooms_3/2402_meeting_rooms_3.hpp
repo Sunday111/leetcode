@@ -84,11 +84,6 @@ public:
         u64 end : 20;
         u64 begin : 20;
         u64 placeholder : 20;
-
-        [[nodiscard]] constexpr u64 full() const noexcept
-        {
-            return std::bit_cast<u64>(*this);
-        }
     };
 
     struct Booking
