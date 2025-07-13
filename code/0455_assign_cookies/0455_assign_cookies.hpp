@@ -118,19 +118,25 @@ public:
             in.size()};
     }
 
-    [[nodiscard]] static constexpr size_t matchPlayersAndTrainers(
-        std::vector<int>& players,
-        std::vector<int>& trainers) noexcept
+    [[nodiscard]] static size_t findContentChildren(
+        std::vector<int>& g,
+        std::vector<int>& s) noexcept
     {
-        RadixSorter<u32, SortOrder::Descending, 10, 3>::radixSort(
-            reinterpret_span<u32>(std::span{players}));
-        RadixSorter<u32, SortOrder::Descending, 10, 3>::radixSort(
-            reinterpret_span<u32>(std::span{trainers}));
+        RadixSorter<u32, SortOrder::Descending, 6, 5>::radixSort(
+            reinterpret_span<u32>(std::span{g}));
+        RadixSorter<u32, SortOrder::Descending, 6, 5>::radixSort(
+            reinterpret_span<u32>(std::span{s}));
 
-        const size_t np = players.size(), nt = trainers.size();
-        size_t ip = 0, it = 0;
-        while (ip != np && it != nt) it += players[ip++] <= trainers[it];
+        size_t np = g.size(), nt = s.size();
+        size_t ip = 0, it = 0, r = 0;
+        while (ip != np && it != nt)
+        {
+            bool match = g[ip] <= s[it];
+            it += match;
+            r += match;
+            ++ip;
+        }
 
-        return it;
+        return r;
     }
 };
