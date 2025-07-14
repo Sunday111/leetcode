@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <array>
 #include <span>
-#include <vector>
 
 using u8 = uint8_t;
 using u32 = uint32_t;
@@ -95,31 +94,5 @@ public:
     ATTR static void sort(std::span<T> arr) noexcept
     {
         if (arr.size()) do_passes(arr, pass_idx_seq);
-    }
-};
-
-class Solution
-{
-public:
-    [[nodiscard]] static constexpr size_t matchPlayersAndTrainers(
-        std::vector<int>& players,
-        std::vector<int>& trainers) noexcept
-    {
-        auto sort_descending = [](std::vector<int>& arr)
-        {
-            using Sorter = RadixSorter<u32, SortOrder::Descending, 10, 3>;
-            Sorter::sort(
-                std::span{
-                    reinterpret_cast<u32*>(arr.data()),  // NOLINT
-                    arr.size()});
-        };
-        sort_descending(players);
-        sort_descending(trainers);
-
-        const size_t np = players.size(), nt = trainers.size();
-        size_t ip = 0, it = 0;
-        while (ip != np && it != nt) it += players[ip++] <= trainers[it];
-
-        return it;
     }
 };

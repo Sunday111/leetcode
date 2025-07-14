@@ -5,7 +5,6 @@
 #include <vector>
 
 using u32 = uint32_t;
-using u64 = uint64_t;
 
 #ifdef __GNUC__
 #define ATTR inline __attribute__((always_inline))
@@ -22,34 +21,47 @@ public:
         return data[i * (k + 1) + j];
     }
 
+    struct Event
+    {
+        u32 begin;
+        u32 end;
+        u32 value;
+    };
+
+    inline static std::array<Event, 1'000'000> events_array;
+
     ATTR static constexpr u32 maxValue(
         std::vector<std::vector<int>>& events_,
         u32 k) noexcept
     {
-        auto events = std::span{
-            reinterpret_cast<std::vector<std::vector<u32>>&>(  // NOLINT
-                events_)};
-        std::ranges::sort(events, [](auto& a, auto& b) { return a[0] < b[0]; });
+        u32 n = 0;
+        for (auto& e : events_)
+        {
+            events_array[n++] = Event{
+                .begin = static_cast<u32>(e[0]),
+                .end = static_cast<u32>(e[1]),
+                .value = static_cast<u32>(e[2]),
+            };
+        }
+
+        auto events = std::span{events_array}.first(n);
+        std::ranges::sort(events, std::less{}, &Event::begin);
 
         std::array<u32, 2'000'000> dp{};
-        const u32 n = static_cast<u32>(events.size());
 
         u32 r = 0;
-        u32 i = n;
-        do
+        for (u32 i = n; i--;)
         {
-            --i;
-
             const u32 next_i = static_cast<u32>(std::distance(
                 events.begin(),
                 std::ranges::lower_bound(
                     events.begin() + i,
                     events.end(),
-                    events[i][1] + 1,
+                    events[i].end + 1,
                     std::less{},
-                    [](const auto& e) { return e.front(); })));
+                    &Event::begin)));
 
-            const u32 event_val = events[i][2];
+            const u32 event_val = events[i].value;
             for (u32 j = 1; j <= k; ++j)
             {
                 u32 skip_current = index(dp, i + 1, j, k);
@@ -57,8 +69,7 @@ public:
                 index(dp, i, j, k) = std::max(skip_current, take_current);
                 r = std::max(r, index(dp, i, j, k));
             }
-
-        } while (i);
+        }
 
         return r;
     }
