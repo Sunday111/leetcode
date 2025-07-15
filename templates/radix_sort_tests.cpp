@@ -8,7 +8,7 @@ class RadixSortTest : public ::testing::Test
 {
 protected:
     static constexpr unsigned seed = 1234;
-    static constexpr size_t num_values = 2;
+    static constexpr size_t num_values = 20'000;
     static constexpr size_t num_passes = 20;
 
     std::mt19937 rnd{seed};

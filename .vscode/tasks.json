@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Embed incudes",
+            "type": "shell",
+            "command": "/usr/bin/python3",
+            "args": [
+                "${workspaceFolder}/scripts/embed_includes.py",
+                "${file}"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

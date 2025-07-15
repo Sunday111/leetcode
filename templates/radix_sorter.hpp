@@ -4,24 +4,9 @@
 #include <array>
 #include <span>
 
-using u8 = uint8_t;
-using u32 = uint32_t;
-using u64 = uint64_t;
-
-#ifdef __GNUC__
-#define ATTR inline __attribute__((always_inline))
-#else
-#define ATTR inline
-#endif
-
-template <typename To, typename From, size_t extent = std::dynamic_extent>
-[[nodiscard]] ATTR static auto reinterpret_span(
-    std::span<From, extent> in) noexcept
-{
-    return std::span<To, extent>{
-        reinterpret_cast<To*>(in.data()),  // NOLINT
-        in.size()};
-}
+#include "force_inline.hpp"
+#include "integral_aliases.hpp"
+#include "reinterpret_range.hpp"
 
 enum class SortOrder : u8
 {
@@ -50,7 +35,7 @@ class RadixSorter
     inline static std::array<UT, 100'001> temp;
 
     template <u8 pass_index>
-    ATTR static void do_pass(std::span<UT> arr) noexcept
+    FORCE_INLINE static void do_pass(std::span<UT> arr) noexcept
     {
         count.fill(0);
         constexpr UT shift = pass_index * bits_per_pass;
@@ -83,14 +68,9 @@ class RadixSorter
         }
         else
         {
-            // Compute descending start positions directly
+            // Compute descending start positions
             UT sum = 0;
-            for (u32 i = base; i--;)
-            {
-                auto c = count[i];
-                count[i] = sum;
-                sum += c;
-            }
+            for (u32 i = base; i--;) sum += std::exchange(count[i], sum);
 
             // Stable placement
             for (u32 i = 0; i != n; ++i)
@@ -103,9 +83,9 @@ class RadixSorter
         std::ranges::copy_n(temp.begin(), n, arr.begin());
     }
 
-    // Invokes pass for each do_pass index.
+    // Invokes do_pass for each pass_index.
     template <u8... pass_index>
-    ATTR static void do_passes(
+    FORCE_INLINE static void do_passes(
         std::span<UT> arr,
         std::integer_sequence<u8, pass_index...>) noexcept
     {
@@ -113,8 +93,18 @@ class RadixSorter
     }
 
 public:
-    ATTR static void sort(std::span<T> arr) noexcept
+    FORCE_INLINE static void sort(std::span<T> arr) noexcept
     {
-        if (arr.size()) do_passes(reinterpret_span<UT>(arr), pass_idx_seq);
+        if (arr.size()) do_passes(reinterpret_range<UT>(arr), pass_idx_seq);
     }
 };
+
+template <
+    std::integral T,
+    SortOrder order,
+    u8 bits_per_pass,
+    u32 num_passes = ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)>
+FORCE_INLINE void radix_sort(std::span<T> arr) noexcept
+{
+    RadixSorter<T, order, bits_per_pass, num_passes>::sort(arr);
+}
