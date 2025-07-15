@@ -1,8 +1,8 @@
 #pragma once
 
-#include <algorithm>
 #include <array>
 #include <span>
+#include <vector>
 
 using u8 = uint8_t;
 using u32 = uint32_t;
@@ -116,5 +116,32 @@ public:
     ATTR static void sort(std::span<T> arr) noexcept
     {
         if (arr.size()) do_passes(reinterpret_span<UT>(arr), pass_idx_seq);
+    }
+};
+
+class Solution
+{
+public:
+    [[nodiscard]] static constexpr int longestConsecutive(
+        std::vector<int>& nums) noexcept
+    {
+        RadixSorter<int, SortOrder::Ascending, 8>::sort(nums);
+
+        if (nums.empty()) return 0;
+
+        int max_len = 1;
+        int len = 1;
+        int prev = nums.front();
+
+        const u32 n = static_cast<u32>(nums.size());
+        for (u32 i = 1; i != n; ++i)
+        {
+            auto v = nums[i];
+            len = v > (prev + 1) ? 1 : len + (v - prev);
+            prev = v;
+            max_len = std::max(max_len, len);
+        }
+
+        return max_len;
     }
 };
