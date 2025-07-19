@@ -1,9 +1,14 @@
 #pragma once
 
-#include <array>
+#include <algorithm>
+#include <bit>
 #include <span>
 #include <string>
 #include <vector>
+
+using u8 = uint8_t;
+using u16 = uint16_t;
+using u32 = uint32_t;
 
 #ifdef __GNUC__
 #define FORCE_INLINE inline __attribute__((always_inline))
@@ -11,8 +16,68 @@
 #define FORCE_INLINE inline
 #endif
 
-using u8 = uint8_t;
-using u16 = uint16_t;
+class HashSet
+{
+public:
+    static constexpr std::hash<std::string_view> kHasher{};
+
+    FORCE_INLINE void Init(u32 size) noexcept
+    {
+        u32 s = std::bit_ceil(size);
+        if (s == size) s <<= 1;
+        mask_ = s - 1;
+        std::ranges::fill_n(values_.begin(), s, std::string_view{});
+    }
+
+    FORCE_INLINE void add(std::string_view key) noexcept
+    {
+        u32 index = kHasher(key) & mask_;
+        while (values_[index].size()) ++index &= mask_;
+        values_[index] = key;
+    }
+
+    FORCE_INLINE bool contains(std::string_view key) const noexcept
+    {
+        u32 index = kHasher(key) & mask_;
+        while (values_[index].size() && values_[index] != key) ++index &= mask_;
+        return values_[index] == key;
+    }
+
+private:
+    std::array<std::string_view, (1 << 17)> values_;
+    u32 mask_{};
+};
+
+class Solution
+{
+public:
+    std::vector<std::string> removeSubfolders(std::vector<std::string>& folders)
+    {
+        static HashSet set;
+        set.Init(static_cast<u32>(folders.size() * 2));
+
+        std::vector<std::string> result;
+        result.reserve(folders.size());
+
+        for (auto& str : folders) set.add(str);
+
+        std::ranges::for_each(
+            folders,
+            [&](const std::string& folder)
+            {
+                for (size_t pos = 1;; ++pos)
+                {
+                    pos = folder.find('/', pos);
+                    if (pos == folder.npos) break;
+                    if (set.contains({folder.data(), pos})) return;
+                }
+
+                result.emplace_back(folder);
+            });
+
+        return result;
+    }
+};
 
 static constexpr u16 kMaxNodes = 19'000;
 
@@ -143,7 +208,7 @@ public:
     }
 };
 
-class Solution
+class Solution2
 {
 public:
     [[nodiscard]] FORCE_INLINE static std::vector<std::string> removeSubfolders(
