@@ -18,17 +18,26 @@ static constexpr u16 kMaxNodes = 19'000;
 
 struct Node
 {
-    u16 sibling : 15 = kMaxNodes;
-    u16 is_leaf : 1 = 0;
+    char* token_ptr = nullptr;
+    u16 sibling = kMaxNodes;
     u16 child = kMaxNodes;
+    u8 token_size = 0;
+    bool is_leaf = 0;
+
+    [[nodiscard]] FORCE_INLINE constexpr std::string_view token() const noexcept
+    {
+        return std::string_view{token_ptr, token_size};
+    }
 };
+
+static_assert(sizeof(Node) == 16);
+static_assert(alignof(Node) == 8);
 
 class Solver
 {
 public:
     std::string tmp;
     std::array<Node, kMaxNodes> nodes;
-    std::array<std::string, kMaxNodes> tokens;
     std::array<std::string, 40'000> results;
     u16 num_results = 0;
 
@@ -36,7 +45,7 @@ public:
     {
         u8 ps = tmp.size() & 0xFF;
 
-        tmp.append(tokens[node]);
+        tmp.append(nodes[node].token());
         if (nodes[node].is_leaf)
         {
             results[num_results++] = tmp;
@@ -61,6 +70,7 @@ public:
         constexpr u16 root = 0;
         nodes[root].child = kMaxNodes;
         u16 num_nodes = 1;
+        tmp.reserve(128);
 
         for (std::string& path : paths)
         {
@@ -70,35 +80,33 @@ public:
 
             while (true)
             {
-                ++pos;
-                u8 next_pos = static_cast<u8>(path.find('/', pos));
-                next_pos = std::min(next_pos, len);
-                std::string_view token{
-                    path.begin() + pos,
-                    path.begin() + next_pos};
+                char* const token_ptr = &path[++pos];
+                const u8 next_pos =
+                    std::min(len, static_cast<u8>(path.find('/', pos)));
+                const u8 token_size = next_pos - std::exchange(pos, next_pos);
+                const bool is_last = pos == len;
 
                 u16 existing_id = nodes[parent].child;
-
+                const std::string_view token{token_ptr, token_size};
                 while (existing_id != kMaxNodes)
                 {
                     auto& node = nodes[existing_id];
-                    if (tokens[existing_id] == token) break;
+                    if (node.token() == token) break;
                     existing_id = node.sibling;
                 }
 
-                pos = next_pos;
-                bool is_last = pos == len;
-
                 if (existing_id == kMaxNodes)
                 {
-                    u16 new_id = num_nodes++;
-                    auto& node = nodes[new_id];
-                    tokens[new_id] = token;
-                    node.is_leaf = is_last;
-                    node.sibling = std::exchange(nodes[parent].child, new_id);
-                    node.child = kMaxNodes;
+                    u16 id = num_nodes++;
+                    nodes[id] = {
+                        .token_ptr = token_ptr,
+                        .sibling = std::exchange(nodes[parent].child, id),
+                        .child = kMaxNodes,
+                        .token_size = token_size,
+                        .is_leaf = is_last,
+                    };
 
-                    parent = new_id;
+                    parent = id;
                     if (is_last)
                     {
                         break;
@@ -109,15 +117,14 @@ public:
                     }
                 }
 
+                parent = existing_id;
                 if (auto& existing = nodes[existing_id];
                     existing.is_leaf || is_last)
                 {
                     existing.child = kMaxNodes;
-                    existing.is_leaf = 1;
+                    existing.is_leaf = true;
                     break;
                 }
-
-                parent = existing_id;
             }
         }
 
@@ -129,7 +136,7 @@ public:
         u16 i = 0;
         for (auto& s : std::span{results}.first(num_results))
         {
-            paths[i++] = std::move(s);
+            paths[i++] = s;
         }
 
         return paths;
