@@ -21,25 +21,32 @@ class HashSet
 public:
     static constexpr std::hash<std::string_view> kHasher{};
 
-    FORCE_INLINE void Init(u32 size) noexcept
+    FORCE_INLINE void init(u32 size) noexcept
     {
-        u32 s = std::bit_ceil(size);
-        if (s == size) s <<= 1;
-        mask_ = s - 1;
-        std::ranges::fill_n(values_.begin(), s, std::string_view{});
+        u32 capacity = std::bit_ceil(size * 2);
+        std::ranges::fill_n(values_.begin(), capacity, std::string_view{});
+        mask_ = capacity - 1;
     }
 
     FORCE_INLINE void add(std::string_view key) noexcept
     {
         u32 index = kHasher(key) & mask_;
-        while (values_[index].size()) ++index &= mask_;
+        while (values_[index].size())
+        {
+            ++index;
+            index &= mask_;
+        }
         values_[index] = key;
     }
 
     FORCE_INLINE bool contains(std::string_view key) const noexcept
     {
         u32 index = kHasher(key) & mask_;
-        while (values_[index].size() && values_[index] != key) ++index &= mask_;
+        while (values_[index].size() && values_[index] != key)
+        {
+            ++index;
+            index &= mask_;
+        }
         return values_[index] == key;
     }
 
@@ -54,7 +61,7 @@ public:
     std::vector<std::string> removeSubfolders(std::vector<std::string>& folders)
     {
         static HashSet set;
-        set.Init(static_cast<u32>(folders.size() * 2));
+        set.init(static_cast<u32>(folders.size()));
 
         std::vector<std::string> result;
         result.reserve(folders.size());
