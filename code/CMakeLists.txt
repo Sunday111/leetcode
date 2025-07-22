@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 add_subdirectory(0001_two_sum)
+add_subdirectory(0003_maximum_substring_without_repeating_characters)
 add_subdirectory(0015_3sum)
 add_subdirectory(0016_3sum_closest)
 add_subdirectory(0017_letter_combinations_of_a_phone_number)
