@@ -46,8 +46,7 @@ public:
         const u16 end = nodes[node_id].edges_offset + nodes[node_id].num_edges;
         for (u16 i = nodes[node_id].edges_offset; i != end; ++i)
         {
-            u16 neighbor = edges_arr[i];
-            if (neighbor != parent)
+            if (u16 neighbor = edges_arr[i]; neighbor != parent)
             {
                 dfs(neighbor, node_id);
                 node.xor_sum ^= nodes[neighbor].xor_sum;

@@ -79,8 +79,8 @@ static void BM_Branchless(benchmark::State& state)
     }
 }
 
-BENCHMARK(BM_AllBranches)->Unit(benchmark::kMillisecond);  // NOLINT
-BENCHMARK(BM_TwoBranches)->Unit(benchmark::kMillisecond);  // NOLINT
-BENCHMARK(BM_OneBranch)->Unit(benchmark::kMillisecond);    // NOLINT
 BENCHMARK(BM_Branchless)->Unit(benchmark::kMillisecond);   // NOLINT
+BENCHMARK(BM_OneBranch)->Unit(benchmark::kMillisecond);    // NOLINT
+BENCHMARK(BM_TwoBranches)->Unit(benchmark::kMillisecond);  // NOLINT
+BENCHMARK(BM_AllBranches)->Unit(benchmark::kMillisecond);  // NOLINT
 BENCHMARK_MAIN();                                          // NOLINT
