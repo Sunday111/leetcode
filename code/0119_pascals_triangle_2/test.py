@@ -26,4 +26,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-    print(math.log2(math.factorial(29) / math.factorial(15)))
+    print(math.log2(math.factorial(33)))
