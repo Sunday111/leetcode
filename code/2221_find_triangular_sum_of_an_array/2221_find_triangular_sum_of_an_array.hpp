@@ -3,15 +3,12 @@
 #include <array>
 #include <cstdint>
 #include <vector>
+
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
 
-#ifdef __GNUC__
 #define FORCE_INLINE inline __attribute__((always_inline))
-#else
-#define FORCE_INLINE inline
-#endif
 
 class BinomialMod10
 {
@@ -20,7 +17,7 @@ public:
     {
         std::array<std::array<u8, 5>, 5> table{};
 
-        for (u8 a = 0; a < 5; ++a)
+        for (u8 a = 0; a != 5; ++a)
         {
             for (u8 b = 0; b <= a; ++b)
             {

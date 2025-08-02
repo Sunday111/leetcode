@@ -14,17 +14,17 @@ using i32 = int32_t;
 class HashSet
 {
 public:
-    using ValueType = i32;
-    static constexpr ValueType kInvalidValue = -1;
-    static constexpr std::hash<ValueType> kHasher{};
+    using KeyType = i32;
+    static constexpr KeyType kInvalidKey = -1;
+    static constexpr std::hash<KeyType> kHasher{};
     static constexpr u32 mask_ = (~u32{0}) >> (32 - 21);
 
-    FORCE_INLINE void clear() noexcept { values_.fill(kInvalidValue); }
+    FORCE_INLINE void clear() noexcept { values_.fill(kInvalidKey); }
 
-    FORCE_INLINE bool add(ValueType key) noexcept
+    FORCE_INLINE bool add(KeyType key) noexcept
     {
         u32 index = kHasher(key) & mask_;
-        while (values_[index] != kInvalidValue && values_[index] != key)
+        while (values_[index] != kInvalidKey && values_[index] != key)
         {
             ++index;
             index &= mask_;
@@ -33,7 +33,7 @@ public:
     }
 
 private:
-    std::array<ValueType, 1 << 21> values_;
+    std::array<KeyType, 1 << 21> values_;
 };
 
 class Solution
