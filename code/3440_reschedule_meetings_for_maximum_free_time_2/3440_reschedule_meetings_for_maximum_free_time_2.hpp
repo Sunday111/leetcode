@@ -3,21 +3,27 @@
 #include <array>
 #include <vector>
 
+#define HOT_PATH __attribute__((hot))
+#define FORCE_INLINE inline __attribute__((always_inline))
+
+template <std::integral T>
+[[nodiscard]] FORCE_INLINE HOT_PATH constexpr T iif(bool c, T a, T b) noexcept
+{
+    return (a & static_cast<T>(-c)) + (b & static_cast<T>(~static_cast<T>(-c)));
+}
+
+template <std::integral Int>
+FORCE_INLINE HOT_PATH constexpr void swap_if_greater(Int& a, Int& b) noexcept
+{
+    Int cond = iif(a > b, ~Int{0}, Int{0});
+    Int mask = (a ^ b) & cond;
+    a ^= mask, b ^= mask;
+}
+
 class Solution
 {
 public:
-    // Swap if a > b
-    static constexpr void __attribute__((always_inline)) swap_if_greater(
-        int& a,
-        int& b)
-    {
-        int cond = (a > b) ? ~0 : 0;
-        int mask = (a ^ b) & cond;
-        a ^= mask;
-        b ^= mask;
-    }
-
-    static constexpr void __attribute__((always_inline)) consider(
+    static constexpr void FORCE_INLINE consider(
         std::array<int, 3>& biggest_gaps,
         int& r,
         int duration,

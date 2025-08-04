@@ -3,11 +3,22 @@
 #include <span>
 #include <vector>
 
-#ifdef __GNUC__
+#define HOT_PATH __attribute__((hot))
 #define FORCE_INLINE inline __attribute__((always_inline))
-#else
-#define FORCE_INLINE inline
-#endif
+
+template <std::integral T>
+[[nodiscard]] FORCE_INLINE HOT_PATH constexpr T iif(bool c, T a, T b) noexcept
+{
+    return (a & static_cast<T>(-c)) + (b & static_cast<T>(~static_cast<T>(-c)));
+}
+
+template <std::integral Int>
+FORCE_INLINE HOT_PATH constexpr void swap_if_greater(Int& a, Int& b) noexcept
+{
+    Int cond = iif(a > b, ~Int{0}, Int{0});
+    Int mask = (a ^ b) & cond;
+    a ^= mask, b ^= mask;
+}
 
 using u8 = uint8_t;
 using u16 = uint16_t;
@@ -61,12 +72,6 @@ public:
     {
         return nodes[ancestor].in <= nodes[descendant].in &&
                nodes[descendant].out <= nodes[ancestor].out;
-    }
-
-    FORCE_INLINE static constexpr void swap_if_greater(int& a, int& b) noexcept
-    {
-        int cond = (a > b) ? ~0 : 0, mask = (a ^ b) & cond;
-        a ^= mask, b ^= mask;
     }
 
     [[nodiscard]] FORCE_INLINE static constexpr int

@@ -1,9 +1,23 @@
-#pragma once
-
+#include <concepts>
 #include <vector>
 
-#include "branchless_max.hpp"
-#include "int_if.hpp"
+#define FORCE_INLINE inline __attribute__((always_inline))
+#define HOT_PATH __attribute__((hot))
+
+template <std::integral T>
+[[nodiscard]] FORCE_INLINE HOT_PATH constexpr T branchless_max(
+    T a,
+    T b) noexcept
+{
+    T m = static_cast<T>(-T{a > b});
+    return (m & a) | (~m & b);
+}
+
+template <std::integral T>
+[[nodiscard]] FORCE_INLINE HOT_PATH constexpr T iif(bool c, T a, T b) noexcept
+{
+    return (a & static_cast<T>(-c)) + (b & static_cast<T>(~static_cast<T>(-c)));
+}
 
 class Solution
 {

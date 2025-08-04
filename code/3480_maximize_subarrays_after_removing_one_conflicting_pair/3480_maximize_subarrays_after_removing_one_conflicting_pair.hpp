@@ -1,17 +1,22 @@
 #include <array>
 #include <vector>
 
-#ifdef __GNUC__
-#define FORCE_INLINE inline __attribute__((always_inline))
-#else
-#define FORCE_INLINE inline
-#endif
-
-#ifdef __GNUC__
 #define HOT_PATH __attribute__((hot))
-#else
-#define FORCE_INLINE inline
-#endif
+#define FORCE_INLINE inline __attribute__((always_inline))
+
+template <std::integral T>
+[[nodiscard]] FORCE_INLINE HOT_PATH constexpr T iif(bool c, T a, T b) noexcept
+{
+    return (a & static_cast<T>(-c)) + (b & static_cast<T>(~static_cast<T>(-c)));
+}
+
+template <std::integral Int>
+FORCE_INLINE HOT_PATH constexpr void swap_if_greater(Int& a, Int& b) noexcept
+{
+    Int cond = iif(a > b, ~Int{0}, Int{0});
+    Int mask = (a ^ b) & cond;
+    a ^= mask, b ^= mask;
+}
 
 // This is a reformatted version of.
 // https://leetcode.com/problems/maximize-subarrays-after-removing-one-conflicting-pair/solutions/7007108/dynamic-programming-with-o-n-time-c-4-ms-beating-100-of-fair-submissions

@@ -12,7 +12,7 @@ def main():
         raise FileNotFoundError()
 
     included: set[Path] = set()
-    not_included: set[str] = set()
+    not_included: dict[str, str] = dict()
 
     src: list[str] = list()
     with open(file=target_file_path, mode="rt", encoding="utf-8") as target_file:
@@ -37,7 +37,11 @@ def main():
                 assert part[-1] in '">'
                 include_val = part[1:-1]
                 include_path = (templates_dir / include_val).resolve()
-                if include_path.exists() and include_path.is_file() and include_path not in included:
+
+                if include_path in included:
+                    continue
+
+                if include_path.is_file():
                     with open(file=include_path, mode="rt", encoding="utf-8") as included_file:
                         for included_line in included_file:
                             result.append(included_line.rstrip())
@@ -45,7 +49,7 @@ def main():
                     included.add(include_path)
                     num_embeds += 1
                 else:
-                    not_included.add(include_val)
+                    not_included[include_val] = part[0]
 
                 continue
 
@@ -55,10 +59,15 @@ def main():
         result = list()
 
     result_file_path = target_file_path.with_name(f"{target_file_path.stem}_mono.{target_file_path.suffix}")
-    with open(file=result_file_path, mode="wt", encoding="utf-8") as result_file:
 
-        for val in sorted(not_included):
-            result_file.write(f"#include <{val}>\n")
+    mirror = {
+        "<": ">",
+        '"': '"',
+    }
+    with open(file=result_file_path, mode="wt", encoding="utf-8") as result_file:
+        for val in sorted(not_included.keys()):
+            c = not_included[val]
+            result_file.write(f"#include {c}{val}{mirror[c]}\n")
 
         result_file.write("\n")
 
