@@ -33,6 +33,7 @@ public:
         u32 max_sum = 0, sum = 0;
         auto begin = trees.begin(), end = begin;
 
+        // Consider all cases where we have to go to the left
         while (begin->pos < start_pos)
         {
             u32 lo_steps = start_pos - begin->pos;
