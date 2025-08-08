@@ -33,6 +33,6 @@ public:
             }
         }
 
-        return fruits[0][0] + fruits[n - 1][0] + +fruits[0][n - 1];
+        return fruits[0][0] + fruits[n - 1][0] + fruits[0][n - 1];
     }
 };
