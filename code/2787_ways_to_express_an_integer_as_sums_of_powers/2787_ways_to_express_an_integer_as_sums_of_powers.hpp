@@ -30,7 +30,7 @@ inline constexpr auto gen_numbers_in_power = [](auto&& cb)
     std::bitset<301> bs;
     bs[1] = 1;
 
-    for (uint16_t i = 2; i <= 301; ++i)
+    for (uint16_t i = 2; i <= bs.size(); ++i)
     {
         uint16_t k = i;
         uint8_t j = 1;
@@ -43,7 +43,7 @@ inline constexpr auto gen_numbers_in_power = [](auto&& cb)
             }
 
             k *= i;
-            if (k >= 301) break;
+            if (k >= bs.size()) break;
         }
     }
 
