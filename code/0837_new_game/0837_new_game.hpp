@@ -16,8 +16,8 @@ public:
         constexpr u16 o = 10'001;
         dp[o] = 1, n += o + 1, k += o;
 
-        double r = 0.0;
-        float sum = 1.0, m = 1.f / static_cast<float>(maxPts);
+        double r = 0;
+        float sum = 1, m = 1.f / static_cast<float>(maxPts);
         u16 i = o + 1, j = i - maxPts, mnk = std::min(n, k);
 
         for (; i != mnk; ++i, ++j)
