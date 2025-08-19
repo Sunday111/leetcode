@@ -10,24 +10,27 @@
 template <
     u32 capacity,
     typename Value,
-    auto empty_val,
-    auto proj = std::identity{}>
+    auto default_entry,
+    auto empty_key,
+    auto key_proj = std::identity{}>
     requires(std::popcount(capacity) == 1)
 class HashSet
 {
 public:
-    using Key = decltype(proj(std::declval<Value>()));
+    using Key = std::decay_t<decltype(key_proj(std::declval<Value>()))>;
     static constexpr u32 kHashMask = capacity - 1;
     static constexpr std::hash<std::decay_t<Key>> kHasher{};
 
-    constexpr void Init(const Value& v) noexcept
+    constexpr void Init() noexcept
     {
-        std::ranges::fill(data_, v);
+        Value empty{};
+        key_proj(empty) = empty_key;
+        std::ranges::fill(data_, empty);
     }
 
     FORCE_INLINE void add(const Value& v) noexcept
     {
-        u32 index = kHasher(proj(v)) & kHashMask;
+        u32 index = kHasher(key_proj(v)) & kHashMask;
         while (has_value(data_[index]))
         {
             ++index;
@@ -40,31 +43,31 @@ public:
     FORCE_INLINE bool contains(const U& key) const noexcept
     {
         u32 index = kHasher(key) & kHashMask;
-        while (has_value(data_[index]) && proj(data_[index]) != key)
+        while (has_value(data_[index]) && key_proj(data_[index]) != key)
         {
             ++index;
             index &= kHashMask;
         }
-        return has_value(data_[index]) && proj(data_[index]) == key;
+        return has_value(data_[index]) && key_proj(data_[index]) == key;
     }
 
     template <typename U>
     [[nodiscard]] FORCE_INLINE Value* find(const U& key) noexcept
     {
         u32 index = kHasher(key) & kHashMask;
-        while (has_value(data_[index]) && proj(data_[index]) != key)
+        while (has_value(data_[index]) && key_proj(data_[index]) != key)
         {
             ++index;
             index &= kHashMask;
         }
         auto* p = &data_[index];
-        return has_value(*p) && proj(*p) == key ? p : nullptr;
+        return has_value(*p) && key_proj(*p) == key ? p : nullptr;
     }
 
     [[nodiscard]] FORCE_INLINE static constexpr bool has_value(
         const Value& v) noexcept
     {
-        return proj(v) != empty_val;
+        return key_proj(v) != empty_key;
     }
 
     std::span<Value, capacity> data_;

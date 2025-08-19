@@ -9,18 +9,16 @@ TEST(HashSetTest, Simple)
 {
     constexpr unsigned seed = 1234;
     constexpr size_t num_values = 20'000;
-    constexpr size_t num_passes = 20;
+    constexpr size_t num_passes = 200;
     std::mt19937 rnd{seed};
     std::uniform_int_distribution<u32> distr;
 
     std::vector<u32> values;
     std::unordered_set<u32> std_set;
 
-    static std::array<u32, 1 << 17> arr;
-    HashSet<1 << 16, u32, ~u32{0}> my_set{
-        .data_ = std::span<u32, 1 << 16>{arr.data(), 1 << 16},
-    };
-    my_set.Init(std::numeric_limits<u32>::max());
+    static constexpr u32 kCapacity = 1 << 16;
+    static std::array<u32, kCapacity> arr;
+    HashSet<kCapacity, u32, u32{}, ~u32{}> my_set{std::span{arr}};
 
     auto generate_values = [&]
     {
@@ -32,6 +30,8 @@ TEST(HashSetTest, Simple)
     for (size_t pass = 0; pass < num_passes; ++pass)
     {
         generate_values();
+        my_set.Init();
+        std_set.clear();
 
         for (auto value : values)
         {
@@ -46,7 +46,7 @@ TEST(HashMapTest, Simple)
 {
     constexpr unsigned seed = 1234;
     constexpr size_t num_values = 20'000;
-    constexpr size_t num_passes = 20;
+    constexpr size_t num_passes = 200;
     std::mt19937 rnd{seed};
     std::uniform_int_distribution<u32> distr;
 
@@ -57,12 +57,12 @@ TEST(HashMapTest, Simple)
     static std::array<Value, 1 << 16> arr;
     constexpr u32 capacity = 1 << 16;
 
-    constexpr auto proj = [](const auto& v)
+    constexpr auto proj = []<typename T>(T&& v) -> decltype(auto)  // NOLINT
     {
-        return v.first;
+        return (v.first);
     };
-    HashSet<capacity, Value, ~u32{0}, proj> my_map{arr};
-    my_map.Init(Value{0, 0});
+
+    HashSet<capacity, Value, Value{}, ~u32{}, proj> my_map{arr};
 
     auto generate_values = [&]
     {
@@ -74,6 +74,8 @@ TEST(HashMapTest, Simple)
     for (size_t pass = 0; pass < num_passes; ++pass)
     {
         generate_values();
+        my_map.Init();
+        std_map.clear();
 
         for (auto value : values)
         {

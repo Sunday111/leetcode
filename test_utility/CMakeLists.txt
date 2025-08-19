@@ -9,3 +9,7 @@ add_library(${target_name} INTERFACE ${test_utility_files})
 target_link_libraries(${target_name} INTERFACE gtest_main)
 target_include_directories(${target_name} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 set_generic_compiler_options(${target_name} INTERFACE)
+
+# Debug with sanitizers 🤌
+target_compile_options(${target_name} INTERFACE $<$<CONFIG:Debug>:-fsanitize=address,undefined>)
+target_link_options(${target_name} INTERFACE $<$<CONFIG:Debug>:-fsanitize=address,undefined>)

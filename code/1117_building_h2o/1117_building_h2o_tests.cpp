@@ -38,10 +38,10 @@ TEST(t1117_building_h2o, test_1)
 
     {
         std::println("Creating {} threads...", input.size());
-        std::vector<std::jthread> threads;
         std::latch start{static_cast<std::ptrdiff_t>(input.size()) + 1};
-
         H2O s;
+        std::vector<std::jthread> threads;
+
         for (char c : input)
         {
             if (c == 'H')

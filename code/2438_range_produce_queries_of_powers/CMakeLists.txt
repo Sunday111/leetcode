@@ -29,6 +29,3 @@ if (benchmark_sources)
             test_utility
     )
 endif()
-
-# target_compile_options(${target_name} INTERFACE -fsanitize=undefined)
-# target_link_options(${target_name} INTERFACE -fsanitize=undefined)
