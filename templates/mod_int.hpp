@@ -1,27 +1,10 @@
+#pragma once
+
 #include <concepts>
-#include <cstdint>
 
-#ifdef __GNUC__
-#define FORCE_INLINE inline __attribute__((always_inline))
-#else
-#define FORCE_INLINE inline
-#endif
-
-#ifdef __GNUC__
-#define HOT_PATH __attribute__((hot))
-#else
-#define FORCE_INLINE inline
-#endif
-
-using u8 = uint8_t;
-using u16 = uint16_t;
-using u32 = uint32_t;
-using u64 = uint64_t;
-
-using i8 = int8_t;
-using i16 = int16_t;
-using i32 = int32_t;
-using i64 = int64_t;
+#include "force_inline.hpp"
+#include "hot_path.hpp"
+#include "integral_aliases.hpp"
 
 inline constexpr u32 kMOD = 1'000'000'007;
 
@@ -116,8 +99,10 @@ struct ModInt
 
         while (exp)
         {
+            // these two lines are equal to if (exp & 1) r *= b;
             u32 t = -(exp & 1);
             r *= ModInt((b.value & t) + (1u & ~t));
+
             b *= b;
             exp >>= 1;
         }
@@ -126,14 +111,4 @@ struct ModInt
     }
 
     u32 value = 0;
-};
-
-class Solution
-{
-public:
-    [[nodiscard]] static constexpr u32 countGoodNumbers(u64 n) noexcept
-    {
-        const u64 odd = n / 2, even = n - odd;
-        return (ModInt{4}.pow(odd) * ModInt{5}.pow(even)).value;
-    }
 };
