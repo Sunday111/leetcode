@@ -1,4 +1,4 @@
-#include "branchless_max.hpp"
+#include "min_max_int.hpp"
 
 #include <gtest/gtest.h>
 
@@ -40,7 +40,7 @@ TYPED_TEST(BranchlessMaxTest, FuzzyCorrectness)
     {
         const T a = static_cast<T>(dist(rng)), b = static_cast<T>(dist(rng));
         T expected = std::max(a, b);
-        T actual = branchless_max(a, b);
+        T actual = int_max(a, b);
         ASSERT_EQ(actual, expected) << "Failed for a=" << +a << ", b=" << +b;
     }
 }
