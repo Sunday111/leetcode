@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.25)
 
 include(set_compiler_options)
 
-set(target_name 3195_find_the_minimum_area_to_cover_all_ones_2)
+set(target_name 3197_find_the_minimum_area_to_cover_all_ones_2)
 set(tests_target_name ${target_name}_tests)
 
 add_library(${target_name} INTERFACE ${target_name}.hpp)
