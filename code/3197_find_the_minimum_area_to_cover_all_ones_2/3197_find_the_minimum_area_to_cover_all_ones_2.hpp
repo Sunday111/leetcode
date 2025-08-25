@@ -119,10 +119,19 @@ public:
                 return;
             }
 
-            u32 fA = findTwoRectsWithMinArea(rects.first, grid);
-            if (fA != ~u32{}) result = std::min(fA + secondRectMinArea, result);
-            u32 fB = findTwoRectsWithMinArea(rects.second, grid);
-            if (fB != ~u32{}) result = std::min(fB + firstRectMinArea, result);
+            if (auto twoRectsMinArea =
+                    findTwoRectsWithMinArea(rects.first, grid);
+                twoRectsMinArea != ~u32{})
+            {
+                result = std::min(twoRectsMinArea + secondRectMinArea, result);
+            }
+
+            if (auto twoRectsMinArea =
+                    findTwoRectsWithMinArea(rects.second, grid);
+                twoRectsMinArea != ~u32{})
+            {
+                result = std::min(twoRectsMinArea + firstRectMinArea, result);
+            }
         };
 
         for (u8 t = 1; t != w; ++t)
