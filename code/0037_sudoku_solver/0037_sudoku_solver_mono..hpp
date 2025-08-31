@@ -2,20 +2,10 @@
 #include <bit>
 #include <concepts>
 #include <cstdint>
-#include <optional>
 #include <vector>
 
-#ifdef __GNUC__
 #define FORCE_INLINE inline __attribute__((always_inline))
-#else
-#define FORCE_INLINE inline
-#endif
-
-#ifdef __GNUC__
 #define HOT_PATH __attribute__((hot))
-#else
-#define FORCE_INLINE inline
-#endif
 
 template <std::integral T>
 [[nodiscard]] FORCE_INLINE HOT_PATH constexpr T iif(bool c, T a, T b) noexcept
@@ -25,13 +15,6 @@ template <std::integral T>
 
 using u8 = uint8_t;
 using u16 = uint16_t;
-using u32 = uint32_t;
-using u64 = uint64_t;
-
-using i8 = int8_t;
-using i16 = int16_t;
-using i32 = int32_t;
-using i64 = int64_t;
 
 struct OptionsBitset
 {
@@ -217,26 +200,24 @@ struct SudokuBoard
         return true;
     }
 
-    [[nodiscard]] constexpr std::optional<SudokuBoard> solve() const noexcept
+    [[nodiscard]] constexpr bool solve() noexcept
     {
-        auto b = *this;
-
         u8 x{}, y{};
         OptionsBitset opts;
 
-        while (std::tie(x, y, opts) = b.findBestCandidate(), x != 10)
+        while (std::tie(x, y, opts) = findBestCandidate(), x != 10)
         {
             if (opts.num() == 0)
             {
-                return std::nullopt;
+                return false;
             }
 
             if (opts.num() == 1)
             {
                 // Only one option. Avoid unnecessary recursion step
-                if (!b.setCellAndCheck(x, y, opts.get_min()))
+                if (!setCellAndCheck(x, y, opts.get_min()))
                 {
-                    return std::nullopt;
+                    return false;
                 }
 
                 continue;
@@ -245,18 +226,21 @@ struct SudokuBoard
             // Try all available options
             while (opts.num())
             {
-                auto tmp = b;
+                auto tmp = *this;
                 if (tmp.setCellAndCheck(x, y, opts.pop_min()))
                 {
-                    auto solved = tmp.solve();
-                    if (solved.has_value()) return solved;
+                    if (tmp.solve())
+                    {
+                        *this = tmp;
+                        return true;
+                    }
                 }
             }
 
-            return std::nullopt;
+            return false;
         }
 
-        return b;
+        return true;
     }
 
     std::array<std::array<u8, 9>, 9> board{};
@@ -271,7 +255,9 @@ public:
     static constexpr void solveSudoku(
         std::vector<std::vector<char>>& sb) noexcept
     {
+        auto board = SudokuBoard::fromArrays(sb);
         // there is a guarantee to have a solution so no need to check optional
-        SudokuBoard::fromArrays(sb).solve()->toArrays(sb);
+        [[maybe_unused]] auto solved = board.solve();
+        board.toArrays(sb);
     }
 };
