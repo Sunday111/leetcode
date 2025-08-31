@@ -1,11 +1,20 @@
-#pragma once
-
 #include <array>
 #include <bit>
+#include <concepts>
+#include <cstdint>
 #include <vector>
 
-#include "int_if.hpp"
-#include "integral_aliases.hpp"
+#define FORCE_INLINE inline __attribute__((always_inline))
+#define HOT_PATH __attribute__((hot))
+
+template <std::integral T>
+[[nodiscard]] FORCE_INLINE HOT_PATH constexpr T iif(bool c, T a, T b) noexcept
+{
+    return (a & static_cast<T>(-c)) + (b & static_cast<T>(~static_cast<T>(-c)));
+}
+
+using u8 = uint8_t;
+using u16 = uint16_t;
 
 struct OptionsBitset
 {
