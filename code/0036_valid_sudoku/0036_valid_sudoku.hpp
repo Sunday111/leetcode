@@ -18,7 +18,7 @@ public:
             {
                 if (char c = board[y][x]; c != '.')
                 {
-                    u8 i = c - '0', t = (y / 3) * 3 + x / 3;
+                    u8 i = (c - '0') & 0xFF, t = (y / 3) * 3 + x / 3;
                     if (h[y][i] || v[x][i] || b[t][i]) return false;
                     h[y][i] = v[x][i] = b[t][i] = true;
                 }
