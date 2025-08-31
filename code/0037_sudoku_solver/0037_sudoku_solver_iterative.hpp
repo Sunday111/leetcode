@@ -1,20 +1,11 @@
+#pragma once
+
 #include <array>
 #include <bit>
-#include <concepts>
-#include <cstdint>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define HOT_PATH __attribute__((hot))
-
-template <std::integral T>
-[[nodiscard]] FORCE_INLINE HOT_PATH constexpr T iif(bool c, T a, T b) noexcept
-{
-    return (a & static_cast<T>(-c)) + (b & static_cast<T>(~static_cast<T>(-c)));
-}
-
-using u8 = uint8_t;
-using u16 = uint16_t;
+#include "int_if.hpp"
+#include "integral_aliases.hpp"
 
 struct OptionsBitset
 {
@@ -202,45 +193,65 @@ struct SudokuBoard
 
     [[nodiscard]] constexpr bool solve() noexcept
     {
-        u8 x{}, y{};
-        OptionsBitset opts;
-
-        while (std::tie(x, y, opts) = findBestCandidate(), x != 10)
+        struct Frame
         {
-            if (opts.num() == 0)
-            {
-                return false;
-            }
+            SudokuBoard board;
+            u8 x{}, y{};
+            OptionsBitset opts;
+        };
 
-            if (opts.num() == 1)
-            {
-                // Only one option. Avoid unnecessary recursion step
-                if (!setCellAndCheck(x, y, opts.get_min()))
-                {
-                    return false;
-                }
+        std::array<Frame, 81> stack;
+        u8 depth = 0;
 
+        // Push initial state
+        {
+            u8 x{}, y{};
+            OptionsBitset opts;
+            std::tie(x, y, opts) = findBestCandidate();
+            if (x == 10) return true;  // already solved
+            if (opts.num() == 0) return false;
+            stack[depth++] = {*this, x, y, opts};
+        }
+
+        u8 nx{}, ny{};
+        OptionsBitset next_opts;
+
+        while (depth)
+        {
+            auto& frame = stack[depth - 1];
+            if (frame.opts.num() == 0)
+            {
+                --depth;
                 continue;
             }
 
-            // Try all available options
-            while (opts.num())
+            // Try next option
+            auto next_board = frame.board;
+
+            if (!next_board
+                     .setCellAndCheck(frame.x, frame.y, frame.opts.pop_min()))
             {
-                auto tmp = *this;
-                if (tmp.setCellAndCheck(x, y, opts.pop_min()))
-                {
-                    if (tmp.solve())
-                    {
-                        *this = tmp;
-                        return true;
-                    }
-                }
+                continue;  // invalid, try next option
             }
 
-            return false;
+            std::tie(nx, ny, next_opts) = next_board.findBestCandidate();
+
+            if (nx == 10)
+            {
+                *this = next_board;
+                return true;  // solved
+            }
+
+            if (next_opts.num() == 0)
+            {
+                continue;  // dead end, try other branch
+            }
+
+            // Otherwise, push deeper frame
+            stack[depth++] = {next_board, nx, ny, next_opts};
         }
 
-        return true;
+        return false;  // no solution
     }
 
     std::array<std::array<u8, 9>, 9> board{};
@@ -255,9 +266,9 @@ public:
     static constexpr void solveSudoku(
         std::vector<std::vector<char>>& sb) noexcept
     {
-        auto board = SudokuBoard::fromArrays(sb);
-        // there is a guarantee to have a solution so no need to check optional
-        [[maybe_unused]] auto solved = board.solve();
-        board.toArrays(sb);
+        if (auto board = SudokuBoard::fromArrays(sb); board.solve())
+        {
+            board.toArrays(sb);
+        }
     }
 };
