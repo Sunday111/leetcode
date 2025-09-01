@@ -15,7 +15,7 @@ public:
     {
         struct Class
         {
-            u32 failed, total;
+            float failed, total;
         };
 
         auto classes = [&]()
@@ -27,8 +27,8 @@ public:
                 int pass = in_class[0], total = in_class[1],
                     failed = total - pass;
                 classes_array[n] = {
-                    .failed = static_cast<u32>(failed),
-                    .total = static_cast<u32>(total),
+                    .failed = static_cast<float>(failed),
+                    .total = static_cast<float>(total),
                 };
                 n += failed != 0;
             }
@@ -37,32 +37,28 @@ public:
 
         if (!classes.empty())
         {
-            constexpr auto cmp = std::less{};
-
-            constexpr auto proj = [](const Class& cls)
+            constexpr auto cmp = [](const Class& a, const Class& b)
             {
-                float f = static_cast<float>(cls.failed);
-                float t = static_cast<float>(cls.total);
-                return f / (t * (t + 1));
+                return a.failed * b.total * (b.total + 1) <
+                       b.failed * a.total * (a.total + 1);
             };
 
-            std::ranges::make_heap(classes, cmp, proj);
+            std::ranges::make_heap(classes, cmp);
 
             while (extra)
             {
-                std::ranges::pop_heap(classes, cmp, proj);
+                std::ranges::pop_heap(classes, cmp);
                 auto& best = classes.back();
                 ++best.total;
                 --extra;
-                std::ranges::push_heap(classes, cmp, proj);
+                std::ranges::push_heap(classes, cmp);
             }
         }
 
         double s = 0;
         for (auto& cls : classes)
         {
-            s += static_cast<double>(cls.failed) /
-                 static_cast<double>(cls.total);
+            s += static_cast<double>(cls.failed / cls.total);
         }
 
         const double n = static_cast<double>(in_classes.size());
