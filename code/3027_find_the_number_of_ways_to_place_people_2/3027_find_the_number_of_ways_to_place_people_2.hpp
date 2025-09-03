@@ -10,14 +10,13 @@
 class Solution
 {
 public:
-    using Index = uint8_t;   // [0; 50)
-    using Coord = int32_t;   // [0;50]
-    using Result = uint8_t;  // < 50x50 ?
+    using Index = uint16_t;   // [0; 1000)
+    using Coord = int32_t;    // [-10^9; 10^9]
+    using Result = uint16_t;  // < 1000x1000 ?
 
     struct Point
     {
-        Coord x;
-        Coord y;
+        Coord x, y;
 
         [[nodiscard]] FORCE_INLINE HOT_PATH constexpr bool operator<(
             const Point& r) const noexcept

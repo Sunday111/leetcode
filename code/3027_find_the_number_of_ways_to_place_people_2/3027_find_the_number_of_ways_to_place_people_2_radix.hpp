@@ -1,8 +1,9 @@
 #pragma once
 
-#include <algorithm>
 #include <array>
 #include <vector>
+
+#include "radix_sorter.hpp"
 
 #define FORCE_INLINE inline __attribute__((always_inline))
 #define HOT_PATH __attribute__((hot))
@@ -10,14 +11,14 @@
 class Solution
 {
 public:
-    using Index = uint8_t;   // [0; 50)
-    using Coord = int32_t;   // [0;50]
-    using Result = uint8_t;  // < 50x50 ?
+    using Index = uint16_t;   // [0; 1000)
+    using Coord = uint32_t;   // [0; 2 * 10^9]
+    using Result = uint16_t;  // < 1000x1000 ?
 
     struct Point
     {
-        Coord x;
         Coord y;
+        Coord x;
 
         [[nodiscard]] FORCE_INLINE HOT_PATH constexpr bool operator<(
             const Point& r) const noexcept
@@ -31,18 +32,23 @@ public:
     {
         std::array<Point, 1000> points;  // NOLINT
         Index n = 0;
+        constexpr int minc = 1'000'000'000;
+        constexpr Coord adj = 2'000'000'000;
         for (auto& p : in)
         {
             points[n++] = {
-                .x = static_cast<Coord>(p[0]),
-                .y = static_cast<Coord>(p[1]),
+                .y = adj - static_cast<Coord>(p[1] + minc),
+                .x = static_cast<Coord>(p[0] + minc),
             };
         }
 
-        std::ranges::sort(
-            points.begin(),
-            std::next(points.begin(), n),
-            std::less{});
+        radix_sort<u64, SortOrder::Ascending, 8>(
+            reinterpret_range<uint64_t>(std::span{points}.first(n)));
+
+        for (Index i = 0; i != n; ++i)
+        {
+            points[i].y = adj - points[i].y;
+        }
 
         Result r = 0;
 
