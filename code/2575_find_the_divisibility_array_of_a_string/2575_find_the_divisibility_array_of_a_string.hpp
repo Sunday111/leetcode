@@ -20,7 +20,7 @@ public:
             v *= 10;
             v += digit;
             v %= m;
-            r.push_back(v == 0);
+            r.emplace_back(v == 0);
         }
 
         return r;
