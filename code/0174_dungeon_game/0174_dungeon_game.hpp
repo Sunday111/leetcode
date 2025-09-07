@@ -42,10 +42,8 @@ public:
             for (u8 x = last_x; x--;)
             {
                 int& current = current_row[x];
-                const int& right = current_row[x + 1];
-                const int& bottom = next_row[x];
-                current =
-                    std::max(1, std::min(right - current, bottom - current));
+                int next = std::min(current_row[x + 1], next_row[x]);
+                current = std::max(1, next - current);
             }
         }
 
