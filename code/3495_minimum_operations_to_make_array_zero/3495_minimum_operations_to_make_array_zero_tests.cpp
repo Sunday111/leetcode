@@ -9,6 +9,16 @@
     return r;
 }
 
+TEST(t3495_minimum_operations_to_make_array_zero, test_yo)
+{
+    u32 x = 1;
+    for (u8 i = 1; i != 17; ++i)
+    {
+        std::println("{:2}: {}", i, u64{num_divs(x)} * u64{(x << 2) - x});
+        x <<= 2;
+    }
+}
+
 TEST(t3495_minimum_operations_to_make_array_zero, test_sandbox)
 {
     u32 begin = 0;
@@ -37,7 +47,7 @@ TEST(t3495_minimum_operations_to_make_array_zero, test_sandbox)
             begin = x;
             prev_r = expected;
         }
-        u8 actual = count_divisions(x);
+        u8 actual = num_divs(x);
         ASSERT_EQ(+expected, +actual) << "x = " << x;
     }
 
