@@ -38,29 +38,39 @@ class Solution
 {
 public:
     template <u16 max_langs>
-    FORCE_INLINE static constexpr u16 test_language(
+    [[nodiscard]] FORCE_INLINE static constexpr u16 test_languages(
         std::vector<std::vector<int>>& friendships,
         std::array<std::bitset<max_langs>, 512>& know,
-        u16 lang,
+        std::bitset<max_langs>& languages,
+        u16 n,
         u16 max_r) noexcept
     {
-        u16 cnt = 0;
-        std::bitset<512> learners;
-        for (u16 f = 0; f != friendships.size() && cnt < max_r; ++f)
+        u16 r = max_r;
+        for (u16 lang = 1; lang <= n; ++lang)
         {
-            auto& friendship = friendships[f];
-            u16 a = friendship[0] & 0xFFFF;
-            u16 b = friendship[1] & 0xFFFF;
-            bool prev_a = learners[a];
-            bool prev_b = learners[b];
-            bool new_a = prev_a || !know[a][lang];
-            bool new_b = prev_b || !know[b][lang];
-            cnt += new_a != prev_a;
-            cnt += new_b != prev_b;
-            learners[a] = new_a;
-            learners[b] = new_b;
+            if (languages[lang])
+            {
+                u16 cnt = 0;
+                std::bitset<512> learners;
+                for (u16 f = 0; f != friendships.size() && cnt < max_r; ++f)
+                {
+                    auto& friendship = friendships[f];
+                    u16 a = friendship[0] & 0xFFFF;
+                    u16 b = friendship[1] & 0xFFFF;
+                    bool prev_a = learners[a];
+                    bool prev_b = learners[b];
+                    bool new_a = prev_a || !know[a][lang];
+                    bool new_b = prev_b || !know[b][lang];
+                    cnt += new_a != prev_a;
+                    cnt += new_b != prev_b;
+                    learners[a] = new_a;
+                    learners[b] = new_b;
+                }
+                r = std::min(cnt, r);
+            }
         }
-        return std::min(cnt, max_r);
+
+        return r;
     }
 
     template <u16 max_langs>
@@ -93,42 +103,26 @@ public:
 
         if (friendships.empty()) return 0;
 
-        u16 r = num_users;
-
-        auto languages_to_test =
+        auto or_langs =
             know[friendships[0][0] & 0xFFFF] ^ know[friendships[0][1] & 0xFFFF];
+        auto and_langs = or_langs;
 
+        for (u16 f = 1; f != friendships.size(); ++f)
         {
-            auto tt = know[friendships[0][0] & 0xFFFF] ^
-                      know[friendships[0][1] & 0xFFFF];
-
-            for (u16 f = 1; f != friendships.size(); ++f)
-            {
-                tt &= know[friendships[f][0] & 0xFFFF] ^
-                      know[friendships[f][1] & 0xFFFF];
-                languages_to_test |= know[friendships[f][0] & 0xFFFF] ^
-                                     know[friendships[f][1] & 0xFFFF];
-            }
-
-            for (u16 lang = 1; lang <= n; ++lang)
-            {
-                if (tt[lang])
-                {
-                    languages_to_test[lang] = false;
-                    r = test_language<max_langs>(friendships, know, lang, r);
-                }
-            }
+            auto tmp = know[friendships[f][0] & 0xFFFF] ^
+                       know[friendships[f][1] & 0xFFFF];
+            and_langs &= tmp;
+            or_langs |= tmp;
         }
 
-        for (u16 lang = 1; lang <= n; ++lang)
-        {
-            if (languages_to_test[lang])
-            {
-                r = test_language<max_langs>(friendships, know, lang, r);
-            }
-        }
-
-        return r;
+        u16 r = test_languages<max_langs>(
+            friendships,
+            know,
+            and_langs,
+            n,
+            num_users);
+        or_langs &= ~and_langs;  // and_langs already tested - skip
+        return test_languages<max_langs>(friendships, know, or_langs, n, r);
     }
 
     [[nodiscard]] static constexpr int minimumTeachings(
