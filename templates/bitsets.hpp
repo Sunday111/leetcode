@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <bit>
 #include <concepts>
 
 #include "int_if.hpp"
@@ -68,6 +69,35 @@ public:
     constexpr void Flip() noexcept
     {
         for (auto& word : words) word = ~word;
+    }
+
+    [[nodiscard]] constexpr Bitset Flipped() const noexcept
+    {
+        auto copy = *this;
+        copy.Flip();
+        return copy;
+    }
+
+    void InplaceAnd(const Bitset& another) noexcept
+    {
+        for (Index word_index = 0; word_index != num_words; ++word_index)
+        {
+            words[word_index] &= another.words[word_index];
+        }
+    }
+
+    [[nodiscard]] constexpr Bitset And(const Bitset& another) const noexcept
+    {
+        auto copy = *this;
+        copy.InplaceAnd(another);
+        return copy;
+    }
+
+    [[nodiscard]] constexpr Size Count() const noexcept
+    {
+        Size r = 0;
+        for (auto& w : words) r += std::popcount(w);
+        return r;
     }
 
     std::array<Word, num_words> words{};
