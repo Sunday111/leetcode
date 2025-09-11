@@ -1,12 +1,64 @@
-#pragma once
-
+#include <algorithm>
 #include <bitset>
+#include <concepts>
+#include <cstdint>
 #include <span>
+#include <utility>
 #include <vector>
 
-#include "ceil_div.hpp"
-#include "integral_aliases.hpp"
-#include "remove_if.hpp"
+#ifdef __GNUC__
+#define FORCE_INLINE inline __attribute__((always_inline))
+#else
+#define FORCE_INLINE inline
+#endif
+
+template <std::integral T>
+[[nodiscard]] FORCE_INLINE static constexpr T ceil_div(T a, T b) noexcept
+{
+    return ((a + b) - 1) / b;
+}
+
+using u8 = uint8_t;
+using u16 = uint16_t;
+using u32 = uint32_t;
+using u64 = uint64_t;
+
+using i8 = int8_t;
+using i16 = int16_t;
+using i32 = int32_t;
+using i64 = int64_t;
+
+// Returns new end
+template <typename ForwardIt, typename UnaryPredicate>
+[[nodiscard]] FORCE_INLINE static constexpr ForwardIt
+unstable_remove_if(ForwardIt begin, ForwardIt end, UnaryPredicate p) noexcept
+{
+    while (begin != end)
+    {
+        if (p(*begin))
+        {
+            do
+            {
+                if (--end == begin) return begin;
+            } while (p(*end));
+            std::iter_swap(begin, end);
+        }
+        ++begin;
+    }
+    return end;
+}
+
+// Returns new end. Range overload
+template <typename Range, typename UnaryPredicate>
+[[nodiscard]] FORCE_INLINE static constexpr auto unstable_remove_if(
+    Range& range,
+    UnaryPredicate&& p) noexcept
+{
+    return unstable_remove_if(
+        std::begin(range),
+        std::end(range),
+        std::forward<UnaryPredicate>(p));
+}
 
 class Solution
 {
