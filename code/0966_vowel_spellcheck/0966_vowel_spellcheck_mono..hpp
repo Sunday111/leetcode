@@ -1,11 +1,9 @@
-#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <string_view>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
-
-// #pragma GCC optimize("O3")
 
 #ifdef __GNUC__
 #define FORCE_INLINE inline __attribute__((always_inline))
@@ -37,7 +35,8 @@ public:
 
     FORCE_INLINE HOT_PATH static constexpr bool is_vowel(u8 c) noexcept
     {
-        return ((0x104111 >> (c - 'a')) & 1);
+        assert(c >= 64);
+        return is_vowel_bitset & (uint64_t{1} << (c - 64));
     }
 
     [[nodiscard]] FORCE_INLINE HOT_PATH static constexpr u64 str_to_bstr(
@@ -104,7 +103,8 @@ public:
         std::vector<std::string>& wordlist,
         std::vector<std::string>& queries) noexcept
     {
-        std::unordered_map<u64, std::vector<u64>> case_lookup;
+        std::unordered_set<u64> exact_lookup;
+        std::unordered_map<u64, u64> case_lookup;
         std::unordered_map<u64, u64> no_vowels_lookup;
 
         for (const std::string& word : wordlist)
@@ -112,23 +112,24 @@ public:
             u64 bstr = str_to_bstr(word);
             u64 lowered = to_lower(bstr);
             u64 no_vowels = remove_vowels(lowered);
-            case_lookup[lowered].push_back(bstr);
+            exact_lookup.insert(bstr);
+            case_lookup.try_emplace(lowered, bstr);
             no_vowels_lookup.try_emplace(no_vowels, bstr);
         }
 
         for (std::string& query : queries)
         {
             u64 query_bstr = str_to_bstr(query);
-            u64 lowered = to_lower(query_bstr);
 
+            if (exact_lookup.contains(query_bstr))
+            {
+                continue;
+            }
+
+            const u64 lowered = to_lower(query_bstr);
             if (auto it = case_lookup.find(lowered); it != case_lookup.end())
             {
-                // If there is no exact match, convert the first one
-                if (!std::ranges::contains(it->second, query_bstr))
-                {
-                    bstr_to_str(it->second.front(), query);
-                }
-
+                bstr_to_str(it->second, query);
                 continue;
             }
 
