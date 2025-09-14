@@ -3,6 +3,9 @@
 #include <ranges>
 #include <string_view>
 
+#include "compose.hpp"
+#include "functional.hpp"
+
 class Solution
 {
 public:
@@ -21,13 +24,17 @@ public:
         return is_vowel_bitset & (uint64_t{1} << (c - 64));
     }
 
+    template <typename To>
+    static constexpr auto cast = []<typename From>(From&& from) noexcept
+    {
+        return static_cast<To>(std::forward<From&&>(from));
+    };
+
     [[nodiscard]] static constexpr int maxFreqSum(std::string_view s) noexcept
     {
+        constexpr auto to_u8 = cast<uint8_t>;
         std::array<u8, 64> freq_arr{};
-        auto freq = [&](char c) -> u8&
-        {
-            return freq_arr[c & 0x7F];
-        };
+        auto freq = compose(to_u8, index_op(freq_arr));
         for (char c : s) ++freq(c);
 
         std::array<u8, 2> ans{};
