@@ -103,9 +103,13 @@ public:
         std::vector<std::string>& wordlist,
         std::vector<std::string>& queries) noexcept
     {
+        auto capacity = wordlist.size();
         std::unordered_set<u64> exact_lookup;
         std::unordered_map<u64, u64> case_lookup;
         std::unordered_map<u64, u64> no_vowels_lookup;
+        exact_lookup.reserve(capacity);
+        case_lookup.reserve(capacity);
+        no_vowels_lookup.reserve(capacity);
 
         for (const std::string& word : wordlist)
         {
@@ -126,21 +130,21 @@ public:
                 continue;
             }
 
+            u64 result = 0;
             const u64 lowered = to_lower(query_bstr);
-            if (auto it = case_lookup.find(lowered); it != case_lookup.end())
+            if (auto l_it = case_lookup.find(lowered);
+                l_it != case_lookup.end())
             {
-                bstr_to_str(it->second, query);
-                continue;
+                result = l_it->second;
             }
 
-            if (auto it = no_vowels_lookup.find(remove_vowels(lowered));
-                it != no_vowels_lookup.end())
+            else if (auto nv_it = no_vowels_lookup.find(remove_vowels(lowered));
+                     nv_it != no_vowels_lookup.end())
             {
-                bstr_to_str(it->second, query);
-                continue;
+                result = nv_it->second;
             }
 
-            query.clear();
+            bstr_to_str(result, query);
         }
 
         return std::move(queries);
