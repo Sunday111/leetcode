@@ -25,3 +25,21 @@ template <typename T, size_t N>
         return arr[std::forward<Index>(index)];
     };
 }
+
+template <typename T>
+[[nodiscard]] inline constexpr auto index_op(std::vector<T>& arr) noexcept
+{
+    return [&]<typename Index>(Index&& index) -> T&
+    {
+        return arr[std::forward<Index>(index)];
+    };
+}
+
+template <typename T>
+[[nodiscard]] inline constexpr auto index_op(const std::vector<T>& arr) noexcept
+{
+    return [&]<typename Index>(Index&& index) -> const T&
+    {
+        return arr[std::forward<Index>(index)];
+    };
+}
