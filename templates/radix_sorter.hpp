@@ -5,7 +5,9 @@
 #include <span>
 
 #include "force_inline.hpp"
+#include "hot_path.hpp"
 #include "integral_aliases.hpp"
+#include "no_sanitizers.hpp"
 #include "reinterpret_range.hpp"
 
 enum class SortOrder : u8
@@ -36,6 +38,7 @@ class RadixSorter
 
     template <u8 pass_index>
     FORCE_INLINE static void do_pass(std::span<UT> arr) noexcept
+        NO_SANITIZERS HOT_PATH
     {
         count.fill(0);
         constexpr UT shift = pass_index * bits_per_pass;
@@ -88,12 +91,14 @@ class RadixSorter
     FORCE_INLINE static void do_passes(
         std::span<UT> arr,
         std::integer_sequence<u8, pass_index...>) noexcept
+        NO_SANITIZERS HOT_PATH
     {
         (do_pass<pass_index>(arr), ...);
     }
 
 public:
     FORCE_INLINE static void sort(std::span<T> arr) noexcept
+        NO_SANITIZERS HOT_PATH
     {
         if (arr.size()) do_passes(reinterpret_range<UT>(arr), pass_idx_seq);
     }
@@ -104,7 +109,7 @@ template <
     SortOrder order,
     u8 bits_per_pass,
     u32 num_passes = ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)>
-FORCE_INLINE void radix_sort(std::span<T> arr) noexcept
+FORCE_INLINE void radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
 {
     RadixSorter<T, order, bits_per_pass, num_passes>::sort(arr);
 }

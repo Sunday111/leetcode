@@ -10,6 +10,12 @@
 #define FORCE_INLINE inline
 #endif
 
+#ifdef __GNUC__
+#define HOT_PATH __attribute__((hot))
+#else
+#define FORCE_INLINE inline
+#endif
+
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
@@ -19,6 +25,9 @@ using i8 = int8_t;
 using i16 = int16_t;
 using i32 = int32_t;
 using i64 = int64_t;
+
+#define NO_SANITIZERS \
+    __attribute__((no_sanitize("undefined", "address", "coverage", "thread")))
 
 template <typename To, typename From, std::size_t extent = std::dynamic_extent>
     requires(sizeof(To) == sizeof(From))
@@ -66,6 +75,7 @@ class RadixSorter
 
     template <u8 pass_index>
     FORCE_INLINE static void do_pass(std::span<UT> arr) noexcept
+        NO_SANITIZERS HOT_PATH
     {
         count.fill(0);
         constexpr UT shift = pass_index * bits_per_pass;
@@ -118,12 +128,14 @@ class RadixSorter
     FORCE_INLINE static void do_passes(
         std::span<UT> arr,
         std::integer_sequence<u8, pass_index...>) noexcept
+        NO_SANITIZERS HOT_PATH
     {
         (do_pass<pass_index>(arr), ...);
     }
 
 public:
     FORCE_INLINE static void sort(std::span<T> arr) noexcept
+        NO_SANITIZERS HOT_PATH
     {
         if (arr.size()) do_passes(reinterpret_range<UT>(arr), pass_idx_seq);
     }
@@ -134,7 +146,7 @@ template <
     SortOrder order,
     u8 bits_per_pass,
     u32 num_passes = ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)>
-FORCE_INLINE void radix_sort(std::span<T> arr) noexcept
+FORCE_INLINE void radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
 {
     RadixSorter<T, order, bits_per_pass, num_passes>::sort(arr);
 }
@@ -142,26 +154,27 @@ FORCE_INLINE void radix_sort(std::span<T> arr) noexcept
 class Solution
 {
 public:
+    [[nodiscard]] static constexpr i64 pass(
+        const std::vector<int>& nums,
+        i32 max) noexcept NO_SANITIZERS HOT_PATH
+    {
+        i64 count = 0;
+        auto l = nums.begin(), r = nums.end() - 1;
+        while (l != r)
+        {
+            auto ok = *l + *r <= max;
+            count += ok * (r - l);
+            l += ok;
+            r -= !ok;
+        }
+        return count;
+    }
+
     [[nodiscard]] static constexpr i64
     countFairPairs(std::vector<i32>& nums, i32 lower, i32 upper) noexcept
     {
         radix_sort<i32, SortOrder::Ascending, 16, 2>(nums);
-        std::ranges::sort(nums);
 
-        auto countPairs = [&](i32 bound)
-        {
-            i64 count = 0;
-            auto l = nums.begin(), r = nums.end() - 1;
-            while (l < r)
-            {
-                auto ok = *l + *r <= bound;
-                count += ok * (r - l);
-                l += ok;
-                r -= !ok;
-            }
-            return count;
-        };
-
-        return countPairs(upper) - countPairs(lower - 1);
+        return pass(nums, upper) - pass(nums, lower - 1);
     }
 };
