@@ -2,13 +2,12 @@
 #include <string_view>
 
 #define FORCE_INLINE inline __attribute__((always_inline))
+
 class Spreadsheet
 {
 public:
     using u8 = uint8_t;
-    using u16 = uint16_t;
     using u32 = uint32_t;
-    using u64 = uint64_t;
 
 private:
     std::array<std::array<u32, 26>, 1001> rows{};
