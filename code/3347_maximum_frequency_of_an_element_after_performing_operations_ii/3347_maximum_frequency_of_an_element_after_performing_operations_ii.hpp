@@ -1,19 +1,26 @@
 #pragma once
 
 #include <algorithm>
+#include <span>
 #include <utility>
 #include <vector>
+
+#include "radix_sorter.hpp"
 
 class Solution
 {
 public:
     using u32 = uint32_t;
     [[nodiscard]] static constexpr u32 maxFrequency(
-        std::vector<int>& nums,
-        const int k,
+        std::vector<int>& nums_,
+        const u32 k,
         const u32 numOperations) noexcept
     {
-        std::ranges::sort(nums);
+        const std::span<u32> nums{
+            reinterpret_cast<u32*>(nums_.data()),  // NOLINT
+            nums_.size(),
+        };
+        radix_sort<u32, SortOrder::Ascending, 7, 3>(nums);
 
         u32 r = 0;
 
@@ -22,7 +29,7 @@ public:
         for (auto it = nums.begin(); it != nums.end();)
         {
             auto v_begin = it;
-            int v = *it;
+            u32 v = *it;
 
             u32 freq = 0;
             do
@@ -31,7 +38,7 @@ public:
                 ++freq;
             } while (it != nums.end() && *it == v);
 
-            int left = v - k, right = v + k;
+            u32 left = v - std::min(v, k), right = v + k;
             while (*lo < left) ++lo;
             hi = std::max(hi, it);
             while (hi != nums.end() && *hi <= right) ++hi;
@@ -44,7 +51,7 @@ public:
             if (*(hi - 1) != v + k)
             {
                 t = std::max(t, hi);
-                int ahead = v + 2 * k;
+                u32 ahead = v + 2 * k;
                 while (t != nums.end() && *t <= ahead) ++t;
                 num_in_range = static_cast<u32>(std::distance(v_begin, t));
                 possible_freq = std::min(num_in_range, numOperations);
