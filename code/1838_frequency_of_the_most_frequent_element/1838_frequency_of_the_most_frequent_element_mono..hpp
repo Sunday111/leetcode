@@ -4,27 +4,11 @@
 #include <span>
 #include <vector>
 
-#ifdef __GNUC__
 #define FORCE_INLINE inline __attribute__((always_inline))
-#else
-#define FORCE_INLINE inline
-#endif
-
-#ifdef __GNUC__
 #define HOT_PATH __attribute__((hot))
-#else
-#define FORCE_INLINE inline
-#endif
 
 using u8 = uint8_t;
-using u16 = uint16_t;
 using u32 = uint32_t;
-using u64 = uint64_t;
-
-using i8 = int8_t;
-using i16 = int16_t;
-using i32 = int32_t;
-using i64 = int64_t;
 
 #define NO_SANITIZERS \
     __attribute__((no_sanitize("undefined", "address", "coverage", "thread")))
@@ -156,30 +140,24 @@ class Solution
 public:
     [[nodiscard]] static constexpr u32 maxFrequency(
         std::vector<int>& _nums,
-        const u32 k) noexcept
+        u32 k) noexcept
     {
-        const std::span<u32> nums{
-            reinterpret_cast<u32*>(_nums.data()),  // NOLINT
-            _nums.size(),
-        };
-        radix_sort<u32, SortOrder::Descending, 7, 3>(nums);
+        const std::span<u32> nums = reinterpret_range<u32>(_nums);
+        radix_sort<u32, SortOrder::Descending, 10, 2>(nums);
 
         auto i = nums.begin(), j = i, e = nums.end();
-        u32 count = 0, available_ops = k, r = 0;
-        while (true)
+        u32 r = 0;
+        while (j != e && std::distance(i, e) > r)
         {
-            if (j != e && *i - *j <= available_ops)
+            if (u32 d = *i - *j; d <= k)
             {
-                u32 delta = *i - *j;
-                available_ops -= delta;
-                r = std::max(r, ++count);
-                ++j;
+                r = std::max(r, static_cast<u32>(++j - i));
+                k -= d;
             }
             else
             {
                 u32 pv = *i++;
-                if (i == e) break;
-                available_ops += --count * (pv - *i);
+                k += (j - i) * (pv - *i);
             }
         }
 
