@@ -18,19 +18,21 @@ public:
     using u32 = uint32_t;
     struct RankInfo
     {
-        static u64 calc(u64 n, u64 rank) { return n * n * rank; }
-
-        void Init() { finish_time_1 = calc(cars + 1, rank); }
-
-        void AddCar()
+        [[nodiscard]] inline static constexpr u64 Calc(u64 n, u64 rank) noexcept
         {
-            ++cars;
-            Init();
+            return n * n * rank;
         }
+
+        [[nodiscard]] inline constexpr u64 Calc(u32 d) const noexcept
+        {
+            return Calc(cars + d, rank);
+        }
+
+        constexpr void Update() noexcept { finish_time_1 = Calc(1); }
 
         [[nodiscard]] constexpr u64 GetFinishTime() const noexcept
         {
-            return calc(cars, rank);
+            return Calc(0);
         }
 
         u32 rank = 0;
@@ -54,7 +56,7 @@ public:
                 auto& r = info[num_ranks++];
                 r = info[i];
                 r.rank = i;
-                r.Init();
+                r.Update();
             }
         }
 
@@ -67,9 +69,8 @@ public:
 
         if (heap.size() == 1)
         {
-            return RankInfo::calc(
-                ceil_div(cars, heap[0].mechanics),
-                heap[0].rank);
+            heap[0].cars = ceil_div(cars, heap[0].mechanics);
+            return heap[0].Calc(0);
         }
 
         heap_op(std::ranges::make_heap);
@@ -91,7 +92,7 @@ public:
 
             cars -= std::min(cars, da * curr.mechanics);
             curr.cars += da;
-            curr.Init();
+            curr.Update();
 
             heap_op(std::ranges::push_heap);
         }
