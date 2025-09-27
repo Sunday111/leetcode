@@ -5,23 +5,31 @@
 class Solution
 {
 public:
+    [[nodiscard]] inline static constexpr auto xy(
+        const std::vector<int>& v) noexcept
+    {
+        return std::make_tuple(v[0], v[1]);
+    }
+
+    using u32 = uint32_t;
     [[nodiscard]] static constexpr double largestTriangleArea(
-        const std::vector<std::vector<int>>& points) noexcept
+        const std::vector<std::vector<int>>& p) noexcept
     {
         int r = 0;
-        for (auto& p1 : points)
+        auto n = static_cast<u32>(p.size());
+        for (u32 i = 0; i != n; ++i)
         {
-            const int x1 = p1[0], y1 = p1[1];
-            for (auto& p2 : points)
+            auto [xi, yi] = xy(p[i]);
+            for (u32 j = i + 1; j != n; ++j)
             {
-                const int x2 = p2[0], y2 = p2[1];
-                for (auto& p3 : points)
+                auto [xj, yj] = xy(p[j]);
+                for (u32 k = j + 1; k != n; ++k)
                 {
-                    const int x3 = p3[0], y3 = p3[1];
+                    auto [xk, yk] = xy(p[k]);
                     r = std::max(
                         r,
                         std::abs(
-                            x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)));
+                            xi * (yj - yk) + xj * (yk - yi) + xk * (yi - yj)));
                 }
             }
         }
