@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<!-- saved from url=(0112)file://wsl.localhost/Ubuntu-24.04/home/sunday/leetcode/code/1039_minimum_score_triangulation_of_polygon/vis.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Min Score Triangulation Visualizer</title>
+<style>
+body { font-family: sans-serif; text-align: center; display: flex; flex-direction: column; align-items: center; }
+#container { display: flex; flex-direction: row; align-items: flex-start; }
+canvas { border: 1px solid black; margin-left: 10px; }
+button, input, label { margin: 5px; padding: 5px 10px; }
+#info { margin-top: 10px; font-size: 16px; font-weight: bold; }
+</style>
+</head>
+<body>
+<h2>Min Score Triangulation Visualizer</h2>
+
+<div>
+  <label>Vertex values: </label>
+  <input id="valuesInput" type="text" value="2,3,1,5,4,6,9,1,2,4,1,3" size="30">
+  <button onclick="initPolygon()">Load</button>
+  <button onclick="nextStep()">Next Step</button>
+  <button onclick="playAnimation()">Play Animation</button>
+  <button onclick="reset()">Reset</button>
+  <br>
+  <label>Animation speed (ms): </label>
+  <input type="range" id="speedSlider" min="100" max="2000" value="100" step="50">
+  <span id="speedValue">100</span> ms
+</div>
+
+<div id="info">Step 275/275: dp[0,11], k=10, score=127 (final)</div>
+
+<div id="container">
+  <canvas id="dpCanvas" width="600" height="600"></canvas>
+  <canvas id="polyCanvas" width="600" height="600"></canvas>
+</div>
+
+<script>
+const polyCanvas = document.getElementById("polyCanvas");
+const polyCtx = polyCanvas.getContext("2d");
+const dpCanvas = document.getElementById("dpCanvas");
+const dpCtx = dpCanvas.getContext("2d");
+const speedSlider = document.getElementById("speedSlider");
+const speedValue = document.getElementById("speedValue");
+
+speedSlider.oninput = () => { speedValue.innerText = speedSlider.value; }
+
+let points = [];
+let values = [];
+let n = 0;
+let dp = [];
+let steps = [];
+let currentStep = 0;
+let timer = null;
+let readCells = [];
+let writeCell = null;
+
+function generateConvexPolygon(n, radius=200, cx=300, cy=300){
+    let pts=[];
+    for(let i=0;i<n;i++){
+        let angle = 2*Math.PI*i/n - Math.PI/2;
+        pts.push([cx + radius*Math.cos(angle), cy + radius*Math.sin(angle)]);
+    }
+    return pts;
+}
+
+function polygonCentroid(pts){
+    let cx=0,cy=0;
+    for(const [x,y] of pts){ cx+=x; cy+=y; }
+    return [cx/pts.length, cy/pts.length];
+}
+
+function initPolygon(){
+    const input = document.getElementById("valuesInput").value.trim();
+    values = input.split(",").map(x=>parseInt(x,10)).filter(x=>!isNaN(x));
+    n = values.length;
+    if(n<3){ alert("Need at least 3 vertices!"); return; }
+    points = generateConvexPolygon(n);
+    dp = Array.from({length:n},()=>Array(n).fill(0)); // zeroed
+    steps = [];
+    currentStep = 0;
+    readCells = [];
+    writeCell = null;
+
+    // Generate steps without changing dp
+    computeDP();
+
+    drawAll();
+    updateInfo("Polygon loaded. Total steps: "+steps.length);
+}
+
+function computeDP(){
+    const tempDP = Array.from({length:n},()=>Array(n).fill(0)); // temporary storage
+    for(let i=n-2;i>=0;i--){
+        for(let j=i+2;j<n;j++){
+            let r = values[i]*values[j]*values[i+1]+tempDP[i+1][j];
+            let bestK = i+1;
+            steps.push({i,j,k:i+1,score:r,reads:[[i+1,j]],write:null,isFinal:false});
+            for(let k=i+2;k<j;k++){
+                let s2 = tempDP[i][k]+values[i]*values[j]*values[k]+tempDP[k][j];
+                steps.push({i,j,k,score:s2,reads:[[i,k],[k,j]],write:null,isFinal:false});
+                if(s2<r){ r=s2; bestK=k; }
+            }
+            tempDP[i][j]=r;
+            steps.push({i,j,k:bestK,score:r,reads:[],write:[i,j],isFinal:true});
+        }
+    }
+}
+
+
+function triangleCentroid(a,b,c){ return [(a[0]+b[0]+c[0])/3,(a[1]+b[1]+c[1])/3]; }
+
+function drawDPTable(){
+    dpCtx.clearRect(0,0,dpCanvas.width,dpCanvas.height);
+
+    const cellSize = 30;
+    const offsetX = 30;
+    const offsetY = 30;
+    dpCtx.font = "12px sans-serif";
+
+    // Column indices
+    for(let j=0;j<n;j++){
+        const x = offsetX + j*cellSize;
+        const y = offsetY - 10;
+        dpCtx.fillStyle="black";
+        dpCtx.fillText(j, x+10, y);
+    }
+
+    // Row indices
+    for(let i=0;i<n;i++){
+        const x = offsetX - 15;
+        const y = offsetY + i*cellSize + 20;
+        dpCtx.fillStyle="black";
+        dpCtx.fillText(i, x, y);
+    }
+
+    // Draw DP cells
+    for(let i=0;i<n;i++){
+        for(let j=0;j<n;j++){
+            const x = offsetX + j*cellSize;
+            const y = offsetY + i*cellSize;
+            dpCtx.fillStyle = (writeCell && writeCell[0]===i && writeCell[1]===j) ? "lightgreen" :
+                              readCells.some(c=>c[0]===i && c[1]===j) ? "lightblue" : "white";
+            dpCtx.fillRect(x,y,cellSize,cellSize);
+            dpCtx.strokeStyle="black";
+            dpCtx.strokeRect(x,y,cellSize,cellSize);
+            dpCtx.fillStyle="black";
+            dpCtx.fillText(dp[i][j], x+5, y+20);
+        }
+    }
+}
+
+function drawPolygon(highlight){
+    polyCtx.clearRect(0,0,polyCanvas.width,polyCanvas.height);
+    polyCtx.strokeStyle="black";
+    polyCtx.lineWidth=1;
+    polyCtx.setLineDash([]);
+    polyCtx.beginPath();
+    polyCtx.moveTo(points[0][0],points[0][1]);
+    for(let i=1;i<n;i++) polyCtx.lineTo(points[i][0],points[i][1]);
+    polyCtx.closePath();
+    polyCtx.stroke();
+
+    const centroid = polygonCentroid(points);
+
+    // Draw vertex points
+    for(let i=0;i<n;i++){
+        const [x,y]=points[i];
+        polyCtx.beginPath();
+        polyCtx.arc(x,y,5,0,2*Math.PI);
+        polyCtx.fillStyle="black";
+        polyCtx.fill();
+    }
+
+    // Draw indices/values outside polygon
+    const labelOffset = 40;
+    polyCtx.font="14px sans-serif";
+    for(let i=0;i<n;i++){
+        const [x,y]=points[i];
+        const dx = x-centroid[0], dy = y-centroid[1];
+        const len = Math.sqrt(dx*dx+dy*dy);
+        const lx = x + dx/len*labelOffset;
+        const ly = y + dy/len*labelOffset;
+        polyCtx.fillStyle="black";
+        polyCtx.fillText(i,lx,ly);
+        polyCtx.fillStyle="grey";
+        polyCtx.fillText(`(${values[i]})`,lx+15,ly);
+    }
+
+    if(!highlight) return;
+
+    const {i,j,k} = highlight;
+
+    // Subpolygon outline
+    polyCtx.setLineDash([5,5]);
+    polyCtx.strokeStyle="black";
+    polyCtx.beginPath();
+    polyCtx.moveTo(points[i][0],points[i][1]);
+    for(let idx=i+1;idx<=j;idx++) polyCtx.lineTo(points[idx][0],points[idx][1]);
+    polyCtx.closePath();
+    polyCtx.stroke();
+    polyCtx.setLineDash([]);
+
+    // Main triangle
+    let tri=[points[i],points[j],points[k]];
+    polyCtx.fillStyle="hsla(0,70%,60%,0.3)";
+    polyCtx.beginPath();
+    polyCtx.moveTo(tri[0][0],tri[0][1]);
+    polyCtx.lineTo(tri[1][0],tri[1][1]);
+    polyCtx.lineTo(tri[2][0],tri[2][1]);
+    polyCtx.closePath();
+    polyCtx.fill();
+    polyCtx.strokeStyle="red";
+    polyCtx.stroke();
+    let [cx,cy] = triangleCentroid(...tri);
+    polyCtx.fillStyle="red";
+    polyCtx.fillText(values[i]*values[j]*values[k], cx-10, cy);
+
+    // Draw subpolygons
+    if(k>i+1){
+        let poly=[];
+        for(let idx=i;idx<=k;idx++) poly.push(points[idx]);
+        polyCtx.fillStyle="hsla(120,70%,60%,0.3)";
+        polyCtx.beginPath();
+        polyCtx.moveTo(poly[0][0],poly[0][1]);
+        for(let p of poly) polyCtx.lineTo(p[0],p[1]);
+        polyCtx.closePath();
+        polyCtx.fill();
+        polyCtx.strokeStyle="green";
+        polyCtx.stroke();
+    }
+    if(j>k+1){
+        let poly=[];
+        for(let idx=k;idx<=j;idx++) poly.push(points[idx]);
+        poly
+        polyCtx.fillStyle="hsla(240,70%,60%,0.3)";
+        polyCtx.beginPath();
+        polyCtx.moveTo(poly[0][0],poly[0][1]);
+        for(let p of poly) polyCtx.lineTo(p[0],p[1]);
+        polyCtx.closePath();
+        polyCtx.fill();
+        polyCtx.strokeStyle="blue";
+        polyCtx.stroke();
+    }
+
+    // Draw i,j,k letters further from centroid
+    const letterOffset = 75;
+    const verts=[i,j,k];
+    const letters=["i","j","k"];
+    for(let idx=0; idx<3; idx++){
+        const v=verts[idx];
+        const [vx,vy]=points[v];
+        const dx=vx- centroid[0], dy=vy- centroid[1];
+        const len=Math.sqrt(dx*dx+dy*dy);
+        const lx=vx+dx/len*letterOffset;
+        const ly=vy+dy/len*letterOffset;
+        polyCtx.fillStyle="black";
+        polyCtx.fillText(letters[idx], lx, ly);
+    }
+}
+
+function drawAll(){
+    drawDPTable();
+    drawPolygon(steps[currentStep]||null);
+}
+
+function nextStep(){
+    if(currentStep<steps.length){
+        let s=steps[currentStep];
+        readCells=s.reads||[];
+        writeCell=s.write||null;
+        if(s.isFinal && writeCell) dp[writeCell[0]][writeCell[1]]=s.score;
+        drawAll();
+        updateInfo(`Step ${currentStep+1}/${steps.length}: dp[${s.i},${s.j}], k=${s.k}, score=${s.score} ${s.isFinal?'(final)':''}`);
+        currentStep++;
+    } else updateInfo("Triangulation complete. Min score = "+dp[0][n-1]);
+}
+
+function playAnimation(){
+    if(timer) return;
+    timer=setInterval(()=>{
+        if(currentStep<steps.length) nextStep();
+        else { clearInterval(timer); timer=null; }
+    }, parseInt(speedSlider.value));
+}
+
+function reset(){
+    currentStep=0;
+    readCells=[];
+    writeCell=null;
+    dp = Array.from({length:n},()=>Array(n).fill(0)); // zero out DP table
+    drawAll();
+    updateInfo("Reset. Ready to step through.");
+    if(timer){ clearInterval(timer); timer=null; }
+}
+
+function updateInfo(text){ document.getElementById("info").innerText=text; }
+</script>
+</body></html>
