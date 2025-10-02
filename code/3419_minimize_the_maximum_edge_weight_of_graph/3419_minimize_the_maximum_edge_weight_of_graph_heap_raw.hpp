@@ -1,7 +1,5 @@
 #include <algorithm>
-#include <array>
 #include <cassert>
-#include <span>
 #include <vector>
 
 class Solution
@@ -27,41 +25,32 @@ public:
         const std::vector<std::vector<int>>& inedges,
         [[maybe_unused]] int threshold) noexcept
     {
-        const auto nodes = [&]()
+        static Node nodes[100'001];  // NOLINT
+        std::fill_n(nodes, n, Node{});
+
+        u32 numEdges = 0;
+        static Edge edges[100'001];  // NOLINT
+
+        for (auto& inEdge : inedges)
         {
-            static std::array<Node, 100'001> nodes_arr;
-            std::fill_n(nodes_arr.begin(), n, Node{});
-            return std::span{nodes_arr}.first(n);
-        }();
-
-        const auto edges = [&]()
-        {
-            static std::array<Edge, 100'001> edges_arr;
-            u32 numEdges = 0;
-
-            for (auto& inEdge : inedges)
-            {
-                u32 a = static_cast<u32>(inEdge[0]);
-                u32 b = static_cast<u32>(inEdge[1]);
-                u32 w = static_cast<u32>(inEdge[2]);
-
-                auto& node = nodes[b];
-                edges_arr[numEdges] = {a, w, node.firstEdge};
-                node.firstEdge = numEdges++;
-            }
-
-            return std::span{edges_arr}.first(numEdges);
-        }();
+            edges[numEdges] = {
+                .link = static_cast<u32>(inEdge[0]),
+                .value = static_cast<u32>(inEdge[2]),
+                .next = std::exchange(
+                    nodes[static_cast<u32>(inEdge[1])].firstEdge,
+                    numEdges)};
+            ++numEdges;
+        }
 
         nodes[0].maxEdge = 0;
 
-        static std::array<std::pair<u32, u32>, 300'001> queue;
+        static std::pair<u32, u32> queue[300'001];  // NOLINT
         u32 qSize = 0;
 
         auto heap_op = [&](auto op)
         {
-            op(queue.begin(),
-               queue.begin() + qSize,  // NOLINT
+            op(queue,
+               queue + qSize,  // NOLINT
                std::greater{},
                &std::pair<u32, u32>::first);
         };
@@ -90,9 +79,12 @@ public:
             }
         }
 
-        const u32 r =
-            std::ranges::max_element(nodes, std::less{}, &Node::maxEdge)
-                ->maxEdge;
+        const u32 r = std::ranges::max_element(
+                          nodes,
+                          nodes + n,  // NOLINT
+                          std::less{},
+                          &Node::maxEdge)
+                          ->maxEdge;
 
         if (r == 0xFFFFFFFF) return -1;
         return static_cast<int>(r);
