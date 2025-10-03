@@ -6,11 +6,7 @@ public:
         int exchange) noexcept
     {
         int drank = full;
-        while (full >= exchange)
-        {
-            full -= exchange++ - 1;
-            ++drank;
-        }
+        for (; full >= exchange; ++drank) full -= exchange++ - 1;
         return drank;
     }
 };
