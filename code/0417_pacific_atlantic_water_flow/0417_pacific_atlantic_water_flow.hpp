@@ -1,7 +1,5 @@
 #include <vector>
 
-#include "hier_bitset.hpp"
-
 #define FORCE_INLINE inline __attribute__((always_inline))
 
 using u32 = uint32_t;

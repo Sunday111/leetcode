@@ -4,13 +4,8 @@
 #include <bit>
 #include <concepts>
 
+#include "ceil_div.hpp"
 #include "int_if.hpp"
-
-template <std::integral T>
-[[nodiscard]] static constexpr T ceil_div(T a, T b) noexcept
-{
-    return ((a + b) - 1) / b;
-}
 
 struct DefaultBitsetTraits
 {

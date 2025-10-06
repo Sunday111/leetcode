@@ -1,20 +1,44 @@
 #include <random>
+#include <set>
 
 #include "gtest/gtest.h"
 #include "hier_bitset.hpp"
 
-TEST(HierBitsetTest, Fuzzy)
+// List of capacities we want to test
+using BitsetCapacities = ::testing::Types<
+    HierBitset<1, u8>,
+    HierBitset<256, u8>,
+    HierBitset<1024, u16>,
+    HierBitset<16 * 16 * 16, u16>,
+    HierBitset<1024, u32>,
+    HierBitset<4096, u32>,
+    HierBitset<13593, u32>,
+    HierBitset<32 * 32 * 32, u32>,
+    HierBitset<1024, u64>,
+    HierBitset<4096, u64>,
+    HierBitset<13593, u64>,
+    HierBitset<64 * 64 * 64, u64>>;
+
+template <typename BitsetT>
+class HierBitsetTypedFuzzyTest : public ::testing::Test
+{
+};
+
+TYPED_TEST_SUITE(HierBitsetTypedFuzzyTest, BitsetCapacities);
+
+TYPED_TEST(HierBitsetTypedFuzzyTest, Fuzzy)
 {
     constexpr unsigned seed = 1234;
-    constexpr u16 capacity = 13593;
-    constexpr u16 min_size = capacity / 2;
+    using Bitset = TypeParam;
+    constexpr u32 capacity = Bitset::capacity();  // template parameter
+    constexpr u32 min_size = capacity / 2;
     std::mt19937 rnd{seed};
 
-    HierBitset<capacity> bs;  // NOLINT
+    Bitset bs;
     std::set<u32> std_set;
     std::uniform_int_distribution<u32> size_distr(min_size, capacity - 1);
 
-    for (u32 t = 0; t != 500; ++t)
+    for (u32 t = 0; t != 10; ++t)
     {
         const u32 size = size_distr(rnd);
         std::uniform_int_distribution<u32> value_distr(0, size - 1);
@@ -27,12 +51,12 @@ TEST(HierBitsetTest, Fuzzy)
             ASSERT_EQ(bs.test(v), std_set.contains(v));
             if (bs.test(v))
             {
-                bs.set<false>(v);
+                bs.template set<false>(v);
                 std_set.erase(v);
             }
             else
             {
-                bs.set<true>(v);
+                bs.template set<true>(v);
                 std_set.insert(v);
             }
 
