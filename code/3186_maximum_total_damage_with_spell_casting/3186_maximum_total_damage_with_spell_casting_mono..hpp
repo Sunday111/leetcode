@@ -1,21 +1,12 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
-#include <print>
 #include <span>
 #include <vector>
 
-#ifdef __GNUC__
 #define FORCE_INLINE inline __attribute__((always_inline))
-#else
-#define FORCE_INLINE inline
-#endif
 
-#ifdef __GNUC__
 #define HOT_PATH __attribute__((hot))
-#else
-#define FORCE_INLINE inline
-#endif
 
 using u8 = uint8_t;
 using u16 = uint16_t;
@@ -57,6 +48,7 @@ enum class SortOrder : u8
 template <
     std::integral T,
     SortOrder order,
+    bool stable,
     u8 bits_per_pass,
     u32 num_passes = ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)>
     requires(((num_passes * bits_per_pass) <= sizeof(T) * 8) && (sizeof(T) > 1))
@@ -100,24 +92,57 @@ class RadixSorter
             // Prefix sums for positions
             for (u32 i = 1; i != base; ++i) count[i] += count[i - 1];
 
-            // Stable placement
-            for (u32 i = n; i--;)
+            if constexpr (stable)
             {
-                UT digit = (arr[i] >> shift) & mask;
-                temp[--count[digit]] = post_flip ? arr[i] ^ sign_mask : arr[i];
+                // Stable placement (reverse)
+                for (u32 i = n; i--;)
+                {
+                    UT digit = (arr[i] >> shift) & mask;
+                    temp[--count[digit]] =
+                        post_flip ? arr[i] ^ sign_mask : arr[i];
+                }
+            }
+            else
+            {
+                // Unstable placement (forward, single linear pass)
+                UT start = 0;
+                for (u32 i = 0; i != base; ++i)
+                {
+                    start += std::exchange(count[i], start);
+                }
+
+                for (u32 j = 0; j != n; ++j)
+                {
+                    UT v = arr[j];
+                    temp[count[(v >> shift) & mask]++] =
+                        post_flip ? v ^ sign_mask : v;
+                }
             }
         }
-        else
+        else  // Descending
         {
             // Compute descending start positions
             UT sum = 0;
             for (u32 i = base; i--;) sum += std::exchange(count[i], sum);
 
-            // Stable placement
-            for (u32 i = 0; i != n; ++i)
+            if constexpr (stable)
             {
-                UT digit = (arr[i] >> shift) & mask;
-                temp[count[digit]++] = post_flip ? arr[i] ^ sign_mask : arr[i];
+                for (u32 i = 0; i != n; ++i)
+                {
+                    UT digit = (arr[i] >> shift) & mask;
+                    temp[count[digit]++] =
+                        post_flip ? arr[i] ^ sign_mask : arr[i];
+                }
+            }
+            else
+            {
+                // Unstable descending placement (forward)
+                for (u32 i = 0; i != n; ++i)
+                {
+                    UT digit = (arr[i] >> shift) & mask;
+                    temp[count[digit]++] =
+                        post_flip ? arr[i] ^ sign_mask : arr[i];
+                }
             }
         }
 
@@ -149,8 +174,30 @@ template <
     u32 num_passes = ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)>
 FORCE_INLINE void radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
 {
-    RadixSorter<T, order, bits_per_pass, num_passes>::sort(arr);
+    RadixSorter<T, order, true, bits_per_pass, num_passes>::sort(arr);
 }
+
+template <
+    std::integral T,
+    SortOrder order,
+    u8 bits_per_pass,
+    u32 num_passes = ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)>
+FORCE_INLINE void stable_radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
+{
+    RadixSorter<T, order, false, bits_per_pass, num_passes>::sort(arr);
+}
+#ifndef __clang__
+#define SYNC_STDIO                   \
+    auto init = []()                 \
+    {                                \
+        ios::sync_with_stdio(false); \
+        cin.tie(nullptr);            \
+        cout.tie(nullptr);           \
+        return 'c';                  \
+    }();
+#else
+#define SYNC_STDIO
+#endif
 
 class Solution
 {
@@ -165,39 +212,34 @@ public:
 
         static std::array<u64, 100'001> arr;
 
-        u32 n = 0xFFFFFFFF;
+        u32 n = 0xFFFFFFFF, h = 0;
+        for (u32 v : power)
         {
-            u32 pv = 0;
-            for (u32 v : power)
-            {
-                n += v != pv;
-                power[n] = v;
-                arr[n] *= v == pv;
-                arr[n]++;
-                pv = v;
-            }
-            ++n;
+            n += v != h;
+            power[n] = v;
+            arr[n] *= v == h;
+            arr[n]++;
+            h = v;
         }
+        ++n;
 
         u64 r = 0;
 
-        u32 p1 = 0xFFFFFFFF - 10;
-        u32 p2 = 0xFFFFFFFF - 10;
-        std::array<u64, 4> pv{};
+        std::array<u32, 3> p{};
+        p.fill(0xFFFFFFFF - 10);
+        std::array<u64, 4> v{};
         for (u32 i = 0; i != n; ++i)
         {
-            auto p = power[i];
-            pv[0] = arr[i] * p + (p1 < p) * pv[1] +
-                    (!(p1 < p) && (p2 < p)) * pv[2] +
-                    (!(p1 < p) && !(p2 < p)) * pv[3];
-
-            pv[0] = r = std::max(r, pv[0]);
-            std::exchange(p2, std::exchange(p1, p + 2));
-            std::exchange(
-                pv[3],
-                std::exchange(pv[2], std::exchange(pv[1], pv[0])));
+            p[0] = power[i];
+            const bool c1 = p[1] < p[0], c2 = p[2] < p[0];
+            v[0] = arr[i] * p[0] + v[!c1 * (c2 * 2 + !c2 * 3) + c1];
+            v[0] = r = std::max(r, v[0]);
+            p[2] = p[1], p[1] = p[0] + 2;
+            v[3] = v[2], v[2] = v[1], v[1] = v[0];
         }
 
         return r;
     }
 };
+
+SYNC_STDIO

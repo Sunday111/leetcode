@@ -35,8 +35,7 @@ protected:
             custom_sorted = values;
             std_sorted = values;
 
-            using Sorter = RadixSorter<T, SortOrder::Ascending, 4>;
-            Sorter::sort(std::span{custom_sorted});
+            radix_sort<T, SortOrder::Ascending, 4>(custom_sorted);
             std::ranges::sort(std_sorted, std::less{});
             ASSERT_EQ(custom_sorted, std_sorted);
 
@@ -44,8 +43,7 @@ protected:
             custom_sorted = values;
             std_sorted = values;
 
-            using SorterDesc = RadixSorter<T, SortOrder::Descending, 4>;
-            SorterDesc::sort(std::span{custom_sorted});
+            radix_sort<T, SortOrder::Descending, 4>(custom_sorted);
             std::ranges::sort(std_sorted, std::greater{});
             ASSERT_EQ(custom_sorted, std_sorted);
         }

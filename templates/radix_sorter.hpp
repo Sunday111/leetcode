@@ -19,6 +19,7 @@ enum class SortOrder : u8
 template <
     std::integral T,
     SortOrder order,
+    bool stable,
     u8 bits_per_pass,
     u32 num_passes = ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)>
     requires(((num_passes * bits_per_pass) <= sizeof(T) * 8) && (sizeof(T) > 1))
@@ -62,24 +63,57 @@ class RadixSorter
             // Prefix sums for positions
             for (u32 i = 1; i != base; ++i) count[i] += count[i - 1];
 
-            // Stable placement
-            for (u32 i = n; i--;)
+            if constexpr (stable)
             {
-                UT digit = (arr[i] >> shift) & mask;
-                temp[--count[digit]] = post_flip ? arr[i] ^ sign_mask : arr[i];
+                // Stable placement (reverse)
+                for (u32 i = n; i--;)
+                {
+                    UT digit = (arr[i] >> shift) & mask;
+                    temp[--count[digit]] =
+                        post_flip ? arr[i] ^ sign_mask : arr[i];
+                }
+            }
+            else
+            {
+                // Unstable placement (forward, single linear pass)
+                UT start = 0;
+                for (u32 i = 0; i != base; ++i)
+                {
+                    start += std::exchange(count[i], start);
+                }
+
+                for (u32 j = 0; j != n; ++j)
+                {
+                    UT v = arr[j];
+                    temp[count[(v >> shift) & mask]++] =
+                        post_flip ? v ^ sign_mask : v;
+                }
             }
         }
-        else
+        else  // Descending
         {
             // Compute descending start positions
             UT sum = 0;
             for (u32 i = base; i--;) sum += std::exchange(count[i], sum);
 
-            // Stable placement
-            for (u32 i = 0; i != n; ++i)
+            if constexpr (stable)
             {
-                UT digit = (arr[i] >> shift) & mask;
-                temp[count[digit]++] = post_flip ? arr[i] ^ sign_mask : arr[i];
+                for (u32 i = 0; i != n; ++i)
+                {
+                    UT digit = (arr[i] >> shift) & mask;
+                    temp[count[digit]++] =
+                        post_flip ? arr[i] ^ sign_mask : arr[i];
+                }
+            }
+            else
+            {
+                // Unstable descending placement (forward)
+                for (u32 i = 0; i != n; ++i)
+                {
+                    UT digit = (arr[i] >> shift) & mask;
+                    temp[count[digit]++] =
+                        post_flip ? arr[i] ^ sign_mask : arr[i];
+                }
             }
         }
 
@@ -111,5 +145,15 @@ template <
     u32 num_passes = ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)>
 FORCE_INLINE void radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
 {
-    RadixSorter<T, order, bits_per_pass, num_passes>::sort(arr);
+    RadixSorter<T, order, true, bits_per_pass, num_passes>::sort(arr);
+}
+
+template <
+    std::integral T,
+    SortOrder order,
+    u8 bits_per_pass,
+    u32 num_passes = ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)>
+FORCE_INLINE void stable_radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
+{
+    RadixSorter<T, order, false, bits_per_pass, num_passes>::sort(arr);
 }

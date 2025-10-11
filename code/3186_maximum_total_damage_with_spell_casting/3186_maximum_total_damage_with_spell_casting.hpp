@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "radix_sorter.hpp"
+#include "sync_stdio.hpp"
 
 class Solution
 {
@@ -13,7 +14,7 @@ public:
 
     static u64 maximumTotalDamage(std::vector<int>& power_) noexcept
     {
-        std::span<u32> power = reinterpret_range<u32>(power_);
+        const std::span<u32> power = reinterpret_range<u32>(power_);
         radix_sort<u32, SortOrder::Ascending, 8>(power);
 
         static std::array<u64, 100'001> arr;
@@ -47,3 +48,5 @@ public:
         return r;
     }
 };
+
+SYNC_STDIO
