@@ -22,7 +22,7 @@ public:
     [[nodiscard]] static constexpr i64
     countFairPairs(std::vector<i32>& nums, i32 lower, i32 upper) noexcept
     {
-        radix_sort<i32, SortOrder::Ascending, 16, 2>(nums);
+        radix_sort<16>(std::span{nums});
 
         return pass(nums, upper) - pass(nums, lower - 1);
     }

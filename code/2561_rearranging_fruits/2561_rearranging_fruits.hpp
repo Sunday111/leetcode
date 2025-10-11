@@ -13,8 +13,8 @@ class Solution
         std::span<u32> basket2) noexcept
     {
         // need 30 bits to represent range [1; 10^9]
-        radix_sort<u32, SortOrder::Ascending, 10, 3>(basket1);
-        radix_sort<u32, SortOrder::Ascending, 10, 3>(basket2);
+        radix_sort<10, 3>(basket1);
+        radix_sort<10, 3>(basket2);
 
         const u32 n = static_cast<u32>(basket1.size());
         const u32 min_fruit_cost =

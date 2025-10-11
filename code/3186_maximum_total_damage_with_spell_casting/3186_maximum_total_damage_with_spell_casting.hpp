@@ -15,7 +15,15 @@ public:
     static u64 maximumTotalDamage(std::vector<int>& power_) noexcept
     {
         const std::span<u32> power = reinterpret_range<u32>(power_);
-        radix_sort<u32, SortOrder::Ascending, 8>(power);
+
+        if (power.size() < 10'000)
+        {
+            radix_sort<6, 5>(power);
+        }
+        else
+        {
+            radix_sort<15, 2>(power);
+        }
 
         static std::array<u64, 100'001> arr;
 
@@ -24,9 +32,8 @@ public:
         {
             n += v != h;
             power[n] = v;
-            arr[n] *= v == h;
+            arr[n] *= v == std::exchange(h, v);
             arr[n]++;
-            h = v;
         }
         ++n;
 

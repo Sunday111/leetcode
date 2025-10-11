@@ -20,10 +20,8 @@ public:
         const u32 pills,
         const int strength) noexcept
     {
-        radix_sort<u32, SortOrder::Ascending, 8, 4>(
-            reinterpret_range<u32>(tasks));
-        radix_sort<u32, SortOrder::Ascending, 8, 4>(
-            reinterpret_range<u32>(workers));
+        radix_sort<8>(reinterpret_range<u32>(tasks));
+        radix_sort<8>(reinterpret_range<u32>(workers));
 
         const u32 num_workers = to<u32>(workers.size());
 

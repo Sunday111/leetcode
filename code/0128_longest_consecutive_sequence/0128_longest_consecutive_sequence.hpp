@@ -11,7 +11,7 @@ public:
     [[nodiscard]] static constexpr int longestConsecutive(
         std::vector<int>& nums) noexcept
     {
-        radix_sort<int, SortOrder::Ascending, 8>(nums);
+        radix_sort<8>(std::span{nums});
 
         if (nums.empty()) return 0;
 

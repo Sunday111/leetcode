@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <numeric>
 #include <span>
 #include <vector>
 
@@ -89,11 +90,13 @@ class RadixSorter
 
         if constexpr (order == SortOrder::Ascending)
         {
-            // Prefix sums for positions
-            for (u32 i = 1; i != base; ++i) count[i] += count[i - 1];
-
             if constexpr (stable)
             {
+                std::inclusive_scan(
+                    count.begin(),
+                    std::next(count.begin(), base),
+                    count.begin());
+
                 // Stable placement (reverse)
                 for (u32 i = n; i--;)
                 {
@@ -104,12 +107,11 @@ class RadixSorter
             }
             else
             {
-                // Unstable placement (forward, single linear pass)
-                UT start = 0;
-                for (u32 i = 0; i != base; ++i)
-                {
-                    start += std::exchange(count[i], start);
-                }
+                std::exclusive_scan(
+                    count.begin(),
+                    std::next(count.begin(), base),
+                    count.begin(),
+                    0);
 
                 for (u32 j = 0; j != n; ++j)
                 {
@@ -125,24 +127,10 @@ class RadixSorter
             UT sum = 0;
             for (u32 i = base; i--;) sum += std::exchange(count[i], sum);
 
-            if constexpr (stable)
+            for (u32 i = 0; i != n; ++i)
             {
-                for (u32 i = 0; i != n; ++i)
-                {
-                    UT digit = (arr[i] >> shift) & mask;
-                    temp[count[digit]++] =
-                        post_flip ? arr[i] ^ sign_mask : arr[i];
-                }
-            }
-            else
-            {
-                // Unstable descending placement (forward)
-                for (u32 i = 0; i != n; ++i)
-                {
-                    UT digit = (arr[i] >> shift) & mask;
-                    temp[count[digit]++] =
-                        post_flip ? arr[i] ^ sign_mask : arr[i];
-                }
+                UT digit = (arr[i] >> shift) & mask;
+                temp[count[digit]++] = post_flip ? arr[i] ^ sign_mask : arr[i];
             }
         }
 
@@ -168,23 +156,31 @@ public:
 };
 
 template <
-    std::integral T,
-    SortOrder order,
     u8 bits_per_pass,
-    u32 num_passes = ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)>
+    u32 num_passes = 0xFFFFFFFF,
+    SortOrder order = SortOrder::Ascending,
+    std::integral T>
 FORCE_INLINE void radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
 {
-    RadixSorter<T, order, true, bits_per_pass, num_passes>::sort(arr);
+    constexpr u32 np =
+        num_passes == 0xFFFFFFFF
+            ? ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)
+            : num_passes;
+    RadixSorter<T, order, false, bits_per_pass, np>::sort(arr);
 }
 
 template <
-    std::integral T,
-    SortOrder order,
     u8 bits_per_pass,
-    u32 num_passes = ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)>
+    u32 num_passes = 0xFFFFFFFF,
+    SortOrder order = SortOrder::Ascending,
+    std::integral T>
 FORCE_INLINE void stable_radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
 {
-    RadixSorter<T, order, false, bits_per_pass, num_passes>::sort(arr);
+    constexpr u32 np =
+        num_passes == 0xFFFFFFFF
+            ? ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)
+            : num_passes;
+    RadixSorter<T, order, true, bits_per_pass, np>::sort(arr);
 }
 #ifndef __clang__
 #define SYNC_STDIO                   \
@@ -207,8 +203,16 @@ public:
 
     static u64 maximumTotalDamage(std::vector<int>& power_) noexcept
     {
-        std::span<u32> power = reinterpret_range<u32>(power_);
-        radix_sort<u32, SortOrder::Ascending, 8>(power);
+        const std::span<u32> power = reinterpret_range<u32>(power_);
+
+        if (power.size() < 10'000)
+        {
+            radix_sort<6, 5>(power);
+        }
+        else
+        {
+            radix_sort<15, 2>(power);
+        }
 
         static std::array<u64, 100'001> arr;
 
@@ -217,9 +221,8 @@ public:
         {
             n += v != h;
             power[n] = v;
-            arr[n] *= v == h;
+            arr[n] *= v == std::exchange(h, v);
             arr[n]++;
-            h = v;
         }
         ++n;
 

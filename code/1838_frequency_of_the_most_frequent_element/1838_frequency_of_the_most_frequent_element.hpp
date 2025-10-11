@@ -12,7 +12,7 @@ public:
         u32 k) noexcept
     {
         const std::span<u32> nums = reinterpret_range<u32>(_nums);
-        radix_sort<u32, SortOrder::Descending, 10, 2>(nums);
+        radix_sort<10, 2, SortOrder::Descending>(nums);
 
         auto i = nums.begin(), j = i, e = nums.end();
         u32 r = 0;
