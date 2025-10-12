@@ -62,7 +62,6 @@ class RadixSorter
     static constexpr auto pass_idx_seq =
         std::make_integer_sequence<u8, num_passes>();
     static constexpr size_t num_bits = sizeof(T) * 8;
-    static constexpr UT sign_mask = UT{1} << (num_bits - 1);
 
     inline static std::array<UT, base> count;
     inline static std::array<UT, 100'001> temp;
@@ -73,64 +72,62 @@ class RadixSorter
     {
         count.fill(0);
         constexpr UT shift = pass_index * bits_per_pass;
+        constexpr UT msb = UT{1} << (num_bits - 1);
+        constexpr bool sign_masking = std::is_signed_v<T>;
+        constexpr bool is_first_pass = pass_index == 0;
+        constexpr bool is_last_pass = (pass_index == (num_passes - 1));
+        constexpr UT pre_sign_mask = sign_masking && is_first_pass ? msb : UT{};
+        constexpr UT post_sign_mask = sign_masking && is_last_pass ? msb : UT{};
 
         // Count digit occurrences
         for (auto& v : arr)
         {
-            constexpr bool is_first_pass = pass_index == 0;
-            if constexpr (std::is_signed_v<T> && is_first_pass) v ^= sign_mask;
-
+            v ^= pre_sign_mask;
             ++count[(v >> shift) & mask];
         }
 
         const u32 n = static_cast<u32>(arr.size());
 
-        constexpr bool post_flip =
-            std::is_signed_v<T> && (pass_index == (num_passes - 1));
-
         if constexpr (order == SortOrder::Ascending)
         {
             if constexpr (stable)
             {
-                std::inclusive_scan(
-                    count.begin(),
-                    std::next(count.begin(), base),
-                    count.begin());
+                std::inclusive_scan(count.begin(), count.end(), count.begin());
 
-                // Stable placement (reverse)
                 for (u32 i = n; i--;)
                 {
                     UT digit = (arr[i] >> shift) & mask;
-                    temp[--count[digit]] =
-                        post_flip ? arr[i] ^ sign_mask : arr[i];
+                    temp[--count[digit]] = arr[i] ^ post_sign_mask;
                 }
             }
             else
             {
                 std::exclusive_scan(
                     count.begin(),
-                    std::next(count.begin(), base),
+                    count.end(),
                     count.begin(),
                     0);
 
                 for (u32 j = 0; j != n; ++j)
                 {
                     UT v = arr[j];
-                    temp[count[(v >> shift) & mask]++] =
-                        post_flip ? v ^ sign_mask : v;
+                    temp[count[(v >> shift) & mask]++] = v ^ post_sign_mask;
                 }
             }
         }
         else  // Descending
         {
             // Compute descending start positions
-            UT sum = 0;
-            for (u32 i = base; i--;) sum += std::exchange(count[i], sum);
+            std::exclusive_scan(
+                count.rbegin(),
+                count.rend(),
+                count.rbegin(),
+                UT{0});
 
             for (u32 i = 0; i != n; ++i)
             {
-                UT digit = (arr[i] >> shift) & mask;
-                temp[count[digit]++] = post_flip ? arr[i] ^ sign_mask : arr[i];
+                UT v = (arr[i] >> shift) & mask;
+                temp[count[v]++] = arr[i] ^ post_sign_mask;
             }
         }
 
