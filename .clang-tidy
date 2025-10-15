@@ -19,6 +19,7 @@ modernize-*\
 -cppcoreguidelines-avoid-do-while,\
 -cert-msc51-cpp,\
 -cert-msc32-c,\
+-cppcoreguidelines-pro-type-reinterpret-cast,\
 "
 WarningsAsErrors: '*'
 # Use clang-format

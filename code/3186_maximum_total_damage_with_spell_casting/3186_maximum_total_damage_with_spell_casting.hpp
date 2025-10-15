@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "radix_sorter.hpp"
-#include "sync_stdio.hpp"
 
 class Solution
 {
@@ -56,4 +55,4 @@ public:
     }
 };
 
-SYNC_STDIO
+#include "sync_stdio.hpp"
