@@ -20,6 +20,7 @@ modernize-*\
 -cert-msc51-cpp,\
 -cert-msc32-c,\
 -cppcoreguidelines-pro-type-reinterpret-cast,\
+-cppcoreguidelines-avoid-c-arrays,\
 "
 WarningsAsErrors: '*'
 # Use clang-format
