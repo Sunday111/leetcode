@@ -24,6 +24,9 @@ struct SmallString
         return view() < s.view();
     }
 
+    [[nodiscard]] FORCE_INLINE constexpr bool operator==(
+        const SmallString& s) const noexcept = default;
+
     struct Hasher
     {
         [[nodiscard]] FORCE_INLINE size_t
@@ -59,7 +62,7 @@ public:
         auto copy = s;
         for (u8 i = 1; i < n; i += 2)
         {
-            char& c = copy[i];
+            char& c = copy.data[i];
             c = static_cast<char>(((c + a - '0') % 10) + '0');
         }
 
