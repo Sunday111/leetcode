@@ -13,11 +13,13 @@ struct ScopedArena
     u32 rollback_offset = 0;
     u32* offset = nullptr;
 
-    ~ScopedArena()
+    FORCE_INLINE void Reset() const noexcept { *offset = rollback_offset; }
+
+    FORCE_INLINE ~ScopedArena() noexcept
     {
         if (offset)
         {
-            *offset = rollback_offset;
+            Reset();
             offset = nullptr;
         }
     }

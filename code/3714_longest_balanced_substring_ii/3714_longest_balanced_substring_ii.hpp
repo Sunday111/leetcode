@@ -5,7 +5,7 @@
 #include "bump_hash_map.hpp"
 #include "bump_vector.hpp"
 
-using SolutionStorage = GlobalBufferStorage<1 << 25>;
+using SolutionStorage = GlobalBufferStorage<1 << 23>;
 
 class Solution
 {
@@ -46,6 +46,7 @@ public:
             {
                 l = 0;
                 split_c1c2 = f[u1] - f[u2], split_c3 = f[u3];
+                scoped_arena.Reset();
                 diff_to_idx.Reset();
                 continue;
             }

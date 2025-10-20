@@ -5,9 +5,16 @@
 #include <unordered_map>
 #include <vector>
 
+
+
+
+
+
+
 #define FORCE_INLINE inline __attribute__((always_inline))
 
 #define HOT_PATH __attribute__((hot))
+
 
 using u8 = uint8_t;
 using u16 = uint16_t;
@@ -27,11 +34,13 @@ struct ScopedArena
     u32 rollback_offset = 0;
     u32* offset = nullptr;
 
-    ~ScopedArena()
+    FORCE_INLINE void Reset() const noexcept { *offset = rollback_offset; }
+
+    FORCE_INLINE ~ScopedArena() noexcept
     {
         if (offset)
         {
-            *offset = rollback_offset;
+            Reset();
             offset = nullptr;
         }
     }
@@ -146,10 +155,12 @@ using BumpHashMap = std::unordered_map<
     Cmp,
     BumpAllocator<std::pair<const Key, Value>, Storage>>;
 
+
+
 template <typename Value, typename Storage>
 using BumpVector = std::vector<Value, BumpAllocator<Value, Storage>>;
 
-using SolutionStorage = GlobalBufferStorage<1 << 25>;
+using SolutionStorage = GlobalBufferStorage<1 << 23>;
 
 class Solution
 {
@@ -190,6 +201,7 @@ public:
             {
                 l = 0;
                 split_c1c2 = f[u1] - f[u2], split_c3 = f[u3];
+                scoped_arena.Reset();
                 diff_to_idx.Reset();
                 continue;
             }
