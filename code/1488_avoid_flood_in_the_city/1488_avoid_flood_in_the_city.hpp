@@ -9,6 +9,21 @@
 using u32 = uint32_t;
 using u64 = uint64_t;
 
+struct ScopedArena
+{
+    size_t rollback_offset = 0;
+    size_t* offset = nullptr;
+
+    ~ScopedArena()
+    {
+        if (offset)
+        {
+            *offset = rollback_offset;
+            offset = nullptr;
+        }
+    }
+};
+
 template <size_t num_bytes>
 struct GlobalBufferStorage
 {
@@ -19,6 +34,11 @@ struct GlobalBufferStorage
     }
 
     FORCE_INLINE void Reset() noexcept { allocator_offset_ = 0; }
+
+    [[nodiscard]] FORCE_INLINE ScopedArena StartArena() noexcept
+    {
+        return {allocator_offset_, &allocator_offset_};
+    }
 
     std::array<std::byte, num_bytes> allocator_memory_;
     size_t allocator_offset_;

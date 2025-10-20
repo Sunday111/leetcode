@@ -7,6 +7,21 @@
 #include "hot_path.hpp"
 #include "no_sanitizers.hpp"
 
+struct ScopedArena
+{
+    size_t rollback_offset = 0;
+    size_t* offset = nullptr;
+
+    ~ScopedArena()
+    {
+        if (offset)
+        {
+            *offset = rollback_offset;
+            offset = nullptr;
+        }
+    }
+};
+
 template <size_t num_bytes>
 struct GlobalBufferStorage
 {
@@ -17,6 +32,11 @@ struct GlobalBufferStorage
     }
 
     FORCE_INLINE void Reset() noexcept { allocator_offset_ = 0; }
+
+    [[nodiscard]] FORCE_INLINE ScopedArena StartArena() noexcept
+    {
+        return {allocator_offset_, &allocator_offset_};
+    }
 
     std::array<std::byte, num_bytes> allocator_memory_;
     size_t allocator_offset_;
@@ -82,7 +102,8 @@ class ObjectWithoutDtor
     alignas(T) std::array<std::byte, sizeof(T)> arr;
 
 public:
-    FORCE_INLINE ObjectWithoutDtor() noexcept { new (&get()) T(); }
+    FORCE_INLINE ObjectWithoutDtor() noexcept { Reset(); }
+    FORCE_INLINE void Reset() noexcept { new (&get()) T(); }
 
     FORCE_INLINE T& get() noexcept
     {
