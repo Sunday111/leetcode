@@ -9,13 +9,23 @@
 
 #define HOT_PATH __attribute__((hot))
 
+using u8 = uint8_t;
+using u16 = uint16_t;
+using u32 = uint32_t;
+using u64 = uint64_t;
+
+using i8 = int8_t;
+using i16 = int16_t;
+using i32 = int32_t;
+using i64 = int64_t;
+
 #define NO_SANITIZERS \
     __attribute__((no_sanitize("undefined", "address", "coverage", "thread")))
 
 struct ScopedArena
 {
-    size_t rollback_offset = 0;
-    size_t* offset = nullptr;
+    u32 rollback_offset = 0;
+    u32* offset = nullptr;
 
     ~ScopedArena()
     {
@@ -27,7 +37,7 @@ struct ScopedArena
     }
 };
 
-template <size_t num_bytes>
+template <u32 num_bytes>
 struct GlobalBufferStorage
 {
     FORCE_INLINE static GlobalBufferStorage& Instance() noexcept
@@ -44,7 +54,7 @@ struct GlobalBufferStorage
     }
 
     std::array<std::byte, num_bytes> allocator_memory_;
-    size_t allocator_offset_;
+    u32 allocator_offset_;
 };
 
 template <typename T, typename S>
@@ -60,35 +70,27 @@ struct BumpAllocator
     {
     }
 
-    [[nodiscard]] FORCE_INLINE T* allocate(std::size_t n) noexcept HOT_PATH
+    [[nodiscard]] FORCE_INLINE T* allocate(u32 n) noexcept HOT_PATH
         NO_SANITIZERS
     {
         auto& inst = S::Instance();
 
-        // raw buffer start
-        std::byte* base = inst.allocator_memory_.data();
-
         // align current offset for T
-        std::size_t alignment = alignof(T);
-        std::size_t offset = inst.allocator_offset_;
-        std::size_t aligned_offset =
-            (offset + (alignment - 1)) & ~(alignment - 1);
-
-        // compute how many bytes we need
-        std::size_t bytes = n * sizeof(T);
+        u32 alignment = alignof(T);
+        u32 offset = inst.allocator_offset_;
+        u32 aligned_offset = (offset + (alignment - 1)) & ~(alignment - 1);
+        u32 bytes = n * sizeof(T);
 
         assert(aligned_offset + bytes <= inst.allocator_memory_.size());
-
-        // pointer to aligned location
-        void* p = base + aligned_offset;  // NOLINT
 
         // bump offset
         inst.allocator_offset_ = aligned_offset + bytes;
 
-        return static_cast<T*>(p);
+        return reinterpret_cast<T*>(
+            inst.allocator_memory_.data() + aligned_offset);  // NOLINT
     }
 
-    FORCE_INLINE void deallocate(T*, std::size_t) noexcept {}
+    FORCE_INLINE void deallocate(T*, u32) noexcept {}
 
     // equality so containers can compare allocators
     FORCE_INLINE constexpr bool operator==(const BumpAllocator&) const noexcept
@@ -131,28 +133,28 @@ public:
     }
 };
 
-using u8 = uint8_t;
-using u16 = uint16_t;
-using u32 = uint32_t;
-using u64 = uint64_t;
+template <
+    typename Key,
+    typename Value,
+    typename Storage,
+    typename Hash = std::hash<Key>,
+    typename Cmp = std::equal_to<Key>>
+using BumpHashMap = std::unordered_map<
+    Key,
+    Value,
+    Hash,
+    Cmp,
+    BumpAllocator<std::pair<const Key, Value>, Storage>>;
 
-using i8 = int8_t;
-using i16 = int16_t;
-using i32 = int32_t;
-using i64 = int64_t;
-
-#define HOT_PATH __attribute__((hot))
+template <typename Value, typename Storage>
+using BumpVector = std::vector<Value, BumpAllocator<Value, Storage>>;
 
 using SolutionStorage = GlobalBufferStorage<1 << 25>;
 
 class Solution
 {
 public:
-    using u8 = uint8_t;
-    using u32 = uint32_t;
-
-    using Cnt = std::array<u32, 3>;
-    std::vector<Cnt, BumpAllocator<Cnt, SolutionStorage>> freq{};
+    ObjectWithoutDtor<BumpVector<std::array<u32, 3>, SolutionStorage>> freq{};
     u32 n = 0;
 
     [[nodiscard]] static u32 one_char(char target, std::string_view s) noexcept
@@ -175,13 +177,7 @@ public:
     {
         const auto scoped_arena = SolutionStorage::Instance().StartArena();
 
-        ObjectWithoutDtor<std::unordered_map<
-            u32,
-            u32,
-            std::hash<u32>,
-            std::equal_to<u32>,
-            BumpAllocator<std::pair<const u32, u32>, SolutionStorage>>>
-            diff_to_idx;
+        ObjectWithoutDtor<BumpHashMap<u32, u32, SolutionStorage>> diff_to_idx;
         u32 r = 0;
         const u8 u1 = (c1 - 'a') & 0x1F, u2 = (c2 - 'a') & 0x1F,
                  u3 = (c3 - 'a') & 0x1F;
@@ -189,7 +185,7 @@ public:
         u32 split_c1c2 = 0, split_c3 = 0;
         for (u32 i = 0, l = 1; i != n; ++i, ++l)
         {
-            const auto& f = freq[i];
+            const auto& f = freq.get()[i];
             if (f[u3] != split_c3)
             {
                 l = 0;
@@ -218,18 +214,12 @@ public:
     {
         const auto scoped_arena = SolutionStorage::Instance().StartArena();
 
-        ObjectWithoutDtor<std::unordered_map<
-            u64,
-            u32,
-            std::hash<u64>,
-            std::equal_to<u64>,
-            BumpAllocator<std::pair<const u64, u32>, SolutionStorage>>>
-            diff_to_idx;
+        ObjectWithoutDtor<BumpHashMap<u64, u32, SolutionStorage>> diff_to_idx;
         u32 r = 0;
 
         for (u32 i = 0; i != n; ++i)
         {
-            const auto& [fa, fb, fc] = freq[i];
+            const auto& [fa, fb, fc] = freq.get()[i];
             u32 t = 0;
             if (u32 d1 = fa - fb, d2 = fc - fa; d1 | d2)
             {
@@ -254,14 +244,14 @@ public:
 
         n = static_cast<u32>(s.size());
 
-        freq.reserve(n);
-        freq.emplace_back()[(s[0] - 'a') & 0x1F]++;
+        freq->reserve(n);
+        freq->emplace_back()[(s[0] - 'a') & 0x1F]++;
 
         for (u32 i = 1; i != n; ++i)
         {
-            auto f = freq.back();
+            auto f = freq->back();
             ++f[(s[i] - 'a') & 0x1F];
-            freq.push_back(f);
+            freq->push_back(f);
         }
 
         u32 r = 0;

@@ -5,12 +5,13 @@
 
 #include "force_inline.hpp"
 #include "hot_path.hpp"
+#include "integral_aliases.hpp"
 #include "no_sanitizers.hpp"
 
 struct ScopedArena
 {
-    size_t rollback_offset = 0;
-    size_t* offset = nullptr;
+    u32 rollback_offset = 0;
+    u32* offset = nullptr;
 
     ~ScopedArena()
     {
@@ -22,7 +23,7 @@ struct ScopedArena
     }
 };
 
-template <size_t num_bytes>
+template <u32 num_bytes>
 struct GlobalBufferStorage
 {
     FORCE_INLINE static GlobalBufferStorage& Instance() noexcept
@@ -39,7 +40,7 @@ struct GlobalBufferStorage
     }
 
     std::array<std::byte, num_bytes> allocator_memory_;
-    size_t allocator_offset_;
+    u32 allocator_offset_;
 };
 
 template <typename T, typename S>
@@ -55,35 +56,27 @@ struct BumpAllocator
     {
     }
 
-    [[nodiscard]] FORCE_INLINE T* allocate(std::size_t n) noexcept HOT_PATH
+    [[nodiscard]] FORCE_INLINE T* allocate(u32 n) noexcept HOT_PATH
         NO_SANITIZERS
     {
         auto& inst = S::Instance();
 
-        // raw buffer start
-        std::byte* base = inst.allocator_memory_.data();
-
         // align current offset for T
-        std::size_t alignment = alignof(T);
-        std::size_t offset = inst.allocator_offset_;
-        std::size_t aligned_offset =
-            (offset + (alignment - 1)) & ~(alignment - 1);
-
-        // compute how many bytes we need
-        std::size_t bytes = n * sizeof(T);
+        u32 alignment = alignof(T);
+        u32 offset = inst.allocator_offset_;
+        u32 aligned_offset = (offset + (alignment - 1)) & ~(alignment - 1);
+        u32 bytes = n * sizeof(T);
 
         assert(aligned_offset + bytes <= inst.allocator_memory_.size());
-
-        // pointer to aligned location
-        void* p = base + aligned_offset;  // NOLINT
 
         // bump offset
         inst.allocator_offset_ = aligned_offset + bytes;
 
-        return static_cast<T*>(p);
+        return reinterpret_cast<T*>(
+            inst.allocator_memory_.data() + aligned_offset);  // NOLINT
     }
 
-    FORCE_INLINE void deallocate(T*, std::size_t) noexcept {}
+    FORCE_INLINE void deallocate(T*, u32) noexcept {}
 
     // equality so containers can compare allocators
     FORCE_INLINE constexpr bool operator==(const BumpAllocator&) const noexcept

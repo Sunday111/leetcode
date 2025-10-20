@@ -1,23 +1,16 @@
 #include <algorithm>
 #include <array>
 #include <unordered_map>
-#include <vector>
 
-#include "bump_allocator.hpp"
-#include "integral_aliases.hpp"
-
-#define HOT_PATH __attribute__((hot))
+#include "bump_hash_map.hpp"
+#include "bump_vector.hpp"
 
 using SolutionStorage = GlobalBufferStorage<1 << 25>;
 
 class Solution
 {
 public:
-    using u8 = uint8_t;
-    using u32 = uint32_t;
-
-    using Cnt = std::array<u32, 3>;
-    std::vector<Cnt, BumpAllocator<Cnt, SolutionStorage>> freq{};
+    ObjectWithoutDtor<BumpVector<std::array<u32, 3>, SolutionStorage>> freq{};
     u32 n = 0;
 
     [[nodiscard]] static u32 one_char(char target, std::string_view s) noexcept
@@ -40,13 +33,7 @@ public:
     {
         const auto scoped_arena = SolutionStorage::Instance().StartArena();
 
-        ObjectWithoutDtor<std::unordered_map<
-            u32,
-            u32,
-            std::hash<u32>,
-            std::equal_to<u32>,
-            BumpAllocator<std::pair<const u32, u32>, SolutionStorage>>>
-            diff_to_idx;
+        ObjectWithoutDtor<BumpHashMap<u32, u32, SolutionStorage>> diff_to_idx;
         u32 r = 0;
         const u8 u1 = (c1 - 'a') & 0x1F, u2 = (c2 - 'a') & 0x1F,
                  u3 = (c3 - 'a') & 0x1F;
@@ -54,7 +41,7 @@ public:
         u32 split_c1c2 = 0, split_c3 = 0;
         for (u32 i = 0, l = 1; i != n; ++i, ++l)
         {
-            const auto& f = freq[i];
+            const auto& f = freq.get()[i];
             if (f[u3] != split_c3)
             {
                 l = 0;
@@ -83,18 +70,12 @@ public:
     {
         const auto scoped_arena = SolutionStorage::Instance().StartArena();
 
-        ObjectWithoutDtor<std::unordered_map<
-            u64,
-            u32,
-            std::hash<u64>,
-            std::equal_to<u64>,
-            BumpAllocator<std::pair<const u64, u32>, SolutionStorage>>>
-            diff_to_idx;
+        ObjectWithoutDtor<BumpHashMap<u64, u32, SolutionStorage>> diff_to_idx;
         u32 r = 0;
 
         for (u32 i = 0; i != n; ++i)
         {
-            const auto& [fa, fb, fc] = freq[i];
+            const auto& [fa, fb, fc] = freq.get()[i];
             u32 t = 0;
             if (u32 d1 = fa - fb, d2 = fc - fa; d1 | d2)
             {
@@ -119,14 +100,14 @@ public:
 
         n = static_cast<u32>(s.size());
 
-        freq.reserve(n);
-        freq.emplace_back()[(s[0] - 'a') & 0x1F]++;
+        freq->reserve(n);
+        freq->emplace_back()[(s[0] - 'a') & 0x1F]++;
 
         for (u32 i = 1; i != n; ++i)
         {
-            auto f = freq.back();
+            auto f = freq->back();
             ++f[(s[i] - 'a') & 0x1F];
-            freq.push_back(f);
+            freq->push_back(f);
         }
 
         u32 r = 0;
