@@ -20,7 +20,7 @@ public:
             reinterpret_cast<u32*>(nums_.data()),  // NOLINT
             nums_.size(),
         };
-        radix_sort<u32, SortOrder::Ascending, 7, 3>(nums);
+        radix_sort<7, 3>(nums);
 
         u32 r = 0;
 
