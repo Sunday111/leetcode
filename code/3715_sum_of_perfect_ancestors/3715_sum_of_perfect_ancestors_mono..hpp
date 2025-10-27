@@ -17,12 +17,12 @@ using i16 = int16_t;
 using i32 = int32_t;
 using i64 = int64_t;
 
-template <u32 n>
+template <u32 n, u32 primes_capacity>
 class Factorizer
 {
 public:
     std::array<u32, n + 1> spf{};
-    std::array<u32, 10'000> primes;
+    std::array<u32, primes_capacity> primes;
     u32 num_primes = 0;
 
     Factorizer() noexcept  // NOLINT
@@ -93,7 +93,7 @@ public:
 
     inline static auto kernels = []()  // NOLINT
     {
-        Factorizer<100'001> factorizer{};
+        Factorizer<100'001, 10'001> factorizer{};
         std::array<u32, 100'001> result{};
 
         for (u32 x = 1; x != result.size(); ++x)

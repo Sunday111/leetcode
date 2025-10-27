@@ -30,7 +30,7 @@ public:
 
     inline static auto kernels = []()  // NOLINT
     {
-        Factorizer<100'001> factorizer{};
+        Factorizer<100'001, 10'001> factorizer{};
         std::array<u32, 100'001> result{};
 
         for (u32 x = 1; x != result.size(); ++x)

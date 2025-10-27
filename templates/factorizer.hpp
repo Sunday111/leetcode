@@ -5,12 +5,12 @@
 #include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
-template <u32 n>
+template <u32 n, u32 primes_capacity>
 class Factorizer
 {
 public:
     std::array<u32, n + 1> spf{};
-    std::array<u32, 10'000> primes;
+    std::array<u32, primes_capacity> primes;
     u32 num_primes = 0;
 
     Factorizer() noexcept  // NOLINT
@@ -48,5 +48,10 @@ public:
             }
             callback(prime, power);
         }
+    }
+
+    [[nodiscard]] constexpr u32 prime_at_index(u32 idx) const noexcept
+    {
+        return primes[idx];
     }
 };
