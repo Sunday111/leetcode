@@ -21,6 +21,7 @@ modernize-*\
 -cert-msc32-c,\
 -cppcoreguidelines-pro-type-reinterpret-cast,\
 -cppcoreguidelines-avoid-c-arrays,\
+-cppcoreguidelines-pro-bounds-pointer-arithmetic,\
 "
 WarningsAsErrors: '*'
 # Use clang-format
