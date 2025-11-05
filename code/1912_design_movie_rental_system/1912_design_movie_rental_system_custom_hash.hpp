@@ -1,16 +1,8 @@
-#ifndef __clang__
-#pragma GCC optimize("O3")
-#endif
-
 #include <algorithm>
 #include <cassert>
-#include <set>
 #include <vector>
 
-using u8 = uint8_t;
-using u16 = uint16_t;
-using u32 = uint32_t;
-using u64 = uint64_t;
+#include "bump_set.hpp"
 
 using ShopID = u32;   // [1; 3 * 10^5]
 using MovieID = u16;  // [1; 10^4]
@@ -144,110 +136,6 @@ private:
     }
 };
 
-template <size_t num_bytes>
-struct GlobalBufferStorage
-{
-    FORCE_INLINE static GlobalBufferStorage& Instance() noexcept
-    {
-        static GlobalBufferStorage inst;
-        return inst;
-    }
-
-    FORCE_INLINE void Reset() noexcept { allocator_offset_ = 0; }
-
-    std::array<std::byte, num_bytes> allocator_memory_;
-    size_t allocator_offset_;
-};
-
-template <typename T, typename S>
-struct BumpAllocator
-{
-    using value_type = T;
-
-    BumpAllocator() = default;
-
-    template <class U>
-    FORCE_INLINE explicit constexpr BumpAllocator(
-        const BumpAllocator<U, S>&) noexcept
-    {
-    }
-
-    [[nodiscard]] FORCE_INLINE T* allocate(std::size_t n) noexcept
-    {
-        auto& inst = S::Instance();
-
-        // raw buffer start
-        std::byte* base = inst.allocator_memory_.data();
-
-        // align current offset for T
-        std::size_t alignment = alignof(T);
-        std::size_t offset = inst.allocator_offset_;
-        std::size_t aligned_offset =
-            (offset + (alignment - 1)) & ~(alignment - 1);
-
-        // compute how many bytes we need
-        std::size_t bytes = n * sizeof(T);
-
-        assert(aligned_offset + bytes <= inst.allocator_memory_.size());
-
-        // pointer to aligned location
-        void* p = base + aligned_offset;  // NOLINT
-
-        // bump offset
-        inst.allocator_offset_ = aligned_offset + bytes;
-
-        return static_cast<T*>(p);
-    }
-
-    FORCE_INLINE void deallocate(T*, std::size_t) noexcept {}
-
-    // equality so containers can compare allocators
-    FORCE_INLINE constexpr bool operator==(const BumpAllocator&) const noexcept
-    {
-        return true;
-    }
-    FORCE_INLINE constexpr bool operator!=(const BumpAllocator&) const noexcept
-    {
-        return false;
-    }
-};
-
-template <
-    typename Element,
-    typename AllocatorStorage,
-    template <typename> typename Comparator = std::less>
-class BumpSet
-{
-    using Set = std::set<
-        Element,
-        Comparator<Element>,
-        BumpAllocator<Element, AllocatorStorage>>;
-    alignas(Set) std::array<std::byte, sizeof(Set)> arr;
-
-public:
-    FORCE_INLINE BumpSet() noexcept { new (&get()) Set(); }
-
-    FORCE_INLINE Set& get() noexcept
-    {
-        return *reinterpret_cast<Set*>(arr.data());  // NOLINT
-    }
-
-    FORCE_INLINE const Set& get() const noexcept
-    {
-        return *reinterpret_cast<const Set*>(arr.data());  // NOLINT
-    }
-
-    FORCE_INLINE Set* operator->() noexcept
-    {
-        return reinterpret_cast<Set*>(arr.data());  // NOLINT
-    }
-
-    FORCE_INLINE const Set* operator->() const noexcept
-    {
-        return reinterpret_cast<const Set*>(arr.data());  // NOLINT
-    }
-};
-
 using SetStorage = GlobalBufferStorage<1 << 25>;
 
 class MovieRentingSystem
@@ -260,17 +148,18 @@ private:
         return std::hash<u64>{}(v);
         });
 
-    inline static HashMap<
+    inline static ObjectWithoutDtor<HashMap<
         1 << 14,
         MovieID,
-        BumpSet<std::pair<Price, ShopID>, SetStorage>>
+        BumpSet<std::pair<Price, ShopID>, SetStorage>>>
         unrented;  // NOLINT
-    BumpSet<std::tuple<Price, ShopID, MovieID>, SetStorage> rented;
-    inline static HashMap<
+    ObjectWithoutDtor<BumpSet<std::tuple<Price, ShopID, MovieID>, SetStorage>>
+        rented;
+    inline static ObjectWithoutDtor<HashMap<
         1 << 18,
         std::pair<ShopID, MovieID>,
         Price,
-        PairHasher>
+        PairHasher>>
         prices;  // NOLINT
 
 public:
@@ -279,16 +168,16 @@ public:
         std::vector<std::vector<int>>& entries) noexcept
     {
         SetStorage::Instance().Reset();
-        unrented.clear();
-        prices.clear();
+        unrented.Reset();
+        prices.Reset();
 
         for (auto& entry : entries)
         {
             ShopID shop = static_cast<ShopID>(entry[0]);
             MovieID movie = static_cast<MovieID>(entry[1]);
             Price price = static_cast<Price>(entry[2]);
-            unrented[movie]->insert({price, shop});
-            prices[{shop, movie}] = price;
+            unrented.get()[movie].insert({price, shop});
+            prices.get()[{shop, movie}] = price;
         }
     }
 
@@ -296,10 +185,10 @@ public:
     {
         static std::vector<int> r;
         r.clear();
-        if (const auto unrented_it = unrented.find(movie))
+        if (const auto unrented_it = unrented->find(movie))
         {
-            auto it = unrented_it->get().begin();
-            auto end = unrented_it->get().end();
+            auto it = unrented_it->begin();
+            auto end = unrented_it->end();
             for (size_t i = 0; i != 5 && it != end; ++i, ++it)
             {
                 r.push_back(static_cast<int>(it->second));
@@ -310,16 +199,16 @@ public:
 
     void rent(ShopID shop, MovieID movie) noexcept
     {
-        Price price = prices[{shop, movie}];
-        unrented[movie]->erase({price, shop});
+        Price price = prices.get()[{shop, movie}];
+        unrented.get()[movie].erase({price, shop});
         rented->insert({price, shop, movie});
     }
 
     void drop(ShopID shop, MovieID movie) noexcept
     {
-        Price price = prices[{shop, movie}];
+        Price price = prices.get()[{shop, movie}];
         rented->erase({price, shop, movie});
-        unrented[movie]->insert({price, shop});
+        unrented.get()[movie].insert({price, shop});
     }
 
     const std::vector<std::vector<int>>& report() const noexcept
@@ -343,3 +232,5 @@ public:
         return r;
     }
 };
+
+#include "sync_stdio.hpp"
