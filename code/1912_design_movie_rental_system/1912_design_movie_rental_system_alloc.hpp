@@ -1,11 +1,10 @@
 #include <cassert>
 #include <ranges>
-#include <set>
 #include <unordered_map>
 #include <vector>
 
-using u16 = uint16_t;
-using u32 = uint32_t;
+#include "bump_set.hpp"
+#include "integral_aliases.hpp"
 
 using ShopID = u32;   // [1; 3 * 10^5]
 using MovieID = u16;  // [1; 10^4]
@@ -20,117 +19,13 @@ inline constexpr auto toInt = [](std::integral auto v)
     return static_cast<int>(v);
 };
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-
-template <size_t num_bytes>
-struct GlobalBufferStorage
-{
-    FORCE_INLINE static GlobalBufferStorage& Instance() noexcept
-    {
-        static GlobalBufferStorage inst;
-        return inst;
-    }
-
-    FORCE_INLINE void Reset() noexcept { allocator_offset_ = 0; }
-
-    std::array<std::byte, num_bytes> allocator_memory_;
-    size_t allocator_offset_;
-};
-
-template <typename T, typename S>
-struct BumpAllocator
-{
-    using value_type = T;
-
-    BumpAllocator() = default;
-
-    template <class U>
-    FORCE_INLINE explicit constexpr BumpAllocator(
-        const BumpAllocator<U, S>&) noexcept
-    {
-    }
-
-    [[nodiscard]] FORCE_INLINE T* allocate(std::size_t n) noexcept
-    {
-        auto& inst = S::Instance();
-
-        // raw buffer start
-        std::byte* base = inst.allocator_memory_.data();
-
-        // align current offset for T
-        std::size_t alignment = alignof(T);
-        std::size_t offset = inst.allocator_offset_;
-        std::size_t aligned_offset =
-            (offset + (alignment - 1)) & ~(alignment - 1);
-
-        // compute how many bytes we need
-        std::size_t bytes = n * sizeof(T);
-
-        assert(aligned_offset + bytes <= inst.allocator_memory_.size());
-
-        // pointer to aligned location
-        void* p = base + aligned_offset;  // NOLINT
-
-        // bump offset
-        inst.allocator_offset_ = aligned_offset + bytes;
-
-        return static_cast<T*>(p);
-    }
-
-    FORCE_INLINE void deallocate(T*, std::size_t) noexcept {}
-
-    // equality so containers can compare allocators
-    FORCE_INLINE constexpr bool operator==(const BumpAllocator&) const noexcept
-    {
-        return true;
-    }
-    FORCE_INLINE constexpr bool operator!=(const BumpAllocator&) const noexcept
-    {
-        return false;
-    }
-};
-
-template <
-    typename Element,
-    typename AllocatorStorage,
-    template <typename> typename Comparator>
-class BumpSet
-{
-    using Set = std::set<
-        Element,
-        Comparator<Element>,
-        BumpAllocator<Element, AllocatorStorage>>;
-    alignas(Set) std::array<std::byte, sizeof(Set)> arr;
-
-public:
-    FORCE_INLINE BumpSet() noexcept { new (&get()) Set(); }
-
-    FORCE_INLINE Set& get() noexcept
-    {
-        return *reinterpret_cast<Set*>(arr.data());  // NOLINT
-    }
-
-    FORCE_INLINE const Set& get() const noexcept
-    {
-        return *reinterpret_cast<const Set*>(arr.data());  // NOLINT
-    }
-
-    FORCE_INLINE Set* operator->() noexcept
-    {
-        return reinterpret_cast<Set*>(arr.data());  // NOLINT
-    }
-
-    FORCE_INLINE const Set* operator->() const noexcept
-    {
-        return reinterpret_cast<const Set*>(arr.data());  // NOLINT
-    }
-};
-
-using SetStorage = GlobalBufferStorage<1 << 25>;
+using SolutionStorage = GlobalBufferStorage<1 << 25>;
 
 struct MovieInfo
 {
-    BumpSet<PriceAndShop, SetStorage, std::less> pricesAndShops;
+    ObjectWithoutDtor<
+        BumpSet<PriceAndShop, SolutionStorage, std::less<PriceAndShop>>>
+        pricesAndShops;
     std::unordered_map<ShopID, Price> shopsAndPrices;
     std::unordered_map<ShopID, Price> rentedShopsAndPrices;
 
@@ -173,11 +68,13 @@ class MovieRentingSystem
 {
 public:
     std::unordered_map<MovieID, MovieInfo> available;
-    BumpSet<PriceShopMovie, SetStorage, std::less> rented;
+    ObjectWithoutDtor<
+        BumpSet<PriceShopMovie, SolutionStorage, std::less<PriceShopMovie>>>
+        rented;
 
     MovieRentingSystem(u32, std::vector<std::vector<int>>& entries) noexcept
     {
-        SetStorage::Instance().Reset();
+        SolutionStorage::Instance().Reset();
         for (auto& entry : entries)
         {
             auto shop = static_cast<ShopID>(entry[0]);

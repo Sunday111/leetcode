@@ -1,18 +1,14 @@
 #pragma once
 
 #include <cassert>
-#include <set>
 #include <unordered_map>
 #include <vector>
 
-#include "bump_allocator.hpp"
 #include "bump_hash_map.hpp"
+#include "bump_set.hpp"
 #include "reinterpret_range.hpp"
 
 using SolutionStorage = GlobalBufferStorage<1 << 25>;
-
-template <typename V, typename Storage, typename Cmp = std::less<V>>
-using BumpSet = std::set<V, Cmp, BumpAllocator<V, SolutionStorage>>;
 
 class Solution
 {
@@ -96,9 +92,12 @@ public:
         r.push_back(static_cast<i64>(current_sum));
         for (u32 i = 0, j = k; j != n; ++i, ++j)
         {
-            remove_value(nums[i]);
-            add_value(nums[j]);
-            refresh_map_size();
+            if (nums[i] != nums[j])
+            {
+                remove_value(nums[i]);
+                add_value(nums[j]);
+                refresh_map_size();
+            }
             r.push_back(static_cast<i64>(current_sum));
         }
 
