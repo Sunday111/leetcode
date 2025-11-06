@@ -41,7 +41,7 @@ struct GlobalBufferStorage
         return {allocator_offset_, &allocator_offset_};
     }
 
-    std::array<std::byte, num_bytes> allocator_memory_;
+    alignas(64) std::array<std::byte, num_bytes> allocator_memory_;
     u32 allocator_offset_;
 };
 
