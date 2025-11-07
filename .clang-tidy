@@ -23,6 +23,7 @@ modernize-*\
 -cppcoreguidelines-avoid-c-arrays,\
 -cppcoreguidelines-pro-bounds-pointer-arithmetic,\
 -google-runtime-int,\
+-performance-avoid-endl,\
 "
 WarningsAsErrors: '*'
 # Use clang-format
