@@ -3,6 +3,7 @@
 #include <ranges>
 #include <vector>
 
+#include "bisect.hpp"
 #include "integral_aliases.hpp"
 
 class Solution
@@ -24,38 +25,34 @@ public:
         std::inclusive_scan(power, power + n, power);
 
         static std::pair<u32, i64> q[100'001];
-        auto possible = [&](i64 x)
-        {
-            u32 qb = 0, qe = 0, can_build = k;
-            i64 delta = 0;
-            for (u32 i = 0; i != n; ++i)
-            {
-                if (qb != qe && q[qb].first == i)
-                {
-                    delta -= q[qb++].second;
-                }
-
-                if (i64 p = power[i] + delta; p < x)
-                {
-                    i64 to_build = x - p;
-                    if (to_build > can_build) return false;
-
-                    can_build -= to_build;
-                    delta += to_build;
-                    q[qe++] = {std::min(n, i + coverage), to_build};
-                }
-            }
-
-            return true;
-        };
 
         const i64 min_power = *std::min_element(power, power + n);
-        return *std::ranges::lower_bound(
-                   std::views::iota(min_power, min_power + k + 1),
-                   false,
-                   std::greater{},
-                   possible) -
-               1;
+        return *bisectLastTrue(
+            std::views::iota(min_power, min_power + k + 1),
+            [&](i64 x)
+            {
+                u32 qb = 0, qe = 0, can_build = k;
+                i64 delta = 0;
+                for (u32 i = 0; i != n; ++i)
+                {
+                    if (qb != qe && q[qb].first == i)
+                    {
+                        delta -= q[qb++].second;
+                    }
+
+                    if (i64 p = power[i] + delta; p < x)
+                    {
+                        i64 to_build = x - p;
+                        if (to_build > can_build) return false;
+
+                        can_build -= to_build;
+                        delta += to_build;
+                        q[qe++] = {std::min(n, i + coverage), to_build};
+                    }
+                }
+
+                return true;
+            });
     }
 };
 
