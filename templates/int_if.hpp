@@ -20,3 +20,9 @@ template <typename T>
     return std::bit_cast<T>(
         iif(c, std::bit_cast<std::size_t>(a), std::bit_cast<std::size_t>(b)));
 }
+
+template <std::integral T>
+[[nodiscard]] FORCE_INLINE HOT_PATH constexpr T negate_if(bool c, T v) noexcept
+{
+    return iif(c, -v, v);
+}
