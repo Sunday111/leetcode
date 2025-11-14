@@ -1,5 +1,7 @@
 #pragma once
 
+#include <immintrin.h>
+
 #include <ranges>
 #include <string>
 
@@ -14,7 +16,7 @@ public:
         {
             int m = (c == '0') - 1;
             a += z & m;
-            z += p & ~m;
+            z += _andn_u32(m, p);
             p = m & 1;
         }
         return a;
