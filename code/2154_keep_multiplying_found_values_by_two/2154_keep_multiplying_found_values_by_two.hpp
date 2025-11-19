@@ -1,21 +1,25 @@
 #pragma once
 
-#include <algorithm>
 #include <vector>
 
 class Solution
 {
 public:
-    [[nodiscard]] static constexpr int findFinalValue(
-        const std::vector<int>& nums,
-        int original) noexcept
+    using u32 = uint32_t;
+    [[nodiscard]] static constexpr u32 findFinalValue(
+        std::vector<int>& nums,
+        u32 original) noexcept
     {
-        int r = original;
-        while (std::ranges::find(nums, r) != nums.end())
+        int ko = std::countr_zero(original);
+        unsigned base = original >> ko, bits = 0;
+        for (int v : nums)
         {
-            r *= 2;
+            u32 uv = static_cast<u32>(v);
+            int k = std::countr_zero(uv);
+            uv >>= k;
+            bits |= u32{uv == base} << k;
         }
 
-        return r;
+        return original << std::countr_one(bits >> ko);
     }
 };
