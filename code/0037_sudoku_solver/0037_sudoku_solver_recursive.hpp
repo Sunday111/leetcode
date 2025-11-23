@@ -4,6 +4,7 @@
 #include <bit>
 #include <vector>
 
+#include "hot_path.hpp"
 #include "int_if.hpp"
 #include "integral_aliases.hpp"
 

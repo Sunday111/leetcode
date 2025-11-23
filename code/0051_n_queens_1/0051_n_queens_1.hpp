@@ -12,13 +12,13 @@ class SolutionT
 public:
     std::vector<std::vector<std::string>> r;
     std::array<u16, n> grid{};
-    std::array<u8, n> curr{};
+    std::array<u8, n> x{};
 
     template <u8 y>
     constexpr void add_queen() noexcept
     {
         grid[y] = 0xFFFF;
-        const u16 m = (1 << curr[y]) & 0xFFFF;
+        const u16 m = (1 << x[y]) & 0xFFFF;
         u16 left = m, right = m;
         for (u8 yy = y + 1; yy != n; ++yy)
         {
@@ -37,17 +37,16 @@ public:
             {
                 auto& row = board[yy];
                 row.resize(n, '.');
-                row[curr[yy]] = 'Q';
+                row[x[yy]] = 'Q';
             }
         }
         else
         {
-            constexpr u16 full = (0xFFFF >> (16 - n)) & 0xFFFF;
-            u16 row = grid[y] & full;
-            while (row != full)
+            constexpr auto full = 0xFFFF >> (16 - n);
+
+            for (u16 row = grid[y] & full; row != full; row |= 1u << x[y])
             {
-                curr[y] = std::countr_one(row) & 0xFF;
-                row |= 1u << curr[y];
+                x[y] = std::countr_one(row) & 0xFF;
                 auto saved = grid;
                 add_queen<y>();
                 solve<y + 1>();

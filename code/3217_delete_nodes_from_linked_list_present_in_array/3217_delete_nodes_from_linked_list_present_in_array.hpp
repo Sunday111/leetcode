@@ -1,7 +1,7 @@
 #include <vector>
 
 #include "force_inline.hpp"
-#include "int_if.hpp"
+#include "ptr_if.hpp"
 
 struct ListNode
 {
@@ -40,7 +40,7 @@ public:
         for (auto p = head->next; p; p = p->next)
         {
             last->next = p;
-            last = iif(is_set(p->val), last, p);
+            last = ptrif(is_set(p->val), last, p);
         }
         last->next = nullptr;
 
