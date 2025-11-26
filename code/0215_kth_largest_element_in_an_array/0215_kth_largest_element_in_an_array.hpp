@@ -1,26 +1,28 @@
 #include <vector>
 
-#include "bitset_heap.hpp"
+#include "bitset_priority_queue.hpp"
 
 class Solution
 {
 public:
-    static constexpr u32 kValueLimit = 20'002;
-    BitsetHeap<kValueLimit> heap{};
+    using Queue = BitsetPriorityQueue<20'002, 100'000>;
+    using ValueType = Queue::ValueType;
+    using FreqType = Queue::FrequencyType;
+    Queue heap{};
 
     [[nodiscard]] constexpr int findKthLargest(
         const std::vector<int>& nums,
-        const u32 k) noexcept
+        const FreqType k) noexcept
     {
-        for (u32 i = 0; i != k; ++i)
+        for (FreqType i = 0; i != k; ++i)
         {
-            heap.add(to<u32>(nums[i] + 10'000));
+            heap.add(to<ValueType>(nums[i] + 10'000));
         }
 
-        const u32 n = to<u32>(nums.size());
-        for (u32 i = k; i != n; ++i)
+        const auto n = to<FreqType>(nums.size());
+        for (FreqType i = k; i != n; ++i)
         {
-            heap.add(to<u32>(nums[i] + 10'000));
+            heap.add(to<ValueType>(nums[i] + 10'000));
             heap.pop_min();
         }
 

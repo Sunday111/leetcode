@@ -1,12 +1,14 @@
-#include "layered_bitset.hpp"
+#include "pyramid_bitset.hpp"
 
-template <size_t value_limit>
-class BitsetHeap
+template <size_t value_limit, size_t size_limit>
+class BitsetPriorityQueue
 {
 public:
-    using ValueType = UintForValue<value_limit>;
-    std::array<ValueType, value_limit> freq{};
-    LayeredBitset<value_limit> bits{};
+    using B = PyramidBitset<value_limit>;
+    using ValueType = B::ValueType;
+    using FrequencyType = UintForValue<size_limit>;
+    std::array<FrequencyType, value_limit> freq{};
+    B bits{};
 
     FORCE_INLINE constexpr void add(ValueType v) noexcept
     {

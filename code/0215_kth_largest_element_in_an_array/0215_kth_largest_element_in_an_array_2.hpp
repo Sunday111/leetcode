@@ -62,7 +62,7 @@ using LayersWords = decltype([]<u32... layers_sizes>(std::integer_sequence<u32, 
 ));
 
 template <size_t size>
-struct LayeredBitset
+struct PyramidBitset
 {
     static constexpr u32 num_layers = count_layers(size);
     LayersWords<size> layers{};

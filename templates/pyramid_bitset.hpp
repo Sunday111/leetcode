@@ -1,39 +1,11 @@
+#pragma once
+
 #include <array>
-#include <bit>
-#include <concepts>
-#include <cstdint>
 #include <numeric>
-#include <tuple>
-#include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-
-template <typename To>
-[[nodiscard]] FORCE_INLINE static constexpr To to(auto v) noexcept
-{
-    return static_cast<To>(v);
-}
-
-template <std::integral T>
-[[nodiscard]] FORCE_INLINE static constexpr T ceil_div(T a, T b) noexcept
-{
-    return ((a + b) - 1) / b;
-}
-
-using u8 = uint8_t;
-using u16 = uint16_t;
-using u32 = uint32_t;
-using u64 = uint64_t;
-
-using i8 = int8_t;
-using i16 = int16_t;
-using i32 = int32_t;
-using i64 = int64_t;
-
-template <u64 value>
-using UintForValue = std::tuple_element_t<
-    ceil_div(std::bit_width(value), 8),
-    std::tuple<u8, u16, u32, u64>>;
+#include "force_inline.hpp"
+#include "to.hpp"
+#include "uint_for_value.hpp"
 
 template <size_t size>
 class PyramidBitset
@@ -124,67 +96,5 @@ private:
         u8 bi = std::countr_zero(words[offsets[layer] + wi]) & 63;
         ValueType x = to<ValueType>(wi << 6) | to<ValueType>(bi);
         wi = x;
-    }
-};
-
-template <size_t value_limit, size_t size_limit>
-class BitsetPriorityQueue
-{
-public:
-    using B = PyramidBitset<value_limit>;
-    using ValueType = B::ValueType;
-    using FrequencyType = UintForValue<size_limit>;
-    std::array<FrequencyType, value_limit> freq{};
-    B bits{};
-
-    FORCE_INLINE constexpr void add(ValueType v) noexcept
-    {
-        ++freq[v];
-        bits.add(v);
-    }
-
-    FORCE_INLINE constexpr void remove(ValueType v) noexcept
-    {
-        if (0 == --freq[v]) bits.remove(v);
-    }
-
-    [[nodiscard]] FORCE_INLINE constexpr ValueType min() noexcept
-    {
-        return bits.lowest();
-    }
-
-    FORCE_INLINE constexpr ValueType pop_min() noexcept
-    {
-        auto lo = min();
-        remove(lo);
-        return lo;
-    }
-};
-
-class Solution
-{
-public:
-    using Queue = BitsetPriorityQueue<20'002, 100'000>;
-    using ValueType = Queue::ValueType;
-    using FreqType = Queue::FrequencyType;
-    Queue heap{};
-
-    [[nodiscard]] constexpr int findKthLargest(
-        const std::vector<int>& nums,
-        const FreqType k) noexcept
-    {
-        for (FreqType i = 0; i != k; ++i)
-        {
-            heap.add(to<ValueType>(nums[i] + 10'000));
-        }
-
-        const auto n = to<FreqType>(nums.size());
-        for (FreqType i = k; i != n; ++i)
-        {
-            heap.add(to<ValueType>(nums[i] + 10'000));
-            heap.pop_min();
-        }
-
-        return to<int>(heap.min()) - 10'000;
     }
 };
