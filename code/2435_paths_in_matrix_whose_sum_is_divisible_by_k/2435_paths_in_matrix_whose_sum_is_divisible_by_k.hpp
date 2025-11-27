@@ -41,7 +41,7 @@ public:
                     m -= (k & -(m >= k));
                     auto& c = curr[m];
                     c = left[pm] + top[pm];
-                    c -= (kMod & std::bit_cast<u32>(-(c >= kMod)));
+                    c -= (kMod & -u32{c >= kMod});
                 }
             }
         }
