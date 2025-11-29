@@ -7,5 +7,5 @@
 template <std::integral T>
 [[nodiscard]] FORCE_INLINE static constexpr T ceil_div(T a, T b) noexcept
 {
-    return ((a + b) - 1) / b;
+    return (a + (b - 1)) / b;
 }

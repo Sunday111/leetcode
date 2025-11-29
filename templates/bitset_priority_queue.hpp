@@ -1,13 +1,13 @@
 #include "pyramid_bitset.hpp"
 
-template <size_t value_limit, size_t size_limit>
+template <size_t max_value, size_t max_count>
 class BitsetPriorityQueue
 {
 public:
-    using B = PyramidBitset<value_limit>;
+    using B = PyramidBitset<max_value + 1>;
     using ValueType = B::ValueType;
-    using FrequencyType = UintForValue<size_limit>;
-    std::array<FrequencyType, value_limit> freq{};
+    using FrequencyType = UintForValue<max_count>;
+    std::array<FrequencyType, max_value + 1> freq{};
     B bits{};
 
     FORCE_INLINE constexpr void add(ValueType v) noexcept
