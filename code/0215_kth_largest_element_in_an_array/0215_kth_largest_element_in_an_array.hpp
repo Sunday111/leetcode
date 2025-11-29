@@ -16,16 +16,16 @@ public:
     {
         for (FreqType i = 0; i != k; ++i)
         {
-            heap.add(to<ValueType>(nums[i] + 10'000));
+            heap.add(cast<ValueType>(nums[i] + 10'000));
         }
 
-        const auto n = to<FreqType>(nums.size());
+        const auto n = cast<FreqType>(nums.size());
         for (FreqType i = k; i != n; ++i)
         {
-            heap.add(to<ValueType>(nums[i] + 10'000));
+            heap.add(cast<ValueType>(nums[i] + 10'000));
             heap.pop_min();
         }
 
-        return to<int>(heap.min()) - 10'000;
+        return cast<int>(heap.min()) - 10'000;
     }
 };

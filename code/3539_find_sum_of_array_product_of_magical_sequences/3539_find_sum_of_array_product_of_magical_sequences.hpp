@@ -38,7 +38,7 @@ class Solution
 
     u32 dfs(u32 flag) noexcept NO_SANITIZERS
     {
-        const u32 bz = to<u32>(std::popcount(flag));
+        const u32 bz = cast<u32>(std::popcount(flag));
         if (k == 0xFFFFFFFF || m + bz < k) return 0;
         if (m == 0) return (k == bz) ? 1 : 0;
         if (i >= nums.size()) return 0;
@@ -46,7 +46,7 @@ class Solution
         if (dp[m][k][i][flag] != 0xFFFFFFFF) return dp[m][k][i][flag];
 
         u64 r = 0, p = 1;
-        const u32 x = to<u32>(nums[i]);
+        const u32 x = cast<u32>(nums[i]);
         ++i;
         for (u32 f = 0; f <= m; ++f)
         {
@@ -82,7 +82,7 @@ public:
         NO_SANITIZERS
     {
         i = 0, k = k_, m = m_, nums = nums_;
-        clearDP(m, to<u32>(nums.size()));
+        clearDP(m, cast<u32>(nums.size()));
         auto r = dfs(0);
         return r;
     }

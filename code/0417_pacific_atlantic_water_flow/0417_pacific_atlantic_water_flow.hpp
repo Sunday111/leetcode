@@ -1,10 +1,8 @@
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-
-using u32 = uint32_t;
-using u16 = uint16_t;
-using u8 = uint8_t;
+#include "cast.hpp"
+#include "force_inline.hpp"
+#include "integral_aliases.hpp"
 
 struct Vec2
 {
@@ -51,16 +49,16 @@ public:
     [[nodiscard]] FORCE_INLINE constexpr static u16 toIdx(
         const Vec2& v) noexcept
     {
-        return to<u16>((u16{v.x} << 8) | v.y);
+        return cast<u16>((u16{v.x} << 8) | v.y);
     }
 
     [[nodiscard]] static std::vector<std::vector<int>> pacificAtlantic(
         std::vector<std::vector<int>>& hmap) noexcept
     {
         // Size of the island
-        const Vec2 size{to<u8>(hmap[0].size()), to<u8>(hmap.size())};
+        const Vec2 size{cast<u8>(hmap[0].size()), cast<u8>(hmap.size())};
         // Maximum point coordinate within the island
-        const Vec2 lim{to<u8>(size.x - 1), to<u8>(size.y - 1)};
+        const Vec2 lim{cast<u8>(size.x - 1), cast<u8>(size.y - 1)};
         // Bit constants used in 'bits' array
         constexpr u8 kPacific = 1, kAtlantic = 2, kBoth = 3;
         // Static bits array

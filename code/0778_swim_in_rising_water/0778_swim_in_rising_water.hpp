@@ -51,7 +51,7 @@ struct Vec2
 
     [[nodiscard]] FORCE_INLINE constexpr u16 toIdx() const noexcept
     {
-        return to<u16>((y << 6) | x);
+        return cast<u16>((y << 6) | x);
     }
 
     [[nodiscard]] FORCE_INLINE constexpr bool isValid(
@@ -90,9 +90,9 @@ public:
     u16 swimInWater(std::vector<std::vector<int>>& grid) noexcept
     {
         // Size of the pool
-        const Vec2 size{to<u8>(grid[0].size()), to<u8>(grid.size())};
+        const Vec2 size{cast<u8>(grid[0].size()), cast<u8>(grid.size())};
         // Maximum coordinate within the pool
-        const Vec2 target{to<u8>(size.x - 1), to<u8>(size.y - 1)};
+        const Vec2 target{cast<u8>(size.x - 1), cast<u8>(size.y - 1)};
 
         static std::array<u32, 2500> q;
         u16 qs = 0;

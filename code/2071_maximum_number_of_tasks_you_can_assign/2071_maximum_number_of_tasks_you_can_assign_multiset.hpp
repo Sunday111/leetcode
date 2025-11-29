@@ -53,7 +53,7 @@ struct PrefixSumCheck
         u32 w0 = num_workers - num_tasks;
         u64 available =
             ws[num_workers - 1] +
-            to<u64>(std::min(pills, num_workers)) * to<u64>(strength);
+            cast<u64>(std::min(pills, num_workers)) * cast<u64>(strength);
         if (w0 > 0) available -= ws[w0 - 1];
 
         return req <= available;
@@ -84,7 +84,7 @@ public:
 
         InitPrefixSumCheck(tasks, workers);
 
-        const u32 num_workers = to<u32>(workers.size());
+        const u32 num_workers = cast<u32>(workers.size());
 
         auto canComplete = [&](const u32 num_tasks)
         {
@@ -130,8 +130,8 @@ public:
             return ti == t_end;
         };
 
-        return to<int>(*std::ranges::lower_bound(
-                   std::views::iota(u32{0}, to<u32>(tasks.size() + 1)),
+        return cast<int>(*std::ranges::lower_bound(
+                   std::views::iota(u32{0}, cast<u32>(tasks.size() + 1)),
                    false,
                    std::greater{},
                    canComplete)) -

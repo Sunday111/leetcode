@@ -5,6 +5,7 @@
 #include <numeric>
 #include <span>
 
+#include "cast.hpp"
 #include "force_inline.hpp"
 #include "hot_path.hpp"
 #include "integral_aliases.hpp"
@@ -57,7 +58,7 @@ class RadixSorter
             ++count[(v >> shift) & mask];
         }
 
-        const u32 n = static_cast<u32>(arr.size());
+        const u32 n = cast<u32>(arr.size());
 
         if constexpr (order == SortOrder::Ascending)
         {

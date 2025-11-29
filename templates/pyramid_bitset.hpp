@@ -3,8 +3,8 @@
 #include <array>
 #include <numeric>
 
+#include "cast.hpp"
 #include "force_inline.hpp"
-#include "to.hpp"
 #include "uint_for_value.hpp"
 
 template <size_t size>
@@ -94,7 +94,7 @@ private:
     FORCE_INLINE constexpr void lowest_impl(ValueType& wi) const noexcept
     {
         u8 bi = std::countr_zero(words[offsets[layer] + wi]) & 63;
-        ValueType x = to<ValueType>(wi << 6) | to<ValueType>(bi);
+        ValueType x = cast<ValueType>(wi << 6) | cast<ValueType>(bi);
         wi = x;
     }
 };

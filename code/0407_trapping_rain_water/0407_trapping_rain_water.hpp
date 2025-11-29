@@ -2,21 +2,11 @@
 #include <array>
 #include <vector>
 
-#ifndef __clang__
-#pragma GCC optimize("O3")
-#endif
-
-#define HOT_PATH __attribute__((hot))
-
-#define NO_SANITIZERS \
-    __attribute__((no_sanitize("undefined", "address", "coverage", "thread")))
-
-#define FORCE_INLINE inline __attribute__((always_inline))
-
-using u64 = uint64_t;
-using u32 = uint32_t;
-using u16 = uint16_t;
-using u8 = uint8_t;
+#include "cast.hpp"
+#include "force_inline.hpp"
+#include "hot_path.hpp"
+#include "integral_aliases.hpp"
+#include "no_sanitizers.hpp"
 
 struct Vec2
 {
@@ -39,7 +29,7 @@ struct ArrayBucket
 {
     [[nodiscard]] FORCE_INLINE u16 size() const noexcept HOT_PATH NO_SANITIZERS
     {
-        return to<u16>(data.size());
+        return cast<u16>(data.size());
     }
     FORCE_INLINE constexpr void clear() noexcept HOT_PATH NO_SANITIZERS
     {
@@ -160,11 +150,11 @@ struct BucketPriorityQueue
     [[nodiscard]] FORCE_INLINE Entry pop() noexcept HOT_PATH NO_SANITIZERS
     {
         // branchless min extraction
-        u16 idx2 = to<u16>(std::countr_zero(layer3));
+        u16 idx2 = cast<u16>(std::countr_zero(layer3));
         u64 w2 = layer2[idx2];
-        u16 idx1 = to<u16>(std::countr_zero(w2));
+        u16 idx1 = cast<u16>(std::countr_zero(w2));
         u64 w1 = layer1[idx2 * 64 + idx1];
-        u16 idx0 = to<u16>(std::countr_zero(w1));
+        u16 idx0 = cast<u16>(std::countr_zero(w1));
         u16 h = idx2 * 4096 + idx1 * 64 + idx0;
         Vec2 v = buckets[h].pop();
         clearBit(h);
@@ -186,22 +176,22 @@ public:
     [[nodiscard]] FORCE_INLINE constexpr static u16 toIdx(
         const Vec2& v) noexcept
     {
-        return to<u16>((u16{v.x} << 8) | v.y);
+        return cast<u16>((u16{v.x} << 8) | v.y);
     }
 
     [[nodiscard]] FORCE_INLINE constexpr static u16 getH(
         std::vector<std::vector<int>>& hmap,
         const Vec2& v) noexcept NO_SANITIZERS
     {
-        return to<u16>(hmap[v.y][v.x]);
+        return cast<u16>(hmap[v.y][v.x]);
     }
 
     [[nodiscard]] static constexpr u32 trapRainWater(
         std::vector<std::vector<int>>& hmap) noexcept HOT_PATH NO_SANITIZERS
     {
         const Vec2 size{
-            to<u8>(hmap[0].size()),
-            to<u8>(hmap.size()),
+            cast<u8>(hmap[0].size()),
+            cast<u8>(hmap.size()),
         };
 
         if (size.x < 3 || size.y < 3) return 0;
@@ -209,7 +199,7 @@ public:
         static std::array<u8, 0xFFFF> visited;  // NOLINT
         std::ranges::fill_n(visited.begin(), toIdx(size), 0);
 
-        const Vec2 lim{to<u8>(size.x - 1), to<u8>(size.y - 1)};
+        const Vec2 lim{cast<u8>(size.x - 1), cast<u8>(size.y - 1)};
 
         q.clear();
 

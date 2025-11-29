@@ -21,10 +21,10 @@ public:
 
         for (auto& q : queries)
         {
-            u32 y0 = to<u32>(q[0]);
-            u32 x0 = to<u32>(q[1]);
-            u32 y1 = to<u32>(q[2] + 1);
-            u32 x1 = to<u32>(q[3] + 1);
+            u32 y0 = cast<u32>(q[0]);
+            u32 x0 = cast<u32>(q[1]);
+            u32 y1 = cast<u32>(q[2] + 1);
+            u32 x1 = cast<u32>(q[3] + 1);
             ++t[y0][x0];
             --t[y0][x1];
             --t[y1][x0];

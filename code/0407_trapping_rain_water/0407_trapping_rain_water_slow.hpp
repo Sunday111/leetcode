@@ -1,13 +1,12 @@
 
 #include <vector>
 
+#include "cast.hpp"
+#include "integral_aliases.hpp"
+
 class Solution
 {
 public:
-    using u32 = uint32_t;
-    using u16 = uint16_t;
-    using u8 = uint8_t;
-
     template <typename To>
     [[nodiscard]] static constexpr To to(auto v) noexcept
     {
@@ -20,7 +19,7 @@ public:
 
         [[nodiscard]] constexpr u16 toIdx() const noexcept
         {
-            return to<u16>((u16{x} << 8) | y);
+            return cast<u16>((u16{x} << 8) | y);
         }
     };
 
@@ -40,10 +39,10 @@ public:
 
         std::array<u16, 0xFFFF> heights;  // NOLINT
 
-        const u16 w = to<u16>(hmap[0].size());
+        const u16 w = cast<u16>(hmap[0].size());
         // Fill the root area with all points
         {
-            const u16 m = to<u16>(hmap.size()), a = w * m;
+            const u16 m = cast<u16>(hmap.size()), a = w * m;
             auto& root = areas->emplace_back();
             root.points.reserve(a);
             for (u8 y = 0; y != m; ++y)
@@ -51,7 +50,7 @@ public:
                 for (u8 x = 0; x != w; ++x)
                 {
                     root.points.push_back({.x = x, .y = y});
-                    auto height = to<u16>(hmap[y][x]);
+                    auto height = cast<u16>(hmap[y][x]);
                     heights[root.points.back().toIdx()] = height;
                     root.h = std::max(height, root.h);
                 }
@@ -63,8 +62,8 @@ public:
 
         std::array<u8, 0xFFFF> visited{};
         u8 vt = 0;
-        u16 lim_y = (to<u16>(hmap.size())) - 1,
-            lim_x = to<u16>(hmap[0].size()) - 1;
+        u16 lim_y = (cast<u16>(hmap.size())) - 1,
+            lim_x = cast<u16>(hmap[0].size()) - 1;
         u32 r = 0;
         while (num_areas)
         {

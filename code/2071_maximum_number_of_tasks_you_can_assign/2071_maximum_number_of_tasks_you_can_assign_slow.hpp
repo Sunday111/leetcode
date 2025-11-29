@@ -39,11 +39,11 @@ public:
             ws.begin() + workers.size(),  // NOLINT
             ws.begin());
 
-        const u32 nw = to<u32>(workers.size());
+        const u32 nw = cast<u32>(workers.size());
         static std::array<u8, 50'001> used_workers;
 
-        return to<int>(*std::ranges::lower_bound(
-                   std::views::iota(u32{0}, to<u32>(tasks.size() + 1)),
+        return cast<int>(*std::ranges::lower_bound(
+                   std::views::iota(u32{0}, cast<u32>(tasks.size() + 1)),
                    false,
                    std::greater{},
                    [&](const u32 num_tasks)
@@ -61,7 +61,7 @@ public:
                                if (num_tasks > 0) req = ts[num_tasks - 1];
 
                                u64 avl = ws[nw - 1] +
-                                         to<u64>(pills) * to<u64>(strength);
+                                         cast<u64>(pills) * cast<u64>(strength);
                                if (w0 > 0) avl -= ws[w0 - 1];
 
                                if (req > avl) return false;
@@ -95,7 +95,7 @@ public:
                                auto end = std::next(workers.begin(), wi + 1);
                                u32 wx =
                                    w0 +
-                                   to<u32>(std::distance(
+                                   cast<u32>(std::distance(
                                        begin,
                                        std::lower_bound(begin, end, task)));
 

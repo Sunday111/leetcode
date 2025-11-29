@@ -43,7 +43,7 @@ public:
 
         for (auto& edge : edges)
         {
-            u16 a = to<u16>(edge[0]), b = to<u16>(edge[1]);
+            u16 a = cast<u16>(edge[0]), b = cast<u16>(edge[1]);
             degree[a]++;
             degree[b]++;
         }
@@ -57,7 +57,7 @@ public:
 
         for (auto& edge : edges)
         {
-            u16 a = to<u16>(edge[0]), b = to<u16>(edge[1]);
+            u16 a = cast<u16>(edge[0]), b = cast<u16>(edge[1]);
             link[offset[a] + degree[a]++] = b;
             link[offset[b] + degree[b]++] = a;
         }

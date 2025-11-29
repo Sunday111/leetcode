@@ -52,7 +52,7 @@ struct Vec2
 
     [[nodiscard]] FORCE_INLINE constexpr u16 toIdx() const noexcept
     {
-        return to<u16>((y << 7) | x);
+        return cast<u16>((y << 7) | x);
     }
 
     [[nodiscard]] FORCE_INLINE constexpr bool isValid(
@@ -69,7 +69,7 @@ public:
         int effort,
         Vec2 p) noexcept
     {
-        u64 r{to<u32>(effort)};
+        u64 r{cast<u32>(effort)};
         r <<= 7;
         r |= (~p.x) & 127;
         r <<= 7;
@@ -90,8 +90,8 @@ public:
 
     int minimumEffortPath(std::vector<std::vector<int>>& grid) noexcept
     {
-        const Vec2 size{to<u8>(grid[0].size()), to<u8>(grid.size())};
-        const Vec2 target{to<u8>(size.x - 1), to<u8>(size.y - 1)};
+        const Vec2 size{cast<u8>(grid[0].size()), cast<u8>(grid.size())};
+        const Vec2 target{cast<u8>(size.x - 1), cast<u8>(size.y - 1)};
 
         static std::array<u64, 10000> q;
         u16 qs = 0;

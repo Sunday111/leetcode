@@ -23,7 +23,7 @@ public:
         radix_sort<8>(reinterpret_range<u32>(tasks));
         radix_sort<8>(reinterpret_range<u32>(workers));
 
-        const u32 num_workers = to<u32>(workers.size());
+        const u32 num_workers = cast<u32>(workers.size());
 
         static std::array<int, 50'001> q;
 
@@ -55,8 +55,8 @@ public:
             return true;
         };
 
-        return to<int>(*std::ranges::lower_bound(
-                   std::views::iota(u32{0}, to<u32>(tasks.size() + 1)),
+        return cast<int>(*std::ranges::lower_bound(
+                   std::views::iota(u32{0}, cast<u32>(tasks.size() + 1)),
                    false,
                    std::greater{},
                    canComplete)) -

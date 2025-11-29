@@ -2,11 +2,9 @@
 #include <array>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-
-using u32 = uint32_t;
-using u16 = uint16_t;
-using u8 = uint8_t;
+#include "cast.hpp"
+#include "force_inline.hpp"
+#include "integral_aliases.hpp"
 
 struct Vec2
 {
@@ -107,14 +105,14 @@ public:
     [[nodiscard]] FORCE_INLINE constexpr static u16 toIdx(
         const Vec2& v) noexcept
     {
-        return to<u16>((u16{v.x} << 8) | v.y);
+        return cast<u16>((u16{v.x} << 8) | v.y);
     }
 
     [[nodiscard]] FORCE_INLINE constexpr static u16 getH(
         std::vector<std::vector<int>>& hmap,
         const Vec2& v) noexcept
     {
-        return to<u16>(hmap[v.y][v.x]);
+        return cast<u16>(hmap[v.y][v.x]);
     }
 
     inline static BucketPriorityQueue q;
@@ -123,8 +121,8 @@ public:
         std::vector<std::vector<int>>& hmap) noexcept
     {
         const Vec2 size{
-            to<u8>(hmap[0].size()),
-            to<u8>(hmap.size()),
+            cast<u8>(hmap[0].size()),
+            cast<u8>(hmap.size()),
         };
 
         if (size.x < 3 || size.y < 3) return 0;
@@ -132,7 +130,7 @@ public:
         static std::array<u8, 0xFFFF> visited;  // NOLINT
         std::ranges::fill_n(visited.begin(), toIdx(size), 0);
 
-        const Vec2 lim{to<u8>(size.x - 1), to<u8>(size.y - 1)};
+        const Vec2 lim{cast<u8>(size.x - 1), cast<u8>(size.y - 1)};
 
         q.clear();
 

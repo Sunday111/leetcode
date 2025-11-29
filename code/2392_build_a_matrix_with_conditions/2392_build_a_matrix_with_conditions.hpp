@@ -24,8 +24,8 @@ struct Graph  // NOLINT
 
         for (auto& cond : conds)
         {
-            ++nodes[to<u16>(cond[0])].out_degree;
-            ++nodes[to<u16>(cond[1])].in_degree;
+            ++nodes[cast<u16>(cond[0])].out_degree;
+            ++nodes[cast<u16>(cond[1])].in_degree;
         }
 
         u16 offset = 0;
@@ -38,8 +38,8 @@ struct Graph  // NOLINT
 
         for (auto& cond : conds)
         {
-            auto& node = nodes[to<u16>(cond[0])];
-            links[node.offset + node.out_degree++] = to<u16>(cond[1]);
+            auto& node = nodes[cast<u16>(cond[0])];
+            links[node.offset + node.out_degree++] = cast<u16>(cond[1]);
         }
     }
 
