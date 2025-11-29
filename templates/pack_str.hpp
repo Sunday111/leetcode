@@ -4,6 +4,7 @@
 
 #include <string>
 
+#include "cast.hpp"
 #include "integral_aliases.hpp"
 
 // NOLINTBEGIN
@@ -42,7 +43,7 @@ inline u64 packStr(const std::string& s) noexcept
     if (n8)
     {
         sh -= 5;
-        r += (static_cast<u64>(*c8) - (BIAS & 0xFFu)) << sh;
+        r += (cast<u64>(*c8) - (BIAS & 0xFFu)) << sh;
         c8 += 1;
         n8 -= 1;
     }
@@ -58,9 +59,7 @@ inline std::string unpackStr(const u64 v) noexcept
         __builtin_bswap64(_pdep_u64(v >> 10, EXT)) + BIAS;
     *reinterpret_cast<u16*>(c8 + 8u) =
         __builtin_bswap32(
-            static_cast<u32>(
-                _pdep_u32(static_cast<u32>(v), EXT & 0xFFFFu) +
-                (BIAS & 0xFFFFu))
+            cast<u32>(_pdep_u32(cast<u32>(v), EXT & 0xFFFFu) + (BIAS & 0xFFFFu))
             << 16) &
         0xFFFF;
     const auto end = r.find(BIAS & 0xFFu);

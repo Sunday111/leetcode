@@ -4,6 +4,8 @@
 #include <span>
 #include <sstream>
 
+#include "cast.hpp"
+
 template <typename T>
 concept BinaryTreeNodeConcept = requires(T a, int x) {
     // Has left and right properties convertible to pointers of the same type
@@ -27,7 +29,7 @@ bool CompareBinaryTrees(TNode* root_a, TNode* root_b)
         auto [a, b] = q.front();
         q.pop();
 
-        if (static_cast<bool>(a) ^ static_cast<bool>(b)) return false;
+        if (cast<bool>(a) ^ cast<bool>(b)) return false;
         if (!a) continue;
         if (a->val != b->val) return false;
 
@@ -93,7 +95,7 @@ struct LeetCodeBinaryTree
             // Erase k handled nodes from the beginning of the queue
             queue.erase(
                 queue.begin(),
-                std::next(queue.begin(), static_cast<int64_t>(k)));
+                std::next(queue.begin(), cast<int64_t>(k)));
         }
 
         return tree;

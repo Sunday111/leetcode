@@ -4,6 +4,7 @@
 #include <random>
 #include <variant>
 
+#include "cast.hpp"
 #include "integral_aliases.hpp"
 #include "overload.hpp"
 
@@ -44,7 +45,7 @@ struct RandomStringParams
     {
         for (u32 j = 0; j != buffer.size(); ++j)
         {
-            buffer[j] = static_cast<char>(params.char_distribution(rnd));
+            buffer[j] = cast<char>(params.char_distribution(rnd));
         }
 
         r.append(buffer.begin(), buffer.end());
@@ -53,7 +54,7 @@ struct RandomStringParams
     const u32 remainder = l % buffer.size();
     for (u32 j = 0; j != remainder; ++j)
     {
-        buffer[j] = static_cast<char>(params.char_distribution(rnd));
+        buffer[j] = cast<char>(params.char_distribution(rnd));
     }
 
     r.append(buffer.begin(), std::next(buffer.begin(), remainder));

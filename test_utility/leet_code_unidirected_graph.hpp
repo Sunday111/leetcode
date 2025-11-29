@@ -6,6 +6,8 @@
 #include <string_view>
 #include <vector>
 
+#include "cast.hpp"
+
 template <typename T>
 concept UnidirectedGraphNodeConcept = requires(T a, int x) {
     requires(
@@ -47,7 +49,7 @@ public:
             while (std::isdigit(peek()))
             {
                 r *= 10;
-                r += static_cast<uint8_t>(take() - '0');
+                r += cast<uint8_t>(take() - '0');
             }
 
             return r;
@@ -107,8 +109,7 @@ public:
             for (const auto* neighbour : node.neighbors)
             {
                 neighbours_numbers.push_back(
-                    static_cast<uint32_t>(
-                        std::distance(nodes.data(), neighbour) + 1));
+                    cast<uint32_t>(std::distance(nodes.data(), neighbour) + 1));
             }
         }
 

@@ -1,5 +1,8 @@
 #include <vector>
 
+#include "cast.hpp"
+#include "integral_aliases.hpp"
+
 template <std::integral T, std::unsigned_integral Idx>
 class FenwickTree
 {
@@ -37,7 +40,7 @@ public:
         T sum{};
         while (i)
         {
-            sum += bits[static_cast<unsigned>(i)];
+            sum += bits[cast<u32>(i)];
             i -= i & (~i + 1);
         }
         return sum;

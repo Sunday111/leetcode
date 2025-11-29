@@ -2,6 +2,7 @@
 
 #include <array>
 
+#include "cast.hpp"
 #include "ceil_div.hpp"
 #include "force_inline.hpp"
 #include "integral_aliases.hpp"
@@ -79,21 +80,18 @@ public:
 
     [[nodiscard]] FORCE_INLINE constexpr u32 min() const noexcept
     {
-        const u32 i2 = static_cast<u32>(std::countr_zero(l2));
-        const u32 i1 = static_cast<u32>(std::countr_zero(l1[i2]));
-        const u32 i0 =
-            static_cast<u32>(std::countr_zero(l0[(i2 << kShift) | i1]));
+        const u32 i2 = cast<u32>(std::countr_zero(l2));
+        const u32 i1 = cast<u32>(std::countr_zero(l1[i2]));
+        const u32 i0 = cast<u32>(std::countr_zero(l0[(i2 << kShift) | i1]));
         return (i2 << (kShift << 1)) | (i1 << kShift) | i0;
     }
 
     [[nodiscard]] FORCE_INLINE constexpr u32 max() const noexcept
     {
-        const u32 i2 = kWordBits - 1 - static_cast<u32>(std::countl_zero(l2));
-        const u32 i1 =
-            kWordBits - 1 - static_cast<u32>(std::countl_zero(l1[i2]));
-        const u32 i0 =
-            kWordBits - 1 -
-            static_cast<u32>(std::countl_zero(l0[(i2 << kShift) | i1]));
+        const u32 i2 = kWordBits - 1 - cast<u32>(std::countl_zero(l2));
+        const u32 i1 = kWordBits - 1 - cast<u32>(std::countl_zero(l1[i2]));
+        const u32 i0 = kWordBits - 1 -
+                       cast<u32>(std::countl_zero(l0[(i2 << kShift) | i1]));
         return (i2 << (kShift << 1)) | (i1 << kShift) | i0;
     }
 };

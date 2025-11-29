@@ -2,6 +2,7 @@
 
 #include <array>
 
+#include "cast.hpp"
 #include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
@@ -28,7 +29,7 @@ public:
                 u32 prime = primes[prime_index];
                 const u64 prod64 = u64{prime} * u64{x};
                 if (prod64 > n) break;
-                u32 prod = static_cast<u32>(prod64);
+                u32 prod = cast<u32>(prod64);
                 spf[prod] = prime;
                 if (prime == spf[x]) break;
             }

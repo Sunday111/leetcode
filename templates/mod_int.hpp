@@ -2,6 +2,7 @@
 
 #include <concepts>
 
+#include "cast.hpp"
 #include "force_inline.hpp"
 #include "hot_path.hpp"
 #include "integral_aliases.hpp"
@@ -47,7 +48,7 @@ struct ModInt
         u64 v = rhs.value;
         v *= value;
         if (v >= kMOD) v %= kMOD;
-        value = static_cast<u32>(v);
+        value = cast<u32>(v);
         return *this;
     }
 
