@@ -21,44 +21,46 @@ def main():
 
     result: list[str] = list()
 
-    num_embeds = 1
-    while num_embeds != 0:
-        num_embeds = 0
+    added_one = 1
+    while added_one:
+        added_one = False
         include = "#include "
         for line in src:
             if "#pragma once" in line:
                 continue
 
             idx = line.find(include)
-            if idx != -1:
-                part = line[idx + len(include) :].strip()
-                assert len(part) > 2
-                assert part[0] in '"<'
-                assert part[-1] in '">'
-                include_val = part[1:-1]
-                include_path = (templates_dir / include_val).resolve()
 
-                if include_path in included:
-                    continue
-
-                if include_path.is_file():
-                    with open(file=include_path, mode="rt", encoding="utf-8") as included_file:
-                        for included_line in included_file:
-                            result.append(included_line.rstrip())
-
-                    included.add(include_path)
-                    num_embeds += 1
-                else:
-                    not_included[include_val] = part[0]
-
+            if idx == -1 or added_one:
+                result.append(line)
                 continue
 
-            result.append(line)
+            part = line[idx + len(include) :].strip()
+            assert len(part) > 2
+            assert part[0] in '"<'
+            assert part[-1] in '">'
+            include_val = part[1:-1]
+            include_path = (templates_dir / include_val).resolve()
+
+            if include_path in included:
+                print(f"{include_val}: skip")
+                continue
+            print(f"{include_val}: embed")
+
+            if include_path.is_file():
+                with open(file=include_path, mode="rt", encoding="utf-8") as included_file:
+                    for included_line in included_file:
+                        result.append(included_line.rstrip())
+
+                included.add(include_path)
+                added_one = True
+            else:
+                not_included[include_val] = part[0]
 
         src = result
         result = list()
 
-    result_file_path = target_file_path.with_name(f"{target_file_path.stem}_mono.{target_file_path.suffix}")
+    result_file_path = target_file_path.with_name(f"{target_file_path.stem}_mono{target_file_path.suffix}")
 
     mirror = {
         "<": ">",

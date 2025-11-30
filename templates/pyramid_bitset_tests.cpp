@@ -64,8 +64,8 @@ TYPED_TEST(PyramidBitsetTypedFuzzyTest, Fuzzy)
             ASSERT_EQ(std_set.empty(), bs.is_empty());
             if (!std_set.empty())
             {
-                ASSERT_EQ(*std_set.begin(), bs.lowest());
-                // ASSERT_EQ(*std_set.rbegin(), bs.max());
+                ASSERT_EQ(*std_set.begin(), bs.min());
+                ASSERT_EQ(*std_set.rbegin(), bs.max());
             }
         }
     }

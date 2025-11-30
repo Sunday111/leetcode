@@ -6,9 +6,9 @@ TEST(t0215_kth_largest_element_in_an_array, test_1)
     PyramidBitset<20'000> lbs;
     lbs.add(1234);
     lbs.add(5932);
-    ASSERT_EQ(lbs.lowest(), 1234);
+    ASSERT_EQ(lbs.min(), 1234);
     lbs.remove(1234);
-    ASSERT_EQ(lbs.lowest(), 5932);
+    ASSERT_EQ(lbs.min(), 5932);
 
     std::vector<int> nums{0, 1, 2, 3, 4, 5, 9999};
     ASSERT_EQ(Solution{}.findKthLargest(nums, 1), 9999);
@@ -33,7 +33,7 @@ TEST(LayeredBitsetTest, RemoveOneBitFromNonEmptyWord)
     EXPECT_TRUE(bs.get(1));
 
     // Lowest should now return 1
-    EXPECT_EQ(bs.lowest(), 1u);
+    EXPECT_EQ(bs.min(), 1u);
 
     // Remove the remaining bit
     bs.remove(1);
@@ -52,11 +52,11 @@ TEST(LayeredBitsetTest, MultipleLayers)
     bs.add(4321);
     bs.add(4999);
 
-    EXPECT_EQ(bs.lowest(), 1234);
+    EXPECT_EQ(bs.min(), 1234);
 
     bs.remove(1234);
-    EXPECT_EQ(bs.lowest(), 4321);
+    EXPECT_EQ(bs.min(), 4321);
 
     bs.remove(4321);
-    EXPECT_EQ(bs.lowest(), 4999);
+    EXPECT_EQ(bs.min(), 4999);
 }

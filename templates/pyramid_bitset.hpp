@@ -15,7 +15,7 @@ class PyramidBitset
 public:
     using ValueType = UintForValue<capacity - 1>;
     static constexpr size_t kWordSize = sizeof(Word) * 8;
-    static constexpr Word kMask = kWordSize - 1;
+    static constexpr u8 kMask = kWordSize - 1;
     static constexpr int kShift = std::bit_width(kMask);
     static constexpr size_t kNumLayers =
         ceil_div(std::bit_width(capacity), kShift);
@@ -31,7 +31,8 @@ public:
     }();
     static constexpr size_t kTotalWords =
         std::accumulate(kLayersSizes.begin(), kLayersSizes.end(), 0UZ);
-    std::array<Word, kTotalWords> words{};
+    std::array<Word, kTotalWords> words;
+
     static constexpr auto offsets = []
     {
         std::array<size_t, kNumLayers> offsets;  // NOLINT
@@ -64,7 +65,7 @@ public:
 
     FORCE_INLINE constexpr void add(ValueType v) noexcept
     {
-        [&]<size_t... layer>(std::index_sequence<layer...>)
+        [&]<size_t... layer>(std::index_sequence<layer...>) INLINE_LAMBDA
         {
             (add_impl<layer>(v), ...);
         }(std::make_index_sequence<kNumLayers>());
@@ -72,19 +73,29 @@ public:
 
     FORCE_INLINE constexpr void remove(ValueType v) noexcept
     {
-        [&]<size_t... layer>(std::index_sequence<layer...>)
+        [&]<size_t... layer>(std::index_sequence<layer...>) INLINE_LAMBDA
         {
             bool pe = true;
             (rem_impl<layer>(v, pe), ...);
         }(std::make_index_sequence<kNumLayers>());
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr ValueType lowest() const noexcept
+    [[nodiscard]] FORCE_INLINE constexpr ValueType min() const noexcept
     {
         ValueType x = 0;
-        [&]<size_t... layer>(std::index_sequence<layer...>)
+        [&]<size_t... layer>(std::index_sequence<layer...>) INLINE_LAMBDA
         {
-            (lowest_impl<kNumLayers - (layer + 1)>(x), ...);
+            (min_impl<kNumLayers - (layer + 1)>(x), ...);
+        }(std::make_index_sequence<kNumLayers>());
+        return x;
+    }
+
+    [[nodiscard]] FORCE_INLINE constexpr ValueType max() const noexcept
+    {
+        ValueType x = 0;
+        [&]<size_t... layer>(std::index_sequence<layer...>) INLINE_LAMBDA
+        {
+            (max_impl<kNumLayers - (layer + 1)>(x), ...);
         }(std::make_index_sequence<kNumLayers>());
         return x;
     }
@@ -104,9 +115,9 @@ public:
         return words[offsets[kNumLayers - 1]] == 0;
     }
 
-    FORCE_INLINE constexpr void initialize(size_t end) noexcept
+    FORCE_INLINE constexpr void initialize(size_t end = capacity) noexcept
     {
-        [&]<size_t... layer>(std::index_sequence<layer...>)
+        [&]<size_t... layer>(std::index_sequence<layer...>) INLINE_LAMBDA
         {
             ((init_layer<layer>(end)), ...);
         }(std::make_index_sequence<kNumLayers>());
@@ -141,9 +152,17 @@ private:
     }
 
     template <size_t layer>
-    FORCE_INLINE constexpr void lowest_impl(ValueType& wi) const noexcept
+    FORCE_INLINE constexpr void min_impl(ValueType& wi) const noexcept
     {
         u8 bi = std::countr_zero(words[offsets[layer] + wi]) & 0xFF;
+        ValueType x = cast<ValueType>(wi << kShift) | cast<ValueType>(bi);
+        wi = x;
+    }
+
+    template <size_t layer>
+    FORCE_INLINE constexpr void max_impl(ValueType& wi) const noexcept
+    {
+        u8 bi = kMask - std::countl_zero(words[offsets[layer] + wi]) & 0xFF;
         ValueType x = cast<ValueType>(wi << kShift) | cast<ValueType>(bi);
         wi = x;
     }

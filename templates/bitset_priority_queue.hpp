@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "pyramid_bitset.hpp"
 
 template <size_t max_value, size_t max_count>
@@ -7,7 +9,7 @@ public:
     using B = PyramidBitset<max_value + 1>;
     using ValueType = B::ValueType;
     using FrequencyType = UintForValue<max_count>;
-    std::array<FrequencyType, max_value + 1> freq{};
+    std::array<FrequencyType, max_value + 1> freq;
     B bits{};
 
     FORCE_INLINE constexpr void add(ValueType v) noexcept
@@ -23,7 +25,18 @@ public:
 
     [[nodiscard]] FORCE_INLINE constexpr ValueType min() noexcept
     {
-        return bits.lowest();
+        return bits.min();
+    }
+
+    [[nodiscard]] FORCE_INLINE constexpr ValueType max() noexcept
+    {
+        return bits.max();
+    }
+
+    FORCE_INLINE constexpr void clear() noexcept
+    {
+        bits.initialize();
+        std::ranges::fill(freq, 0);
     }
 
     FORCE_INLINE constexpr ValueType pop_min() noexcept
