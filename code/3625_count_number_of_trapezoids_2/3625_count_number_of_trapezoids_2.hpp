@@ -3,6 +3,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "bump_hash_map.hpp"
+#include "cast.hpp"
 #include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
@@ -10,12 +12,6 @@ struct Line
 {
     int A, B, C;
 };
-
-template <typename To>
-[[nodiscard]] FORCE_INLINE static constexpr To to(auto v) noexcept
-{
-    return static_cast<To>(v);
-}
 
 [[nodiscard]] FORCE_INLINE constexpr Line
 make_line(int x1, int y1, int x2, int y2) noexcept
@@ -42,19 +38,21 @@ template <std::unsigned_integral To, std::integral From>
 {
     if constexpr (std::is_signed_v<From>)
     {
-        return std::bit_cast<To>(static_cast<std::make_signed_t<To>>(v));
+        return std::bit_cast<To>(cast<std::make_signed_t<To>>(v));
     }
     else
     {
-        return static_cast<To>(v);
+        return cast<To>(v);
     }
 }
 
 struct MidInfo
 {
-    int num_points = 0;
-    std::unordered_map<u64, int> lines_to_cnt;
+    u32 num_points = 0;
+    std::unordered_map<u64, u32> lines_to_cnt;
 };
+
+using SolutionStorage = GlobalBufferStorage<1 << 26>;
 
 class Solution
 {
@@ -95,12 +93,41 @@ public:
         return (n * (n - 1)) / 2;
     }
 
-    int countTrapezoids(std::vector<std::vector<int>>& points) noexcept
+    struct Hasher
     {
-        using SlopeInfo = std::unordered_map<int, int>;
+        [[nodiscard]] FORCE_INLINE constexpr u64 operator()(
+            u32 x) const noexcept
+        {
+            u64 z = x;
+            z += 0x9e3779b97f4a7c15ULL;
+            z = (z ^ (z >> 30U)) * 0xbf58476d1ce4e5b9ULL;
+            z = (z ^ (z >> 27U)) * 0x94d049bb133111ebULL;
+            return z >> 32U;
+        }
+
+        [[nodiscard]] FORCE_INLINE constexpr u64 operator()(
+            u64 x) const noexcept
+        {
+            u64 z = x + 0x9e3779b97f4a7c15ULL;
+            z = (z ^ (z >> 30U)) * 0xbf58476d1ce4e5b9ULL;
+            z = (z ^ (z >> 27U)) * 0x94d049bb133111ebULL;
+            z = (z ^ (z >> 31U));
+            return z;
+        }
+    };
+
+    u32 countTrapezoids(std::vector<std::vector<int>>& points) noexcept
+    {
+        auto arena = SolutionStorage::Instance().StartArena();
+        using SlopeInfo =
+            ObjectWithoutDtor<BumpHashMap<u32, u32, SolutionStorage, Hasher>>;
         std::ranges::sort(points);
-        std::unordered_map<u32, SlopeInfo> slope_to_info;
-        std::unordered_map<u64, MidInfo> mids;
+        ObjectWithoutDtor<BumpHashMap<u32, SlopeInfo, SolutionStorage, Hasher>>
+            slope_to_info;
+        slope_to_info->reserve(2 * points.size() * points.size());
+        ObjectWithoutDtor<BumpHashMap<u64, MidInfo, SolutionStorage, Hasher>>
+            mids;
+        mids->reserve(2 * points.size() * points.size());
         for (size_t i = 0; i != points.size(); ++i)
         {
             const auto& pi = points[i];
@@ -110,26 +137,28 @@ public:
                 const auto& pj = points[j];
                 const int jx = pj[0], jy = pj[1];
 
-                auto& mid_info = mids[pack_mid(ix, iy, jx, jy)];
+                auto& mid_info = mids.get()[pack_mid(ix, iy, jx, jy)];
                 ++mid_info.num_points;
                 const auto [a, b, c] = make_line(ix, iy, jx, jy);
-                slope_to_info[pack_slope(a, b)][c]++;
+                auto& si = slope_to_info.get()[pack_slope(a, b)].get();
+                si.reserve(points.size());
+                si[as<u32>(c)]++;
                 ++mid_info.lines_to_cnt[pack_t(a, b, c)];
             }
         }
 
-        int r = 0;
-        for (auto& [slope, dist_to_cnt] : slope_to_info)
+        u32 r = 0;
+        for (auto& [slope, dist_to_cnt] : slope_to_info.get())
         {
-            int s = 0;
-            for (auto& [dist, f] : dist_to_cnt)
+            u32 s = 0;
+            for (auto& [dist, f] : dist_to_cnt.get())
             {
                 r += f * s;
                 s += f;
             }
         }
 
-        for (auto& [m, info] : mids)
+        for (auto& [m, info] : mids.get())
         {
             r -= comb_2(info.num_points);
             for (auto& [k, cnt] : info.lines_to_cnt)
