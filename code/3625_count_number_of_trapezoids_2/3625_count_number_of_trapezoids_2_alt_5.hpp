@@ -9,13 +9,8 @@
 template <typename Key, u32 capacity, typename Storage>
 struct HashTable
 {
-    struct Entry
-    {
-        Key key;
-        u32 value;
-    };
-
-    Entry* tk;
+    Key* tk;
+    u32* tv;
     u64* bits;
 
     static_assert(
@@ -26,7 +21,8 @@ struct HashTable
 
     FORCE_INLINE HashTable()
     {
-        tk = BumpAllocator<Entry, Storage>{}.allocate(capacity);
+        tk = BumpAllocator<Key, Storage>{}.allocate(capacity);
+        tv = BumpAllocator<u32, Storage>{}.allocate(capacity);
         bits = BumpAllocator<u64, Storage>{}.allocate(kNumWords);
         std::fill_n(bits, kNumWords, u64{0});
     }
@@ -58,13 +54,12 @@ struct HashTable
             i = ++i & kMask;
             wi = i >> 6;
             m = u64{1} << (i & 63);
-        } while ((bits[wi] & m) && tk[i].key != k);
+        } while ((bits[wi] & m) && tk[i] != k);
 
-        auto& e = tk[i];
-        e.key = k;
-        e.value = v;
+        tk[i] = k;
+        tv[i] = v;
         bits[wi] |= m;
-        return &e.value;
+        return tv + i;
     }
 
     FORCE_INLINE constexpr u32& get_or_add(Key k) noexcept
@@ -78,13 +73,12 @@ struct HashTable
             i = ++i & kMask;
             wi = i >> 6;
             m = u64{1} << (i & 63);
-        } while ((bits[wi] & m) && tk[i].key != k);
+        } while ((bits[wi] & m) && tk[i] != k);
 
-        auto& e = tk[i];
-        e.key = k;
-        e.value &= -u32{(bits[wi] & m) != 0};
+        tk[i] = k;
+        tv[i] &= -u32{(bits[wi] & m) != 0};
         bits[wi] |= m;
-        return e.value;
+        return tv[i];
     }
 
     [[nodiscard]] FORCE_INLINE constexpr u32* find(Key k) noexcept
@@ -110,11 +104,13 @@ class Solution
 public:
     inline static constexpr int kBias = 1 << 11;
 
-    template <u32 mm = 0>
-    FORCE_INLINE static u32 pack(int a, int b) noexcept
+    template <u64 mm = 0>
+    FORCE_INLINE static u64 pack(int a, int b) noexcept
     {
-        return std::bit_cast<u32>(i32{a + kBias} << 16) |
-               std::bit_cast<u32>(b + kBias) | mm;
+        return (u64{std::bit_cast<u32>(i32{a + kBias} << 16) |
+                    std::bit_cast<u32>(b + kBias)}
+                << 32) |
+               mm;
     }
 
     template <u64 mm = 0>
@@ -158,7 +154,6 @@ public:
     {
         auto arena = SolutionStorage::Instance().StartArena();
         HashTable<u64, cap << 1, SolutionStorage> m64;
-        HashTable<u32, cap << 1, SolutionStorage> m32;
 
         u32 cnt = 0;
         for (u16 i = 0; i != n - 1; ++i)
@@ -177,13 +172,13 @@ public:
                 c = negate_if(c4, c);
                 int gm = std::gcd(a, b), gc = std::gcd(gm, c);
 
-                u32 v1 = pack<0b11u << 30>(a / gm, b / gm);
-                u32 v2 = pack<0b00u << 30>(x0 + x1, y0 + y1);
-                cnt += m32.get_or_add(v1)++;
-                cnt -= m32.get_or_add(v2)++;
+                u64 v1 = pack<(0b00ul << 62) | (~0ul >> 32)>(a / gm, b / gm);
+                u64 v2 = pack<(0b01ul << 62) | (~0ul >> 32)>(x0 + x1, y0 + y1);
+                u64 v3 = pack<0b10ul << 62>(a / gc, b / gc, c / gc);
+                u64 v4 = pack<0b11ul << 62>(x0 + x1, y0 + y1, a / gm, b / gm);
 
-                u64 v3 = pack<0b11ul << 62>(a / gc, b / gc, c / gc);
-                u64 v4 = pack<0b00ul << 62>(x0 + x1, y0 + y1, a / gm, b / gm);
+                cnt += m64.get_or_add(v1)++;
+                cnt -= m64.get_or_add(v2)++;
                 cnt += m64.get_or_add(v4)++;
                 cnt -= m64.get_or_add(v3)++;
             }

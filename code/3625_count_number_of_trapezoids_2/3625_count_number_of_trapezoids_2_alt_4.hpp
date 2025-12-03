@@ -9,13 +9,8 @@
 template <typename Key, u32 capacity, typename Storage>
 struct HashTable
 {
-    struct Entry
-    {
-        Key key;
-        u32 value;
-    };
-
-    Entry* tk;
+    Key* tk;
+    u32* tv;
     u64* bits;
 
     static_assert(
@@ -26,7 +21,8 @@ struct HashTable
 
     FORCE_INLINE HashTable()
     {
-        tk = BumpAllocator<Entry, Storage>{}.allocate(capacity);
+        tk = BumpAllocator<Key, Storage>{}.allocate(capacity);
+        tv = BumpAllocator<u32, Storage>{}.allocate(capacity);
         bits = BumpAllocator<u64, Storage>{}.allocate(kNumWords);
         std::fill_n(bits, kNumWords, u64{0});
     }
@@ -58,13 +54,12 @@ struct HashTable
             i = ++i & kMask;
             wi = i >> 6;
             m = u64{1} << (i & 63);
-        } while ((bits[wi] & m) && tk[i].key != k);
+        } while ((bits[wi] & m) && tk[i] != k);
 
-        auto& e = tk[i];
-        e.key = k;
-        e.value = v;
+        tk[i] = k;
+        tv[i] = v;
         bits[wi] |= m;
-        return &e.value;
+        return tv + i;
     }
 
     FORCE_INLINE constexpr u32& get_or_add(Key k) noexcept
@@ -78,13 +73,12 @@ struct HashTable
             i = ++i & kMask;
             wi = i >> 6;
             m = u64{1} << (i & 63);
-        } while ((bits[wi] & m) && tk[i].key != k);
+        } while ((bits[wi] & m) && tk[i] != k);
 
-        auto& e = tk[i];
-        e.key = k;
-        e.value &= -u32{(bits[wi] & m) != 0};
+        tk[i] = k;
+        tv[i] &= -u32{(bits[wi] & m) != 0};
         bits[wi] |= m;
-        return e.value;
+        return tv[i];
     }
 
     [[nodiscard]] FORCE_INLINE constexpr u32* find(Key k) noexcept
