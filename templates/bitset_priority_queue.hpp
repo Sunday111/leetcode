@@ -9,7 +9,7 @@ public:
     using B = PyramidBitset<max_value + 1>;
     using ValueType = B::ValueType;
     using FrequencyType = UintForValue<max_count>;
-    std::array<FrequencyType, max_value + 1> freq;
+    std::array<FrequencyType, max_value + 1> freq{};
     B bits{};
 
     FORCE_INLINE constexpr void add(ValueType v) noexcept
@@ -44,5 +44,11 @@ public:
         auto lo = min();
         remove(lo);
         return lo;
+    }
+    FORCE_INLINE constexpr ValueType pop_max() noexcept
+    {
+        auto hi = max();
+        remove(hi);
+        return hi;
     }
 };

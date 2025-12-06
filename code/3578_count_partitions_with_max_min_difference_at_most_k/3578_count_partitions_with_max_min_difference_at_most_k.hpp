@@ -11,11 +11,10 @@ public:
         constexpr u32 N = 50'001, kMOD = 1'000'000'007;
         static u32 qMax[N], qMin[N], sum[N + 2];
         auto nums = reinterpret_cast<const u32*>(nums_.data());
-        u32 frontX = 1, frontN = 1, backX = 0, backN = 0;
+        u32 frontX = 1, frontN = 1, backX = 0, backN = 0, cnt = 0;
         sum[0] = 0;
         sum[1] = 1;
 
-        u32 cnt = 0;
         for (u32 l = 0, r = 0; r < nums_.size(); r++)
         {
             u32 x = nums[r];
