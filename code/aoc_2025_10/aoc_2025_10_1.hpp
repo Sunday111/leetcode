@@ -20,7 +20,7 @@ namespace stdv = std::views;
 class Solution
 {
 public:
-    static Machine parse_spec(std::string_view s)
+    static Machine parse_line(std::string_view s)
     {
         const u32 l = cast<u32>(s.size());
         u32 i = 0;
@@ -170,7 +170,7 @@ public:
     static u64 solve(std::string_view input_lines) noexcept
     {
         auto r = stdr::fold_left(
-            input_lines | split_filter<'\n'> | stdv::transform(parse_spec) |
+            input_lines | split_filter<'\n'> | stdv::transform(parse_line) |
                 stdv::transform(min_presses),
             0ul,
             std::plus{});
