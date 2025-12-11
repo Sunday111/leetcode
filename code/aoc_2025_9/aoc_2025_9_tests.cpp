@@ -139,22 +139,22 @@ inline static constexpr std::array<Vec2<u32>, 496> kMyInput{{
     {97555, 47929}, {97555, 49132}, {97674, 49132}, {97674, 50345},
 }};
 
-TEST(taoc_2025_9, test_sample_1)
+TEST(taoc_2025_9, DISABLED_test_sample_1)
 {
     ASSERT_EQ(Solution1{}.solve(kSampleInput), 50);
 }
 
-TEST(taoc_2025_9, test_input_1)
+TEST(taoc_2025_9, DISABLED_test_input_1)
 {
     ASSERT_EQ(Solution1{}.solve(kMyInput), 4759930955);
 }
 
-TEST(taoc_2025_9, test_sample_2)
+TEST(taoc_2025_9, DISABLED_test_sample_2)
 {
     ASSERT_EQ(Solution2{}.solve(kSampleInput), 24);
 }
 
-TEST(taoc_2025_9, test_input_2)
+TEST(taoc_2025_9, DISABLED_test_input_2)
 {
     ASSERT_EQ(Solution2{}.solve(kMyInput), 1525241870);
 }

@@ -84,20 +84,25 @@ struct RecursiveSolver
         auto saved_state = state;
 
         ++state.button_index;
+
+        const u32 btn_lim = stdr::min(
+            button_counters |
+            stdv::transform([&](u32 counter_idx)
+                            { return state.counters[counter_idx]; }));
+
         *r = solve();
+        if (state.button_index == 1) logln("    0/{}", btn_lim);
 
-        [&]
+        for (u32 presses = 1; presses <= btn_lim; ++presses)
         {
-            for (u32 presses = 1;; ++presses)
+            for (u32 counter_index : button_counters)
             {
-                for (u32 counter_index : button_counters)
-                {
-                    if (!state.counters[counter_index]--) return;
-                }
-
-                *r = std::min(*r, presses + solve());
+                state.counters[counter_index]--;
             }
-        }();
+
+            *r = std::min(*r, presses + solve());
+            if (state.button_index == 1) logln("    {}/{}", presses, btn_lim);
+        }
 
         state = saved_state;
 
@@ -148,7 +153,21 @@ struct RecursiveSolver
                 }
             }
         }
-        stdr::sort(solver.buttons, std::greater{}, stdr::size);
+        stdr::sort(
+            solver.buttons,
+            std::less{},
+            [&](auto& btn)
+            {
+                u16 min_counter = 300;
+                for (u32 counter_index : btn)
+                {
+                    min_counter = std::min<u16>(
+                        solver.state.counters[counter_index],
+                        min_counter);
+                }
+
+                return min_counter;
+            });
 
         logln("    exclusive presses: {}", exclusive_presses);
         for (auto& [idx, counters] : buttons)
