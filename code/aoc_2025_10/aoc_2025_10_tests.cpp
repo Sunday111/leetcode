@@ -184,17 +184,17 @@ inline constexpr auto kMyInput = R"(
 [.###.#.] (4,5,6) (0,1,2,6) (1,4,5) (2,4) (0,3,4,6) (0,3) (0,1,3,4,5) (0,2,3,5) (0,1,2,3,5,6) {60,41,34,47,57,45,43}
 )"sv;
 
-TEST(taoc_2025_10, DISABLED_test_sample_1)
+TEST(taoc_2025_10, test_sample_1)
 {
     ASSERT_EQ(part1::Solution{}.solve(kSampleInput), 7);
 }
 
-TEST(taoc_2025_10, DISABLED_test_input_1)
+TEST(taoc_2025_10, test_input_1)
 {
     ASSERT_EQ(part1::Solution{}.solve(kMyInput), 473);
 }
 
-TEST(taoc_2025_10, DISABLED_test_sample_2)
+TEST(taoc_2025_10, test_sample_2)
 {
     ASSERT_EQ(part2::Solution{}.solve(kSampleInput), 33);
 }

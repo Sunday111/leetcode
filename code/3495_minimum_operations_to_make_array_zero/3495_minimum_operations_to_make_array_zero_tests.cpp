@@ -9,33 +9,23 @@
     return r;
 }
 
-TEST(t3495_minimum_operations_to_make_array_zero, test_yo)
-{
-    u32 x = 1;
-    for (u8 i = 1; i != 17; ++i)
-    {
-        std::println("{:2}: {}", i, u64{num_divs(x)} * u64{(x << 2) - x});
-        x <<= 2;
-    }
-}
-
 TEST(t3495_minimum_operations_to_make_array_zero, test_sandbox)
 {
-    u32 begin = 0;
+    // u32 begin = 0;
     u8 prev_r = 0;
     constexpr u32 max_x = 1'000'000;
 
-    auto print_line = [&](u32 x)
+    auto print_line = [&]([[maybe_unused]] u32 x)
     {
-        std::println(
-            "[{:10}, {:10}): {:3} | [{:32b}, {:32b}) | [{:2}:{:2})",
-            begin,
-            x,
-            prev_r,
-            begin,
-            x,
-            16 - std::countl_zero(begin) / 2,
-            16 - std::countl_zero(x) / 2);
+        // std::println(
+        //     "[{:10}, {:10}): {:3} | [{:32b}, {:32b}) | [{:2}:{:2})",
+        //     begin,
+        //     x,
+        //     prev_r,
+        //     begin,
+        //     x,
+        //     16 - std::countl_zero(begin) / 2,
+        //     16 - std::countl_zero(x) / 2);
     };
 
     for (u32 x = 1; x != max_x; ++x)
@@ -44,14 +34,14 @@ TEST(t3495_minimum_operations_to_make_array_zero, test_sandbox)
         if (expected != prev_r)
         {
             print_line(x);
-            begin = x;
+            // begin = x;
             prev_r = expected;
         }
         u8 actual = num_divs(x);
         ASSERT_EQ(+expected, +actual) << "x = " << x;
     }
 
-    print_line(max_x);
+    // print_line(max_x);
 }
 
 TEST(t3495_minimum_operations_to_make_array_zero, test_1)

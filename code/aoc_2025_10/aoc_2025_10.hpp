@@ -18,7 +18,7 @@
 
 using Clock = std::chrono::high_resolution_clock;
 
-inline constexpr bool kDebugPrint = true;
+inline constexpr bool kDebugPrint = false;
 
 template <typename... Args>
 inline auto log(std::format_string<Args...> fmt, Args&&... args) noexcept

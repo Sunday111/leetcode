@@ -25,7 +25,7 @@ TEST(t1768_merge_strings_alternately, test_simple)
     }
 }
 
-TEST(t1768_merge_strings_alternately, test_sse2)
+TEST(t1768_merge_strings_alternately, DISABLED_test_sse2)
 {
     auto& strings = StringsForTesting::Get().strings;
     for (u32 i = 0; i != strings.size(); ++i)

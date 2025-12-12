@@ -1,4 +1,4 @@
-#include "3625_count_number_of_trapezoids_2.hpp"
+#include "3625_count_number_of_trapezoids_2_alt_5.hpp"
 #include "gtest/gtest.h"
 #include "parse_2d_array.hpp"
 

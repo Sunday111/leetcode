@@ -433,17 +433,17 @@ public:
             const bool a_orphan = group_a == kInvalidGroup,
                        b_orphan = group_b == kInvalidGroup;
 
-            std::println(
-                "{}: Connecting {}:[{},{},{}] - {}:[{},{},{}]",
-                i,
-                a,
-                points[a].x,
-                points[a].y,
-                points[a].z,
-                b,
-                points[b].x,
-                points[b].y,
-                points[b].z);
+            // std::println(
+            //     "{}: Connecting {}:[{},{},{}] - {}:[{},{},{}]",
+            //     i,
+            //     a,
+            //     points[a].x,
+            //     points[a].y,
+            //     points[a].z,
+            //     b,
+            //     points[b].x,
+            //     points[b].y,
+            //     points[b].z);
 
             if (a_orphan && b_orphan)
             {

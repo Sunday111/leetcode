@@ -244,8 +244,6 @@ public:
 
         consume(']');
 
-        // std::println("{:b}", machine.target);
-
         consume(' ');
 
         while (try_consume('('))
@@ -279,8 +277,8 @@ public:
         auto machines = stdr::to<std::vector>(
             input_lines | split_filter<'\n'> | stdv::transform(parse_spec));
         auto joltages = machines | stdv::transform(&Machine::counters);
-        std::println("max counter: {}", stdr::max(stdv::join(joltages)));
-        std::println(
+        logln("max counter: {}", stdr::max(stdv::join(joltages)));
+        logln(
             "max counters length: {}",
             stdr::max(joltages | stdv::transform(stdr::size)));
 

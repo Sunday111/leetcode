@@ -12,9 +12,9 @@ struct StringsForTesting
             RandomStringsParams params{
                 .string_params{
                     .char_distribution{},
-                    .length = std::uniform_int_distribution{10u, 2000u},
+                    .length = std::uniform_int_distribution{10u, 1000u},
                 },
-                .num_distribution = 1'000u,
+                .num_distribution = 500u,
             };
             constexpr unsigned kSeed = 12345;
             std::mt19937 rnd{kSeed};

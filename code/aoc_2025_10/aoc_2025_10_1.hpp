@@ -71,8 +71,6 @@ public:
 
         consume(']');
 
-        // std::println("{:b}", machine.target);
-
         consume(' ');
 
         while (try_consume('('))

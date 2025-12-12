@@ -19,7 +19,7 @@ bool is_balanced(u32 v)
     return true;
 }
 
-TEST(t2048_next_greater_numerically_balanced_number, test_1)
+TEST(t2048_next_greater_numerically_balanced_number, DISABLED_precompute)
 {
     std::vector<u32> balanced;
     for (u32 i = 0; i != 2'000'001; ++i)

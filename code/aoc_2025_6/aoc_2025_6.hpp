@@ -68,7 +68,7 @@ public:
         for (size_t i = 0; i != operators.size(); ++i)
         {
             auto& op = operators[i];
-            std::print("{}: ", op);
+            // std::print("{}: ", op);
 
             u64 s{};
             using OP = u64 (*)(u64, u64);
@@ -94,10 +94,10 @@ public:
             for (auto& line : number_lines)
             {
                 s = f(s, line[i]);
-                std::print("{} ", line[i]);
+                // std::print("{} ", line[i]);
             }
 
-            std::println("| {}", s);
+            // std::println("| {}", s);
 
             r += s;
         }
@@ -122,7 +122,7 @@ public:
         u64 total = 0;
         using Operator = u64 (*)(u64, u64);
         Operator op{};
-        char oc = ' ';
+        // char oc = ' ';
 
         u64 acc{};
         const size_t w = arg_rows.front().size();
@@ -131,8 +131,8 @@ public:
             if (column < operator_row.size() && operator_row[column] != ' ')
             {
                 total += acc;
-                oc = operator_row[column];
-                std::println("= {:<13}", acc);
+                // oc = operator_row[column];
+                // std::println("= {:<13}", acc);
 
                 if (operator_row[column] == '+')
                 {
@@ -151,7 +151,7 @@ public:
                     };
                 }
 
-                std::print("{:<13} | {} ", total, acc);
+                // std::print("{:<13} | {} ", total, acc);
             }
 
             u64 v = 0;
@@ -166,11 +166,11 @@ public:
 
             if (v)
             {
-                std::print("{} {} ", oc, v);
+                // std::print("{} {} ", oc, v);
                 acc = op(acc, v);
             }
         }
-        std::println("= {:<13}", acc);
+        // std::println("= {:<13}", acc);
 
         return total + acc;
     }

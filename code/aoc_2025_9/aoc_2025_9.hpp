@@ -2,7 +2,7 @@
 #include <atomic>
 #include <cassert>
 #include <cstdlib>
-#include <print>
+// #include <print>
 #include <ranges>
 #include <span>
 #include <thread>
@@ -62,7 +62,7 @@ public:
         const auto n = cast<u32>(points.size());
 
         u64 max_area = 0;
-        u32 a = 0, b = 0;
+        // u32 a = 0, b = 0;
         for (const auto i : stdv::iota(0u, n))
         {
             for (const auto j : stdv::iota(i + 1, n))
@@ -75,19 +75,19 @@ public:
                 if (area > max_area)
                 {
                     max_area = area;
-                    a = i;
-                    b = j;
+                    // a = i;
+                    // b = j;
                 }
             }
         }
 
-        std::println(
-            "[{},{}], [{},{}] -> {}",
-            points[a].x,
-            points[a].y,
-            points[b].x,
-            points[b].y,
-            max_area);
+        // std::println(
+        //     "[{},{}], [{},{}] -> {}",
+        //     points[a].x,
+        //     points[a].y,
+        //     points[b].x,
+        //     points[b].y,
+        //     max_area);
 
         return max_area;
     }
@@ -101,11 +101,11 @@ public:
     {
         auto [minx, maxx] =
             stdr::minmax(points | stdv::transform(&Vec2<u32>::x));
-        std::println("x: [{}, {}]", minx, maxx);
+        // std::println("x: [{}, {}]", minx, maxx);
 
         auto [miny, maxy] =
             stdr::minmax(points | stdv::transform(&Vec2<u32>::y));
-        std::println("y: [{}, {}]", miny, maxy);
+        // std::println("y: [{}, {}]", miny, maxy);
 
         const auto grid_extent = Vec2{maxx + 2, maxy + 2}.cast<size_t>();
         std::vector<u8> grid(grid_extent.x * grid_extent.y, 0);
@@ -125,7 +125,7 @@ public:
             return grid[to_index(p)];
         };
 
-        std::println("Marking walls...");
+        // std::println("Marking walls...");
         const auto n = cast<u32>(points.size());
         for (auto start_point_index : stdv::iota(0u, n))
         {
@@ -146,7 +146,7 @@ public:
         }
 
         {
-            std::println("Marking outer space");
+            // std::println("Marking outer space");
             std::vector<Vec2u> q;
             q.reserve(190000000);
             q.push_back(Vec2u{0, 0});
@@ -184,7 +184,7 @@ public:
                 }
             }
 
-            std::println("queue cap: {}", q.capacity());
+            // std::println("queue cap: {}", q.capacity());
         }
 
         constexpr u8 kCorner = 4;
@@ -197,8 +197,6 @@ public:
 
         auto handle_point = [&](Vec2u start_pt)
         {
-            // std::println("Point {}: {},{}", prog++, start_pt.x, start_pt.y);
-
             u32 max_w = 1;
 
             {
@@ -236,13 +234,13 @@ public:
 
                         if (area > max_area)
                         {
-                            std::println(
-                                "    {},{} - {},{}: {}",
-                                start_pt.x,
-                                start_pt.y,
-                                start_pt.x + w - 1,
-                                start_pt.y + h - 1,
-                                area);
+                            // std::println(
+                            //     "    {},{} - {},{}: {}",
+                            //     start_pt.x,
+                            //     start_pt.y,
+                            //     start_pt.x + w - 1,
+                            //     start_pt.y + h - 1,
+                            //     area);
                         }
 
                         auto old = max_area.load(std::memory_order_relaxed);
