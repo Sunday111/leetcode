@@ -644,7 +644,7 @@ TEST(taoc_2025_11, test_sample_2)
     ASSERT_EQ(part2::Solution{}.solve(kSampleInput2), 2);
 }
 
-TEST(taoc_2025_10, test_input_2)
+TEST(taoc_2025_11, test_input_2)
 {
     ASSERT_EQ(part2::Solution{}.solve(kMyInput), 0);
 }
