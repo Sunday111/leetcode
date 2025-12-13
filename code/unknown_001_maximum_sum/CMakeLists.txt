@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 3.25)
 
 include(set_compiler_options)
 
-set(target_name 3625_count_number_of_trapezoids_2)
+set(target_name unknown_001_maximum_sum)
 set(tests_target_name ${target_name}_tests)
 
-add_library(${target_name} INTERFACE ${target_name}_alt_5.hpp)
+add_library(${target_name} INTERFACE ${target_name}.hpp)
 set_generic_compiler_options(${target_name} INTERFACE)
 target_link_libraries(${target_name} INTERFACE lc_templates)
 
