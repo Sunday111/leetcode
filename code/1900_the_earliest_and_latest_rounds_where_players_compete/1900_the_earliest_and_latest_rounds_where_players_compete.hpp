@@ -44,7 +44,7 @@ class Solution
         u16 initialized : 1;
     };
 
-    inline static auto memo = []  // NOLINT
+    inline static auto dp = []  // NOLINT
     {
         std::array<Result, (1 << 16)> memo;  // NOLINT
         std::ranges::fill(memo, Result{.min = 255, .max = 0, .initialized = 0});
@@ -71,7 +71,7 @@ class Solution
         constexpr u8 num_winners = h + (n & 1);
         constexpr u16 e = (1u << h) & 0xFFFF;
         constexpr u16 mid_mask = e * (n & 1);
-        auto& r = memo[std::bit_cast<u16>(Query{.n = n, .a = a, .b = b})];
+        auto& r = dp[std::bit_cast<u16>(Query{.n = n, .a = a, .b = b})];
         if (!r.initialized)
         {
             r.initialized = true;
