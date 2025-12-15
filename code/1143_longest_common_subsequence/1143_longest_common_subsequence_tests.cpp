@@ -28,6 +28,9 @@ TEST(t1143_longest_common_subsequence, test_5)
     ASSERT_EQ(Solution{}.longestCommonSubsequence("jijiijjpji", "jjji"), 4);
 }
 
+#define WITH_BIG_TESTS
+#ifdef WITH_BIG_TESTS
+
 TEST(t1143_longest_common_subsequence, test_6)
 {
     ASSERT_EQ(
@@ -153,3 +156,4 @@ TEST(t1143_longest_common_subsequence, test_9)
             "qqzzqqqqzq"),
         831);
 }
+#endif

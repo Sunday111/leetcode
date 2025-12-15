@@ -1,6 +1,6 @@
-
-#include <algorithm>
 #include <string_view>
+
+#include "largest_common_subsequence.hpp"
 
 class Solution
 {
@@ -10,31 +10,9 @@ public:
         std::string_view a,
         std::string_view b) noexcept
     {
-        u16 la = a.size() & 0xFFFF, lb = b.size() & 0xFFFF, dp[2000];
-        auto curr = dp, prev = curr + 1000;
-        std::fill_n(prev, lb, 0);
+        u16 dp[2000];
+        auto subseq = lcs_length<char, 1000>({dp}, a, b);
 
-        for (u16 ia = 0; ia != la; ++ia)
-        {
-            std::swap(curr, prev);
-
-            char ca = a[ia];
-
-            curr[0] = ca == b[0] || prev[0];
-
-            for (u16 ib = 1; ib != lb; ++ib)
-            {
-                if (ca == b[ib])
-                {
-                    curr[ib] = prev[ib - 1] + 1;
-                }
-                else
-                {
-                    curr[ib] = std::max(curr[ib - 1], prev[ib]);
-                }
-            }
-        }
-
-        return curr[lb - 1];
+        return static_cast<u16>(subseq);
     }
 };
