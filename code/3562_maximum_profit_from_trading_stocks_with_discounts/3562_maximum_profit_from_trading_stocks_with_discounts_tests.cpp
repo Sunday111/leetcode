@@ -62,3 +62,13 @@ TEST(t3562_maximum_profit_from_trading_stocks_with_discounts, test_6)
     u8 budget = 102;
     ASSERT_EQ(Solution{}.maxProfit(n, present, future, hierarchy, budget), 116);
 }
+
+TEST(t3562_maximum_profit_from_trading_stocks_with_discounts, test_7)
+{
+    u8 n = 1;
+    std::vector present{28};
+    std::vector future{6};
+    auto hierarchy = parse2DArray("[]");
+    u8 budget = 2;
+    ASSERT_EQ(Solution{}.maxProfit(n, present, future, hierarchy, budget), 0);
+}
