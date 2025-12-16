@@ -28,20 +28,13 @@ public:
 
     void merge_knapsack(int* dst, const int* src) noexcept
     {
-        constexpr auto bad = std::numeric_limits<int>::lowest();
-        std::fill_n(merged, b1, bad);
+        std::fill_n(merged, b1, 0);
 
-        for (u32 bi = 0; bi <= budget; ++bi)
+        for (u8 bi = 0; bi != b1; ++bi)
         {
-            if (dst[bi] == bad) continue;
-
-            for (u32 bj = 0; bj + bi <= budget; ++bj)
+            for (u8 bj = 0, lim = b1 - bi; bj != lim; ++bj)
             {
-                if (src[bj] == bad) continue;
-
-                const u32 nb = bi + bj;
-                const int val = dst[bi] + src[bj];
-                merged[nb] = std::max(merged[nb], val);
+                acc_max(merged[bi + bj], dst[bi] + src[bj]);
             }
         }
 
