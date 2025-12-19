@@ -14,30 +14,25 @@ public:
 
         if (l1 + l2 != l3) return false;
 
-        u8 dp[2][101];
-        u8 *curr = dp[0], *prev = dp[1];
-
-        curr[0] = 0;
+        u8 dp[101];
+        dp[0] = 0;
         for (u8 i2 = 0; i2 != l2; ++i2)
         {
-            curr[i2 + 1] = curr[i2] + (s2[i2] == s3[curr[i2]]);
+            dp[i2 + 1] = dp[i2] + (s2[i2] == s3[dp[i2]]);
         }
 
         for (u8 i1 = 0; i1 != l1; ++i1)
         {
-            std::swap(curr, prev);
             char c1 = s1[i1];
-
-            curr[0] = prev[0] + (c1 == s3[prev[0]]);
+            dp[0] = dp[0] + (c1 == s3[dp[0]]);
             for (u8 i2 = 0; i2 != l2; ++i2)
             {
-                char c2 = s2[i2];
-                curr[i2 + 1] = std::max<u8>(
-                    curr[i2] + (c2 == s3[curr[i2]]),
-                    prev[i2 + 1] + (c1 == s3[prev[i2 + 1]]));
+                dp[i2 + 1] = std::max<u8>(
+                    dp[i2] + (s2[i2] == s3[dp[i2]]),
+                    dp[i2 + 1] + (c1 == s3[dp[i2 + 1]]));
             }
         }
 
-        return curr[l2] == l3;
+        return dp[l2] == l3;
     }
 };
