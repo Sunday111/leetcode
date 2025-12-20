@@ -13,11 +13,11 @@ using u16 = uint16_t;
 class Solution
 {
 public:
-    inline static std::array<std::vector<TreeNode*>, 256> memo;
+    inline static std::array<std::vector<TreeNode*>, 256> dp;
 
     const std::vector<TreeNode*>& generateTrees(u8 n, u8 s = 1) noexcept
     {
-        auto& out = memo[((n << 4) | s) & 0xff];
+        auto& out = dp[((n << 4) | s) & 0xff];
 
         if (out.empty())
         {
