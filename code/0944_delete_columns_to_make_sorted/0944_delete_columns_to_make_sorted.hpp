@@ -12,11 +12,10 @@ public:
     auto minDeletionSize(std::vector<std::string>& strs)
     {
         auto& map = stdv::transform;
-        return stdr::count(
+        return stdr::count_if(
             stdv::iota(0uz, strs[0].size()) |
                 map([&](size_t x)
-                    { return strs | map([&, x](auto& s) { return s[x]; }); }) |
-                map(stdr::is_sorted),
-            false);
+                    { return strs | map([&, x](auto& s) { return s[x]; }); }),
+            stdr::is_sorted);
     }
 };
