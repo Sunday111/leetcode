@@ -1,183 +1,117 @@
 #include <algorithm>
 #include <bitset>
-#include <optional>
 #include <span>
 #include <string>
 
 using u8 = uint8_t;
-using u64 = uint64_t;
 
 class Solution
 {
 public:
-    std::span<const std::string> strs;
-    u8 dfs(u8 x, u8 prev_sorted, std::bitset<128> exclude_row)
+    static constexpr u8 minDeletionSize(
+        std::span<const std::string> strs) noexcept
     {
-        if (x == strs.front().size())
+        const u8 w = strs[0].size() & 0xFF;
+        u8 last_sorted = w, result = 0;
+        std::bitset<128> sorted_rows{};
+
+        for (u8 x = 0; x != w; ++x)
         {
-            return 0;
-        }
-
-        u8 result = strs[0].size() & 0xFF;
-
-        struct Group
-        {
-            u8 first_row = 0;
-            u8 size = 0;
-            char c = 0;
-        };
-
-        bool sorted = true;
-        u8 max_group = 1;
-
-        auto sorted_exclude = exclude_row;
-        auto close_group = [&](std::optional<Group> group)
-        {
-            if (group)
+            struct Group
             {
-                max_group = std::max(group->size, max_group);
-                if (group->size == 1) sorted_exclude[group->first_row] = 1;
-            }
-        };
+                u8 first_row = 0;
+                u8 size = 0;
+                char c = 0;
+            };
 
-        if (prev_sorted == 0xFF)
-        {
-            std::optional<Group> g;
+            bool sorted = true;
+            u8 max_group = 1;
 
-            for (u8 row = 0; row != strs.size(); ++row)
+            auto new_sorted_rows = sorted_rows;
+
+            Group outer, inner;
+            auto close_group = [&]
             {
-                if (exclude_row[row])
+                if (inner.size)
                 {
-                    close_group(g);
+                    max_group = std::max(inner.size, max_group);
+                    new_sorted_rows[inner.first_row] = inner.size == 1;
+                }
+            };
+
+            for (u8 y = 0; y != strs.size() && sorted; ++y)
+            {
+                if (sorted_rows[y])
+                {
+                    close_group();
+                    outer.size = inner.size = 0;
                     continue;
                 }
 
-                char c = strs[row][x];
+                const char outer_char = strs[y][last_sorted];
+                const char inner_char = strs[y][x];
 
-                if (!g)
+                if (!outer.size)
                 {
-                    g = Group{.first_row = row, .size = 1, .c = c};
+                    outer = Group{
+                        .first_row = y,
+                        .size = 1,
+                        .c = outer_char,
+                    };
+                    inner = Group{
+                        .first_row = y,
+                        .size = 1,
+                        .c = inner_char,
+                    };
                     continue;
                 }
 
-                if (c < g->c)
+                if (outer_char != outer.c)
                 {
-                    sorted = false;
-                    break;
+                    close_group();
+                    outer = Group{
+                        .first_row = y,
+                        .size = 1,
+                        .c = outer_char,
+                    };
+                    inner = Group{
+                        .first_row = y,
+                        .size = 1,
+                        .c = inner_char,
+                    };
+                    continue;
                 }
 
-                if (c == g->c)
+                sorted = inner_char >= inner.c;
+
+                if (inner_char == inner.c)
                 {
-                    g->size++;
+                    inner.size++;
                 }
                 else
                 {
-                    close_group(g);
-                    g = Group{
-                        .first_row = row,
-                        .size = 1,
-                        .c = c,
-                    };
-                }
-            }
-
-            close_group(g);
-        }
-        else
-        {
-            std::optional<Group> outer;
-            std::optional<Group> inner;
-
-            for (u8 row = 0; row != strs.size(); ++row)
-            {
-                if (exclude_row[row])
-                {
-                    close_group(inner);
-                    outer = inner = std::nullopt;
-                    continue;
-                }
-
-                char outer_char = strs[row][prev_sorted & 0xFF];
-                char inner_char = strs[row][x];
-
-                if (!outer)
-                {
-                    outer = Group{
-                        .first_row = row,
-                        .size = 1,
-                        .c = outer_char,
-                    };
+                    close_group();
                     inner = Group{
-                        .first_row = row,
+                        .first_row = y,
                         .size = 1,
                         .c = inner_char,
                     };
-                    continue;
                 }
-
-                if (outer_char != outer->c)
-                {
-                    close_group(inner);
-                    outer = Group{
-                        .first_row = row,
-                        .size = 1,
-                        .c = outer_char,
-                    };
-                    inner = Group{
-                        .first_row = row,
-                        .size = 1,
-                        .c = inner_char,
-                    };
-                    continue;
-                }
-
-                if (inner_char < inner->c)
-                {
-                    sorted = false;
-                    break;
-                }
-
-                if (inner_char != inner->c)
-                {
-                    close_group(inner);
-                    inner = Group{
-                        .first_row = row,
-                        .size = 1,
-                        .c = inner_char,
-                    };
-                    continue;
-                }
-
-                inner->size++;
             }
 
-            close_group(inner);
-        }
+            close_group();
 
-        if (sorted)
-        {
-            if (max_group == 1)
+            if (sorted)
             {
-                result = 0;
-            }
-            else
-            {
-                result = std::min(dfs(x + 1, x, sorted_exclude), result);
-            }
-        }
+                if (max_group < 2) break;
 
-        if (result != 0)
-        {
-            u8 alt = dfs(x + 1, prev_sorted, exclude_row) + 1;
-            result = std::min(alt, result);
+                last_sorted = x;
+                sorted_rows = new_sorted_rows;
+            }
+
+            result += !sorted;
         }
 
         return result;
-    }
-
-    u8 minDeletionSize(std::span<const std::string> strs_)
-    {
-        strs = strs_;
-        return dfs(0, 0xFF, {});
     }
 };
