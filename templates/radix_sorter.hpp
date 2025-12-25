@@ -23,7 +23,8 @@ template <
     SortOrder order,
     bool stable,
     u8 bits_per_pass,
-    u32 num_passes = ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)>
+    u32 num_passes = ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass),
+    u32 capacity = 100'001>
     requires(((num_passes * bits_per_pass) <= sizeof(T) * 8) && (sizeof(T) > 1))
 class RadixSorter
 {
@@ -36,7 +37,7 @@ class RadixSorter
     static constexpr size_t num_bits = sizeof(T) * 8;
 
     inline static std::array<UT, base> count;
-    inline static std::array<UT, 100'001> temp;
+    inline static std::array<UT, capacity> temp;
 
     template <u8 pass_index>
     FORCE_INLINE static void do_pass(std::span<UT> arr) noexcept
@@ -128,6 +129,7 @@ template <
     u8 bits_per_pass,
     u32 num_passes = 0xFFFFFFFF,
     SortOrder order = SortOrder::Ascending,
+    u32 capacity = 100'001,
     std::integral T>
 FORCE_INLINE void radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
 {
@@ -135,13 +137,14 @@ FORCE_INLINE void radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
         num_passes == 0xFFFFFFFF
             ? ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)
             : num_passes;
-    RadixSorter<T, order, false, bits_per_pass, np>::sort(arr);
+    RadixSorter<T, order, false, bits_per_pass, np, capacity>::sort(arr);
 }
 
 template <
     u8 bits_per_pass,
     u32 num_passes = 0xFFFFFFFF,
     SortOrder order = SortOrder::Ascending,
+    u32 capacity = 100'001,
     std::integral T>
 FORCE_INLINE void stable_radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
 {
@@ -149,5 +152,5 @@ FORCE_INLINE void stable_radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
         num_passes == 0xFFFFFFFF
             ? ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)
             : num_passes;
-    RadixSorter<T, order, true, bits_per_pass, np>::sort(arr);
+    RadixSorter<T, order, true, bits_per_pass, np, capacity>::sort(arr);
 }
