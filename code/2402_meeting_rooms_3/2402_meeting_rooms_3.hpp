@@ -4,77 +4,10 @@
 #include <span>
 #include <vector>
 
-#ifdef __GNUC__
-#define ATTR inline __attribute__((always_inline))
-#else
-#define ATTR inline
-#endif
-
-using u8 = uint8_t;
-using u32 = uint32_t;
-using u64 = uint64_t;
-
-template <
-    std::unsigned_integral T,
-    u8 bits_per_pass,
-    u32 num_passes = ((63 + bits_per_pass) / bits_per_pass)>
-struct RadixSorter
-{
-    [[nodiscard]] static std::vector<T>& get_static_data() noexcept
-    {
-        static std::vector<T> v;
-        v.reserve(100'001);
-        return v;
-    }
-
-    static constexpr u64 base = 1u << bits_per_pass;
-    static constexpr u64 mask = base - 1;
-
-    template <u8 pass>
-    ATTR static void radixSortPass(
-        std::span<u64> arr,
-        std::array<u64, base>& count) noexcept
-    {
-        auto& temp = get_static_data();
-
-        count.fill(0);
-        constexpr u64 shift = pass * bits_per_pass;
-
-        // Count digit occurrences
-        for (auto v : arr) ++count[(v >> shift) & mask];
-
-        // Prefix sums for positions
-        for (u32 i = 1; i < base; ++i) count[i] += count[i - 1];
-
-        // Stable placement
-        u32 i = static_cast<u32>(arr.size());
-        do
-        {
-            --i;
-            u32 digit = (arr[i] >> shift) & mask;
-            temp[--count[digit]] = arr[i];
-        } while (i);
-
-        std::ranges::copy(temp, arr.begin());
-    }
-
-    ATTR static void radixSort(std::span<u64> arr) noexcept
-    {
-        u32 n = static_cast<u32>(arr.size());
-        if (n == 0) return;
-
-        auto& temp = get_static_data();
-        temp.clear();
-        temp.resize(n);
-
-        std::array<u64, base> count{};
-
-        [&]<u8... pass>(std::integer_sequence<u8, pass...>)
-        {
-            (radixSortPass<pass>(arr, count), ...);
-        }(std::make_integer_sequence<u8, num_passes>());
-    }
-};
+#include "int_if.hpp"
+#include "integral_aliases.hpp"
+#include "radix_sorter.hpp"
+#include "reinterpret_range.hpp"
 
 class Solution
 {
@@ -92,45 +25,31 @@ public:
         u64 end_time : 57;
     };
 
-    template <typename To, typename From, size_t extent = std::dynamic_extent>
-    [[nodiscard]] ATTR static auto reinterpret_span(
-        std::span<From, extent> in) noexcept
+    FORCE_INLINE static constexpr auto heap_cmp(Booking a, Booking b) noexcept
     {
-        return std::span<To, extent>{
-            reinterpret_cast<To*>(in.data()),  // NOLINT
-            in.size()};
-    }
-
-    static constexpr auto heap_cmp = [](const Booking& a, const Booking& b)
-    {
-        if (a.end_time != b.end_time) return a.end_time > b.end_time;
-        return a.room > b.room;
+        return std::bit_cast<u64>(a) > std::bit_cast<u64>(b);
     };
 
-    ATTR static constexpr void bitsetClear(
+    FORCE_INLINE static constexpr void bitsetClear(
         std::array<u64, 2>& bs,
         u8 idx) noexcept
     {
-        u64& v = idx < 64 ? bs[0] : bs[1];
-        u64 i = idx % 64;
-        v &= ~(u64{1} << i);
+        bs[idx > 63] &= ~(u64{1} << (idx & 63));
     }
 
-    ATTR static constexpr void bitsetSet(
+    FORCE_INLINE static constexpr void bitsetSet(
         std::array<u64, 2>& bs,
         u8 idx) noexcept
     {
-        u64& v = idx < 64 ? bs[0] : bs[1];
-        u32 i = idx < 64 ? idx : idx - 64;
-        v |= u64{1} << i;
+        bs[idx > 63] |= u64{1} << iif<u8>(idx > 63, idx - 64, idx);
     }
 
-    ATTR static constexpr u8 bitsetFindFirstZero(
+    FORCE_INLINE static constexpr u8 bitsetFindFirstZero(
         std::array<u64, 2>& bs) noexcept
     {
         auto a = std::countr_one(bs[0]);
         auto b = std::countr_one(bs[1]);
-        return std::bit_cast<u32>(a < 64 ? a : b + 64) & 0xFF;
+        return iif(a < 64, a, b + 64) & 0xFF;
     }
 
     [[nodiscard]] static u32 mostBooked(
@@ -151,10 +70,49 @@ public:
         }
 
         const auto meetings = std::span{meettings_arr}.first(num_meetings);
-        RadixSorter<u64, 8, 5>::radixSort(reinterpret_span<u64>(meetings));
 
-        Booking* const heap_arr =
-            reinterpret_cast<Booking*>(meetings.data());  // NOLINT
+        // Choose between the std::sort (expect nlogn) and
+        // different sets of parameters for radix sort
+        {
+            using SortFn = void (*)(std::span<u64>);
+
+            auto radix_sort_weight =
+                [num_meetings](u32 bits_per_pass, u32 num_passes)
+            {
+                return num_passes * ((1u << bits_per_pass) + num_meetings);
+            };
+
+            using WeightAndFn = std::pair<u32, SortFn>;
+            std::array<WeightAndFn, 6> fns{{
+                {num_meetings * cast<u32>(32 - std::countl_zero(num_meetings)),
+                 [](std::span<u64> x) { std::ranges::sort(x); }},
+                {radix_sort_weight(6, 7),
+                 [](std::span<u64> x) { radix_sort<7, 6>(x); }},
+                {radix_sort_weight(7, 6),
+                 [](std::span<u64> x) { radix_sort<7, 6>(x); }},
+                {radix_sort_weight(8, 5),
+                 [](std::span<u64> x) { radix_sort<8, 5>(x); }},
+                {radix_sort_weight(10, 4),
+                 [](std::span<u64> x) { radix_sort<10, 4>(x); }},
+                {radix_sort_weight(13, 3),
+                 [](std::span<u64> x) { radix_sort<13, 3>(x); }},
+            }};
+
+            std::ranges::min(fns, std::less{}, &WeightAndFn::first)
+                .second(reinterpret_range<u64>(meetings));
+        }
+
+        if (auto n = num_meetings, log_n = cast<u32>(32 - std::countl_zero(n));
+            n * log_n < 5u * ((1u << 8) + n))
+        {
+            std::ranges::sort(reinterpret_range<u64>(meetings));
+        }
+        else
+        {
+            radix_sort<8, 5>(reinterpret_range<u64>(meetings));
+        }
+
+        Booking* const heap_arr = reinterpret_cast<Booking*>(meetings.data());
         u32 heap_size = 0;
 
         std::array<int, 100> rooms{};
@@ -168,10 +126,7 @@ public:
             while (heap_size && meeting.begin >= heap_arr->end_time)
             {
                 bitsetClear(bs, heap_arr->room);
-                std::ranges::pop_heap(
-                    heap_arr,
-                    heap_arr + heap_size,  // NOLINT
-                    heap_cmp);
+                std::ranges::pop_heap(heap_arr, heap_arr + heap_size, heap_cmp);
                 --heap_size;
             }
 
@@ -180,10 +135,7 @@ public:
             if (room == num_rooms)
             {
                 auto booking = *heap_arr;
-                std::ranges::pop_heap(
-                    heap_arr,
-                    heap_arr + heap_size,  // NOLINT
-                    heap_cmp);
+                std::ranges::pop_heap(heap_arr, heap_arr + heap_size, heap_cmp);
                 --heap_size;
                 start = booking.end_time;
                 room = booking.room;
@@ -194,15 +146,11 @@ public:
             }
 
             ++rooms[room];
-            heap_arr[heap_size++] =  // NOLINT
-                {
-                    .room = room,
-                    .end_time = start + (meeting.end - meeting.begin),
-                };
-            std::ranges::push_heap(
-                heap_arr,
-                heap_arr + heap_size,  // NOLINT
-                heap_cmp);
+            heap_arr[heap_size++] = {
+                .room = room,
+                .end_time = start + (meeting.end - meeting.begin),
+            };
+            std::ranges::push_heap(heap_arr, heap_arr + heap_size, heap_cmp);
         }
 
         return static_cast<u32>(std::distance(
@@ -210,3 +158,5 @@ public:
             std::max_element(rooms.begin(), rooms.begin() + num_rooms)));
     }
 };
+
+#include "sync_stdio.hpp"
