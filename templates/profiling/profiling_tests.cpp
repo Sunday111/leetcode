@@ -2,42 +2,23 @@
 
 #include "gtest/gtest.h"
 #include "profiling.hpp"
+#include "speedscope_json.hpp"
 
-TEST(ProfilingTest, SourceId)
-{
-    auto src_id = profiling::register_source("test");
-    auto& p = profiling::Profiler::Instance();
-    auto& source_info = p.GetSourceInfo(src_id);
-    ASSERT_TRUE(
-        std::string_view{source_info.location.function_name()}.contains(
-            "SourceId"));
-    ASSERT_EQ(source_info.name, "test");
-    std::println("function name: {}", source_info.location.function_name());
-    std::println("file name: {}", source_info.location.file_name());
-    std::println("line: {}", source_info.location.line());
-    std::println("column: {}", source_info.location.column());
-}
-
-constexpr inline auto curr_entry = []() -> const profiling::ProfilerEntry&
+constexpr inline auto curr_frame = []() -> const profiling::Frame&
 {
     auto& p = profiling::Profiler::Instance();
-    return p.entries[p.current_entry_id.GetValue()];
+    return p.GetFrames()[p.current_frame_id.GetValue()];
 };
 
 constexpr inline auto curr_src = []() -> const profiling::SourceInfo&
 {
     auto& p = profiling::Profiler::Instance();
-    return p.sources[curr_entry().source.GetValue()];
+    return p.GetSources()[curr_frame().source.GetValue()];
 };
 
 constexpr inline auto get_current_source_name = []() -> std::string_view
 {
     return curr_src().name;
-};
-
-constexpr inline auto print_current_entry = []()
-{
-    std::println("{}", get_current_source_name());
 };
 
 TEST(ProfilingTest, ScopeExample)
@@ -98,31 +79,31 @@ TEST(ProfilingTest, Scope)
         profiling::Scope scope{"Experiment"};
         ASSERT_EQ(curr_src().location.line(), __LINE__ - 1);
         ASSERT_EQ(curr_src().name, "Experiment");
-        ASSERT_EQ(curr_entry().child, kInvalidId);
-        ASSERT_EQ(curr_entry().sibling, kInvalidId);
-        ASSERT_EQ(curr_entry().status, Status::Started);
+        ASSERT_EQ(curr_frame().child, kInvalidId);
+        ASSERT_EQ(curr_frame().sibling, kInvalidId);
+        ASSERT_EQ(curr_frame().status, Status::Started);
 
         {
             profiling::Scope _{"a"};
             ASSERT_EQ(curr_src().location.line(), __LINE__ - 1);
             ASSERT_EQ(curr_src().name, "a");
-            ASSERT_EQ(curr_entry().child, kInvalidId);
-            ASSERT_EQ(curr_entry().sibling, kInvalidId);
-            ASSERT_EQ(curr_entry().status, Status::Started);
+            ASSERT_EQ(curr_frame().child, kInvalidId);
+            ASSERT_EQ(curr_frame().sibling, kInvalidId);
+            ASSERT_EQ(curr_frame().status, Status::Started);
 
-            profiling::EntryId child = kInvalidId;
+            profiling::FrameId child = kInvalidId;
             {
                 profiling::Scope _{"b"};
                 ASSERT_EQ(get_current_source_name(), "b");
-                ASSERT_EQ(curr_entry().child, kInvalidId);
-                ASSERT_EQ(curr_entry().sibling, kInvalidId);
-                ASSERT_EQ(curr_entry().status, Status::Started);
-                child = p.current_entry_id;
+                ASSERT_EQ(curr_frame().child, kInvalidId);
+                ASSERT_EQ(curr_frame().sibling, kInvalidId);
+                ASSERT_EQ(curr_frame().status, Status::Started);
+                child = p.current_frame_id;
             }
             ASSERT_EQ(get_current_source_name(), "a");
-            ASSERT_EQ(curr_entry().child, child);
-            ASSERT_EQ(curr_entry().sibling, kInvalidId);
-            ASSERT_EQ(curr_entry().status, Status::GotChild);
+            ASSERT_EQ(curr_frame().child, child);
+            ASSERT_EQ(curr_frame().sibling, kInvalidId);
+            ASSERT_EQ(curr_frame().status, Status::GotChild);
 
             {
                 profiling::Scope _{"c"};
