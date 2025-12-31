@@ -12,22 +12,20 @@ public:
     {
         u8 h = g.size() & 0xF, w = g[0].size() & 0xF, r = 0;
 
+        constexpr auto is_magic_sum = std::bind_front(std::equal_to{}, 15);
+
         for (u8 y0 = 0; y0 < h - 2; ++y0)
         {
             for (u8 x0 = 0; x0 < w - 2; ++x0)
             {
-                std::array<u8, 8> sums{};
-                u8 *sr = sums.data(), *sc = sr + 3, *sd = sc + 3;
-                bool ok = true;
+                std::array<u8, 6> sums{};
+                u8 *sr = sums.data(), *sc = sr + 3;
+                bool ok = g[y0 + 1][x0 + 1] == 5;
 
                 u16 bits = 0;
-                for (u8 dy = 0; dy != 3; ++dy)
+                for (u8 dy = 0; ok && dy != 3; ++dy)
                 {
                     u8 y = y0 + dy;
-
-                    // sum diagonals
-                    sd[0] += g[y][x0 + dy];
-                    sd[1] += g[y][x0 + 2 - dy];
 
                     for (u8 dx = 0; dx != 3; ++dx)
                     {
@@ -45,15 +43,11 @@ public:
                     }
                 }
 
-                // all sums are equal
-                ok &= std::ranges::all_of(
-                    sums,
-                    std::bind_front(std::equal_to{}, sums[0]));
-
-                // Met only numbers in range [0,9]
-                ok &= !(bits & ~u16{0b1111111110});
-
-                r += ok;
+                r += ok &&
+                     // all sums are equal
+                     std::ranges::all_of(sums, is_magic_sum) &&
+                     // Met only numbers in range [0,9]
+                     !(bits & ~u16{0b1111111110});
             }
         }
 
