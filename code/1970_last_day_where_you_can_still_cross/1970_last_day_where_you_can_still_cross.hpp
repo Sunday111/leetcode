@@ -27,17 +27,15 @@ public:
         using UF = UnionFind<u16>;
         using Node = UF::Node;
 
-        constexpr u32 K = (10000 + 2) * (2 + 2);
-        constexpr u32 max_words = (K / 64) + 1;
-
-        static Node nodes[K];
-
         const u16 h = row + 2, w = col + 2;
+
+        constexpr u32 K = (10000 + 2) * (2 + 2);
+        static Node nodes[K];
         UF uf(nodes, w * h);
 
+        constexpr u32 max_words = (K / 64) + 1;
         static u64 water[max_words];
-        u16 num_words = ((w * h) / 64) + 1;
-        std::fill_n(water, num_words, 0);
+        std::fill_n(water, ((w * h) / 64) + 1, 0);
 
         // Flood left and right columns
         {
