@@ -10,6 +10,6 @@ public:
         unsigned k) noexcept
     {
         std::ranges::reverse(s | std::views::take(k));
-        return s;
+        return std::move(s);
     }
 };
