@@ -1,13 +1,7 @@
 #pragma once
 
 #include "dsw.hpp"
-
-struct TreeNode
-{
-    int val{};
-    TreeNode* left{};
-    TreeNode* right{};
-};
+#include "lc_tree_node.hpp"
 
 class Solution
 {

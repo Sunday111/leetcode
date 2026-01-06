@@ -1,10 +1,4 @@
-#pragma once
-
-struct TreeNode
-{
-    TreeNode *left, *right;
-    int val;
-};
+#include "lc_tree_node.hpp"
 
 class Solution
 {

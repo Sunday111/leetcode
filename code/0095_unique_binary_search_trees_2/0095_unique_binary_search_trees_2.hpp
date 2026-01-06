@@ -1,11 +1,7 @@
 #include <array>
 #include <vector>
 
-struct TreeNode
-{
-    int val;
-    TreeNode *left, *right;
-};
+#include "lc_tree_node.hpp"
 
 using u8 = uint8_t;
 using u16 = uint16_t;

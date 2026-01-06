@@ -4,20 +4,7 @@
 #include <unordered_map>
 #include <vector>
 
-struct TreeNode
-{
-    int val;
-    TreeNode* left;
-    TreeNode* right;
-    TreeNode() : val(0), left(nullptr), right(nullptr) {}
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}  // NOLINT
-    TreeNode(int x, TreeNode* left, TreeNode* right)
-        : val(x),
-          left(left),
-          right(right)
-    {
-    }
-};
+#include "lc_tree_node.hpp"
 
 class Solution
 {

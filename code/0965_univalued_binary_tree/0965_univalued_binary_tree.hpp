@@ -1,12 +1,4 @@
-#pragma once
-
-struct TreeNode
-{
-    int val;
-    TreeNode* left{nullptr};
-    TreeNode* right{nullptr};
-    explicit TreeNode(int x) : val(x) {}
-};
+#include "lc_tree_node.hpp"
 
 class Solution
 {

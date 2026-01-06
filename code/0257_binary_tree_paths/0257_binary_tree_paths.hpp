@@ -1,25 +1,8 @@
-#pragma once
-
 #include <format>
 #include <string>
 #include <vector>
 
-// Definition for a binary tree node.
-struct TreeNode
-{
-    int val;
-    TreeNode* left;
-    TreeNode* right;
-    explicit TreeNode(
-        int x,
-        TreeNode* left = nullptr,
-        TreeNode* right = nullptr)
-        : val(x),
-          left(left),
-          right(right)
-    {
-    }
-};
+#include "lc_tree_node.hpp"
 
 class Solution
 {
