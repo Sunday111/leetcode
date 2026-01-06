@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef LC_LOCAL_BUILD
+
 struct TreeNode
 {
     int val;
@@ -14,3 +16,5 @@ struct TreeNode
     {
     }
 };
+
+#endif

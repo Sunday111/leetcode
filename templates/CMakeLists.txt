@@ -12,6 +12,7 @@ set(tests_target_name ${target_name}_tests)
 file(GLOB_RECURSE tests_sources CONFIGURE_DEPENDS *.cpp)
 add_executable(${tests_target_name} ${tests_sources})
 target_link_libraries(${tests_target_name} PUBLIC test_utility)
+target_compile_definitions(${target_name} INTERFACE LC_LOCAL_BUILD)
 
 enable_testing()
 include(GoogleTest)

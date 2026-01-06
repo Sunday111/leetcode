@@ -1,3 +1,6 @@
+#include <algorithm>
+
+#include "int_if.hpp"
 #include "lc_tree_node.hpp"
 
 class Solution
@@ -6,8 +9,7 @@ public:
     [[nodiscard]] static int maxLevelSum(TreeNode* root) noexcept
     {
         TreeNode* q[10'001];
-        int qb = 0, qe = 0;
-        int best_level = 1, best_sum = root->val;
+        int qb = 0, qe = 0, r = 1, max_s = root->val;
         q[qe++] = root;
         for (int level = 1; qb != qe; ++level)
         {
@@ -20,13 +22,10 @@ public:
                 q[qe] = node->right, qe += !!q[qe];
             }
 
-            if (s > best_sum)
-            {
-                best_sum = s;
-                best_level = level;
-            }
+            r = iif(max_s < s, level, r);
+            max_s = std::max(max_s, s);
         }
 
-        return best_level;
+        return r;
     }
 };
