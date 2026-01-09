@@ -22,7 +22,8 @@ concept BinaryTreeNodeConcept = requires(T a, int x) {
 template <BinaryTreeNodeConcept TNode>
 bool CompareBinaryTrees(TNode* root_a, TNode* root_b)
 {
-    std::queue<std::pair<TNode*, TNode*>> q{{root_a, root_b}};
+    std::queue<std::pair<TNode*, TNode*>> q;
+    q.emplace(root_a, root_b);
 
     while (!q.empty())
     {
