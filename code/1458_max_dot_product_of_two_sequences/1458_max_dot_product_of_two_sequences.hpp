@@ -8,7 +8,8 @@ public:
         const std::vector<int>& va,
         const std::vector<int>& vb) noexcept
     {
-        int prev[500], curr[500];
+        int data[1000];
+        int *prev = data, *curr = data + 500;
         const u16 lim_i = va.size() & 0xFFFF, lim_j = vb.size() & 0xFFFF;
 
         curr[0] = va[0] * vb[0];
