@@ -11,6 +11,8 @@ public:
         std::string_view va,
         std::string_view vb) noexcept NO_SANITIZERS
     {
+        if (va.size() > vb.size()) std::swap(va, vb);
+
         int curr[1001];
         const u16 la = va.size() & 0xFFFF, lb = vb.size() & 0xFFFF;
 

@@ -5,3 +5,8 @@ TEST(t0712_minimum_ascii_delete_sum_for_two_strings, test_1)
 {
     ASSERT_EQ(Solution{}.minimumDeleteSum("sea", "eat"), 231);
 }
+
+TEST(t0712_minimum_ascii_delete_sum_for_two_strings, test_2)
+{
+    ASSERT_EQ(Solution{}.minimumDeleteSum("delete", "leet"), 403);
+}
