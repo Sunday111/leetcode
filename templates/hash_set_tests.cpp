@@ -18,7 +18,7 @@ TEST(HashSetTest, Simple)
 
     static constexpr u32 kCapacity = 1 << 16;
     static std::array<u32, kCapacity> arr;
-    HashSet<kCapacity, u32, u32{}, ~u32{}> my_set{std::span{arr}};
+    HashSet<kCapacity, u32, ~u32{}> my_set{std::span{arr}};
 
     auto generate_values = [&]
     {
@@ -62,7 +62,7 @@ TEST(HashMapTest, Simple)
         return (v.first);
     };
 
-    HashSet<capacity, Value, Value{}, ~u32{}, proj> my_map{arr};
+    HashSet<capacity, Value, ~u32{}, proj> my_map{arr};
 
     auto generate_values = [&]
     {

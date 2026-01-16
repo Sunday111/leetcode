@@ -10,7 +10,6 @@
 template <
     u32 capacity,
     typename Value,
-    auto default_entry,
     auto empty_key,
     auto key_proj = std::identity{}>
     requires(std::popcount(capacity) == 1)

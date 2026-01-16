@@ -107,12 +107,11 @@ public:
 
         using CaseLookupPair = std::pair<u64, u16>;
         static std::array<CaseLookupPair, capacity> case_lookup_arr;
-        HashSet<capacity, NoVowelsLookupPair, NoVowelsLookupPair{}, 0, proj>
-            no_vowels_lookup{no_vowels_lookup_arr};
+        HashSet<capacity, NoVowelsLookupPair, 0, proj> no_vowels_lookup{
+            no_vowels_lookup_arr};
         no_vowels_lookup.Init();
 
-        HashSet<capacity, CaseLookupPair, CaseLookupPair{}, 0, proj>
-            case_lookup{case_lookup_arr};
+        HashSet<capacity, CaseLookupPair, 0, proj> case_lookup{case_lookup_arr};
         case_lookup.Init();
 
         static std::array<std::vector<u64>, 7001> vectors;
