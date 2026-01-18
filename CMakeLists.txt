@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.25)
 
 project(leetcode)
 
-set(CMAKE_CXX_STANDARD 26)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -39,7 +39,7 @@ option(BUILD_GMOCK "" OFF)
 FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest
-    GIT_TAG        "v1.16.0"
+    GIT_TAG        "v1.17.0"
 )
 FetchContent_MakeAvailable(googletest)
 
@@ -47,10 +47,14 @@ option(BENCHMARK_ENABLE_TESTING "" OFF)
 FetchContent_Declare(
     googlebench
     GIT_REPOSITORY https://github.com/google/benchmark
-    GIT_TAG        "v1.9.2"
+    GIT_TAG        "v1.9.4"
 )
 
 FetchContent_MakeAvailable(googlebench)
+
+# Suppress the warning only for Google Benchmark
+target_compile_options(benchmark PUBLIC -Wno-c2y-extensions)
+target_compile_options(benchmark_main PUBLIC -Wno-c2y-extensions)
 
 add_subdirectory(templates)
 add_subdirectory(test_utility)

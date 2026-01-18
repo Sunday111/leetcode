@@ -1,6 +1,20 @@
+#include <algorithm>
 #include <vector>
 
 #include "force_inline.hpp"
+
+struct Vec2
+{
+    int x, y;
+};
+
+struct Rect
+{
+    FORCE_INLINE constexpr int left_x() const noexcept { return bot_left.x; }
+    FORCE_INLINE constexpr int right_x() const noexcept { return top_right.x; }
+    Vec2 bot_left;
+    Vec2 top_right;
+};
 
 // Intersection between two intervals described as [x1, x2] and [x3, x4]
 template <std::integral T>
@@ -19,17 +33,37 @@ public:
     {
         size_t n = bottomLeft.size();
 
+        static Rect rects[1000];
+        for (size_t i = 0; i != n; ++i)
+        {
+            rects[i] = {
+                .bot_left{.x = bottomLeft[i][0], .y = bottomLeft[i][1]},
+                .top_right{.x = topRight[i][0], .y = topRight[i][1]},
+            };
+        }
+
+        std::ranges::sort(rects, rects + n, std::less{}, &Rect::left_x);
+
         int ans = 0;
         for (size_t i = 0; i != n; ++i)
         {
-            int x1 = bottomLeft[i][0], y1 = bottomLeft[i][1];
-            int x2 = topRight[i][0], y2 = topRight[i][1];
+            auto& ri = rects[i];
             for (size_t j = i + 1; j != n; ++j)
             {
-                int x3 = bottomLeft[j][0], y3 = bottomLeft[j][1];
-                int x4 = topRight[j][0], y4 = topRight[j][1];
-                int a = interval_intersection(x1, x2, x3, x4);
-                int b = interval_intersection(y1, y2, y3, y4);
+                auto& rj = rects[j];
+
+                if (rj.left_x() > ri.right_x()) break;
+
+                int a = interval_intersection(
+                    ri.bot_left.x,
+                    ri.top_right.x,
+                    rj.bot_left.x,
+                    rj.top_right.x);
+                int b = interval_intersection(
+                    ri.bot_left.y,
+                    ri.top_right.y,
+                    rj.bot_left.y,
+                    rj.top_right.y);
                 ans = std::max(ans, std::min(a, b));
             }
         }
