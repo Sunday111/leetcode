@@ -4,58 +4,42 @@ class Solution
 {
 public:
     using u32 = uint32_t;
-    u32 maxSideLength(std::vector<std::vector<int>>& mat, u32 threshold)
+    [[nodiscard]] static u32 maxSideLength(
+        const std::vector<std::vector<int>>& mat,
+        u32 threshold) noexcept
     {
-        static u32 prefix[302][302];
-        u32 h = static_cast<u32>(mat.size()),
-            w = static_cast<u32>(mat[0].size());
-        u32 h1 = h + 1, w1 = w + 1;
+        static u32 p[302][302];
+        const u32 h = static_cast<u32>(mat.size()),
+                  w = static_cast<u32>(mat[0].size());
 
-        // Horizontal prefix sum
-        for (u32 y = 1; y != h1; ++y)
+        for (u32 y = 1, h1 = h + 1; y != h1; ++y)
         {
-            prefix[y][0] = 0;
-            for (u32 x = 1; x != w1; ++x)
+            for (u32 x = 1, w1 = w + 1; x != w1; ++x)
             {
                 u32 v = static_cast<u32>(mat[y - 1][x - 1]);
-                prefix[y][x] = prefix[y][x - 1] + v;
+                p[y][x] = v + p[y - 1][x] + p[y][x - 1] - p[y - 1][x - 1];
             }
         }
 
-        // Vertical prefix sum
-        for (u32 y = 2; y != h1; ++y)
+        u32 max_side = 0;
+        for (u32 y = 0, max_h = h; y != h && max_h > max_side; ++y, --max_h)
         {
-            for (u32 x = 1; x != w1; ++x)
+            for (u32 x = 0, max_w = w; x != w && max_w > max_side; ++x, --max_w)
             {
-                prefix[y][x] += prefix[y - 1][x];
-            }
-        }
-
-        u32 r = 0;
-        for (u32 y1 = 1; y1 != h1; ++y1)
-        {
-            u32 y = y1 - 1;
-            auto max_yt = h1 - y1;
-            for (u32 x1 = 1; x1 != w1; ++x1)
-            {
-                u32 x = x1 - 1;
-                auto max_xt = w1 - x1;
-                auto lim_t = std::min(max_yt, max_xt) + 1;
-                u32 a = prefix[y1 - 1][x1 - 1];
-                for (u32 t = 1, yt = y + 1, xt = x + 1; t != lim_t;
-                     ++t, ++xt, ++yt)
+                u32 lim_t = std::min(max_w, max_h) + 1, a = p[y][x];
+                for (u32 t = std::min(max_side + 1, lim_t); t != lim_t; ++t)
                 {
-                    u32 b = prefix[y][xt];
-                    u32 c = prefix[yt][x];
-                    u32 d = prefix[yt][xt];
+                    u32 b = p[y][x + t];
+                    u32 c = p[y + t][x];
+                    u32 d = p[y + t][x + t];
                     u32 s = d + a - (b + c);
 
                     if (s > threshold) break;
-                    r = std::max(r, t);
+                    max_side = std::max(max_side, t);
                 }
             }
         }
 
-        return r;
+        return max_side;
     }
 };
