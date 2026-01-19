@@ -9,37 +9,30 @@ public:
         u32 threshold) noexcept
     {
         static u32 p[302][302];
-        const u32 h = static_cast<u32>(mat.size()),
-                  w = static_cast<u32>(mat[0].size());
+        const u32 h1 = static_cast<u32>(mat.size() + 1),
+                  w1 = static_cast<u32>(mat[0].size() + 1);
 
-        for (u32 y = 1, h1 = h + 1; y != h1; ++y)
+        for (u32 y = 1; y != h1; ++y)
         {
-            for (u32 x = 1, w1 = w + 1; x != w1; ++x)
+            for (u32 x = 1; x != w1; ++x)
             {
                 u32 v = static_cast<u32>(mat[y - 1][x - 1]);
                 p[y][x] = v + p[y - 1][x] + p[y][x - 1] - p[y - 1][x - 1];
             }
         }
 
-        u32 max_side = 0;
-        for (u32 y = 0, max_h = h; y != h && max_h > max_side; ++y, --max_h)
+        u32 side = 1;
+        for (u32 y = 1; y != h1; y = std::max(y + 1, side))
         {
-            for (u32 x = 0, max_w = w; x != w && max_w > max_side; ++x, --max_w)
+            for (u32 x = side; x != w1 && y >= side; ++x)
             {
-                u32 lim_t = std::min(max_w, max_h) + 1, a = p[y][x];
-                for (u32 t = std::min(max_side + 1, lim_t); t != lim_t; ++t)
-                {
-                    u32 b = p[y][x + t];
-                    u32 c = p[y + t][x];
-                    u32 d = p[y + t][x + t];
-                    u32 s = d + a - (b + c);
-
-                    if (s > threshold) break;
-                    max_side = std::max(max_side, t);
-                }
+                u32 y1 = y - side;
+                u32 x1 = x - side;
+                u32 sum = p[y][x] - p[y1][x] - p[y][x1] + p[y1][x1];
+                side += sum <= threshold;
             }
         }
 
-        return max_side;
+        return side - 1;
     }
 };
