@@ -51,4 +51,5 @@ public:
         remove(hi);
         return hi;
     }
+    FORCE_INLINE constexpr bool is_empty() const { return bits.is_empty(); }
 };

@@ -1,8 +1,11 @@
 #include <algorithm>
 #include <array>
+#include <bit>
+#include <cassert>
+#include <concepts>
 #include <cstdint>
 #include <numeric>
-#include <span>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -15,7 +18,11 @@ inline static constexpr auto cast = []<typename From>(From&& v) INLINE_LAMBDA
     return static_cast<To>(std::forward<From>(v));
 };
 
-#define HOT_PATH __attribute__((hot))
+template <std::integral T>
+[[nodiscard]] FORCE_INLINE static constexpr T ceil_div(T a, T b) noexcept
+{
+    return (a + (b - 1)) / b;
+}
 
 using u8 = uint8_t;
 using u16 = uint16_t;
@@ -27,169 +34,225 @@ using i16 = int16_t;
 using i32 = int32_t;
 using i64 = int64_t;
 
-#define NO_SANITIZERS \
-    __attribute__((no_sanitize("undefined", "address", "coverage", "thread")))
+template <u64 value>
+using UintForValue = std::conditional_t < value < (1 << 8),
+      u8,
+      std::conditional_t <
+          value<
+              (1 << 16),
+              u16,
+              std::conditional_t<value<(1UL << 32), u32, u64>>>;
 
-template <typename To, typename From, std::size_t extent = std::dynamic_extent>
-    requires(sizeof(To) == sizeof(From))
-[[nodiscard]] FORCE_INLINE static auto reinterpret_range(
-    std::span<From, extent> in) noexcept
+template <size_t capacity, typename Word = u64>
+class PyramidBitset
 {
-    return std::span<To, extent>{
-        reinterpret_cast<To*>(in.data()),  // NOLINT
-        in.size()};
-}
-
-template <typename To, typename From, typename Allocator>
-    requires(sizeof(To) == sizeof(From))
-[[nodiscard]] FORCE_INLINE static std::span<To> reinterpret_range(
-    std::vector<From, Allocator>& v) noexcept
-{
-    return reinterpret_range<To>(std::span{v});
-}
-
-enum class SortOrder : u8
-{
-    Ascending,
-    Descending
-};
-
-template <
-    std::integral T,
-    SortOrder order,
-    bool stable,
-    u8 bits_per_pass,
-    u32 num_passes = ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass),
-    u32 capacity = 100'001>
-    requires(((num_passes * bits_per_pass) <= sizeof(T) * 8) && (sizeof(T) > 1))
-class RadixSorter
-{
-    using UT = std::make_unsigned_t<T>;
-
-    static constexpr UT base = 1u << bits_per_pass;
-    static constexpr UT mask = base - 1;
-    static constexpr auto pass_idx_seq =
-        std::make_integer_sequence<u8, num_passes>();
-    static constexpr size_t num_bits = sizeof(T) * 8;
-
-    inline static std::array<UT, base> count;
-    inline static std::array<UT, capacity> temp;
-
-    template <u8 pass_index>
-    FORCE_INLINE static void do_pass(std::span<UT> arr) noexcept
-        NO_SANITIZERS HOT_PATH
-    {
-        count.fill(0);
-        constexpr UT shift = pass_index * bits_per_pass;
-        constexpr UT msb = UT{1} << (num_bits - 1);
-        constexpr bool sign_masking = std::is_signed_v<T>;
-        constexpr bool is_first_pass = pass_index == 0;
-        constexpr bool is_last_pass = (pass_index == (num_passes - 1));
-        constexpr UT pre_sign_mask = sign_masking && is_first_pass ? msb : UT{};
-        constexpr UT post_sign_mask = sign_masking && is_last_pass ? msb : UT{};
-
-        // Count digit occurrences
-        for (auto& v : arr)
-        {
-            v ^= pre_sign_mask;
-            ++count[(v >> shift) & mask];
-        }
-
-        const u32 n = cast<u32>(arr.size());
-
-        if constexpr (order == SortOrder::Ascending)
-        {
-            if constexpr (stable)
-            {
-                std::inclusive_scan(count.begin(), count.end(), count.begin());
-
-                for (u32 i = n; i--;)
-                {
-                    UT digit = (arr[i] >> shift) & mask;
-                    temp[--count[digit]] = arr[i] ^ post_sign_mask;
-                }
-            }
-            else
-            {
-                std::exclusive_scan(
-                    count.begin(),
-                    count.end(),
-                    count.begin(),
-                    0);
-
-                for (u32 j = 0; j != n; ++j)
-                {
-                    UT v = arr[j];
-                    temp[count[(v >> shift) & mask]++] = v ^ post_sign_mask;
-                }
-            }
-        }
-        else  // Descending
-        {
-            // Compute descending start positions
-            std::exclusive_scan(
-                count.rbegin(),
-                count.rend(),
-                count.rbegin(),
-                UT{0});
-
-            for (u32 i = 0; i != n; ++i)
-            {
-                UT v = (arr[i] >> shift) & mask;
-                temp[count[v]++] = arr[i] ^ post_sign_mask;
-            }
-        }
-
-        std::ranges::copy_n(temp.begin(), n, arr.begin());
-    }
-
-    // Invokes do_pass for each pass_index.
-    template <u8... pass_index>
-    FORCE_INLINE static void do_passes(
-        std::span<UT> arr,
-        std::integer_sequence<u8, pass_index...>) noexcept
-        NO_SANITIZERS HOT_PATH
-    {
-        (do_pass<pass_index>(arr), ...);
-    }
-
 public:
-    FORCE_INLINE static void sort(std::span<T> arr) noexcept
-        NO_SANITIZERS HOT_PATH
+    using ValueType = UintForValue<capacity - 1>;
+    static constexpr size_t kWordSize = sizeof(Word) * 8;
+    static constexpr u8 kMask = kWordSize - 1;
+    static constexpr int kShift = std::bit_width(kMask);
+    static constexpr size_t kNumLayers =
+        ceil_div(std::bit_width(capacity), kShift);
+    static constexpr auto kLayersSizes = []
     {
-        if (arr.size()) do_passes(reinterpret_range<UT>(arr), pass_idx_seq);
+        std::array<size_t, kNumLayers> sizes{};
+        for (size_t i = 0, x = capacity; i != sizes.size(); ++i)
+        {
+            sizes[i] = x;
+            x = ceil_div(x, kWordSize);
+        }
+        return sizes;
+    }();
+    static constexpr size_t kTotalWords =
+        std::accumulate(kLayersSizes.begin(), kLayersSizes.end(), 0UZ);
+    std::array<Word, kTotalWords> words;
+
+    static constexpr auto offsets = []
+    {
+        std::array<size_t, kNumLayers> offsets;  // NOLINT
+        std::exclusive_scan(
+            kLayersSizes.begin(),
+            kLayersSizes.end(),
+            offsets.begin(),
+            size_t{});
+        return offsets;
+    }();
+
+    constexpr PyramidBitset(size_t size = capacity) noexcept  // NOLINT
+    {
+        assert(size <= capacity);
+        initialize(size);
+    }
+
+    template <bool v>
+    FORCE_INLINE constexpr void set(ValueType idx) noexcept
+    {
+        if constexpr (v)
+        {
+            add(idx);
+        }
+        else
+        {
+            remove(idx);
+        }
+    }
+
+    FORCE_INLINE constexpr void add(ValueType v) noexcept
+    {
+        [&]<size_t... layer>(std::index_sequence<layer...>) INLINE_LAMBDA
+        {
+            (add_impl<layer>(v), ...);
+        }(std::make_index_sequence<kNumLayers>());
+    }
+
+    FORCE_INLINE constexpr void remove(ValueType v) noexcept
+    {
+        [&]<size_t... layer>(std::index_sequence<layer...>) INLINE_LAMBDA
+        {
+            bool pe = true;
+            (rem_impl<layer>(v, pe), ...);
+        }(std::make_index_sequence<kNumLayers>());
+    }
+
+    [[nodiscard]] FORCE_INLINE constexpr ValueType min() const noexcept
+    {
+        ValueType x = 0;
+        [&]<size_t... layer>(std::index_sequence<layer...>) INLINE_LAMBDA
+        {
+            (min_impl<kNumLayers - (layer + 1)>(x), ...);
+        }(std::make_index_sequence<kNumLayers>());
+        return x;
+    }
+
+    [[nodiscard]] FORCE_INLINE constexpr ValueType max() const noexcept
+    {
+        ValueType x = 0;
+        [&]<size_t... layer>(std::index_sequence<layer...>) INLINE_LAMBDA
+        {
+            (max_impl<kNumLayers - (layer + 1)>(x), ...);
+        }(std::make_index_sequence<kNumLayers>());
+        return x;
+    }
+
+    [[nodiscard]] FORCE_INLINE constexpr bool get(ValueType v) const noexcept
+    {
+        return words[offsets[0] + (v >> kShift)] & (Word{1} << (v & kMask));
+    }
+
+    [[nodiscard]] FORCE_INLINE static constexpr size_t get_capacity() noexcept
+    {
+        return capacity;
+    }
+
+    [[nodiscard]] FORCE_INLINE constexpr bool is_empty() const noexcept
+    {
+        return words[offsets[kNumLayers - 1]] == 0;
+    }
+
+    FORCE_INLINE constexpr void initialize(size_t end = capacity) noexcept
+    {
+        [&]<size_t... layer>(std::index_sequence<layer...>) INLINE_LAMBDA
+        {
+            ((init_layer<layer>(end)), ...);
+        }(std::make_index_sequence<kNumLayers>());
+    }
+
+private:
+    template <size_t layer>
+    FORCE_INLINE constexpr void init_layer(size_t& x) noexcept
+    {
+        x = ceil_div<size_t>(x, kWordSize);
+        std::fill_n(std::next(words.begin(), offsets[layer]), x, 0);
+    }
+
+    template <size_t layer>
+    FORCE_INLINE constexpr void add_impl(ValueType& v) noexcept
+    {
+        ValueType wi = v >> kShift;
+        words[offsets[layer] + wi] |= Word{1} << (v & kMask);
+        v = wi;
+    }
+
+    template <size_t layer>
+    FORCE_INLINE constexpr void rem_impl(
+        ValueType& v,
+        bool& prev_empty) noexcept
+    {
+        ValueType wi = v >> kShift;
+        auto& w = words[offsets[layer] + wi];
+        w &= ~(Word{prev_empty} << (v & kMask));
+        v = wi;
+        prev_empty = !w;
+    }
+
+    template <size_t layer>
+    FORCE_INLINE constexpr void min_impl(ValueType& wi) const noexcept
+    {
+        u8 bi = std::countr_zero(words[offsets[layer] + wi]) & 0xFF;
+        ValueType x = cast<ValueType>(wi << kShift) | cast<ValueType>(bi);
+        wi = x;
+    }
+
+    template <size_t layer>
+    FORCE_INLINE constexpr void max_impl(ValueType& wi) const noexcept
+    {
+        u8 bi = kMask - std::countl_zero(words[offsets[layer] + wi]) & 0xFF;
+        ValueType x = cast<ValueType>(wi << kShift) | cast<ValueType>(bi);
+        wi = x;
     }
 };
 
-template <
-    u8 bits_per_pass,
-    u32 num_passes = 0xFFFFFFFF,
-    SortOrder order = SortOrder::Ascending,
-    u32 capacity = 100'001,
-    std::integral T>
-FORCE_INLINE void radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
+template <size_t max_value, size_t max_count>
+class BitsetPriorityQueue
 {
-    constexpr u32 np =
-        num_passes == 0xFFFFFFFF
-            ? ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)
-            : num_passes;
-    RadixSorter<T, order, false, bits_per_pass, np, capacity>::sort(arr);
-}
+public:
+    using B = PyramidBitset<max_value + 1>;
+    using ValueType = B::ValueType;
+    using FrequencyType = UintForValue<max_count>;
+    std::array<FrequencyType, max_value + 1> freq{};
+    B bits{};
 
-template <
-    u8 bits_per_pass,
-    u32 num_passes = 0xFFFFFFFF,
-    SortOrder order = SortOrder::Ascending,
-    u32 capacity = 100'001,
-    std::integral T>
-FORCE_INLINE void stable_radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
-{
-    constexpr u32 np =
-        num_passes == 0xFFFFFFFF
-            ? ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)
-            : num_passes;
-    RadixSorter<T, order, true, bits_per_pass, np, capacity>::sort(arr);
-}
+    FORCE_INLINE constexpr void add(ValueType v) noexcept
+    {
+        ++freq[v];
+        bits.add(v);
+    }
+
+    FORCE_INLINE constexpr void remove(ValueType v) noexcept
+    {
+        if (0 == --freq[v]) bits.remove(v);
+    }
+
+    [[nodiscard]] FORCE_INLINE constexpr ValueType min() noexcept
+    {
+        return bits.min();
+    }
+
+    [[nodiscard]] FORCE_INLINE constexpr ValueType max() noexcept
+    {
+        return bits.max();
+    }
+
+    FORCE_INLINE constexpr void clear() noexcept
+    {
+        bits.initialize();
+        std::ranges::fill(freq, 0);
+    }
+
+    FORCE_INLINE constexpr ValueType pop_min() noexcept
+    {
+        auto lo = min();
+        remove(lo);
+        return lo;
+    }
+    FORCE_INLINE constexpr ValueType pop_max() noexcept
+    {
+        auto hi = max();
+        remove(hi);
+        return hi;
+    }
+    FORCE_INLINE constexpr bool is_empty() const { return bits.is_empty(); }
+};
 
 class Solution
 {
@@ -197,13 +260,18 @@ public:
     [[nodiscard]] static constexpr u32 minPairSum(
         std::vector<u32>& nums) noexcept
     {
-        radix_sort<6, 3>(std::span{nums});
-        u32 n = static_cast<u32>(nums.size()), ans = 0;
-        for (uint32_t l = 0, r = n - 1; l < r; ++l, --r)
+        static BitsetPriorityQueue<100'000, 100'000> q;
+        for (u32 v : nums) q.add(v);
+
+        u32 r = 0;
+        while (!q.is_empty())
         {
-            ans = std::max(ans, nums[l] + nums[r]);
+            auto a = q.pop_max();
+            auto b = q.pop_min();
+            r = std::max(r, a + b);
         }
-        return ans;
+
+        return r;
     }
 
     [[nodiscard]] static constexpr u32 minPairSum(
@@ -212,3 +280,13 @@ public:
         return minPairSum(reinterpret_cast<std::vector<u32>&>(nums));
     }
 };
+
+#ifndef __clang__
+auto init = []()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    return 'c';
+}();
+#endif
