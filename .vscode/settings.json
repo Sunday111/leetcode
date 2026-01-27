@@ -1,15 +1,10 @@
 {
-    "C_Cpp.intelliSenseEngine": "disabled",
-    "clangd.path": "/home/sunday/llvm/llvm-install/bin/clangd",
-    "clang-format.executable": "/home/sunday/llvm/llvm-install/bin/clang-format",
-
     "[cpp]": {
         "editor.formatOnSave": true,
     },
 
     // CMake
     "cmake.configureOnEdit": true,
-    "cmake.generator": "Ninja",
 
     // Python
     "[python]": {
