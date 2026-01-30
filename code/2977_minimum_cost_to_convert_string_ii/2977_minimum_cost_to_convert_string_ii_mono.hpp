@@ -1,5 +1,7 @@
+#include <algorithm>
 #include <array>
 #include <bit>
+#include <bitset>
 #include <cassert>
 #include <concepts>
 #include <cstdint>
@@ -215,9 +217,6 @@ public:
     {
         if (source == target) return 0;
 
-        std::array<std::array<u32, 256>, 256> dist;  // NOLINT
-        for (auto& x : dist) x.fill(1000000000);
-
         // Register unique tokens
         std::unordered_map<std::string_view, u8> token_to_index;
         u8 num_unique_tokens = 0;
@@ -232,10 +231,40 @@ public:
                 token_to_index.try_emplace(s, num_unique_tokens).second;
         }
 
+        u8 num_sorted = 0;
+        std::pair<std::string_view, u8> sorted_tokens[200];
+
+        {
+            std::bitset<256> visited;
+            for (std::string_view token : original)
+            {
+                u8 idx = token_to_index[token];
+                sorted_tokens[num_sorted] = {token, idx};
+                num_sorted += !visited[idx];
+                visited[idx] = 1;
+            }
+            num_sorted = visited.count() & 0xFF;
+            std::ranges::sort(
+                sorted_tokens,
+                sorted_tokens + num_sorted,
+                std::less{},
+                [&](auto& x)
+                {
+                    auto [s, i] = x;
+                    return std::make_tuple(s.size(), i);
+                });
+        }
+
+        u32 dist[200][200];  // NOLINT
+        for (u8 i = 0; i != num_unique_tokens; ++i)
+        {
+            std::fill_n(dist[i], num_unique_tokens, 1000000000);
+        }
+
         assert(num_unique_tokens <= 200);
 
         // Reset bitsets
-        static std::array<PyramidBitset<256>, 256> bitsets{};
+        static std::array<PyramidBitset<256>, 200> bitsets{};
         for (u8 i = 0; i != num_unique_tokens; ++i)
         {
             bitsets[i].initialize(num_unique_tokens);
@@ -283,14 +312,17 @@ public:
             if (source[i] == target[i]) dpi = dp[i + 1];
 
             std::string_view sub_src = source.substr(i);
-            std::string_view sub_tgt = target.substr(i);
 
-            for (auto& [src_token, src_idx] : token_to_index)
+            u16 max_l = n - i;
+            for (u8 j = 0; j != num_sorted; ++j)
             {
+                auto& [src_token, src_idx] = sorted_tokens[j];
+
+                u16 l = cast<u16>(src_token.size());
+                if (l > max_l) break;
                 if (!sub_src.starts_with(src_token)) continue;
 
-                const u16 l = cast<u16>(src_token.size());
-                auto tgt_token = sub_tgt.substr(0, l);
+                auto tgt_token = target.substr(i, l);
                 if (auto it = token_to_index.find(tgt_token);
                     it != token_to_index.end() &&
                     bitsets[src_idx].get(it->second))
