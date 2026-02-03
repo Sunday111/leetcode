@@ -86,16 +86,11 @@ public:
             }
         }
 
-        max_heap_with_erase<
-            u32,
-            std::identity,
-            BumpAllocator<u32, SolutionStorage>>
-            smaller;
-        min_heap_with_erase<
-            u32,
-            std::identity,
-            BumpAllocator<u32, SolutionStorage>>
-            larger;
+        template <typename X>
+        using Alctr = BumpAllocator<X, SolutionStorage>;
+
+        max_heap_with_erase<u32, std::identity, Alctr> smaller;
+        min_heap_with_erase<u32, std::identity, Alctr> larger;
         u64 sum = 0;
     };
 

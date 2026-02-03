@@ -143,3 +143,14 @@ struct LeetCodeBinaryTree
         return FromArray(array);
     }
 };
+
+template <BinaryTreeNodeConcept TNode>
+void DeleteBinaryTree(TNode* node)
+{
+    if (node)
+    {
+        DeleteBinaryTree(node->left);
+        DeleteBinaryTree(node->right);
+        delete node;  // NOLINT
+    }
+}

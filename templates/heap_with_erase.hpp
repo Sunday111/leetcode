@@ -10,7 +10,7 @@ template <
     typename T,
     typename Cmp,
     typename Proj = std::identity,
-    typename Allocator = std::allocator<T>>
+    template <typename> typename Allocator = std::allocator>
 struct heap_with_erase
 {
     template <typename Op>
@@ -99,11 +99,11 @@ private:
 template <
     typename T,
     typename Proj = std::identity,
-    typename Allocator = std::allocator<T>>
+    template <typename> typename Allocator = std::allocator>
 using min_heap_with_erase = heap_with_erase<T, std::greater<>, Proj, Allocator>;
 
 template <
     typename T,
     typename Proj = std::identity,
-    typename Allocator = std::allocator<T>>
+    template <typename> typename Allocator = std::allocator>
 using max_heap_with_erase = heap_with_erase<T, std::less<>, Proj, Allocator>;
