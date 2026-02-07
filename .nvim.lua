@@ -35,10 +35,10 @@ vim.api.nvim_create_user_command("EmbedIncludes", function()
 
 
     -- Absolute path to script
-    local script_path = root .. "/" .. "scripts/embed_includes.py"
+    local script_path = root .. "/scripts/automation.py"
 
     -- Build command
-    local cmd = { script_path, file_path }
+    local cmd = { script_path, 'embed_includes', file_path }
 
     -- Execute
     vim.fn.jobstart(cmd, {

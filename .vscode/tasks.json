@@ -6,7 +6,8 @@
             "type": "shell",
             "command": "/usr/bin/python3",
             "args": [
-                "${workspaceFolder}/scripts/embed_includes.py",
+                "${workspaceFolder}/scripts/automation.py",
+                "embed_includes",
                 "${file}"
             ],
             "problemMatcher": []
