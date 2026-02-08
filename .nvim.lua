@@ -156,3 +156,18 @@ vim.api.nvim_create_user_command("CreateSolution", function(opts)
 end, {
     nargs = 1
 })
+
+vim.api.nvim_create_user_command("RemoveCR", function()
+    local buf = vim.api.nvim_get_current_buf()
+
+    -- Get all lines
+    local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+
+    -- Remove carriage returns
+    for i, line in ipairs(lines) do
+        lines[i] = line:gsub("\r", "")
+    end
+
+    -- Set lines back
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+end, {})
