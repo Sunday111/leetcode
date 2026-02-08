@@ -1,5 +1,3 @@
-#pragma once
-
 #include <algorithm>
 #include <cmath>
 
@@ -8,18 +6,22 @@
 class Solution
 {
 public:
-    static constexpr int getTreeHeight(TreeNode* n)
+    struct Result
     {
-        if (!n) return 0;
-        return 1 + std::max(getTreeHeight(n->left), getTreeHeight(n->right));
-    }
+        int h = 0;
+        [[nodiscard]] constexpr operator bool() const noexcept  // NOLINT
+        {
+            return h != -1;
+        }
+    };
 
-    static constexpr bool isBalanced(TreeNode* root)
+    [[nodiscard]] static constexpr Result isBalanced(TreeNode* n) noexcept
     {
-        if (!root) return true;
-        int l = getTreeHeight(root->left), r = getTreeHeight(root->right);
-        return (
-            (2 > std::abs(l - r)) && isBalanced(root->left) &&
-            isBalanced(root->right));
+        if (!n) return {};
+        auto l = isBalanced(n->left);
+        if (!l) return l;
+        auto r = isBalanced(n->right);
+        bool balanced = r && (std::abs(l.h - r.h) < 2);
+        return {balanced ? std::max(l.h, r.h) + 1 : -1};
     }
 };
