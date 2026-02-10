@@ -109,6 +109,7 @@ end, {
 
 
 local function normalize_name(name)
+    name = string.lower(name)
     name = name:gsub("[^0-9a-zA-Z%s]", "")
     name = name:gsub("%s+", "_")
     return name
