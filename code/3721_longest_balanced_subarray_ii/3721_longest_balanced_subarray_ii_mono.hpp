@@ -195,11 +195,14 @@ class Solution
 public:
     [[nodiscard]] u32 longestBalanced(std::vector<int>& nums) noexcept
     {
-        static SegmentTree ::Node nodes[num_required_nodes(100'001)];
-        SegmentTree st(nodes, static_cast<u32>(nums.size() + 1));
+        // At most 10^5 indices
+        static SegmentTree::Node nodes[num_required_nodes(100'001)];
+
+        SegmentTree st(nodes, static_cast<u32>(nums.size()));
 
         auto [lo, hi] = std::ranges::minmax(nums);
 
+        // The range of values is [1, 100'000]
         static u32 prev[100'000];
         std::ranges::fill_n(prev, (hi - lo) + 1, ~u32{});
 
