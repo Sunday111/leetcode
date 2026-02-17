@@ -1,13 +1,57 @@
-#pragma once
-
 #include <array>
 #include <bit>
 #include <cassert>
+#include <concepts>
+#include <cstdint>
 #include <numeric>
+#include <type_traits>
+#include <utility>
+#include <vector>
 
-#include "cast.hpp"
-#include "ceil_div.hpp"
-#include "uint_for_value.hpp"
+
+
+
+
+
+
+#define FORCE_INLINE inline __attribute__((always_inline))
+#define INLINE_LAMBDA __attribute__((always_inline))
+
+template <typename To>
+inline static constexpr auto cast = []<typename From>(From&& v) INLINE_LAMBDA
+{
+    return static_cast<To>(std::forward<From>(v));
+};
+
+
+
+template <std::integral T>
+[[nodiscard]] FORCE_INLINE static constexpr T ceil_div(T a, T b) noexcept
+{
+    return (a + (b - 1)) / b;
+}
+
+
+
+
+using u8 = uint8_t;
+using u16 = uint16_t;
+using u32 = uint32_t;
+using u64 = uint64_t;
+
+using i8 = int8_t;
+using i16 = int16_t;
+using i32 = int32_t;
+using i64 = int64_t;
+
+template <u64 value>
+using UintForValue = std::conditional_t < value < (1 << 8),
+      u8,
+      std::conditional_t <
+          value<
+              (1 << 16),
+              u16,
+              std::conditional_t<value<(1UL << 32), u32, u64>>>;
 
 template <size_t capacity, typename Word = u64>
 class PyramidBitset
@@ -177,5 +221,35 @@ private:
         u8 bi = kMask - std::countl_zero(words[offsets[layer] + wi]) & 0xFF;
         ValueType x = cast<ValueType>(wi << kShift) | cast<ValueType>(bi);
         wi = x;
+    }
+};
+
+class Solution
+{
+public:
+    [[nodiscard]] static constexpr auto toggleLightBulbs(
+        const std::vector<int>& bulbs)
+    {
+        PyramidBitset<128> b;
+
+        u8 n = 0;
+        for (int i : bulbs)
+        {
+            bool v = b.get(i & 0xFF);
+            b.set(i & 0xFF, !v);
+            n -= v;
+            n += !v;
+        }
+
+        std::vector<int> r;
+        r.reserve(n);
+        while (n--)
+        {
+            auto i = b.min();
+            b.remove(i);
+            r.emplace_back(i);
+        }
+
+        return r;
     }
 };
