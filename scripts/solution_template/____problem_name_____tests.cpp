@@ -3,5 +3,5 @@
 
 TEST(t____problem_name____, test_1)
 {
-    Solution s{};
+    ASSERT_EQ(Solution{}, );
 }
