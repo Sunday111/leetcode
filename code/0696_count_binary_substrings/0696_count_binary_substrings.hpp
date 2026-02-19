@@ -6,10 +6,9 @@ public:
     [[nodiscard]] constexpr int countBinarySubstrings(
         const std::string& s) noexcept
     {
-        char curr = 0;
         int np = 0, nc = 0, ans = 0;
 
-        for (char c : s)
+        for (char curr = 0; char c : s)
         {
             if (c != curr)
             {
