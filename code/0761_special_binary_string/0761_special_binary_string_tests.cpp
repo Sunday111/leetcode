@@ -21,3 +21,10 @@ TEST(t0761_special_binary_string, test_3)
     std::string expected = "111010010100";
     ASSERT_EQ(Solution{}.makeLargestSpecial(orig), expected);
 }
+
+TEST(t0761_special_binary_string, test_4)
+{
+    std::string orig = "11001011101000101100";
+    std::string expected = "11101000110011001010";
+    ASSERT_EQ(Solution{}.makeLargestSpecial(orig), expected);
+}
