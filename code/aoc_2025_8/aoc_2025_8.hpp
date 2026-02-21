@@ -10,6 +10,7 @@
 
 #include "cast.hpp"
 #include "integral_aliases.hpp"
+#include "signed_integral_aliases.hpp"
 
 struct Vec3
 {

@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "radix_sorter.hpp"
+#include "signed_integral_aliases.hpp"
 
 class Solution
 {

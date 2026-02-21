@@ -7,6 +7,7 @@
 #include "bump_hash_map.hpp"
 #include "bump_set.hpp"
 #include "reinterpret_range.hpp"
+#include "signed_integral_aliases.hpp"
 
 using SolutionStorage = GlobalBufferStorage<1 << 25>;
 

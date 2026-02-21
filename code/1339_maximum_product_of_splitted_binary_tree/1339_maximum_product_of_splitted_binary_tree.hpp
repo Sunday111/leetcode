@@ -1,7 +1,7 @@
 #include <algorithm>
 
-#include "integral_aliases.hpp"
 #include "lc_tree_node.hpp"
+#include "signed_integral_aliases.hpp"
 
 class Solution
 {

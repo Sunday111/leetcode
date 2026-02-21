@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "integral_aliases.hpp"
+#include "signed_integral_aliases.hpp"
 
 class Solution
 {

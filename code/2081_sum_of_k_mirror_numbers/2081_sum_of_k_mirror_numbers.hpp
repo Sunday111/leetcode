@@ -6,46 +6,12 @@
 #include <ranges>
 #include <span>
 
-#ifdef __GNUC__
-#define ATTR inline __attribute__((always_inline))
-#else
-#define ATTR inline
-#endif
-
-using u64 = uint64_t;
-using u32 = uint32_t;
-using u8 = uint8_t;
+#include "integral_aliases.hpp"
+#include "reverse_bits_32.hpp"
 
 class Solution
 {
 public:
-    static constexpr auto kReverseByteTable = []
-    {
-        auto reverse_byte = [](uint8_t b)
-        {
-            b = ((b & 0b00001111) << 4 | (b & 0b11110000) >> 4) & 0xFF;
-            b = ((b & 0b00110011) << 2 | (b & 0b11001100) >> 2) & 0xFF;
-            b = ((b & 0b01010101) << 1 | (b & 0b10101010) >> 1) & 0xFF;
-            return b;
-        };
-
-        std::array<uint8_t, 256> result{};
-        for (size_t i = 0; i != 256; ++i)
-        {
-            result[i] = reverse_byte(static_cast<uint8_t>(i));
-        }
-        return result;
-    }();
-
-    [[nodiscard]] ATTR static constexpr u32 reverseBits(u32 n) noexcept
-    {
-        const u32 a = kReverseByteTable[(n >> 0) & 0xFF];
-        const u32 b = kReverseByteTable[(n >> 8) & 0xFF];
-        const u32 c = kReverseByteTable[(n >> 16) & 0xFF];
-        const u32 d = kReverseByteTable[(n >> 24) & 0xFF];
-        return (a << 24) | (b << 16) | (c << 8) | (d << 0);
-    }
-
     static constexpr std::array
         kMaxDigits{0, 0, 64, 41, 32, 28, 25, 23, 22, 21};
 
@@ -65,7 +31,7 @@ public:
     }();
 
     template <u8 base, u8 num_digits, bool lead = true, typename Callback>
-    ATTR static constexpr void genPalindromes(Callback cb)
+    FORCE_INLINE static constexpr void genPalindromes(Callback cb)
     {
         if constexpr (base == 2)
         {
@@ -89,7 +55,7 @@ public:
                 for (u32 left_part = start; left_part != limit; ++left_part)
                 {
                     u64 v = (u64{left_part} << (half + m)) |
-                            (reverseBits(left_part) >> (32 - half));
+                            (reverse32(left_part) >> (32 - half));
                     cb(v);
                     if constexpr (m) cb(v | (m << half));
                 }
@@ -118,7 +84,8 @@ public:
         }
     }
 
-    [[nodiscard]] ATTR static constexpr bool isPalindromeBase10(u64 v) noexcept
+    [[nodiscard]] FORCE_INLINE static constexpr bool isPalindromeBase10(
+        u64 v) noexcept
     {
         std::array<u8, 20> digits;  // NOLINT
         u8 n = 0;
@@ -208,7 +175,7 @@ public:
         return result;
     }();
 
-    [[nodiscard]] ATTR static constexpr u32 reverseBits(u32 n) noexcept
+    [[nodiscard]] FORCE_INLINE static constexpr u32 reverseBits(u32 n) noexcept
     {
         const u32 a = kReverseByteTable[(n >> 0) & 0xFF];
         const u32 b = kReverseByteTable[(n >> 8) & 0xFF];
@@ -296,7 +263,8 @@ public:
         }
     }
 
-    [[nodiscard]] ATTR static constexpr bool isPalindromeBase10(u64 v) noexcept
+    [[nodiscard]] FORCE_INLINE static constexpr bool isPalindromeBase10(
+        u64 v) noexcept
     {
         std::array<u8, 20> digits;  // NOLINT
         u8 n = 0;
@@ -312,7 +280,7 @@ public:
             full.last(n / 2) | std::views::reverse);
     }
 
-    ATTR constexpr void testValue(u64 v)
+    FORCE_INLINE constexpr void testValue(u64 v)
     {
         if (isPalindromeBase10(v))
         {
@@ -376,7 +344,7 @@ public:
     };
 
     template <u8 base>
-    [[nodiscard]] ATTR static constexpr std::span<u8> toDigits(
+    [[nodiscard]] FORCE_INLINE static constexpr std::span<u8> toDigits(
         u64 x,
         std::array<u8, 64>& digit) noexcept
     {
@@ -396,7 +364,7 @@ public:
     }
 
     template <u8 base>
-    [[nodiscard]] ATTR static constexpr bool isMirror(u64 x) noexcept
+    [[nodiscard]] FORCE_INLINE static constexpr bool isMirror(u64 x) noexcept
     {
         std::array<u8, 64> arr;  // NOLINT
         auto digits = toDigits<base>(x, arr);
@@ -405,7 +373,7 @@ public:
             digits.last(digits.size() / 2) | std::views::reverse);
     }
 
-    [[nodiscard]] ATTR static constexpr u64 rev(u64 x) noexcept
+    [[nodiscard]] FORCE_INLINE static constexpr u64 rev(u64 x) noexcept
     {
         u64 ans = 0;
         for (; x > 0; x /= 10) ans = ans * 10 + x % 10;
@@ -472,7 +440,7 @@ public:
     }();
 
     template <u8 num_digits, u8 out_p, u8 first_digit = 1>
-    ATTR constexpr void genPalindromes(u64 outer_add)
+    FORCE_INLINE constexpr void genPalindromes(u64 outer_add)
     {
         if constexpr (num_digits == 0)
         {
@@ -500,7 +468,8 @@ public:
         }
     }
 
-    [[nodiscard]] ATTR static constexpr bool isPalindrome(u64 v) noexcept
+    [[nodiscard]] FORCE_INLINE static constexpr bool isPalindrome(
+        u64 v) noexcept
     {
         std::array<u8, 64> digits;  // NOLINT
         u8 n = 0;
@@ -516,7 +485,7 @@ public:
             full.last(n / 2) | std::views::reverse);
     }
 
-    ATTR constexpr void testValue(u64 v)
+    FORCE_INLINE constexpr void testValue(u64 v)
     {
         if (isPalindrome(v))
         {
@@ -525,7 +494,7 @@ public:
         }
     }
 
-    [[nodiscard]] ATTR constexpr u64 kMirror(u8 n_) noexcept
+    [[nodiscard]] FORCE_INLINE constexpr u64 kMirror(u8 n_) noexcept
     {
         r = 0;
         n = n_;
@@ -565,7 +534,7 @@ public:
         kMirrorT<9>,
     };
 
-    [[nodiscard]] ATTR constexpr u64 kMirror(u8 k, u8 n_) noexcept
+    [[nodiscard]] FORCE_INLINE constexpr u64 kMirror(u8 k, u8 n_) noexcept
     {
         return kFunctions[k - 2](n_);
     }

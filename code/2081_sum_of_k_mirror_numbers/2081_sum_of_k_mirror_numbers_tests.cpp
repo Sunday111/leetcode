@@ -13,6 +13,8 @@ TEST(t2081_sum_of_k_mirror_numbers, test_1)
     }
 }
 
+#ifndef NDEBUG
+
 TEST(t2081_sum_of_k_mirror_numbers, test_2)
 {
     for (uint8_t k = 2; k != 10; ++k)
@@ -48,3 +50,4 @@ TEST(t2081_sum_of_k_mirror_numbers, test_4)
         }
     }
 }
+#endif

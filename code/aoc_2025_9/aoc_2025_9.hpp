@@ -10,6 +10,7 @@
 
 #include "cast.hpp"
 #include "integral_aliases.hpp"
+#include "signed_integral_aliases.hpp"
 #include "swap_if_greater.hpp"
 
 template <std::integral T>

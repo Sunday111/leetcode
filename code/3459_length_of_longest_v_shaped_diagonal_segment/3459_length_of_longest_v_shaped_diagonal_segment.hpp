@@ -6,6 +6,7 @@
 #include "force_inline.hpp"
 #include "hot_path.hpp"
 #include "integral_aliases.hpp"
+#include "signed_integral_aliases.hpp"
 
 struct Vec2
 {
