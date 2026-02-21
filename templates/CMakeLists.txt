@@ -6,6 +6,7 @@ set(target_name lc_templates)
 file(GLOB_RECURSE target_sources CONFIGURE_DEPENDS *.hpp)
 add_library(${target_name} INTERFACE ${test_utility_files})
 set_generic_compiler_options(${target_name} INTERFACE)
+target_compile_options(${target_name} INTERFACE -mtune=native -march=native)
 target_include_directories(${target_name} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(tests_target_name ${target_name}_tests)
