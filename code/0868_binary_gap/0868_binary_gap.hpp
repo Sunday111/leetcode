@@ -1,5 +1,4 @@
-#include <algorithm>
-
+#include "assign_max.hpp"
 #include "bit_manipultaion/clear_bit.hpp"
 #include "bit_manipultaion/rightmost_one.hpp"
 #include "exch.hpp"
@@ -18,11 +17,11 @@ public:
 
     [[nodiscard]] static constexpr u8 binaryGap(u32 n) noexcept
     {
-        u8 r = 0, p = removeLastBit(n);
+        u8 r = 0, prev = removeLastBit(n);
         while (n)
         {
-            u8 i = removeLastBit(n);
-            r = std::max<u8>(r, i - exch(p, i));
+            auto curr = removeLastBit(n);
+            assign_max(r, curr - exch(prev, curr));
         }
         return r;
     }
