@@ -10,6 +10,6 @@ TEST(t0064_minimum_path_sum_2, test_1)
 
 TEST(t0064_minimum_path_sum_2, test_2)
 {
-    auto grid = parse2DArray(" [[1,2,3],[4,5,6]]");
+    auto grid = parse2DArray("[[1,2,3],[4,5,6]]");
     ASSERT_EQ(Solution{}.minPathSum(grid), 12);
 }
