@@ -106,3 +106,10 @@ template <ListNodeConcept TNode>
     if (!r.empty()) r.pop_back();
     return r;
 }
+
+template <ListNodeConcept TNode, typename V>
+[[nodiscard]] inline constexpr TNode* FindFirst(TNode* head, const V& value)
+{
+    while (head && head->val != value) head = head->next;
+    return head;
+}
