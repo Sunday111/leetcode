@@ -9,7 +9,7 @@ class Solution
 {
     u32 target{};
     std::vector<u32> curr;
-    std::vector<std::vector<u32>> result;
+    std::vector<std::vector<u32>> r;
     std::span<const std::vector<u32>> g;
 
     constexpr void dfs(u32 i) noexcept
@@ -18,7 +18,7 @@ class Solution
 
         if (i == target)
         {
-            result.push_back(curr);
+            r.push_back(curr);
         }
         else
         {
@@ -35,7 +35,6 @@ public:
         target = static_cast<u32>(graph.size() - 1);
         g = reinterpret_cast<const std::vector<std::vector<u32>>&>(graph);
         dfs(0);
-        return std::move(
-            reinterpret_cast<std::vector<std::vector<int>>&>(result));
+        return std::move(reinterpret_cast<std::vector<std::vector<int>>&>(r));
     }
 };
