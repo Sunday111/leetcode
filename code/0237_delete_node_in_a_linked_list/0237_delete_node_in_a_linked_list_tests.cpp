@@ -4,9 +4,9 @@
 
 TEST(t0237_delete_node_in_a_linked_list, test_1)
 {
-    auto orig = LeetCodeList<ListNode>::FromString("4,5,1,9");
+    auto orig = LeetCodeList<ListNode>::FromString("[4,5,1,9]");
     int remove_value = 5;
-    std::string_view expected = "4,1,9";
+    std::string_view expected = "[4,1,9]";
 
     auto node_to_delete = FindFirst(orig.head, remove_value);
     ASSERT_NE(node_to_delete, nullptr);
@@ -19,9 +19,9 @@ TEST(t0237_delete_node_in_a_linked_list, test_1)
 
 TEST(t0237_delete_node_in_a_linked_list, test_2)
 {
-    auto orig = LeetCodeList<ListNode>::FromString("4,5,1,9");
+    auto orig = LeetCodeList<ListNode>::FromString("[4,5,1,9]");
     int remove_value = 1;
-    std::string_view expected = "4,5,9";
+    std::string_view expected = "[4,5,9]";
 
     auto node_to_delete = FindFirst(orig.head, remove_value);
     ASSERT_NE(node_to_delete, nullptr);

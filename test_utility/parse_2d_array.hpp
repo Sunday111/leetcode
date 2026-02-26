@@ -46,6 +46,14 @@
     return {result, i + 1};
 }
 
+[[nodiscard]] constexpr std::vector<int> parse1DArray(
+    std::string_view s) noexcept
+{
+    auto [r, i] = scan1DArray(s, 0);
+    assert(i == s.size());
+    return r;
+}
+
 [[nodiscard]] constexpr std::vector<std::vector<int>> parse2DArray(
     std::string_view s) noexcept
 {

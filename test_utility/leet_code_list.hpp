@@ -6,8 +6,8 @@
 #include <format>
 #include <ranges>
 #include <span>
-#include <sstream>
-#include <vector>
+
+#include "parse_2d_array.hpp"
 
 template <typename T>
 concept ListNodeConcept = requires(T a, int x) {
@@ -53,27 +53,9 @@ struct LeetCodeList
         return list;
     }
 
-    [[nodiscard]] static std::vector<int> StringToArray(std::string_view str)
+    [[nodiscard]] static LeetCodeList FromString(std::string_view s)
     {
-        std::stringstream stream(std::string{str});
-        std::vector<int> r;
-
-        while (!stream.eof())
-        {
-            assert(std::isdigit(stream.peek()) || stream.peek() == '-');
-            int value{};
-            stream >> value;
-            r.push_back(value);
-
-            if (int p = stream.peek(); p == ',') stream.get();
-        }
-
-        return r;
-    }
-
-    [[nodiscard]] static LeetCodeList FromString(std::string_view str)
-    {
-        auto array = StringToArray(str);
+        auto array = parse1DArray(s);
         auto view = std::span{array};
         return FromArray(view);
     }
@@ -95,7 +77,7 @@ template <ListNodeConcept TNode>
 template <ListNodeConcept TNode>
 [[nodiscard]] inline constexpr std::string ListToString(TNode* head)
 {
-    std::string r;
+    std::string r = "[";
     auto i = std::back_inserter(r);
     while (head)
     {
@@ -103,7 +85,8 @@ template <ListNodeConcept TNode>
         head = head->next;
     }
 
-    if (!r.empty()) r.pop_back();
+    if (r.size() > 1) r.pop_back();
+    r.push_back(']');
     return r;
 }
 
