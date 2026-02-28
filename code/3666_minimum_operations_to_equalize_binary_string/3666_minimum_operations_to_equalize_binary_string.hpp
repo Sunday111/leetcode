@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] static constexpr int minOperations(
+    [[nodiscard]] constexpr int minOperations(
         const std::string_view s,
         const u32 k) noexcept
     {

@@ -14,6 +14,7 @@ template <typename T, typename Options = DefaultScannerOptions>
 {
     T r;
     auto i = do_scan(opts, s, 0, r);
+    i = skip_whitespaces(opts, s, i);
     if (i != s.size())
     {
         throw std::runtime_error(

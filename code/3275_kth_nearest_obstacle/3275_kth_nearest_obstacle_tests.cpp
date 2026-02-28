@@ -4,13 +4,13 @@
 
 TEST(t3275_kth_nearest_obstacle, test_scan_int)
 {
-    ASSERT_EQ(-22, parse_from_string<int>("-22"));
+    ASSERT_EQ(-22, parse_from_string<int>("  -  22  "));
 }
 
 TEST(t3275_kth_nearest_obstacle, test_scan_vector)
 {
     std::vector expected{1, 2, 3};
-    ASSERT_EQ(expected, parse_from_string<std::vector<int>>("[1,2,3]"));
+    ASSERT_EQ(expected, parse_from_string<std::vector<int>>(" [ 1 , 2 , 3 ] "));
 }
 
 TEST(t3275_kth_nearest_obstacle, test_scan_vector_vector)
@@ -18,14 +18,15 @@ TEST(t3275_kth_nearest_obstacle, test_scan_vector_vector)
     std::vector<std::vector<int>> expected{{1, 2, 3}, {4, 5, 6}};
     ASSERT_EQ(
         expected,
-        parse_from_string<std::vector<std::vector<int>>>("[[1,2,3],[4,5,6]]"));
+        parse_from_string<std::vector<std::vector<int>>>(
+            " [ [ 1 , 2 , 3 ] , [ 4 , 5 , 6 ] ] "));
 }
 
 TEST(t3275_kth_nearest_obstacle, test_scan_tuple)
 {
     auto expected = std::make_tuple(10, std::vector{1, 2, 3});
-    auto actual =
-        parse_from_string<std::tuple<int, std::vector<int>>>("10[1,2,3]");
+    auto actual = parse_from_string<std::tuple<int, std::vector<int>>>(
+        " 10 [ 1 , 2 , 3 ] ");
     ASSERT_EQ(expected, actual);
 }
 

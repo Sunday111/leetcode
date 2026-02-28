@@ -3,6 +3,8 @@
 #include <concepts>
 #include <format>
 #include <string_view>
+#include <type_traits>
+#include <utility>
 
 #include "force_inline.hpp"
 #include "is_specialization.hpp"
@@ -12,7 +14,7 @@ struct DefaultScannerOptions
     [[nodiscard]] FORCE_INLINE static constexpr bool is_ignored_char(
         [[maybe_unused]] char c) noexcept
     {
-        return false;
+        return std::isspace(c);
     }
 
     static constexpr std::string_view tuple_delimeter = "";
@@ -57,6 +59,31 @@ constexpr void scan_expect(
     }
 }
 
+template <typename Options, typename T>
+    requires(std::same_as<std::string_view, T>)
+[[nodiscard]] constexpr size_t
+do_scan(const Options& opts, std::string_view s, size_t start, T& result)
+{
+    size_t i = skip_whitespaces(opts, s, start);
+    scan_expect(s, i, '\"');
+    ++i;
+    auto begin = i;
+    while (s[i] != '\"') ++i;
+    result = s.substr(begin, i - begin);
+    return i + 1;
+}
+
+template <typename Options, typename T>
+    requires(std::same_as<std::string, T>)
+[[nodiscard]] constexpr size_t
+do_scan(const Options& opts, std::string_view s, size_t start, T& result)
+{
+    std::string_view x;
+    size_t i = do_scan(opts, s, start, x);
+    result = x;
+    return i;
+}
+
 template <typename Options, std::integral T>
 [[nodiscard]] constexpr size_t
 do_scan(const Options& opts, std::string_view s, size_t start, T& result)
@@ -86,7 +113,7 @@ do_scan(const Options& opts, std::string_view s, size_t start, T& result)
     while (std::isdigit(s[i]))
     {
         result *= 10;
-        result += s[i++] - '0';
+        result += static_cast<T>(s[i++] - '0');
     }
 
     if constexpr (std::is_signed_v<T>)
@@ -157,4 +184,48 @@ do_scan(const Options& opts, std::string_view s, size_t start, T& result)
     }(std::make_index_sequence<n>());
 
     return i;
+}
+
+template <size_t k, is_specialization<std::tuple> T>
+[[nodiscard]] constexpr auto tuple_split(T&& x) noexcept
+{
+    constexpr auto n = std::tuple_size_v<T>;
+    static_assert(k <= n);
+
+    return std::make_tuple(
+        [&]<size_t... indices>(std::index_sequence<indices...>)
+        {
+            return std::make_tuple(std::get<indices>(std::forward<T>(x))...);
+        }(std::make_index_sequence<k>()),
+        [&]<size_t... indices>(std::index_sequence<indices...>)
+        {
+            return std::make_tuple(
+                std::get<k + indices>(std::forward<T>(x))...);
+        }(std::make_index_sequence<n - k>()));
+}
+
+template <is_specialization<std::tuple> T, size_t k>
+using tuple_head =
+    std::remove_reference_t<decltype(std::get<0>(tuple_split<k>(T{})))>;
+
+template <typename... Types, typename Options = DefaultScannerOptions>
+[[nodiscard]] auto parse_test_cases(
+    std::string_view s,
+    const Options& opts = Options{})
+{
+    constexpr auto n = sizeof...(Types);
+    static_assert(n > 1, "Expect at least one input and one output");
+    using All = std::tuple<Types...>;
+    using Inputs = tuple_head<All, n - 1>;
+    using Result = std::tuple_element_t<n - 1, All>;
+    std::vector<std::tuple<Inputs, Result>> r;
+
+    size_t i = skip_whitespaces(opts, s, 0);
+    while (i < s.size())
+    {
+        i = do_scan(opts, s, i, r.emplace_back());
+        i = skip_whitespaces(opts, s, i);
+    }
+
+    return r;
 }
