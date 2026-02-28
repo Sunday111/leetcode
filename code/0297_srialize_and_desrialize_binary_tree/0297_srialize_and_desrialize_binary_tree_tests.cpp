@@ -1,9 +1,13 @@
 #include "0297_srialize_and_desrialize_binary_tree.hpp"
 #include "gtest/gtest.h"
+#include "leet_code_binary_tree.hpp"
 
 bool TestCase(std::string_view s)
 {
-    return Codec::serialize(Codec::deserialize(s)) == s;
+    auto node = Codec::deserialize(s);
+    bool result = Codec::serialize(node) == s;
+    DeleteBinaryTree(node);
+    return result;
 }
 
 TEST(t0297_srialize_and_desrialize_binary_tree, test_1)

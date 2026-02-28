@@ -1,4 +1,6 @@
 
+#include <unordered_set>
+
 #include "0133_clone_graph.hpp"
 #include "gtest/gtest.h"
 #include "leet_code_unidirected_graph.hpp"
@@ -31,5 +33,15 @@ TEST(t0133_clone_graph, test_1)
 
     auto graph = Graph::FromAdjacencyListStr(input_al_str, default_value);
 
-    Solution{}.cloneGraph(graph.GetRoot());
+    auto cloned = Solution{}.cloneGraph(graph.GetRoot());
+
+    std::unordered_set<Node*> q{cloned};
+    std::unordered_set<Node*> deleted;
+    while (q.size())
+    {
+        Node* node = q.extract(q.begin()).value();
+        if (!deleted.emplace(node).second) continue;
+        for (auto x : node->neighbors) q.insert(x);
+        delete node;  // NOLINT
+    }
 }

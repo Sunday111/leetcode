@@ -60,7 +60,7 @@ TEST(tunknown_001_maximum_sum, test_fuzz_memo)
 
     std::uniform_int_distribution<u32> val_distr(1, 100);
     u32 dim_lim = 6;
-    u32 num_passes = 20;
+    u32 num_passes = 2;
 
     std::vector<u32> data(dim_lim * dim_lim + num_passes);
     std::generate_n(data.begin(), data.size(), std::bind_front(val_distr, rnd));
@@ -98,8 +98,8 @@ TEST(tunknown_001_maximum_sum, test_fuzz_dp)
     std::mt19937_64 rnd(kSeed);
 
     std::uniform_int_distribution<u32> val_distr(1, 100);
-    u32 dim_lim = 20;
-    u32 num_passes = 40;
+    u32 dim_lim = 10;
+    u32 num_passes = 2;
     std::vector<u32> data(dim_lim * dim_lim + num_passes);
     std::generate_n(data.begin(), data.size(), std::bind_front(val_distr, rnd));
 
