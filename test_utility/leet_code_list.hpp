@@ -55,7 +55,7 @@ struct LeetCodeList
 
     [[nodiscard]] static LeetCodeList FromString(std::string_view s)
     {
-        auto array = parse1DArray(s);
+        auto array = parse_from_string<std::vector<int>>(s);
         auto view = std::span{array};
         return FromArray(view);
     }
