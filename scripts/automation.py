@@ -6,7 +6,6 @@ import argparse
 
 SCRIPTS_DIR = Path(__file__).parent.resolve()
 ROOT_DIR = SCRIPTS_DIR.parent
-TEMPLATE_DIR = SCRIPTS_DIR / 'solution_template'
 CODE_DIR = ROOT_DIR / 'code'
 
 
@@ -33,7 +32,7 @@ def patch_file(src:Path, dst_dir:Path, variables:dict[str, str]):
     write_file(dst_path, file_data)
 
 
-def create_project(name:str, override:bool):
+def create_project(name:str, override:bool, template_dir: Path):
     project_root = CODE_DIR / name
 
     if override:
@@ -44,9 +43,9 @@ def create_project(name:str, override:bool):
     variables = {
         "____problem_name____": name
     }
-    for src_path in TEMPLATE_DIR.rglob("*"):
+    for src_path in template_dir.rglob("*"):
         if src_path.is_file():
-            dst_dir = (project_root / src_path.relative_to(TEMPLATE_DIR)).parent.resolve()
+            dst_dir = (project_root / src_path.relative_to(template_dir)).parent.resolve()
             patch_file(src_path, dst_dir, variables)
 
 
@@ -137,9 +136,13 @@ def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest='command')
 
-    create_parser = subparsers.add_parser('create')
-    create_parser.add_argument("--name", type=str, required=True)
-    create_parser.add_argument("--override", type=bool, required=False, default=False)
+    create_solution = subparsers.add_parser('create')
+    create_solution.add_argument("--name", type=str, required=True)
+    create_solution.add_argument("--override", type=bool, required=False, default=False)
+
+    create_solution2 = subparsers.add_parser('create2')
+    create_solution2.add_argument("--name", type=str, required=True)
+    create_solution2.add_argument("--override", type=bool, required=False, default=False)
 
     update_projects_list_parser = subparsers.add_parser('update_projects_list')
 
@@ -150,7 +153,10 @@ def main():
     command:str = args.command
     match command:
         case 'create':
-            create_project(args.name, args.override)
+            create_project(args.name, args.override, template_dir=SCRIPTS_DIR / 'solution_template')
+            update_projects_list()
+        case 'create2':
+            create_project(args.name, args.override, template_dir=SCRIPTS_DIR / 'solution_template2')
             update_projects_list()
         case 'update_projects_list':
             update_projects_list()

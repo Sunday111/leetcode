@@ -6,7 +6,8 @@
 #include "test_cases.hpp"
 
 // NOLINTNEXTLINE
-static const auto kCases = parse_test_cases<std::string, u32, int>(kTestCases);
+static const auto kCases =
+    parse_test_cases<std::tuple<std::string, u32, int>>(kTestCases);
 
 class T3666Test : public ::testing::TestWithParam<size_t>
 {

@@ -116,7 +116,7 @@ local function normalize_name(name)
 end
 
 
-vim.api.nvim_create_user_command("CreateSolution", function(opts)
+vim.api.nvim_create_user_command("CreateSolution2", function(opts)
     -- Normalize project name
     local name = normalize_name(table.concat(opts.fargs, " "))
 
@@ -125,6 +125,48 @@ vim.api.nvim_create_user_command("CreateSolution", function(opts)
 
     -- The command
     local cmd = { automation_script_path, 'create', '--name', name }
+
+    -- Execute
+    vim.fn.jobstart(cmd, {
+        stdout_buffered = true,
+        stderr_buffered = true,
+
+        on_stdout = function(_, data)
+            if data and #data > 0 then
+                vim.notify(table.concat(data, "\n"))
+            end
+        end,
+
+        on_stderr = function(_, data)
+            if data and #data > 0 then
+                vim.notify(table.concat(data, "\n"), vim.log.levels.ERROR)
+            end
+        end,
+
+        on_exit = function(_, code)
+            if code == 0 then
+                -- Open the created file on the main thread
+                vim.schedule(function()
+                    vim.cmd("edit " .. vim.fn.fnameescape(header_path))
+                end)
+            else
+                vim.notify("CreateSolution failed", vim.log.levels.ERROR)
+            end
+        end,
+    })
+end, {
+    nargs = 1
+})
+
+vim.api.nvim_create_user_command("CreateSolution2", function(opts)
+    -- Normalize project name
+    local name = normalize_name(table.concat(opts.fargs, " "))
+
+    -- Path to created header
+    local header_path = root .. "/code/" .. name .. "/" .. name .. ".hpp"
+
+    -- The command
+    local cmd = { automation_script_path, 'create2', '--name', name }
 
     -- Execute
     vim.fn.jobstart(cmd, {
