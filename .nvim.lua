@@ -116,7 +116,7 @@ local function normalize_name(name)
 end
 
 
-vim.api.nvim_create_user_command("CreateSolution2", function(opts)
+vim.api.nvim_create_user_command("CreateSolution", function(opts)
     -- Normalize project name
     local name = normalize_name(table.concat(opts.fargs, " "))
 

@@ -1,8 +1,12 @@
+#pragma once
+
+#include <algorithm>
 #include <cassert>
 #include <optional>
 #include <queue>
 #include <span>
 #include <sstream>
+#include <unordered_set>
 
 #include "cast.hpp"
 
@@ -44,6 +48,8 @@ bool CompareBinaryTrees(TNode* root_a, TNode* root_b)
 template <BinaryTreeNodeConcept TNode>
 struct LeetCodeBinaryTree
 {
+    using NodeType = TNode;
+    using NodeValue = std::decay_t<decltype(TNode{}.val)>;
     std::deque<TNode> nodes;
     TNode* root = nullptr;
 
@@ -142,6 +148,38 @@ struct LeetCodeBinaryTree
         auto array = StringToArray(str);
         return FromArray(array);
     }
+
+    [[nodiscard]] constexpr static auto ToArray(TNode* root) noexcept
+    {
+        std::vector<std::optional<NodeValue>> r;
+
+        std::vector<TNode*> q;
+        q.push_back(root);
+
+        // BFS
+        size_t begin = 0;
+        while (begin < q.size())
+        {
+            size_t end = q.size();
+            for (size_t i = begin; i != end; ++i)
+            {
+                auto& v = r.emplace_back();
+                auto node = q[i];
+                if (node)
+                {
+                    v = node->val;
+                    q.emplace_back(node->left);
+                    q.emplace_back(node->right);
+                }
+            }
+
+            begin = end;
+        }
+
+        while (r.size() && !r.back()) r.pop_back();
+
+        return r;
+    }
 };
 
 template <BinaryTreeNodeConcept TNode>
@@ -153,4 +191,21 @@ void DeleteBinaryTree(TNode* node)
         DeleteBinaryTree(node->right);
         delete node;  // NOLINT
     }
+}
+
+template <BinaryTreeNodeConcept TNode>
+void DeleteBinaryTreesWithSharedNodes(std::span<TNode*> nodes)
+{
+    std::unordered_set<TNode*> deleted;
+
+    auto dfs = [&](this auto&& dfs, TNode* x) -> void
+    {
+        if (!x || !deleted.emplace(x).second) return;
+        auto l = x->left, r = x->right;
+        delete x;  // NOLINT
+        dfs(l);
+        dfs(r);
+    };
+
+    std::ranges::for_each(nodes, dfs);
 }

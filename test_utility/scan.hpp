@@ -8,6 +8,7 @@
 
 #include "concept/is_specialization.hpp"
 #include "force_inline.hpp"
+#include "leet_code_binary_tree.hpp"
 
 struct DefaultScannerOptions
 {
@@ -81,6 +82,39 @@ do_scan(const Options& opts, std::string_view s, size_t start, T& result)
     std::string_view x;
     size_t i = do_scan(opts, s, start, x);
     result = x;
+    return i;
+}
+
+template <typename Options, is_specialization<std::optional> T>
+[[nodiscard]] constexpr size_t
+do_scan(const Options& opts, std::string_view s, size_t start, T& result)
+{
+    size_t i = skip_whitespaces(opts, s, start);
+    if (s.substr(i).starts_with("null"))
+    {
+        i += 4;
+        result = std::nullopt;
+    }
+    else
+    {
+        using V = T::value_type;
+        result = V{};
+        i = do_scan(opts, s, i, *result);
+    }
+
+    return i;
+}
+
+template <typename Options, is_specialization<LeetCodeBinaryTree> T>
+[[nodiscard]] constexpr size_t
+do_scan(const Options& opts, std::string_view s, size_t start, T& r)
+{
+    using NodeType = T::NodeType;
+    using ValueType = decltype(NodeType{}.val);
+    using Elem = std::optional<ValueType>;
+    std::vector<Elem> vals;
+    size_t i = do_scan(opts, s, start, vals);
+    r = T::FromArray(vals);
     return i;
 }
 
