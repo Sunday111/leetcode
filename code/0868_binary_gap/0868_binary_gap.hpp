@@ -11,7 +11,7 @@ public:
     [[nodiscard]] static constexpr u8 removeLastBit(T& x) noexcept
     {
         auto i = rightmost_one(x);
-        x = clearBit(x, i);
+        x = clear_bit(x, i);
         return i;
     }
 
