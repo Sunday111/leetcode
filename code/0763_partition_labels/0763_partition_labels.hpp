@@ -1,48 +1,37 @@
 #include <string>
 #include <vector>
 
+#include "bit_manipultaion/clear_bit.hpp"
 #include "integral_aliases.hpp"
 
 class Solution
 {
 public:
-    struct Cnt
+    constexpr auto partitionLabels(const std::string& s) noexcept
     {
-        void add(char c) noexcept
-        {
-            u8 i = (c - 'a') & 31;
-            bits |= (1u << i);
-            ++freq[i];
-            ++size;
-        }
-
-        void remove(char c) noexcept
-        {
-            u8 i = (c - 'a') & 31;
-            --freq[i];
-            bits &= ~(u32{!freq[i]} << i);
-            --size;
-        }
-
-        u32 bits = 0;
-        u16 freq[26]{};
-        u16 size = 0;
-    };
-
-    auto partitionLabels(const std::string& s)
-    {
-        Cnt left{}, right{};
-
-        for (char c : s) right.add(c);
-
+        u32 lb = 0, rb = 0;
+        u16 n = 0, freq[26]{};
         std::vector<int> r;
+
         for (char c : s)
         {
-            right.remove(c);
-            left.add(c);
-            if (left.bits & right.bits) continue;
-            r.emplace_back(left.size);
-            left = {};
+            u8 i = (c - 'a') & 31;
+            rb |= (1u << i);
+            ++freq[i];
+        }
+
+        for (char c : s)
+        {
+            u8 i = (c - 'a') & 31;
+
+            rb = clear_bit(rb, i, !--freq[i]);
+            lb |= (1u << i);
+            ++n;
+
+            if (lb & rb) continue;
+            r.emplace_back(n);
+            lb = 0;
+            n = 0;
         }
 
         return r;

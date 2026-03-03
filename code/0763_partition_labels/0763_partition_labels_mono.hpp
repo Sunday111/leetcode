@@ -1,4 +1,4 @@
-#include <algorithm>
+#include <concepts>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -6,59 +6,51 @@
 
 
 
+
+#define FORCE_INLINE inline __attribute__((always_inline))
+#define INLINE_LAMBDA __attribute__((always_inline))
+
+
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
 using u64 = uint64_t;
 
+template <std::unsigned_integral T>
+[[nodiscard]] FORCE_INLINE static constexpr T
+clear_bit(T x, u8 i, bool condition = true) noexcept
+{
+    return x & ~(T{condition} << i);
+}
+
 class Solution
 {
 public:
-    struct Cnt
+    constexpr auto partitionLabels(const std::string& s) noexcept
     {
-        void add(char c) noexcept
+        u32 lb = 0, rb = 0;
+        u16 n = 0, freq[26]{};
+        std::vector<int> r;
+
+        for (char c : s)
         {
             u8 i = (c - 'a') & 31;
-            bits |= (1u << i);
+            rb |= (1u << i);
             ++freq[i];
         }
 
-        void remove(char c) noexcept
-        {
-            u8 i = (c - 'a') & 31;
-            --freq[i];
-            bits &= ~(u32{!freq[i]} << i);
-        }
-
-        [[nodiscard]] u16 size() const noexcept
-        {
-            return std::ranges::fold_left(freq, u16{}, std::plus<u16>{});
-        }
-
-        void clear() noexcept
-        {
-            bits = 0;
-            std::ranges::fill(freq, 0);
-        }
-
-        u32 bits = 0;
-        u16 freq[26]{};
-    };
-
-    auto partitionLabels(const std::string& s)
-    {
-        Cnt left{}, right{};
-
-        for (char c : s) right.add(c);
-
-        std::vector<int> r;
         for (char c : s)
         {
-            right.remove(c);
-            left.add(c);
-            if (left.bits & right.bits) continue;
-            r.emplace_back(left.size());
-            left.clear();
+            u8 i = (c - 'a') & 31;
+
+            rb = clear_bit(rb, i, !--freq[i]);
+            lb |= (1u << i);
+            ++n;
+
+            if (lb & rb) continue;
+            r.emplace_back(n);
+            lb = 0;
+            n = 0;
         }
 
         return r;
