@@ -60,8 +60,7 @@ constexpr void scan_expect(
     }
 }
 
-template <typename Options, typename T>
-    requires(std::same_as<std::string_view, T>)
+template <typename Options, std::same_as<std::string_view> T>
 [[nodiscard]] constexpr size_t
 do_scan(const Options& opts, std::string_view s, size_t start, T& result)
 {
@@ -74,8 +73,29 @@ do_scan(const Options& opts, std::string_view s, size_t start, T& result)
     return i + 1;
 }
 
-template <typename Options, typename T>
-    requires(std::same_as<std::string, T>)
+template <typename Options, std::same_as<bool> T>
+[[nodiscard]] constexpr size_t
+do_scan(const Options& opts, std::string_view s, size_t start, T& r)
+{
+    size_t i = skip_whitespaces(opts, s, start);
+    constexpr std::string_view kTrue = "true", kFalse = "false";
+    auto sub = s.substr(i);
+    if (sub.starts_with(kTrue))
+    {
+        r = true;
+        return i + kTrue.size();
+    }
+
+    if (sub.starts_with(kFalse))
+    {
+        r = false;
+        return i + kFalse.size();
+    }
+
+    throw std::runtime_error(std::format("Expected true or false at {}", i));
+}
+
+template <typename Options, std::same_as<std::string> T>
 [[nodiscard]] constexpr size_t
 do_scan(const Options& opts, std::string_view s, size_t start, T& result)
 {
@@ -119,6 +139,7 @@ do_scan(const Options& opts, std::string_view s, size_t start, T& r)
 }
 
 template <typename Options, std::integral T>
+    requires(!std::same_as<T, bool>)  // Break ambiguity with boolean parser
 [[nodiscard]] constexpr size_t
 do_scan(const Options& opts, std::string_view s, size_t start, T& result)
 {
