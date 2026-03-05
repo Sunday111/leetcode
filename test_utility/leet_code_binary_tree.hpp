@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <format>
 #include <optional>
 #include <queue>
 #include <span>
@@ -179,6 +180,38 @@ struct LeetCodeBinaryTree
         while (r.size() && !r.back()) r.pop_back();
 
         return r;
+    }
+
+    [[nodiscard]] constexpr static auto ToString(
+        const std::vector<std::optional<NodeValue>> a) noexcept
+    {
+        std::string r;
+
+        r += '[';
+
+        for (size_t i = 0; i != a.size(); ++i)
+        {
+            if (i) r += ',';
+            auto& v = a[i];
+            if (v)
+            {
+                std::format_to(std::back_inserter(r), "{}", *v);
+            }
+            else
+            {
+                r += "null";
+            }
+        }
+
+        r += ']';
+
+        return r;
+    }
+
+    [[nodiscard]] constexpr static auto ToString(TNode* root) noexcept
+    {
+        auto a = ToArray(root);
+        return ToString(a);
     }
 };
 
