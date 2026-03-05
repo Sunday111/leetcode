@@ -10,6 +10,9 @@
 
 
 
+#define FORCE_INLINE inline __attribute__((always_inline))
+#define INLINE_LAMBDA __attribute__((always_inline))
+
 #ifdef LC_LOCAL_BUILD
 
 struct TreeNode
@@ -32,9 +35,6 @@ struct TreeNode
 
 
 
-
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
 
 template <typename To>
 inline static constexpr auto cast = []<typename From>(From&& v) INLINE_LAMBDA
@@ -102,10 +102,18 @@ public:
         return offsets;
     }();
 
-    constexpr PyramidBitset(size_t size = capacity) noexcept  // NOLINT
+    // NOLINTNEXTLINE
+    constexpr PyramidBitset(size_t size = capacity, bool v = false) noexcept
     {
         assert(size <= capacity);
-        initialize(size);
+        if (v)
+        {
+            initialize<true>(size);
+        }
+        else
+        {
+            initialize<false>(size);
+        }
     }
 
     template <bool v>
@@ -185,20 +193,22 @@ public:
         return words[offsets[kNumLayers - 1]] == 0;
     }
 
+    template <bool v = false>
     FORCE_INLINE constexpr void initialize(size_t end = capacity) noexcept
     {
         [&]<size_t... layer>(std::index_sequence<layer...>) INLINE_LAMBDA
         {
-            ((init_layer<layer>(end)), ...);
+            ((init_layer<layer, v>(end)), ...);
         }(std::make_index_sequence<kNumLayers>());
     }
 
 private:
-    template <size_t layer>
+    template <size_t layer, bool v>
     FORCE_INLINE constexpr void init_layer(size_t& x) noexcept
     {
+        constexpr auto val = v ? ~Word{} : Word{};
         x = ceil_div<size_t>(x, kWordSize);
-        std::fill_n(std::next(words.begin(), offsets[layer]), x, 0);
+        std::fill_n(std::next(words.begin(), offsets[layer]), x, val);
     }
 
     template <size_t layer>
@@ -241,55 +251,32 @@ private:
 class Solution
 {
 public:
-    struct NodeInfo
-    {
-        TreeNode node{};
-        bool is_root = true;
-    };
-
     [[nodiscard]] TreeNode* createBinaryTree(
         const std::vector<std::vector<int>>& descriptions)
     {
-        static NodeInfo nodes[100001];
+        static TreeNode nodes[100001];
+        PyramidBitset<100001> initialized, roots;
 
-        PyramidBitset<100001> used;
-
-        auto get_node = [&](u32 id) -> NodeInfo&
+        auto get_node = [&](u32 id) INLINE_LAMBDA -> TreeNode&
         {
             auto& x = nodes[id];
-            if (!used.get(id))
+            if (!initialized.get(id))
             {
-                used.add(id);
-                x.node = TreeNode{static_cast<int>(id)};
-                x.is_root = true;
+                initialized.add(id);
+                roots.add(id);
+                x = TreeNode{static_cast<int>(id)};
             }
             return x;
         };
 
         for (auto& descr : descriptions)
         {
-            u32 parent_id = static_cast<u32>(descr[0]);
-            u32 child_id = static_cast<u32>(descr[1]);
-            bool is_left = descr[2];
-
-            auto& parent_info = get_node(parent_id);
-            auto& parent = parent_info.node;
-            auto& child_info = get_node(child_id);
-            auto& child = child_info.node;
-
-            *(is_left ? &parent.left : &parent.right) = &child;
-
-            child_info.is_root = false;
+            u32 pid = cast<u32>(descr[0]), cid = cast<u32>(descr[1]);
+            auto& parent = get_node(pid);
+            *(descr[2] ? &parent.left : &parent.right) = &get_node(cid);
+            roots.remove(cid);
         }
 
-        while (true)
-        {
-            u32 id = used.min();
-            auto& x = nodes[id];
-            if (x.is_root) return &x.node;
-            used.remove(id);
-        }
-
-        std::unreachable();
+        return &nodes[roots.min()];
     }
 };
