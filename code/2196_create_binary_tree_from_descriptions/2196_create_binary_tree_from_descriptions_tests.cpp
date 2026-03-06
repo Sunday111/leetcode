@@ -1,29 +1,9 @@
 #include "2196_create_binary_tree_from_descriptionstest_cases.hpp"
 #include "gtest/gtest.h"
 #include "leet_code_binary_tree.hpp"
-#include "scan.hpp"
-#include "template/signature.hpp"
-#include "template/tuple_remove_ref.hpp"
+#include "test_cases_helpers.hpp"
 
-template <typename T, typename Enabled = void>
-struct ConvertExpectedType
-{
-    using Result = T;
-};
-
-template <BinaryTreeNodeConcept Node>
-struct ConvertExpectedType<Node*, void>
-{
-    using Result = LeetCodeBinaryTree<Node>;
-};
-
-using MethodSignature = Signature<std::decay_t<decltype(kMethodToTest)>>;
-using ResultType = ConvertExpectedType<MethodSignature::Ret>::Result;
-using TestCaseTypes = decltype(std::tuple_cat(
-    tuple_remove_ref<MethodSignature::Args>{},
-    std::tuple<ResultType>{}));
-
-inline static const auto kCases = parse_test_cases<TestCaseTypes>(kTestCases);
+inline static const auto kCases = parse_test_cases<kMethodToTest>(kTestCases);
 
 class t2196_create_binary_tree_from_descriptions
     : public ::testing::TestWithParam<size_t>

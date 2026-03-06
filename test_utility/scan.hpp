@@ -8,7 +8,6 @@
 
 #include "concept/is_specialization.hpp"
 #include "force_inline.hpp"
-#include "leet_code_binary_tree.hpp"
 
 struct DefaultScannerOptions
 {
@@ -122,19 +121,6 @@ do_scan(const Options& opts, std::string_view s, size_t start, T& result)
         i = do_scan(opts, s, i, *result);
     }
 
-    return i;
-}
-
-template <typename Options, is_specialization<LeetCodeBinaryTree> T>
-[[nodiscard]] constexpr size_t
-do_scan(const Options& opts, std::string_view s, size_t start, T& r)
-{
-    using NodeType = T::NodeType;
-    using ValueType = decltype(NodeType{}.val);
-    using Elem = std::optional<ValueType>;
-    std::vector<Elem> vals;
-    size_t i = do_scan(opts, s, start, vals);
-    r = T::FromArray(vals);
     return i;
 }
 
@@ -262,26 +248,3 @@ template <size_t k, is_specialization<std::tuple> T>
 template <is_specialization<std::tuple> T, size_t k>
 using tuple_head =
     std::remove_reference_t<decltype(std::get<0>(tuple_split<k>(T{})))>;
-
-template <
-    is_specialization<std::tuple> Types,
-    typename Options = DefaultScannerOptions>
-[[nodiscard]] auto parse_test_cases(
-    std::string_view s,
-    const Options& opts = Options{})
-{
-    constexpr auto n = std::tuple_size_v<Types>;
-    static_assert(n > 1, "Expect at least one input and one output");
-    using Inputs = tuple_head<Types, n - 1>;
-    using Result = std::tuple_element_t<n - 1, Types>;
-    std::vector<std::tuple<Inputs, Result>> r;
-
-    size_t i = skip_whitespaces(opts, s, 0);
-    while (i < s.size())
-    {
-        i = do_scan(opts, s, i, r.emplace_back());
-        i = skip_whitespaces(opts, s, i);
-    }
-
-    return r;
-}

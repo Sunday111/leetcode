@@ -1,22 +1,18 @@
 #include "1784_check_if_binary_string_has_at_most_one_segment_of_onestest_cases.hpp"
 #include "gtest/gtest.h"
-#include "scan.hpp"
-#include "template/signature.hpp"
-#include "template/tuple_remove_ref.hpp"
+#include "test_cases_helpers.hpp"
 
-using MethodSignature = Signature<std::decay_t<decltype(kMethodToTest)>>;
-using TestCaseTypes = decltype(std::tuple_cat(
-    tuple_remove_ref<MethodSignature::Args>{},
-    std::tuple<MethodSignature::Ret>{}));
+inline static const auto kCases = parse_test_cases<kMethodToTest>(kTestCases);
 
-inline static const auto kCases = parse_test_cases<TestCaseTypes>(kTestCases);
-
-class t1784_check_if_binary_string_has_at_most_one_segment_of_ones : public ::testing::TestWithParam<size_t>
+class t1784_check_if_binary_string_has_at_most_one_segment_of_ones
+    : public ::testing::TestWithParam<size_t>
 {
 public:
 };
 
-TEST_P(t1784_check_if_binary_string_has_at_most_one_segment_of_ones, MinOperations)
+TEST_P(
+    t1784_check_if_binary_string_has_at_most_one_segment_of_ones,
+    MinOperations)
 {
     auto [inputs, expected] = kCases[GetParam()];
     Solution instance{};

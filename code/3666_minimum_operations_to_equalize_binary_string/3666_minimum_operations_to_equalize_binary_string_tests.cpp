@@ -2,12 +2,11 @@
 
 #include "3666_minimum_operations_to_equalize_binary_string.hpp"
 #include "gtest/gtest.h"
-#include "scan.hpp"
 #include "test_cases.hpp"
+#include "test_cases_helpers.hpp"
 
-// NOLINTNEXTLINE
-static const auto kCases =
-    parse_test_cases<std::tuple<std::string, u32, int>>(kTestCases);
+inline static const auto kCases =
+    parse_test_cases<&Solution::minOperations>(kTestCases);
 
 class T3666Test : public ::testing::TestWithParam<size_t>
 {

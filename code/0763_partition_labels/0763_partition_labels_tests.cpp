@@ -1,15 +1,8 @@
 #include "0763_partition_labelstest_cases.hpp"
 #include "gtest/gtest.h"
-#include "scan.hpp"
-#include "template/signature.hpp"
-#include "template/tuple_remove_ref.hpp"
+#include "test_cases_helpers.hpp"
 
-using MethodSignature = Signature<std::decay_t<decltype(kMethodToTest)>>;
-using TestCaseTypes = decltype(std::tuple_cat(
-    tuple_remove_ref<MethodSignature::Args>{},
-    std::tuple<MethodSignature::Ret>{}));
-
-inline static const auto kCases = parse_test_cases<TestCaseTypes>(kTestCases);
+inline static const auto kCases = parse_test_cases<kMethodToTest>(kTestCases);
 
 class t0763_partition_labels : public ::testing::TestWithParam<size_t>
 {

@@ -7,6 +7,7 @@
 #include <ranges>
 #include <span>
 
+#include "convert_expected_type.hpp"  // IWYU pragma: export
 #include "parse_2d_array.hpp"
 
 template <typename T>
@@ -24,6 +25,9 @@ concept ListNodeConcept = requires(T a, int x) {
 template <ListNodeConcept TNode>
 struct LeetCodeList
 {
+    using NodeType = TNode;
+    using ValueType = decltype(NodeType{}.val);
+
     std::deque<TNode> nodes;
     TNode* head = nullptr;
 
@@ -95,4 +99,20 @@ template <ListNodeConcept TNode, typename V>
 {
     while (head && head->val != value) head = head->next;
     return head;
+}
+
+template <ListNodeConcept Node>
+struct ConvertExpectedType<Node*, void>
+{
+    using Result = LeetCodeList<Node>;
+};
+
+template <typename Options, is_specialization<LeetCodeList> T>
+[[nodiscard]] constexpr size_t
+do_scan(const Options& opts, std::string_view s, size_t start, T& r)
+{
+    std::vector<typename T::ValueType> vals;
+    size_t i = do_scan(opts, s, start, vals);
+    r = T::FromArray(std::span{vals});
+    return i;
 }

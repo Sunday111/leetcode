@@ -10,6 +10,8 @@
 #include <unordered_set>
 
 #include "cast.hpp"
+#include "convert_expected_type.hpp"
+#include "scan.hpp"
 
 template <typename T>
 concept BinaryTreeNodeConcept = requires(T a, int x) {
@@ -241,4 +243,23 @@ void DeleteBinaryTreesWithSharedNodes(std::span<TNode*> nodes)
     };
 
     std::ranges::for_each(nodes, dfs);
+}
+
+template <BinaryTreeNodeConcept Node>
+struct ConvertExpectedType<Node*, void>
+{
+    using Result = LeetCodeBinaryTree<Node>;
+};
+
+template <typename Options, is_specialization<LeetCodeBinaryTree> T>
+[[nodiscard]] constexpr size_t
+do_scan(const Options& opts, std::string_view s, size_t start, T& r)
+{
+    using NodeType = T::NodeType;
+    using ValueType = decltype(NodeType{}.val);
+    using Elem = std::optional<ValueType>;
+    std::vector<Elem> vals;
+    size_t i = do_scan(opts, s, start, vals);
+    r = T::FromArray(vals);
+    return i;
 }

@@ -1,17 +1,11 @@
 #include "1605_find_valid_matrix_given_row_and_column_sumstest_cases.hpp"
 #include "gtest/gtest.h"
-#include "scan.hpp"
-#include "template/signature.hpp"
-#include "template/tuple_remove_ref.hpp"
+#include "test_cases_helpers.hpp"
 
-using MethodSignature = Signature<std::decay_t<decltype(kMethodToTest)>>;
-using TestCaseTypes = decltype(std::tuple_cat(
-    tuple_remove_ref<MethodSignature::Args>{},
-    std::tuple<MethodSignature::Ret>{}));
+inline static const auto kCases = parse_test_cases<kMethodToTest>(kTestCases);
 
-inline static const auto kCases = parse_test_cases<TestCaseTypes>(kTestCases);
-
-class t1605_find_valid_matrix_given_row_and_column_sums : public ::testing::TestWithParam<size_t>
+class t1605_find_valid_matrix_given_row_and_column_sums
+    : public ::testing::TestWithParam<size_t>
 {
 public:
 };
