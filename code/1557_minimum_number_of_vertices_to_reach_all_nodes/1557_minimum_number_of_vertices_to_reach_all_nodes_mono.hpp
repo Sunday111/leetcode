@@ -1,15 +1,66 @@
-#pragma once
-
 #include <array>
 #include <bit>
 #include <cassert>
+#include <concepts>
+#include <cstdint>
 #include <numeric>
+#include <type_traits>
+#include <utility>
+#include <vector>
 
-#include "cast.hpp"
-#include "ceil_div.hpp"
-#include "empty.hpp"
-#include "full.hpp"
-#include "uint_for_value.hpp"
+
+
+
+using u8 = uint8_t;
+using u16 = uint16_t;
+using u32 = uint32_t;
+using u64 = uint64_t;
+
+
+
+
+
+#define FORCE_INLINE inline __attribute__((always_inline))
+#define INLINE_LAMBDA __attribute__((always_inline))
+
+template <typename To>
+inline static constexpr auto cast = []<typename From>(From&& v) INLINE_LAMBDA
+{
+    return static_cast<To>(std::forward<From>(v));
+};
+
+
+
+template <std::integral T>
+[[nodiscard]] FORCE_INLINE static constexpr T ceil_div(
+    T a,
+    std::type_identity_t<T> b) noexcept
+{
+    return (a + (b - 1)) / b;
+}
+
+struct EmptyType
+{
+};
+
+inline static constexpr EmptyType kEmpty{};
+
+struct FullType
+{
+};
+
+inline static constexpr FullType kFull{};
+
+
+
+template <u64 value>
+using UintForValue = std::conditional_t < value < (1 << 8),
+      u8,
+      std::conditional_t <
+          value<
+              (1 << 16),
+              u16,
+              std::conditional_t<value<(1UL << 32), u32, u64>>>;
 
 template <size_t capacity, typename Word = u64>
 class PyramidBitset
@@ -205,5 +256,34 @@ private:
         u8 bi = kMask - std::countl_zero(words[offsets[layer] + wi]) & 0xFF;
         ValueType x = cast<ValueType>(wi << kShift) | cast<ValueType>(bi);
         wi = x;
+    }
+};
+
+class Solution
+{
+public:
+    [[nodiscard]] auto findSmallestSetOfVertices(
+        const u32 n,
+        const std::vector<std::vector<int>>& edges)
+    {
+        static PyramidBitset<100'001> is_root;
+        is_root.initialize(kFull, n + 1);
+
+        for (auto& e : edges)
+        {
+            is_root.remove(cast<u32>(e[1]));
+        }
+
+        std::vector<int> r;
+
+        while (true)
+        {
+            auto i = is_root.min();
+            if (i >= n) break;
+            r.emplace_back(static_cast<int>(i));
+            is_root.remove(i);
+        }
+
+        return r;
     }
 };

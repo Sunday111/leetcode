@@ -43,7 +43,7 @@ TYPED_TEST(PyramidBitsetTypedFuzzyTest, Fuzzy)
     {
         const u32 size = size_distr(rnd);
         std::uniform_int_distribution<u32> value_distr(0, size - 1);
-        bs.initialize(capacity);
+        bs.initialize(kEmpty, capacity);
         std_set.clear();
 
         for (u32 i = 0; i != 3 * size; ++i)

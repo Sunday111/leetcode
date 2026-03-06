@@ -72,7 +72,7 @@ public:
         static std::array<PyramidBitset<256>, 200> bitsets{};
         for (u8 i = 0; i != num_unique_tokens; ++i)
         {
-            bitsets[i].initialize(num_unique_tokens);
+            bitsets[i].initialize(kEmpty, num_unique_tokens);
         }
 
         for (u32 i = 0; i != original.size(); ++i)
