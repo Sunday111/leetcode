@@ -15,15 +15,8 @@ struct TestMethodInfo
     using S = ::Signature<std::decay_t<decltype(method)>>;
     using Args = typename S::Args;
     using ReturnType = typename S::Ret;
-
-    using Inputs = tuple_map<
-        tuple_map<Args, std::remove_reference_t>,
-        convert_expected_type_t>;
-
-    using Result = tuple_map<
-        tuple_map<std::tuple<ReturnType>, std::remove_reference_t>,
-        convert_expected_type_t>;
-
+    using Inputs = tuple_map<Args, convert_expected_type_t>;
+    using Result = std::tuple<convert_expected_type_t<ReturnType>>;
     using TestCaseTypes = decltype(std::tuple_cat(Inputs{}, Result{}));
 };
 
