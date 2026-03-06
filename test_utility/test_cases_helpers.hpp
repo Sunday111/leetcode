@@ -6,6 +6,7 @@
 #include "convert_expected_type.hpp"
 #include "scan.hpp"
 #include "template/signature.hpp"
+#include "template/tuple_head.hpp"
 #include "template/tuple_map.hpp"
 
 template <auto method>

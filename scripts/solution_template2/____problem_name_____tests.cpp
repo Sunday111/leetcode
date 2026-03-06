@@ -1,15 +1,5 @@
 #include "____problem_name____test_cases.hpp"
 #include "gtest/gtest.h"
-#include "scan.hpp"
-#include "template/signature.hpp"
-#include "template/tuple_remove_ref.hpp"
-
-using MethodSignature = Signature<std::decay_t<decltype(kMethodToTest)>>;
-using TestCaseTypes = decltype(std::tuple_cat(
-    tuple_remove_ref<MethodSignature::Args>{},
-    std::tuple<MethodSignature::Ret>{}));
-
-inline static const auto kCases = parse_test_cases<TestCaseTypes>(kTestCases);
 
 class t____problem_name____ : public ::testing::TestWithParam<size_t>
 {

@@ -1,8 +1,5 @@
 #include "0763_partition_labelstest_cases.hpp"
 #include "gtest/gtest.h"
-#include "test_cases_helpers.hpp"
-
-inline static const auto kCases = parse_test_cases<kMethodToTest>(kTestCases);
 
 class t0763_partition_labels : public ::testing::TestWithParam<size_t>
 {

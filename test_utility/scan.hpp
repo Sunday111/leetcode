@@ -226,25 +226,3 @@ do_scan(const Options& opts, std::string_view s, size_t start, T& result)
 
     return i;
 }
-
-template <size_t k, is_specialization<std::tuple> T>
-[[nodiscard]] constexpr auto tuple_split(T&& x) noexcept
-{
-    constexpr auto n = std::tuple_size_v<T>;
-    static_assert(k <= n);
-
-    return std::make_tuple(
-        [&]<size_t... indices>(std::index_sequence<indices...>)
-        {
-            return std::make_tuple(std::get<indices>(std::forward<T>(x))...);
-        }(std::make_index_sequence<k>()),
-        [&]<size_t... indices>(std::index_sequence<indices...>)
-        {
-            return std::make_tuple(
-                std::get<k + indices>(std::forward<T>(x))...);
-        }(std::make_index_sequence<n - k>()));
-}
-
-template <is_specialization<std::tuple> T, size_t k>
-using tuple_head =
-    std::remove_reference_t<decltype(std::get<0>(tuple_split<k>(T{})))>;
