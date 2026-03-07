@@ -159,23 +159,19 @@ end, {
 })
 
 vim.api.nvim_create_user_command("CreateSolution2", function(opts)
-    -- Normalize project name
-    local name = normalize_name(table.concat(opts.fargs, " "))
+    local raw_name = table.concat(opts.fargs, " ")
+    local cmd = { automation_script_path, 'create2', '--name', raw_name }
 
-    -- Path to created header
-    local header_path = root .. "/code/" .. name .. "/" .. name .. ".hpp"
+    local stdout_lines = {}
 
-    -- The command
-    local cmd = { automation_script_path, 'create2', '--name', name }
-
-    -- Execute
     vim.fn.jobstart(cmd, {
         stdout_buffered = true,
         stderr_buffered = true,
 
         on_stdout = function(_, data)
-            if data and #data > 0 then
-                vim.notify(table.concat(data, "\n"))
+            if not data then return end
+            for _, line in ipairs(data) do
+                if line ~= "" then table.insert(stdout_lines, line) end
             end
         end,
 
@@ -186,14 +182,102 @@ vim.api.nvim_create_user_command("CreateSolution2", function(opts)
         end,
 
         on_exit = function(_, code)
-            if code == 0 then
-                -- Open the created file on the main thread
-                vim.schedule(function()
-                    vim.cmd("edit " .. vim.fn.fnameescape(header_path))
-                end)
-            else
-                vim.notify("CreateSolution failed", vim.log.levels.ERROR)
+            if code ~= 0 then
+                vim.notify("CreateSolution2 failed", vim.log.levels.ERROR)
+                return
             end
+
+            local project_dir = nil
+            if #stdout_lines > 0 then
+                project_dir = stdout_lines[#stdout_lines]:match("^%s*(.-)%s*$")
+            end
+
+            if not project_dir or project_dir == "" then
+                vim.notify("CreateSolution2: no project directory printed by script", vim.log.levels.ERROR)
+                return
+            end
+
+            local meta_file = project_dir .. "/project.json"
+            if vim.fn.filereadable(meta_file) == 0 then
+                vim.notify("CreateSolution2: project.json not found: " .. meta_file, vim.log.levels.ERROR)
+                return
+            end
+
+            local lines = vim.fn.readfile(meta_file)
+            local ok, obj = pcall(vim.fn.json_decode, table.concat(lines, "\n"))
+            if not ok or not obj or not obj["path_to_solution_header"] then
+                vim.notify("CreateSolution2: invalid project.json", vim.log.levels.ERROR)
+                return
+            end
+
+            local file_to_open = obj["path_to_solution_header"]
+
+            vim.schedule(function()
+                vim.cmd("edit " .. vim.fn.fnameescape(file_to_open))
+            end)
+        end,
+    })
+end, {
+    nargs = 1
+})
+
+vim.api.nvim_create_user_command("CreateLeetcodeSolution", function(opts)
+    local raw_name = table.concat(opts.fargs, " ")
+    local cmd = { automation_script_path, 'create_leetcode', '--name', raw_name }
+
+    local stdout_lines = {}
+
+    vim.fn.jobstart(cmd, {
+        stdout_buffered = true,
+        stderr_buffered = true,
+
+        on_stdout = function(_, data)
+            if not data then return end
+            for _, line in ipairs(data) do
+                if line ~= "" then table.insert(stdout_lines, line) end
+            end
+        end,
+
+        on_stderr = function(_, data)
+            if data and #data > 0 then
+                vim.notify(table.concat(data, "\n"), vim.log.levels.ERROR)
+            end
+        end,
+
+        on_exit = function(_, code)
+            if code ~= 0 then
+                vim.notify("CreateLeetcodeSolution failed", vim.log.levels.ERROR)
+                return
+            end
+
+            local project_dir = nil
+            if #stdout_lines > 0 then
+                project_dir = stdout_lines[#stdout_lines]:match("^%s*(.-)%s*$")
+            end
+
+            if not project_dir or project_dir == "" then
+                vim.notify("CreateLeetcodeSolution: no project directory printed by script", vim.log.levels.ERROR)
+                return
+            end
+
+            local meta_file = project_dir .. "/metadata.json"
+            if vim.fn.filereadable(meta_file) == 0 then
+                vim.notify("CreateLeetcodeSolution: metadata.json not found: " .. meta_file, vim.log.levels.ERROR)
+                return
+            end
+
+            local lines = vim.fn.readfile(meta_file)
+            local ok, obj = pcall(vim.fn.json_decode, table.concat(lines, "\n"))
+            if not ok or not obj or not obj["path_to_solution_header"] then
+                vim.notify("CreateLeetcodeSolution: invalid metadata.json", vim.log.levels.ERROR)
+                return
+            end
+
+            local file_to_open = obj["path_to_solution_header"]
+
+            vim.schedule(function()
+                vim.cmd("edit " .. vim.fn.fnameescape(file_to_open))
+            end)
         end,
     })
 end, {

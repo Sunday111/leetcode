@@ -3,6 +3,9 @@
 from pathlib import Path
 import shutil
 import argparse
+import re
+import json
+import leetcode_fetch
 
 SCRIPTS_DIR = Path(__file__).parent.resolve()
 ROOT_DIR = SCRIPTS_DIR.parent
@@ -35,10 +38,10 @@ def patch_file(src:Path, dst_dir:Path, variables:dict[str, str]):
 def create_project(name:str, override:bool, template_dir: Path):
     project_root = CODE_DIR / name
 
-    if override:
-        shutil.rmtree(project_root, ignore_errors=True)
-    else:
-        assert not project_root.exists()
+    if not override and project_root.exists() and any(project_root.iterdir()):
+        raise RuntimeError(f'{project_root} exists and not empty')
+
+    shutil.rmtree(project_root, ignore_errors=True)
 
     variables = {
         "____problem_name____": name
@@ -47,6 +50,55 @@ def create_project(name:str, override:bool, template_dir: Path):
         if src_path.is_file():
             dst_dir = (project_root / src_path.relative_to(template_dir)).parent.resolve()
             patch_file(src_path, dst_dir, variables)
+
+    project_root = project_root.resolve()
+    header_path = (project_root / f"{name}.hpp").resolve()
+
+    # Write structured metadata JSON that the editor-side script will read.
+    meta = {
+        "path_to_solution_header": str(header_path)
+    }
+    write_file(project_root / "metadata.json", json.dumps(meta, indent=2))
+
+    # Return the project directory path (script prints this to stdout for the editor)
+    return project_root
+
+
+def create_leetcode_project(project_dir_name: str, problem_name_raw: str, override: bool, template_dir: Path):
+    """
+    project_dir_name: name of folder to create (normalized)
+    problem_name_raw: original problem title provided by user (used for slugging/fetch)
+    """
+    project_root = CODE_DIR / project_dir_name
+
+    if override:
+        shutil.rmtree(project_root, ignore_errors=True)
+    else:
+        if project_root.exists() and any(project_root.iterdir()):
+            raise FileExistsError(f"project already exists: {project_root}")
+
+    project_root.mkdir(parents=True, exist_ok=True)
+
+    header_name = f"{project_dir_name}.hpp"
+    header_path = (project_root / header_name).resolve()
+
+    # Try fetching using the raw problem name first, then try stripping a leading numeric id like "3630. "
+    slug = leetcode_fetch.title_to_slug(problem_name_raw)
+    info = leetcode_fetch.fetch_cpp_template(slug)
+
+    variables = {"____problem_name____": project_dir_name}
+    for src_path in template_dir.rglob("*"):
+        if src_path.is_file():
+            dst_dir = (project_root / src_path.relative_to(template_dir)).parent.resolve()
+            patch_file(src_path, dst_dir, variables)
+
+    if info:
+        header_path.write_text(info)
+
+    meta = {"path_to_solution_header": str(header_path)}
+    write_file(project_root / "metadata.json", json.dumps(meta, indent=2))
+
+    return project_root
 
 
 def update_projects_list():
@@ -132,6 +184,16 @@ def embed_includes(target_file_path: Path):
             result_file.write("\n")
 
 
+def normalize_name(name: str) -> str:
+    """
+    Normalize project name: lowercase, remove non-alnum/space, collapse spaces -> underscore.
+    """
+    name = name.lower()
+    name = re.sub(r'[^0-9a-zA-Z\s]', '', name)
+    name = re.sub(r'\s+', '_', name).strip('_')
+    return name
+
+
 def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest='command')
@@ -140,9 +202,9 @@ def main():
     create_solution.add_argument("--name", type=str, required=True)
     create_solution.add_argument("--override", type=bool, required=False, default=False)
 
-    create_solution2 = subparsers.add_parser('create2')
-    create_solution2.add_argument("--name", type=str, required=True)
-    create_solution2.add_argument("--override", type=bool, required=False, default=False)
+    create_leetcode = subparsers.add_parser('create_leetcode')
+    create_leetcode.add_argument("--name", type=str, required=True)
+    create_leetcode.add_argument("--override", type=bool, required=False, default=False)
 
     update_projects_list_parser = subparsers.add_parser('update_projects_list')
 
@@ -153,10 +215,13 @@ def main():
     command:str = args.command
     match command:
         case 'create':
-            create_project(args.name, args.override, template_dir=SCRIPTS_DIR / 'solution_template')
+            project_dir = create_project(args.name, args.override, template_dir=SCRIPTS_DIR / 'solution_template')
             update_projects_list()
-        case 'create2':
-            create_project(args.name, args.override, template_dir=SCRIPTS_DIR / 'solution_template2')
+        case 'create_leetcode':
+            norm_name = normalize_name(args.name)
+            # pass raw problem name for fetching, use normalized folder name for filesystem
+            project_dir = create_leetcode_project(norm_name, args.name, args.override, template_dir=SCRIPTS_DIR / 'solution_template2')
+            print(str(project_dir))
             update_projects_list()
         case 'update_projects_list':
             update_projects_list()
