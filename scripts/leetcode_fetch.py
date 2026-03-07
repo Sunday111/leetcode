@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import re
 import requests
+import json
+from dataclasses import dataclass
 
 
 GRAPHQL_URL = "https://leetcode.com/graphql"
@@ -18,7 +20,28 @@ def title_to_slug(title: str) -> str:
     return slug
 
 
-def fetch_cpp_template(slug: str) -> str | None:
+def request_all_problems() -> dict:
+    resp = requests.get("https://leetcode.com/api/problems/all/")
+    resp.raise_for_status()
+    return resp.json()
+
+
+def find_problem_by_number(problem_number: int, problems_index: dict) -> str | None:
+    for p in problems_index["stat_status_pairs"]:
+        if p["stat"]["frontend_question_id"] == problem_number:
+            return p
+
+    return None
+
+
+def get_slug_by_number(problem_number: int, problems_index: dict) -> str | None:
+    p = find_problem_by_number(problem_number, problems_index)
+    if p:
+        return p["stat"]["question__title_slug"]
+    return None
+
+
+def cpp_template_by_slug(slug: str) -> str | None:
     query = """
     query questionData($titleSlug: String!) {
       question(titleSlug: $titleSlug) {
@@ -51,19 +74,24 @@ def fetch_cpp_template(slug: str) -> str | None:
     return None
 
 
+def method_name_by_slug(slug: str) -> str | None:
+    template = cpp_template_by_slug(slug)
+    if template:
+        end = template.find("(")
+        assert end != -1
+        begin = end
+        while template[begin] != " ":
+            begin -= 1
+        return template[begin + 1 : end]
+
+
 def main():
-    title = input("Problem title: ").strip()
-
-    slug = title_to_slug(title)
-    print("Slug:", slug)
-
-    code = fetch_cpp_template(slug)
-
-    if code:
-        print("\n--- C++ Template ---\n")
-        print(code)
-    else:
-        print("C++ template not found.")
+    # code = fetch_cpp_template(slug)
+    number = int(input("Problem number: "))
+    index = request_all_problems()
+    problem = get_slug_by_number(number, index)
+    method_name = method_name_by_slug(problem)
+    print(f"Method name: {method_name}")
 
 
 if __name__ == "__main__":

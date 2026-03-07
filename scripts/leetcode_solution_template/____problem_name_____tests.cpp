@@ -6,7 +6,7 @@ class t____problem_name____ : public ::testing::TestWithParam<size_t>
 public:
 };
 
-TEST_P(t____problem_name____, MinOperations)
+TEST_P(t____problem_name____, Test)
 {
     auto [inputs, expected] = kCases[GetParam()];
     Solution instance{};

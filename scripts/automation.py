@@ -10,6 +10,9 @@ import leetcode_fetch
 SCRIPTS_DIR = Path(__file__).parent.resolve()
 ROOT_DIR = SCRIPTS_DIR.parent
 CODE_DIR = ROOT_DIR / 'code'
+CACHE_ROOT = ROOT_DIR / '.cache'
+LEETCODE_CACHE_DIR = CACHE_ROOT / 'leetcode'
+LEETCODE_ALL_PROBLEMS_FILE = LEETCODE_CACHE_DIR / 'all.json'
 
 
 def read_file(p:Path) -> str:
@@ -54,22 +57,23 @@ def create_project(name:str, override:bool, template_dir: Path):
     project_root = project_root.resolve()
     header_path = (project_root / f"{name}.hpp").resolve()
 
-    # Write structured metadata JSON that the editor-side script will read.
     meta = {
-        "path_to_solution_header": str(header_path)
+        "path_to_solution_header": (header_path.relative_to(project_root)).as_posix()
     }
     write_file(project_root / "metadata.json", json.dumps(meta, indent=2))
 
-    # Return the project directory path (script prints this to stdout for the editor)
     return project_root
 
 
-def create_leetcode_project(project_dir_name: str, problem_name_raw: str, override: bool, template_dir: Path):
+def create_leetcode_project(all_problems:dict, problem_number: int, override: bool, template_dir: Path):
     """
     project_dir_name: name of folder to create (normalized)
     problem_name_raw: original problem title provided by user (used for slugging/fetch)
     """
-    project_root = CODE_DIR / project_dir_name
+    slug = leetcode_fetch.get_slug_by_number(problem_number, all_problems)
+    assert slug
+
+    project_root = CODE_DIR / str(problem_number)
 
     if override:
         shutil.rmtree(project_root, ignore_errors=True)
@@ -79,24 +83,26 @@ def create_leetcode_project(project_dir_name: str, problem_name_raw: str, overri
 
     project_root.mkdir(parents=True, exist_ok=True)
 
-    header_name = f"{project_dir_name}.hpp"
+    header_name = f"{problem_number}.hpp"
     header_path = (project_root / header_name).resolve()
 
     # Try fetching using the raw problem name first, then try stripping a leading numeric id like "3630. "
-    slug = leetcode_fetch.title_to_slug(problem_name_raw)
-    info = leetcode_fetch.fetch_cpp_template(slug)
+    info = leetcode_fetch.cpp_template_by_slug(slug)
+    assert info
 
-    variables = {"____problem_name____": project_dir_name}
+    variables = {
+        "____problem_name____": str(problem_number),
+        "____method_name____": leetcode_fetch.method_name_by_slug(slug),
+    }
     for src_path in template_dir.rglob("*"):
         if src_path.is_file():
             dst_dir = (project_root / src_path.relative_to(template_dir)).parent.resolve()
             patch_file(src_path, dst_dir, variables)
 
-    if info:
-        header_path.write_text(info)
+    header_path.write_text(info)
 
-    meta = {"path_to_solution_header": str(header_path)}
-    write_file(project_root / "metadata.json", json.dumps(meta, indent=2))
+    meta = {"path_to_solution_header": (header_path.relative_to(project_root)).as_posix(),}
+    write_file(project_root / f"{problem_number}.json", json.dumps(meta, indent=2))
 
     return project_root
 
@@ -108,7 +114,7 @@ def update_projects_list():
     with open(file=projects_list_file, mode='wt', encoding='utf-8') as f:
         f.write('cmake_minimum_required(VERSION 3.25)\n\n')
         for path in sorted(CODE_DIR.glob('*')):
-            if path.is_dir():
+            if path.is_dir() and any(path.iterdir()):
                 f.write(f'add_subdirectory({path.name})\n')
 
 
@@ -184,6 +190,16 @@ def embed_includes(target_file_path: Path):
             result_file.write("\n")
 
 
+def leetcode_get_all_problems() -> dict:
+    p = LEETCODE_ALL_PROBLEMS_FILE
+    if not p.is_file():
+        p.parent.mkdir(parents=True, exist_ok=True)
+        data = leetcode_fetch.request_all_problems()
+        p.write_text(json.dumps(data, indent=2))
+    
+    return json.loads(p.read_bytes())
+
+
 def normalize_name(name: str) -> str:
     """
     Normalize project name: lowercase, remove non-alnum/space, collapse spaces -> underscore.
@@ -218,9 +234,10 @@ def main():
             project_dir = create_project(args.name, args.override, template_dir=SCRIPTS_DIR / 'solution_template')
             update_projects_list()
         case 'create_leetcode':
-            norm_name = normalize_name(args.name)
-            # pass raw problem name for fetching, use normalized folder name for filesystem
-            project_dir = create_leetcode_project(norm_name, args.name, args.override, template_dir=SCRIPTS_DIR / 'solution_template2')
+            all_problems = leetcode_get_all_problems()
+            project_dir = create_leetcode_project(
+                all_problems,
+                int(args.name), args.override, template_dir=SCRIPTS_DIR / 'leetcode_solution_template')
             print(str(project_dir))
             update_projects_list()
         case 'update_projects_list':

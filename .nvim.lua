@@ -213,8 +213,10 @@ vim.api.nvim_create_user_command("CreateSolution2", function(opts)
             local file_to_open = obj["path_to_solution_header"]
 
             vim.schedule(function()
-                vim.cmd("edit " .. vim.fn.fnameescape(file_to_open))
-            end)
+                -- Construct absolute path from project_dir + relative path
+                local abs_path = project_dir .. "/" .. file_to_open
+                vim.cmd("edit " .. vim.fn.fnameescape(abs_path))
+             end)
         end,
     })
 end, {
@@ -260,24 +262,33 @@ vim.api.nvim_create_user_command("CreateLeetcodeSolution", function(opts)
                 return
             end
 
-            local meta_file = project_dir .. "/metadata.json"
+            -- raw_name is now expected to be just a number
+            local problem_number = raw_name:match("^%s*(%d+)")
+            if not problem_number then
+                vim.notify("CreateLeetcodeSolution: invalid problem number: " .. raw_name, vim.log.levels.ERROR)
+                return
+            end
+
+            local meta_file = project_dir .. "/" .. problem_number .. ".json"
             if vim.fn.filereadable(meta_file) == 0 then
-                vim.notify("CreateLeetcodeSolution: metadata.json not found: " .. meta_file, vim.log.levels.ERROR)
+                vim.notify("CreateLeetcodeSolution: " .. problem_number .. ".json not found: " .. meta_file, vim.log.levels.ERROR)
                 return
             end
 
             local lines = vim.fn.readfile(meta_file)
             local ok, obj = pcall(vim.fn.json_decode, table.concat(lines, "\n"))
             if not ok or not obj or not obj["path_to_solution_header"] then
-                vim.notify("CreateLeetcodeSolution: invalid metadata.json", vim.log.levels.ERROR)
+                vim.notify("CreateLeetcodeSolution: invalid " .. problem_number .. ".json", vim.log.levels.ERROR)
                 return
             end
 
             local file_to_open = obj["path_to_solution_header"]
 
             vim.schedule(function()
-                vim.cmd("edit " .. vim.fn.fnameescape(file_to_open))
-            end)
+                -- Construct absolute path from project_dir + relative path
+                local abs_path = project_dir .. "/" .. file_to_open
+                vim.cmd("edit " .. vim.fn.fnameescape(abs_path))
+             end)
         end,
     })
 end, {
