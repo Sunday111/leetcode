@@ -1,12 +1,12 @@
-#include "____problem_name_____test_cases.hpp"
+#include "3131_test_cases.hpp"
 #include "gtest/gtest.h"
 
-class t____problem_name____ : public ::testing::TestWithParam<size_t>
+class t3131 : public ::testing::TestWithParam<size_t>
 {
 public:
 };
 
-TEST_P(t____problem_name____, Test)
+TEST_P(t3131, Test)
 {
     auto [inputs, expected] = kCases[GetParam()];
     Solution instance{};
@@ -17,7 +17,7 @@ TEST_P(t____problem_name____, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t____problem_name____,
+    t3131,
     ::testing::Range(size_t{0}, kCases.size()),
     [](const testing::TestParamInfo<size_t>& info)
     { return "C" + std::to_string(info.index); });
