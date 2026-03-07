@@ -73,7 +73,7 @@ def create_leetcode_project(all_problems:dict, problem_number: int, override: bo
     slug = leetcode_fetch.get_slug_by_number(problem_number, all_problems)
     assert slug
 
-    project_root = CODE_DIR / str(problem_number)
+    project_root = CODE_DIR / f"{problem_number:04d}"
 
     if override:
         shutil.rmtree(project_root, ignore_errors=True)
@@ -86,20 +86,36 @@ def create_leetcode_project(all_problems:dict, problem_number: int, override: bo
     header_name = f"{problem_number}.hpp"
     header_path = (project_root / header_name).resolve()
 
-    # Try fetching using the raw problem name first, then try stripping a leading numeric id like "3630. "
-    info = leetcode_fetch.cpp_template_by_slug(slug)
-    assert info
+    problem_details = leetcode_fetch.problem_details_by_slug(slug)
+    assert problem_details
+
+    sample_inputs = leetcode_fetch.get_sample_inputs(problem_details)
+    sample_outputs = leetcode_fetch.get_sample_outputs(problem_details)
+
+    def chunk_generator(lst, k):
+        for i in range(0, len(lst), k):
+            yield lst[i:i + k]
+
+    inputs_per_test = len(sample_inputs) // len(sample_outputs)
+    test_data = ""
+    for inputs, output in zip(chunk_generator(sample_inputs, inputs_per_test), sample_outputs):
+        test_data += '\n'.join(inputs)
+        test_data += '\n'
+        test_data += output
+        test_data += '\n\n'
+
 
     variables = {
         "____problem_name____": str(problem_number),
-        "____method_name____": leetcode_fetch.method_name_by_slug(slug),
+        "____method_name____": leetcode_fetch.get_method_name(problem_details),
+        "____test_data____": test_data,
     }
     for src_path in template_dir.rglob("*"):
         if src_path.is_file():
             dst_dir = (project_root / src_path.relative_to(template_dir)).parent.resolve()
             patch_file(src_path, dst_dir, variables)
 
-    header_path.write_text(info)
+    header_path.write_text(leetcode_fetch.get_cpp_template(problem_details))
 
     meta = {"path_to_solution_header": (header_path.relative_to(project_root)).as_posix(),}
     write_file(project_root / f"{problem_number}.json", json.dumps(meta, indent=2))

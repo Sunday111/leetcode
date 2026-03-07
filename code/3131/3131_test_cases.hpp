@@ -17,4 +17,5 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [1,1,1,1]
 0
 
+
 )");

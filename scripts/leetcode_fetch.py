@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import re
+from bs4 import BeautifulSoup
 import requests
 import json
 from dataclasses import dataclass
@@ -41,15 +42,20 @@ def get_slug_by_number(problem_number: int, problems_index: dict) -> str | None:
     return None
 
 
-def cpp_template_by_slug(slug: str) -> str | None:
+def problem_details_by_slug(slug: str) -> dict:
     query = """
     query questionData($titleSlug: String!) {
       question(titleSlug: $titleSlug) {
+        questionId
+        title
         codeSnippets {
           lang
           langSlug
           code
         }
+        exampleTestcases
+        sampleTestCase
+        content
       }
     }
     """
@@ -63,9 +69,11 @@ def cpp_template_by_slug(slug: str) -> str | None:
     )
 
     r.raise_for_status()
-    data = r.json()
+    return r.json()
 
-    snippets = data["data"]["question"]["codeSnippets"]
+
+def get_cpp_template(details: dict) -> str | None:
+    snippets = details["data"]["question"]["codeSnippets"]
 
     for s in snippets:
         if s["langSlug"] == "cpp":
@@ -74,8 +82,8 @@ def cpp_template_by_slug(slug: str) -> str | None:
     return None
 
 
-def method_name_by_slug(slug: str) -> str | None:
-    template = cpp_template_by_slug(slug)
+def get_method_name(details: dict) -> str | None:
+    template = get_cpp_template(details)
     if template:
         end = template.find("(")
         assert end != -1
@@ -85,13 +93,42 @@ def method_name_by_slug(slug: str) -> str | None:
         return template[begin + 1 : end]
 
 
+def get_sample_inputs(problem_details: dict):
+    x: str = problem_details["data"]["question"]["exampleTestcases"]
+    return x.splitlines()
+
+
+def get_sample_outputs(problem_details: dict):
+    soup = BeautifulSoup(problem_details["data"]["question"]["content"], "html.parser")
+
+    outputs = []
+
+    for block in soup.select("div.example-block"):
+        p = block.find("p", string=lambda s: s and "Output:" in s)
+        if not p:
+            # handle the common <strong>Output:</strong> case
+            strong = block.find("strong", string="Output:")
+            if strong:
+                span = strong.find_parent("p").find("span", class_="example-io")
+                if span:
+                    outputs.append(span.text.strip())
+            continue
+
+        span = p.find("span", class_="example-io")
+        if span:
+            outputs.append(span.text.strip())
+
+    return outputs
+
+
 def main():
     # code = fetch_cpp_template(slug)
     number = int(input("Problem number: "))
     index = request_all_problems()
-    problem = get_slug_by_number(number, index)
-    method_name = method_name_by_slug(problem)
-    print(f"Method name: {method_name}")
+    slug = get_slug_by_number(number, index)
+    problem = problem_details_by_slug(slug)
+    print(get_sample_inputs(problem))
+    print(get_sample_outputs(problem))
 
 
 if __name__ == "__main__":
