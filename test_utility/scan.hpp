@@ -5,6 +5,7 @@
 #include <string_view>
 #include <type_traits>
 #include <utility>
+#include <vector>
 
 #include "concept/is_specialization.hpp"
 #include "force_inline.hpp"
