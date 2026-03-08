@@ -89,20 +89,23 @@ def create_leetcode_project(all_problems:dict, problem_number: int, override: bo
     problem_details = leetcode_fetch.problem_details_by_slug(slug)
     assert problem_details
 
-    sample_inputs = leetcode_fetch.get_sample_inputs(problem_details)
-    sample_outputs = leetcode_fetch.get_sample_outputs(problem_details)
-
-    def chunk_generator(lst, k):
-        for i in range(0, len(lst), k):
-            yield lst[i:i + k]
-
-    inputs_per_test = len(sample_inputs) // len(sample_outputs)
     test_data = ""
-    for inputs, output in zip(chunk_generator(sample_inputs, inputs_per_test), sample_outputs):
-        test_data += '\n'.join(inputs)
-        test_data += '\n'
-        test_data += output
-        test_data += '\n\n'
+    try:
+        sample_inputs = leetcode_fetch.get_sample_inputs(problem_details)
+        sample_outputs = leetcode_fetch.get_sample_outputs(problem_details)
+
+        def chunk_generator(lst, k):
+            for i in range(0, len(lst), k):
+                yield lst[i:i + k]
+
+        inputs_per_test = len(sample_inputs) // len(sample_outputs)
+        for inputs, output in zip(chunk_generator(sample_inputs, inputs_per_test), sample_outputs):
+            test_data += '\n'.join(inputs)
+            test_data += '\n'
+            test_data += output
+            test_data += '\n\n'
+    except:
+        pass
 
 
     variables = {
