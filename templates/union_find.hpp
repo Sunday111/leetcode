@@ -31,7 +31,8 @@ public:
         return x;
     }
 
-    FORCE_INLINE constexpr void merge(T x, T y) noexcept
+    // Returns true if subgraphs have been merged
+    FORCE_INLINE constexpr bool merge(T x, T y) noexcept
     {
         // Union by size
         x = find(x);
@@ -43,6 +44,8 @@ public:
             nodes[y].parent = x;
             nodes[x].size += nodes[y].size;
         }
+
+        return x != y;
     }
 
     Node* nodes;
