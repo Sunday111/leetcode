@@ -167,6 +167,11 @@ def embed_includes(target_file_path: Path):
                 continue
 
             part = line[idx + len(include) :].strip()
+
+            idx = part.find('//')
+            if idx != -1:
+                part = part[:idx].strip()
+
             assert len(part) > 2
             assert part[0] in '"<'
             assert part[-1] in '">'
