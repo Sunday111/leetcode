@@ -1,11 +1,30 @@
-#pragma once
-
+#include <array>
 #include <concepts>
+#include <cstdint>
+#include <utility>
 
-#include "cast.hpp"
-#include "force_inline.hpp"
-#include "hot_path.hpp"
-#include "integral_aliases.hpp"
+
+
+
+
+
+
+#define FORCE_INLINE inline __attribute__((always_inline))
+#define INLINE_LAMBDA __attribute__((always_inline))
+
+template <typename To>
+inline static constexpr auto cast = []<typename From>(From&& v) INLINE_LAMBDA
+{
+    return static_cast<To>(std::forward<From>(v));
+};
+
+#define HOT_PATH __attribute__((hot))
+
+
+using u8 = uint8_t;
+using u16 = uint16_t;
+using u32 = uint32_t;
+using u64 = uint64_t;
 
 inline constexpr u32 kMOD = 1'000'000'007;
 
@@ -114,3 +133,52 @@ struct ModInt
 
     u32 value = 0;
 };
+
+class Fancy
+{
+    inline static ModInt nums[100000], mul{1}, add{0}, inv_mul{1};
+    u32 n = 0;
+
+public:
+    inline static constexpr auto kPow = []
+    {
+        std::array<ModInt, 101> r;
+
+        for (ModInt base{0}; base.value != r.size(); ++base.value)
+        {
+            r[base.value] = base.pow(kMOD - 2);
+        }
+
+        return r;
+    }();
+
+    void append(int v) noexcept
+    {
+        nums[n++] = (ModInt{static_cast<u32>(v)} - add) * inv_mul;
+    }
+
+    void addAll(int v) noexcept { add += {static_cast<u32>(v)}; }
+
+    void multAll(int v) noexcept
+    {
+        ModInt x{static_cast<u32>(v)};
+        mul *= x, add *= x;
+        inv_mul *= kPow[x.value];
+    }
+
+    [[nodiscard]] int getIndex(int idx) const noexcept
+    {
+        u32 m = -u32{std::cmp_less(idx, n)};
+        return static_cast<int>(((nums[idx] * mul + add).value + 1) & m) - 1;
+    }
+};
+
+#ifndef __clang__
+auto init = []()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    return 'c';
+}();
+#endif
