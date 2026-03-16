@@ -118,7 +118,10 @@ def create_leetcode_project(all_problems:dict, problem_number: int, override: bo
             dst_dir = (project_root / src_path.relative_to(template_dir)).parent.resolve()
             patch_file(src_path, dst_dir, variables)
 
-    header_path.write_text(leetcode_fetch.get_cpp_template(problem_details))
+    template = leetcode_fetch.get_cpp_template(problem_details)
+    url = f"https://leetcode.com/problems/{slug}/"
+    full_content = f"// {url}\n\n{template}"
+    header_path.write_text(full_content)
 
     meta = {"path_to_solution_header": (header_path.relative_to(project_root)).as_posix(),}
     write_file(project_root / f"{problem_number}.json", json.dumps(meta, indent=2))
