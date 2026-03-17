@@ -4,6 +4,7 @@
 #include <bit>
 #include <vector>
 
+#include "force_inline.hpp"
 #include "hot_path.hpp"
 #include "int_if.hpp"
 #include "integral_aliases.hpp"
@@ -13,7 +14,8 @@ struct OptionsBitset
     FORCE_INLINE constexpr void SetBit(u8 idx, bool value) noexcept
     {
         u16 mask = (0b1 << idx) & 0xFFFF;
-        bits = iif<u16>(value, bits | mask, bits & ~mask);
+        u16 a = bits | mask;
+        bits = iif(value, a, bits & ~mask);
     }
 
     [[nodiscard]] FORCE_INLINE constexpr bool HasBit(u8 idx) const noexcept

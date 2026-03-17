@@ -10,7 +10,7 @@ public:
     static constexpr u32 kBitsetCapacity = (2000 * kTableWidth) / 8;
     inline static u64 words[kBitsetCapacity];
 
-    [[nodiscard]] FORCE_INLINE static constexpr u64
+    [[nodiscard, gnu::always_inline]] static constexpr u64
     set_bit(u64 bs, u8 i, bool value) noexcept
     {
         u64 a = (u64{1} << i) | bs;
@@ -18,14 +18,14 @@ public:
         return iif(value, a, b);
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr bool get_bit(
+    [[nodiscard, gnu::always_inline]] static constexpr bool get_bit(
         u64 bs,
         u8 i) noexcept
     {
         return bs & (u64{1} << i);
     }
 
-    FORCE_INLINE static constexpr void
+    [[gnu::always_inline]] static constexpr void
     set_is_palindrome(u16 i, u16 j, bool value) noexcept
     {
         u32 row_offset = i * kTableWidth;
@@ -35,7 +35,7 @@ public:
         words[word_index] = set_bit(words[word_index], bit_index, value);
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr bool get_is_palindrome(
+    [[nodiscard, gnu::always_inline]] static constexpr bool get_is_palindrome(
         u16 i,
         u16 j) noexcept
     {
@@ -46,7 +46,7 @@ public:
         return get_bit(words[word_index], bit_index);
     }
 
-    FORCE_INLINE static int minCut(std::string_view s) noexcept
+    [[gnu::always_inline]] static int minCut(std::string_view s) noexcept
     {
         static u16 min_num_dp[2001];
 
