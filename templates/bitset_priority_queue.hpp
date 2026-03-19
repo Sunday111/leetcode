@@ -12,44 +12,47 @@ public:
     std::array<FrequencyType, max_value + 1> freq{};
     B bits{};
 
-    FORCE_INLINE constexpr void add(ValueType v) noexcept
+    [[gnu::always_inline]] constexpr void add(ValueType v) noexcept
     {
         ++freq[v];
         bits.add(v);
     }
 
-    FORCE_INLINE constexpr void remove(ValueType v) noexcept
+    [[gnu::always_inline]] constexpr void remove(ValueType v) noexcept
     {
         if (0 == --freq[v]) bits.remove(v);
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr ValueType min() noexcept
+    [[nodiscard, gnu::always_inline]] constexpr ValueType min() const noexcept
     {
         return bits.min();
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr ValueType max() noexcept
+    [[nodiscard, gnu::always_inline]] constexpr ValueType max() const noexcept
     {
         return bits.max();
     }
 
-    FORCE_INLINE constexpr void clear() noexcept
+    [[gnu::always_inline]] constexpr void clear() noexcept
     {
         bits.initialize();
         std::ranges::fill(freq, 0);
     }
 
-    FORCE_INLINE constexpr ValueType pop_min() noexcept
+    [[gnu::always_inline]] constexpr ValueType pop_min() noexcept
     {
         auto lo = min();
         remove(lo);
         return lo;
     }
-    FORCE_INLINE constexpr ValueType pop_max() noexcept
+    [[gnu::always_inline]] constexpr ValueType pop_max() noexcept
     {
         auto hi = max();
         remove(hi);
         return hi;
     }
-    FORCE_INLINE constexpr bool is_empty() const { return bits.is_empty(); }
+    [[gnu::always_inline]] constexpr bool is_empty() const noexcept
+    {
+        return bits.is_empty();
+    }
 };

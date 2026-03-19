@@ -15,6 +15,7 @@ modernize-*\
 -cppcoreguidelines-special-member-functions,\
 -cppcoreguidelines-prefer-member-initializer,\
 -cppcoreguidelines-pro-type-static-cast-downcast,\
+-cppcoreguidelines-missing-std-forward,\
 -google-readability-avoid-underscore-in-googletest-name,\
 -cppcoreguidelines-avoid-do-while,\
 -cert-err58-cpp,\

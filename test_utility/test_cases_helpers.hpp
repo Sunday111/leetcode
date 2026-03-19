@@ -20,16 +20,14 @@ struct TestMethodInfo
     using TestCaseTypes = decltype(std::tuple_cat(Inputs{}, Result{}));
 };
 
-template <auto method, typename Options = DefaultScannerOptions>
-[[nodiscard]] auto parse_test_cases(
+template <
+    typename Inputs,
+    typename Result,
+    typename Options = DefaultScannerOptions>
+[[nodiscard]] auto parse_test_cases_with_types(
     std::string_view s,
     const Options& opts = Options{})
 {
-    using Types = typename TestMethodInfo<method>::TestCaseTypes;
-    constexpr auto n = std::tuple_size_v<Types>;
-    static_assert(n > 1, "Expect at least one input and one output");
-    using Inputs = tuple_head<Types, n - 1>;
-    using Result = std::tuple_element_t<n - 1, Types>;
     std::vector<std::tuple<Inputs, Result>> r;
 
     size_t i = skip_whitespaces(opts, s, 0);
@@ -40,4 +38,17 @@ template <auto method, typename Options = DefaultScannerOptions>
     }
 
     return r;
+}
+
+template <auto method, typename Options = DefaultScannerOptions>
+[[nodiscard]] auto parse_test_cases(
+    std::string_view s,
+    const Options& opts = Options{})
+{
+    using Types = typename TestMethodInfo<method>::TestCaseTypes;
+    constexpr auto n = std::tuple_size_v<Types>;
+    static_assert(n > 1, "Expect at least one input and one output");
+    using Inputs = tuple_head<Types, n - 1>;
+    using Result = std::tuple_element_t<n - 1, Types>;
+    return parse_test_cases_with_types<Inputs, Result>(s, opts);
 }

@@ -35,6 +35,13 @@ public:
         std::accumulate(kLayersSizes.begin(), kLayersSizes.end(), 0UZ);
     std::array<Word, kTotalWords> words;
 
+    template <u8 i>
+    struct LyrIdx
+    {
+        // NOLINTNEXTLINE
+        [[nodiscard]] consteval operator u8() const noexcept { return i; }
+    };
+
     static constexpr auto offsets = []
     {
         std::array<size_t, kNumLayers> offsets;  // NOLINT
@@ -63,7 +70,7 @@ public:
     }
 
     template <bool v>
-    FORCE_INLINE constexpr void set(ValueType idx) noexcept
+    [[gnu::always_inline]] constexpr void set(ValueType idx) noexcept
     {
         if constexpr (v)
         {
@@ -75,7 +82,7 @@ public:
         }
     }
 
-    FORCE_INLINE constexpr void set(ValueType idx, bool v) noexcept
+    [[gnu::always_inline]] constexpr void set(ValueType idx, bool v) noexcept
     {
         if (v)
         {
@@ -87,66 +94,106 @@ public:
         }
     }
 
-    FORCE_INLINE constexpr void add(ValueType v) noexcept
+    [[gnu::always_inline]] constexpr void add(ValueType v) noexcept
     {
-        [&]<size_t... layer>(std::index_sequence<layer...>) INLINE_LAMBDA
-        {
-            (add_impl<layer>(v), ...);
-        }(std::make_index_sequence<kNumLayers>());
+        for_each_layer(
+            [&] [[gnu::always_inline]] (auto layer) noexcept
+            {
+                ValueType wi = v >> kShift;
+                words[offsets[layer] + wi] |= Word{1} << (v & kMask);
+                v = wi;
+            });
     }
 
-    FORCE_INLINE constexpr void remove(ValueType v) noexcept
+    // Returns true if element did not exist previously
+    [[nodiscard, gnu::always_inline]] constexpr bool add_ex(
+        ValueType v) noexcept
     {
-        [&]<size_t... layer>(std::index_sequence<layer...>) INLINE_LAMBDA
-        {
-            bool pe = true;
-            (rem_impl<layer>(v, pe), ...);
-        }(std::make_index_sequence<kNumLayers>());
+        bool added = false;
+        for_each_layer(
+            [&] [[gnu::always_inline]] (auto layer) noexcept
+            {
+                ValueType wi = v >> kShift;
+                auto& word = words[offsets[layer] + wi];
+                Word m = Word{1} << (v & kMask);
+                if constexpr (layer == 0)
+                {
+                    added = (word & m) == 0;
+                }
+                word |= m;
+                v = wi;
+            });
+        return added;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr ValueType min() const noexcept
+    [[gnu::always_inline]] constexpr void remove(ValueType v) noexcept
     {
-        ValueType x = 0;
-        [&]<size_t... layer>(std::index_sequence<layer...>) INLINE_LAMBDA
-        {
-            (min_impl<kNumLayers - (layer + 1)>(x), ...);
-        }(std::make_index_sequence<kNumLayers>());
-        return x;
+        bool prev_empty = true;
+        for_each_layer(
+            [&] [[gnu::always_inline]] (auto layer) noexcept
+            {
+                ValueType wi = v >> kShift;
+                auto& w = words[offsets[layer] + wi];
+                w &= ~(Word{prev_empty} << (v & kMask));
+                v = wi;
+                prev_empty = !w;
+            });
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr ValueType max() const noexcept
+    [[nodiscard, gnu::always_inline]] constexpr ValueType min() const noexcept
     {
-        ValueType x = 0;
-        [&]<size_t... layer>(std::index_sequence<layer...>) INLINE_LAMBDA
-        {
-            (max_impl<kNumLayers - (layer + 1)>(x), ...);
-        }(std::make_index_sequence<kNumLayers>());
-        return x;
+        ValueType wi = 0;
+        for_each_layer_reversed(
+            [&] [[gnu::always_inline]] (auto layer) noexcept
+            {
+                u8 bi = std::countr_zero(words[offsets[layer] + wi]) & 0xFF;
+                ValueType x =
+                    cast<ValueType>(wi << kShift) | cast<ValueType>(bi);
+                wi = x;
+            });
+        return wi;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr bool get(ValueType v) const noexcept
+    [[nodiscard, gnu::always_inline]] constexpr ValueType max() const noexcept
+    {
+        ValueType wi = 0;
+        for_each_layer_reversed(
+            [&] [[gnu::always_inline]] (auto layer) noexcept
+            {
+                u8 bi =
+                    kMask - std::countl_zero(words[offsets[layer] + wi]) & 0xFF;
+                ValueType x =
+                    cast<ValueType>(wi << kShift) | cast<ValueType>(bi);
+                wi = x;
+            });
+        return wi;
+    }
+
+    [[nodiscard, gnu::always_inline]] constexpr bool get(
+        ValueType v) const noexcept
     {
         return words[offsets[0] + (v >> kShift)] & (Word{1} << (v & kMask));
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr size_t get_capacity() noexcept
+    [[nodiscard, gnu::always_inline]] static constexpr size_t
+    get_capacity() noexcept
     {
         return capacity;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr bool is_empty() const noexcept
+    [[nodiscard, gnu::always_inline]] constexpr bool is_empty() const noexcept
     {
         return words[offsets[kNumLayers - 1]] == 0;
     }
 
-    FORCE_INLINE constexpr void initialize(
+    [[gnu::always_inline]] constexpr void initialize(
         FullType,
         size_t end = capacity) noexcept
     {
         initialize<true>(end);
     }
 
-    FORCE_INLINE constexpr void initialize(
+    [[gnu::always_inline]] constexpr void initialize(
         EmptyType,
         size_t end = capacity) noexcept
     {
@@ -154,56 +201,34 @@ public:
     }
 
     template <bool value>
-    FORCE_INLINE constexpr void initialize(size_t end = capacity) noexcept
+    [[gnu::always_inline]] constexpr void initialize(
+        size_t end = capacity) noexcept
     {
-        [&]<size_t... layer>(std::index_sequence<layer...>) INLINE_LAMBDA
-        {
-            ((init_layer<layer, value>(end)), ...);
-        }(std::make_index_sequence<kNumLayers>());
+        constexpr auto m = value ? ~Word{} : Word{};
+        for_each_layer(
+            [&] [[gnu::always_inline]] (auto layer) noexcept
+            {
+                end = ceil_div<size_t>(end, kWordSize);
+                std::fill_n(std::next(words.begin(), offsets[layer]), end, m);
+            });
     }
 
 private:
-    template <size_t layer, bool value>
-    FORCE_INLINE constexpr void init_layer(size_t& x) noexcept
+    template <typename F>
+    [[gnu::always_inline]] constexpr static void for_each_layer(F&& f) noexcept
     {
-        x = ceil_div<size_t>(x, kWordSize);
-        constexpr auto m = value ? ~Word{} : Word{};
-        std::fill_n(std::next(words.begin(), offsets[layer]), x, m);
+        [&]<size_t... layer> [[gnu::always_inline]] (
+            std::index_sequence<layer...>) noexcept
+        {
+            (f(LyrIdx<layer>{}), ...);
+        }(std::make_index_sequence<kNumLayers>());
     }
 
-    template <size_t layer>
-    FORCE_INLINE constexpr void add_impl(ValueType& v) noexcept
+    template <typename F>
+    [[gnu::always_inline]] constexpr static void for_each_layer_reversed(
+        F&& f) noexcept
     {
-        ValueType wi = v >> kShift;
-        words[offsets[layer] + wi] |= Word{1} << (v & kMask);
-        v = wi;
-    }
-
-    template <size_t layer>
-    FORCE_INLINE constexpr void rem_impl(
-        ValueType& v,
-        bool& prev_empty) noexcept
-    {
-        ValueType wi = v >> kShift;
-        auto& w = words[offsets[layer] + wi];
-        w &= ~(Word{prev_empty} << (v & kMask));
-        v = wi;
-        prev_empty = !w;
-    }
-
-    template <size_t layer>
-    FORCE_INLINE constexpr void min_impl(ValueType& wi) const noexcept
-    {
-        u8 bi = std::countr_zero(words[offsets[layer] + wi]) & 0xFF;
-        ValueType x = cast<ValueType>(wi << kShift) | cast<ValueType>(bi);
-        wi = x;
-    }
-
-    template <size_t layer>
-    FORCE_INLINE constexpr void max_impl(ValueType& wi) const noexcept
-    {
-        u8 bi = kMask - std::countl_zero(words[offsets[layer] + wi]) & 0xFF;
-        ValueType x = cast<ValueType>(wi << kShift) | cast<ValueType>(bi);
-        wi = x;
+        for_each_layer([&] [[gnu::always_inline]] (auto layer) noexcept
+                       { f(LyrIdx<kNumLayers - (layer + 1)>{}); });
     }
 };
