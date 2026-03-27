@@ -22,8 +22,8 @@ class Solution
 public:
     template <typename T, typename Getter>
     [[nodiscard]] static constexpr bool solve_2d(
-        u32* right,
-        u32* left,
+        u32* const right,
+        u32* const left,
         const T total,
         const u32 max_val,
         const u32 h,
@@ -33,7 +33,7 @@ public:
         auto test = [&max_val] [[nodiscard, gnu::always_inline]] (
                         const auto& m,
                         T v,
-                        bool corner) noexcept
+                        bool corner = true) noexcept
         {
             // when value is greater than maximum value found in the grid
             // the index becomes zero, whose frequency is always zero
@@ -53,25 +53,53 @@ public:
             }
         };
 
+        auto cleanup = [&](u32 x, bool r = true) noexcept
+        {
+            for (x = x + 1; x != w; ++x)
+            {
+                for (u32 y = 0; y != h; ++y)
+                {
+                    u32 v = get(y, x);
+                    right[v]--;
+                    left[v]++;
+                }
+            }
+            return r;
+        };
+
         {
             add_column(0);
+
             T s2 = total - s;
             T d = std::max(s, s2) - std::min(s, s2);
             bool c1 = get(0, 0) == d || get(h - 1, 0) == d;
             bool c2 = ((w != 2) || (get(0, 1) == d || get(h - 1, 1) == d));
-            if (s == s2) return true;
-            if (s > s2 && test(left, d, c1)) return true;
-            if (s2 > s && test(right, d, c2)) return true;
+            bool b1 = s == s2;
+            bool b2 = (s > s2) & test(left, d, c1);
+            bool b3 = (s2 > s) & test(right, d, c2);
+            [[unlikely]] if (b1 | b2 | b3)
+            {
+                return cleanup(0);
+            }
         }
 
         for (u32 x : stdv::iota(u32{0}, w) | stdv::drop(1) |
                          stdv::take(w - std::min(w, 3u)))
         {
             add_column(x);
+
             auto s2 = total - s;
-            if (s == s2) return true;
-            if (s > s2 && test(left, s - s2, true)) return true;
-            if (s2 > s && test(right, s2 - s, true)) return true;
+            bool b1 = s == s2;
+            bool b2 = (s > s2) & test(left, s - s2);
+            bool b3 = (s2 > s) & test(right, s2 - s);
+            [[unlikely]] if (b1 | b2 | b3)
+            {
+                return cleanup(x);
+            }
+            [[unlikely]] if ((s > s2) & ((s - s2) > max_val))
+            {
+                return cleanup(x, false);
+            }
         }
 
         if (w != 2)
@@ -81,17 +109,16 @@ public:
             auto s2 = total - s;
             T d = std::max(s, s2) - std::min(s, s2);
             bool c2 = (get(0, w - 1) == d || get(h - 1, w - 1) == d);
-            if (s == s2) return true;
-            if (s > s2 && test(left, d, true)) return true;
-            if (s2 > s && test(right, d, c2)) return true;
+            bool b1 = s == s2;
+            bool b2 = (s > s2) & test(left, d, true);
+            bool b3 = (s2 > s) & test(right, d, c2);
+            [[unlikely]] if (b1 | b2 | b3)
+            {
+                return cleanup(w - 2);
+            }
         }
 
-        // when this function returns false
-        // it guarantees that left array is full and right array is empty
-        // so this call is necessary
-        add_column(w - 1);
-
-        return false;
+        return cleanup(w - 2, false);
     }
 
     template <typename T>
@@ -145,10 +172,12 @@ public:
         };
 
         // First try horizontal splits and then vertical splits
-        bool r = solve_2d(full, empty, total, max_val, h, w, get_yx) ||
-                 solve_2d(empty, full, total, max_val, w, h, get_xy);
-        // only clean empty array if result is true
-        std::fill_n(empty, (max_val + 1) & -u32{r}, 0);
+        if (solve_2d(full, empty, total, max_val, h, w, get_yx))
+        {
+            std::fill_n(empty, max_val + 1, 0);
+            return true;
+        }
+        bool r = solve_2d(empty, full, total, max_val, w, h, get_xy);
         std::fill_n(full, max_val + 1, 0);
         return r;
     }
