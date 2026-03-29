@@ -73,7 +73,8 @@ def create_leetcode_project(all_problems:dict, problem_number: int, override: bo
     slug = leetcode_fetch.get_slug_by_number(problem_number, all_problems)
     assert slug
 
-    project_root = CODE_DIR / f"{problem_number:04d}"
+    problem_number_str = f"{problem_number:04d}"
+    project_root = CODE_DIR / problem_number_str
 
     if override:
         shutil.rmtree(project_root, ignore_errors=True)
@@ -83,7 +84,7 @@ def create_leetcode_project(all_problems:dict, problem_number: int, override: bo
 
     project_root.mkdir(parents=True, exist_ok=True)
 
-    header_name = f"{problem_number}.hpp"
+    header_name = f"{problem_number_str}.hpp"
     header_path = (project_root / header_name).resolve()
 
     problem_details = leetcode_fetch.problem_details_by_slug(slug)
@@ -109,7 +110,7 @@ def create_leetcode_project(all_problems:dict, problem_number: int, override: bo
 
 
     variables = {
-        "____problem_name____": str(problem_number),
+        "____problem_name____": problem_number_str,
         "____method_name____": leetcode_fetch.get_method_name(problem_details),
         "____test_data____": test_data,
     }
@@ -124,7 +125,7 @@ def create_leetcode_project(all_problems:dict, problem_number: int, override: bo
     header_path.write_text(full_content)
 
     meta = {"path_to_solution_header": (header_path.relative_to(project_root)).as_posix(),}
-    write_file(project_root / f"{problem_number}.json", json.dumps(meta, indent=2))
+    write_file(project_root / f"{problem_number_str}.json", json.dumps(meta, indent=2))
 
     return project_root
 
