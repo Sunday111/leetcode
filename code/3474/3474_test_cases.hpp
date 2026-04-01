@@ -42,11 +42,3 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 "vyv"
 "avyvyvvyvavyvaaaa"
 )");
-
-/*
-inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
-"TFTF"
-"ab"
-"ababa"
-)");
-*/
