@@ -2,110 +2,53 @@
 
 #include <algorithm>
 #include <cassert>
-#include <ranges>
-#include <unordered_map>
 #include <utility>
 #include <vector>
+
+#include "hash_set.hpp"
+#include "int_if.hpp"
+#include "integral_aliases.hpp"
+#include "signed_integral_aliases.hpp"
 
 class Solution
 {
 public:
+    [[nodiscard, gnu::always_inline]] static constexpr u32 pack(
+        i16 a,
+        i16 b) noexcept
+    {
+        return (u32{std::bit_cast<u16>(a)} << 16) | u32{std::bit_cast<u16>(b)};
+    }
+
     int robotSim(
         const std::vector<int>& commands,
-        std::vector<std::vector<int>>& obstacles)
+        std::vector<std::vector<int>>& in_obstacles)
     {
-        std::unordered_map<int16_t, std::vector<int16_t>> obstacles_by_x;
-        obstacles_by_x.reserve(obstacles.size());
+        static u32 data[1 << 14];
+        HashSet<1 << 14, u32, ~u32{}> obstacles{data};
+        obstacles.Init();
 
-        std::unordered_map<int16_t, std::vector<int16_t>> obstacles_by_y;
-        obstacles_by_y.reserve(obstacles.size());
-
-        for (auto& obstacle : obstacles)
+        for (auto& obstacle : in_obstacles)
         {
-            int16_t x = static_cast<int16_t>(obstacle[0]),
-                    y = static_cast<int16_t>(obstacle[1]);
-            obstacles_by_x[x].push_back(y);
-            obstacles_by_y[y].push_back(x);
+            obstacles.add(pack(
+                static_cast<i16>(obstacle[0]),
+                static_cast<i16>(obstacle[1])));
         }
-
-        std::ranges::for_each(
-            std::views::values(obstacles_by_x),
-            std::ranges::sort);
-        std::ranges::for_each(
-            std::views::values(obstacles_by_y),
-            std::ranges::sort);
-
-        auto get_obstacles =
-            [](int coord,
-               const std::unordered_map<int16_t, std::vector<int16_t>>& lookup)
-            -> std::span<const int16_t>
-        {
-            if (std::cmp_greater_equal(
-                    coord,
-                    std::numeric_limits<int16_t>::lowest()) &&
-                std::cmp_less_equal(coord, std::numeric_limits<int16_t>::max()))
-            {
-                if (auto it = lookup.find(static_cast<int16_t>(coord));
-                    it != lookup.end())
-                {
-                    return it->second;
-                }
-            }
-
-            return {};
-        };
 
         int dx = 0, dy = 1;
         int px = 0, py = 0;
-
-        auto move = [](int dist, int& pos, std::span<const int16_t> obstacles)
-        {
-            // std::println("{}", obstacles);
-            if (dist < 0)
-            {
-                auto range = std::views::reverse(obstacles);
-                auto it =
-                    std::ranges::upper_bound(range, pos, std::greater<>{});
-                if (it == range.end())
-                {
-                    pos += dist;
-                }
-                else
-                {
-                    pos = std::max(*it + 1, pos + dist);
-                }
-            }
-            else
-            {
-                auto it = std::ranges::upper_bound(obstacles, pos);
-                if (it == obstacles.end())
-                {
-                    pos += dist;
-                }
-                else
-                {
-                    pos = std::min(*it - 1, pos + dist);
-                }
-            }
-        };
-
         int max_dist_sq = 0;
+
         for (size_t i = 0; i != commands.size();)
         {
-            if (commands[i] == -1)
+            int c = commands[i];
+            if (c < 0)
             {
-                // Turn right (CW)
                 std::swap(dx, dy);
-                dy = -dy;
-                ++i;
-                continue;
-            }
 
-            if (commands[i] == -2)
-            {
-                // Turn left (CCW)
-                std::swap(dx, dy);
-                dx = -dx;
+                bool cw = c == -1;
+                dy = iif(cw, -dy, dy);
+                dx = iif(cw, dx, -dx);
                 ++i;
                 continue;
             }
@@ -118,21 +61,19 @@ public:
             }
 
             // move
-            assert(command > 0);
-            if (dx)
+            while (command != 0)
             {
-                move(command * dx, px, get_obstacles(py, obstacles_by_y));
-            }
-            else
-            {
-                move(command * dy, py, get_obstacles(px, obstacles_by_x));
+                const int tx = px + dx, ty = py + dy;
+                if (obstacles.contains(
+                        pack(static_cast<i16>(tx), static_cast<i16>(ty))))
+                {
+                    break;
+                }
+                px = tx, py = ty;
+                --command;
             }
 
-            int dist_sq = px * px + py * py;
-            if (dist_sq > max_dist_sq)
-            {
-                max_dist_sq = dist_sq;
-            }
+            max_dist_sq = std::max(px * px + py * py, max_dist_sq);
         }
 
         return max_dist_sq;
