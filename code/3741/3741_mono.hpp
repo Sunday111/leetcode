@@ -9,7 +9,7 @@ public:
     {
         auto& nums = reinterpret_cast<const std::vector<u32>&>(nums_);
         u32 n = static_cast<u32>(nums.size()), r = 2 * n;
-        std::tuple<u32, u32> a[100'001];
+        static std::tuple<u32, u32> a[100'001];
         fill_n(a, n + 1, std::tuple{-n, -n});
         for (u32 k = 0; k != n; ++k)
         {
@@ -23,3 +23,13 @@ public:
         return r < (2 * n) ? static_cast<int>(r) : -1;
     }
 };
+
+#ifndef __clang__
+auto init = []()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    return 'c';
+}();
+#endif
