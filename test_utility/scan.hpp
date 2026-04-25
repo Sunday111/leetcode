@@ -34,7 +34,12 @@ constexpr void scan_expect(std::string_view s, size_t i, char c)
     [[unlikely]] if (s[i] != c)
     {
         throw std::runtime_error(
-            std::format("Expected {} at {} but got {}", c, i, s[i]));
+            std::format(
+                "Expected {} at {} but got {} (in string {})",
+                c,
+                i,
+                s[i],
+                s));
     }
 }
 
@@ -95,6 +100,21 @@ do_scan(const Options& opts, std::string_view s, size_t start, T& r)
     throw std::runtime_error(std::format("Expected true or false at {}", i));
 }
 
+template <typename Options, std::same_as<char> T>
+[[nodiscard]] constexpr size_t
+do_scan(const Options& opts, std::string_view s, size_t start, T& r)
+{
+    size_t i = skip_whitespaces(opts, s, start);
+    scan_expect(s, i, '\"');
+    ++i;
+
+    r = s[i];
+    ++i;
+
+    scan_expect(s, i, '\"');
+    return i + 1;
+}
+
 template <typename Options, std::same_as<std::string> T>
 [[nodiscard]] constexpr size_t
 do_scan(const Options& opts, std::string_view s, size_t start, T& result)
@@ -126,7 +146,9 @@ do_scan(const Options& opts, std::string_view s, size_t start, T& result)
 }
 
 template <typename Options, std::integral T>
-    requires(!std::same_as<T, bool>)  // Break ambiguity with boolean parser
+    requires(
+        !(std::same_as<T, bool> ||
+          std::same_as<T, char>))  // Break ambiguity with specialized parsers
 [[nodiscard]] constexpr size_t
 do_scan(const Options& opts, std::string_view s, size_t start, T& result)
 {

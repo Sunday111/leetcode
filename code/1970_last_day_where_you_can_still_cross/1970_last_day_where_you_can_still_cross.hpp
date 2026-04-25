@@ -6,14 +6,14 @@
 class Solution
 {
 public:
-    [[nodiscard]] FORCE_INLINE bool bitset_contains(
+    [[nodiscard, gnu::always_inline]] bool bitset_contains(
         const u64* bitset,
         u16 i) noexcept
     {
         return bitset[i >> 6] & (1ul << (i & 63));
     }
 
-    FORCE_INLINE void bitset_add(u64* bitset, u16 i) noexcept
+    [[gnu::always_inline]] void bitset_add(u64* bitset, u16 i) noexcept
     {
         bitset[i >> 6] |= (1ul << (i & 63));
     }
