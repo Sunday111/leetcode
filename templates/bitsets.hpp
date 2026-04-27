@@ -3,6 +3,7 @@
 #include <array>
 #include <bit>
 #include <concepts>
+#include <cstdint>
 
 #include "ceil_div.hpp"
 #include "int_if.hpp"
