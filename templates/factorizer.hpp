@@ -3,7 +3,6 @@
 #include <array>
 
 #include "cast.hpp"
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
 template <u32 n, u32 primes_capacity>
@@ -37,7 +36,8 @@ public:
     }
 
     template <typename Callback>
-    FORCE_INLINE void factorize(u32 x, Callback callback) const noexcept
+    [[gnu::always_inline]] void factorize(u32 x, Callback callback)
+        const noexcept
     {
         while (x > 1)
         {
