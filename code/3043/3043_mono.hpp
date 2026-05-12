@@ -1,15 +1,64 @@
-#pragma once
-
+#include <algorithm>
 #include <array>
 #include <bit>
 #include <cassert>
+#include <concepts>
+#include <cstdint>
+#include <functional>
 #include <numeric>
+#include <type_traits>
+#include <utility>
+#include <vector>
 
-#include "cast.hpp"
-#include "ceil_div.hpp"
-#include "empty.hpp"
-#include "full.hpp"
-#include "uint_for_value.hpp"
+
+
+
+using u8 = uint8_t;
+using u16 = uint16_t;
+using u32 = uint32_t;
+using u64 = uint64_t;
+
+
+
+
+template <typename To>
+inline static constexpr auto cast =
+    []<typename From> [[nodiscard, gnu::always_inline]] (From&& v) noexcept
+{
+    return static_cast<To>(std::forward<From>(v));
+};
+
+
+template <std::integral T>
+[[nodiscard, gnu::always_inline]] static constexpr T ceil_div(
+    T a,
+    std::type_identity_t<T> b) noexcept
+{
+    return (a + (b - 1)) / b;
+}
+
+struct EmptyType
+{
+};
+
+inline static constexpr EmptyType kEmpty{};
+
+struct FullType
+{
+};
+
+inline static constexpr FullType kFull{};
+
+
+
+template <u64 value>
+using UintForValue = std::conditional_t < value < (1 << 8),
+      u8,
+      std::conditional_t <
+          value<
+              (1 << 16),
+              u16,
+              std::conditional_t<value<(1UL << 32), u32, u64>>>;
 
 template <size_t capacity, typename Word = u64>
 class PyramidBitset
@@ -252,5 +301,82 @@ private:
     {
         for_each_layer([&] [[gnu::always_inline]] (auto layer) noexcept
                        { f(LyrIdx<kNumLayers - (layer + 1)>{}); });
+    }
+};
+
+
+
+
+inline static constexpr auto max2 =
+    []<typename T> [[gnu::always_inline, nodiscard]] (
+        const T& a,
+        const T& b) noexcept -> const T&
+{
+    return std::max(a, b);
+};
+
+
+inline static constexpr auto upd =
+    []<typename T, typename F> [[gnu::always_inline]] (
+        T & x,
+        const std::type_identity_t<T>& another,
+        F&& f) noexcept -> T&
+{
+    return x = std::forward<F>(f)(x, another);
+};
+
+inline static constexpr auto upd_max =
+    std::bind(upd, std::placeholders::_1, std::placeholders::_2, max2);
+
+class Solution
+{
+public:
+    u8 longestCommonPrefix(const std::vector<int>& a, const std::vector<int>& b)
+        const noexcept
+    {
+        auto pa = &a, pb = &b;
+        if (a.size() > b.size()) std::swap(pa, pb);
+        return impl(
+            reinterpret_cast<const std::vector<u32>&>(*pa),
+            reinterpret_cast<const std::vector<u32>&>(*pb));
+    }
+    static u8 impl(
+        const std::vector<u32>& a,
+        const std::vector<u32>& b) noexcept
+    {
+        static PyramidBitset<100'000'001> bs;
+        u8 max_digits = 0;
+        u32 num_unique = 0;
+        for (u32 v : a)
+        {
+            u8 digits = 0;
+            while (v)
+            {
+                num_unique += bs.add_ex(v);
+                v /= 10;
+                ++digits;
+            }
+            upd_max(max_digits, digits);
+        }
+        u8 r = 0;
+        for (u32 v : b)
+        {
+            while (v && !bs.get(v)) v /= 10;
+
+            u8 l = 0;
+            while (v)
+            {
+                num_unique -= bs.remove_ex(v);
+                ++l;
+                v /= 10;
+            }
+            upd_max(r, l);
+            if (r == max_digits || num_unique == 0) break;
+        }
+
+        // cleanup static bitset
+        while (num_unique--) bs.remove(bs.min());
+
+        return r;
     }
 };
