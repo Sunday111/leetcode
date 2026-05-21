@@ -1,9 +1,9 @@
-#ifndef __clang__
+#ifndef LC_LOCAL_BUILD
 auto init = []()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout.tie(nullptr);
     return 'c';
 }();
 #endif

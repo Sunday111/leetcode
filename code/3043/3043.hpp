@@ -56,3 +56,5 @@ public:
         return r;
     }
 };
+
+#include "sync_stdio.hpp"
