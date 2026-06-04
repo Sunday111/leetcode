@@ -105,6 +105,17 @@ public:
             });
     }
 
+    [[gnu::always_inline]] constexpr void add_if(ValueType v, bool c) noexcept
+    {
+        for_each_layer(
+            [&] [[gnu::always_inline]] (auto layer) noexcept
+            {
+                ValueType wi = v >> kShift;
+                words[offsets[layer] + wi] |= Word{c} << (v & kMask);
+                v = wi;
+            });
+    }
+
     // Returns true if element did not exist previously
     [[nodiscard, gnu::always_inline]] constexpr bool add_ex(
         ValueType v) noexcept
