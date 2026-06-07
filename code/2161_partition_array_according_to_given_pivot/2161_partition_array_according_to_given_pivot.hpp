@@ -1,7 +1,3 @@
-#pragma once
-
-#include <algorithm>
-#include <span>
 #include <vector>
 
 class Solution
@@ -11,24 +7,23 @@ public:
         const std::vector<int>& nums,
         int pivot) noexcept
     {
+        size_t i = 0, n = nums.size(), j = n;
         std::vector<int> r;
-        r.resize(nums.size());
+        r.resize(n);
 
-        size_t i = 0, j = nums.size();
         for (int v : nums)
         {
-            if (v < pivot)
-            {
-                r[i++] = v;
-            }
-            else if (v > pivot)
-            {
-                r[--j] = v;
-            }
+            r[i] = v;
+            r[j - 1] = v;
+            i += v < pivot;
+            j -= v > pivot;
         }
 
-        std::ranges::reverse(std::span{r}.subspan(j));
-        std::ranges::fill(std::span{r}.subspan(i, j - i), pivot);
+        // write pivot values between i and j
+        while (i != j) r[i++] = pivot;
+        // reverse values greater than pivot
+        // because they were visited in reverse order
+        for (j = n - 1; i < j; ++i, --j) std::swap(r[i], r[j]);
 
         return r;
     }
