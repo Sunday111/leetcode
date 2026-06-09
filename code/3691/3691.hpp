@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <ranges>
 #include <vector>
 
 #include "integral_aliases.hpp"
