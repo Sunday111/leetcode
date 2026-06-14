@@ -1,14 +1,24 @@
 #include <algorithm>
 
-#include "lc_signly_linked_list_node.hpp"
+
+
+
+#ifdef LC_LOCAL_BUILD
+
+struct ListNode
+{
+    int val{};
+    ListNode* next{};
+};
+
+#endif
 
 class Solution
 {
 public:
-    int pairSum(ListNode* head)
+    int pairSum(ListNode* head) const noexcept
     {
         static int v[100'000];
-
         int n = 0;
         while (head)
         {
@@ -25,3 +35,13 @@ public:
         return s;
     }
 };
+
+#ifndef LC_LOCAL_BUILD
+auto init = []()
+{
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout.tie(nullptr);
+    return 'c';
+}();
+#endif

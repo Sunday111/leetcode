@@ -63,6 +63,11 @@ struct LeetCodeList
         auto view = std::span{array};
         return FromArray(view);
     }
+
+    // NOLINTNEXTLINE
+    operator TNode*() noexcept { return head; }
+    // NOLINTNEXTLINE
+    operator const TNode*() const noexcept { return head; }
 };
 
 template <ListNodeConcept TNode>

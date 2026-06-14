@@ -1,6 +1,6 @@
 #include <utility>
 
-#include "lc_signly_linked_list_node.hpp"
+#include "singly_linked_list/ll_node.hpp"
 
 class Solution
 {
