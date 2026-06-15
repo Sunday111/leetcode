@@ -71,7 +71,9 @@ struct LeetCodeList
 };
 
 template <ListNodeConcept TNode>
-[[nodiscard]] inline constexpr bool CompareLists(TNode* a, TNode* b)
+[[nodiscard]] inline constexpr bool CompareLists(
+    const TNode* a,
+    const TNode* b) noexcept
 {
     while (a && b)
     {
@@ -84,7 +86,7 @@ template <ListNodeConcept TNode>
 }
 
 template <ListNodeConcept TNode>
-[[nodiscard]] inline constexpr std::string ListToString(TNode* head)
+[[nodiscard]] inline constexpr std::string ListToString(TNode* head) noexcept
 {
     std::string r = "[";
     auto i = std::back_inserter(r);
@@ -100,7 +102,9 @@ template <ListNodeConcept TNode>
 }
 
 template <ListNodeConcept TNode, typename V>
-[[nodiscard]] inline constexpr TNode* FindFirst(TNode* head, const V& value)
+[[nodiscard]] inline constexpr TNode* FindFirst(
+    TNode* head,
+    const V& value) noexcept
 {
     while (head && head->val != value) head = head->next;
     return head;
@@ -114,10 +118,32 @@ struct ConvertExpectedType<Node*, void>
 
 template <typename Options, is_specialization<LeetCodeList> T>
 [[nodiscard]] constexpr size_t
-do_scan(const Options& opts, std::string_view s, size_t start, T& r)
+do_scan(const Options& opts, std::string_view s, size_t start, T& r) noexcept
 {
     std::vector<typename T::ValueType> vals;
     size_t i = do_scan(opts, s, start, vals);
     r = T::FromArray(std::span{vals});
     return i;
+}
+
+template <ListNodeConcept TNode>
+[[nodiscard]] inline constexpr bool operator==(
+    const LeetCodeList<TNode>& a,
+    const LeetCodeList<TNode>& b) noexcept
+{
+    return CompareLists(a.head, b.head);
+}
+template <ListNodeConcept TNode>
+[[nodiscard]] inline constexpr bool operator==(
+    const LeetCodeList<TNode>& a,
+    const TNode* b) noexcept
+{
+    return CompareLists(a.head, b);
+}
+template <ListNodeConcept TNode>
+[[nodiscard]] inline constexpr bool operator==(
+    const TNode* a,
+    const LeetCodeList<TNode>& b) noexcept
+{
+    return CompareLists(a, b.head);
 }

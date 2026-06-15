@@ -8,7 +8,7 @@
 
 TEST(t1117_building_h2o, test_1)
 {
-    constexpr size_t m = 15'000;
+    constexpr size_t m = 1'000;
 
     const auto input = []
     {

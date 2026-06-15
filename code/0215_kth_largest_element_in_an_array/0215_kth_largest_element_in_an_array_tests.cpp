@@ -3,7 +3,7 @@
 
 TEST(t0215_kth_largest_element_in_an_array, test_1)
 {
-    PyramidBitset<20'000> lbs;
+    PyramidBitset<20'000> lbs{kEmpty};
     lbs.add(1234);
     lbs.add(5932);
     ASSERT_EQ(lbs.min(), 1234);
@@ -16,7 +16,7 @@ TEST(t0215_kth_largest_element_in_an_array, test_1)
 
 TEST(LayeredBitsetTest, RemoveOneBitFromNonEmptyWord)
 {
-    PyramidBitset<130> bs;  // 130 requires multiple layers
+    PyramidBitset<130> bs{kEmpty};  // 130 requires multiple layers
 
     // Add two bits in the same lower-layer word
     bs.add(0);  // bit 0
@@ -46,7 +46,7 @@ TEST(LayeredBitsetTest, RemoveOneBitFromNonEmptyWord)
 // Optional: test larger numbers and multiple layers
 TEST(LayeredBitsetTest, MultipleLayers)
 {
-    PyramidBitset<5000> bs;
+    PyramidBitset<5000> bs{kEmpty};
 
     bs.add(1234);
     bs.add(4321);

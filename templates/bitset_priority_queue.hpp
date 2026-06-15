@@ -10,7 +10,7 @@ public:
     using ValueType = B::ValueType;
     using FrequencyType = UintForValue<max_count>;
     std::array<FrequencyType, max_value + 1> freq{};
-    B bits{};
+    B bits{EmptyType{}};
 
     [[gnu::always_inline]] constexpr void add(ValueType v) noexcept
     {
