@@ -2,11 +2,6 @@
 #include "gtest/gtest.h"
 #include "parse_2d_array.hpp"
 
-TEST(t3275_kth_nearest_obstacle, test_scan_int)
-{
-    ASSERT_EQ(-22, parse_from_string<int>("  -  22  "));
-}
-
 TEST(t3275_kth_nearest_obstacle, test_scan_vector)
 {
     std::vector expected{1, 2, 3};

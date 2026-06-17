@@ -1,5 +1,6 @@
 #pragma once
 
+#include <charconv>
 #include <concepts>
 #include <format>
 #include <string_view>
@@ -145,6 +146,29 @@ do_scan(const Options& opts, std::string_view s, size_t start, T& result)
     return i;
 }
 
+template <typename Options, typename T>
+    requires(
+        (std::floating_point<T> or std::integral<T>) &&
+        // Break ambiguity with specialized parsers:
+        !(std::same_as<T, bool> || std::same_as<T, char>))
+[[nodiscard]] constexpr size_t
+do_scan(const Options& opts, std::string_view s, size_t start, T& result)
+{
+    // TODO: from_chars will not be able to parse something like "- 22"
+    // For now I decided that I do not care about it.
+    size_t i = skip_whitespaces(opts, s, start);
+    auto begin = s.begin() + i;
+    auto x = std::from_chars(begin, s.end(), result);
+    if (x.ec != std::errc())
+    {
+        throw std::runtime_error(
+            std::format("failed to parse number: \"{}\"", s.substr(i)));
+    }
+
+    return i + static_cast<size_t>(x.ptr - begin);
+}
+
+/*
 template <typename Options, std::integral T>
     requires(
         !(std::same_as<T, bool> ||
@@ -187,6 +211,8 @@ do_scan(const Options& opts, std::string_view s, size_t start, T& result)
 
     return i;
 }
+
+*/
 
 template <typename Options, is_specialization<std::vector> T>
 [[nodiscard]] size_t
