@@ -1,6 +1,9 @@
 #include <unistd.h>
 
 #include <cerrno>
+#include <cstring>
+#include <stdexcept>
+#include <string>
 
 #include "os/os.hpp"
 

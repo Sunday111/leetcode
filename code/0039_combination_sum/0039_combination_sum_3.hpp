@@ -1,4 +1,6 @@
 #include <bit>
+#include <cstdint>
+#include <string>
 #include <unordered_map>
 #include <vector>
 

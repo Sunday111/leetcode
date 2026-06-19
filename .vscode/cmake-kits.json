@@ -5,7 +5,7 @@
             "c": "/home/sunday/llvm-toolchain/llvm-install/bin/clang",
             "cxx": "/home/sunday/llvm-toolchain/llvm-install/bin/clang++"
         },
-        "toolchainFile": "/home/sunday/cloned/llvm-toolchain/generated/llvm-toolchain-dynamic-libstdcxx.cmake"
+        "toolchainFile": "/home/sunday/cloned/llvm-toolchain/generated/llvm-toolchain-static-libcxx.cmake"
     },
     {
         "name": "LLVM from sources, main: Static libstdc++",

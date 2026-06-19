@@ -1,3 +1,4 @@
+#include <bitset>
 #include <random>
 
 #include "bitsets.hpp"
