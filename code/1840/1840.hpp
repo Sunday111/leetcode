@@ -26,10 +26,10 @@ public:
         u32 i = 1, i_max = 0;
         for (auto& [k, k_max] : rstr | std::views::take(nr))
         {
-            u32 l = k - i;
-            k_max = std::min(k_max, i_max + l);
+            k_max = std::min(k_max, i_max + k - i);
             i = k, i_max = k_max;
         }
+
         u32 j = n, j_max = i_max + n - i, r = 0;
         for (auto& prev : rstr | std::views::take(nr) | std::views::reverse)
         {
