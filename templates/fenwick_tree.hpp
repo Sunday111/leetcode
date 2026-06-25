@@ -1,46 +1,51 @@
-#include <vector>
-
-#include "cast.hpp"
-#include "integral_aliases.hpp"
+#include <algorithm>
+#include <cassert>
+#include <span>
 
 template <std::integral T, std::unsigned_integral Idx>
 class FenwickTree
 {
 public:
-    std::vector<T> bits;
-    Idx size;
+    T* data;
+    Idx n;
 
-    explicit constexpr FenwickTree(Idx n) noexcept : bits(n + 1), size{n} {}
+    explicit constexpr FenwickTree(Idx size, std::span<T> buffer) noexcept
+        : data(buffer.data()),
+          n{size}
+    {
+        assert(buffer.size() > size);  // Need 1 extra element
+        std::fill_n(data, n + 1, T{});
+    }
 
     // Add delta to an element at i
-    constexpr void add(Idx i, T delta) noexcept
+    [[gnu::always_inline]] constexpr void add(Idx i, T delta) noexcept
     {
         ++i;
-        while (i <= size)
+        while (i <= n)
         {
-            bits[i] += delta;
+            data[i] += delta;
             i += i & (~i + 1);
         }
     }
 
     // Subtract delta from an element at i
-    constexpr void sub(Idx i, T delta) noexcept
+    [[gnu::always_inline]] constexpr void sub(Idx i, T delta) noexcept
     {
         ++i;
-        while (i <= size)
+        while (i <= n)
         {
-            bits[i] -= delta;
+            data[i] -= delta;
             i += i & (~i + 1);
         }
     }
 
     // Sum of elements BEFORE i
-    [[nodiscard]] constexpr T sum(Idx i) const noexcept
+    [[nodiscard, gnu::always_inline]] constexpr T sum(Idx i) const noexcept
     {
         T sum{};
         while (i)
         {
-            sum += bits[cast<u32>(i)];
+            sum += data[i];
             i -= i & (~i + 1);
         }
         return sum;
@@ -53,16 +58,17 @@ public:
     }
 
     // Update element value. Returns magnitude of value change
-    constexpr int update(Idx i, int val) noexcept
+    [[gnu::always_inline]] constexpr T update(Idx i, T val) noexcept
     {
-        int prev = elem(i);
-        int delta = val - prev;
+        T prev = elem(i);
+        T delta = val - prev;
         add(i, delta);
         return delta;
     }
 
     // Sum values in range [i; j)
-    [[nodiscard]] constexpr int sumRange(Idx i, Idx j) const noexcept
+    [[nodiscard, gnu::always_inline]] constexpr T sumRange(Idx i, Idx j)
+        const noexcept
     {
         return sum(j) - sum(i);
     }
