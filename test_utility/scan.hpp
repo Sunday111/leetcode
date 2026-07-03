@@ -228,7 +228,17 @@ do_scan(const Options& opts, std::string_view s, size_t start, T& result)
     auto parse_element = [&]() INLINE_LAMBDA
     {
         i = skip_whitespaces(opts, s, i);
-        i = do_scan(opts, s, i, result.emplace_back());
+
+        if constexpr (std::same_as<typename T::value_type, bool>)
+        {
+            bool tmp = false;
+            i = do_scan(opts, s, i, tmp);
+            result.emplace_back(tmp);
+        }
+        else
+        {
+            i = do_scan(opts, s, i, result.emplace_back());
+        }
         i = skip_whitespaces(opts, s, i);
     };
     parse_element();
