@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.25)
 
 include(set_compiler_options)
 
-set(target_name 3756_concatenate_non_zero_digits_and_multiply_by_sum_2)
+set(target_name 3756)
 set(tests_target_name ${target_name}_tests)
 
 add_library(${target_name} INTERFACE ${target_name}.hpp)
