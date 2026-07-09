@@ -16,7 +16,7 @@ public:
         const std::vector<u32>& nums,
         std::vector<u32>& queries) noexcept
     {
-        const auto n = cast<u32>(nums.size());
+        const auto n = static_cast<u32>(nums.size());
         [[assume(n <= kMaxN)]];
 
         constexpr u32 lim = 100'000;
