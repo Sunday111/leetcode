@@ -8,7 +8,7 @@ public:
     using u32 = uint32_t;
     using u64 = uint64_t;
 
-    static u64 gcdSum(u32* __restrict__ nums, const u32 n) noexcept
+    static u64 impl(u32* __restrict__ nums, const u32 n) noexcept
     {
         u32 m = nums[0];
         for (u32 i = 1; i != n; ++i)
@@ -31,7 +31,7 @@ public:
     u64 gcdSum(std::vector<int>& nums)
     {
         // NOLINTNEXTLINE
-        return gcdSum(
+        return impl(
             reinterpret_cast<u32*>(nums.data()),
             static_cast<u32>(nums.size()));
     }
