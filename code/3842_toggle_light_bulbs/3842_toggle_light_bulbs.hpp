@@ -1,5 +1,6 @@
 #include <vector>
 
+#include "empty.hpp"
 #include "pyramid_bitset.hpp"
 
 class Solution
@@ -8,7 +9,7 @@ public:
     [[nodiscard]] static constexpr auto toggleLightBulbs(
         const std::vector<int>& bulbs) noexcept
     {
-        PyramidBitset<128> b;
+        PyramidBitset<128> b(kEmpty);
 
         u8 n = 0;
         for (int i : bulbs)
