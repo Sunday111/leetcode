@@ -25,4 +25,8 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [[2,3],[1,2]]
 [1,2,3]
 
+3
+2
+[[1,0],[2,0]]
+[0,1,2]
 )");

@@ -11,6 +11,10 @@ using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
 using u64 = uint64_t;
+
+
+namespace stdr = std::ranges;
+namespace stdv = std::views;
 #ifndef LC_LOCAL_BUILD
 auto init = []()
 {
@@ -48,11 +52,18 @@ public:
         return prev != w;
     }
 
+    [[nodiscard, gnu::always_inline]] static std::span<const u32> get_links(
+        const Node& x) noexcept
+    {
+        return std::span{links + x.offset, x.degree};
+    };
+
     [[nodiscard]] static std::vector<u32> impl(
         u32 n,
         const u32 k,
         const std::vector<std::vector<u32>>& edges) noexcept
     {
+        const auto indices = stdv::iota(u32{}, n);
         std::fill_n(nodes, n, Node{0, 0});
 
         for (auto& e : edges)
@@ -61,7 +72,7 @@ public:
             nodes[i].degree++;
         }
 
-        for (u32 o = 0; auto& x : nodes | std::views::take(n))
+        for (u32 o = 0; auto& x : nodes | stdv::take(n))
         {
             x.offset = o;
             o += std::exchange(x.degree, 0);
@@ -73,70 +84,46 @@ public:
             links[x.offset + x.degree++] = edge[1];
         }
 
-        u32 qs = 0;
-        std::fill_n(queued, (n / 64) + 1, u64{});
-
-        auto enqueue = [&] [[gnu::always_inline]] (u32 i) noexcept
-        {
-            q[qs] = i;
-            qs += add_bit(queued, i);
-        };
-
-        auto get_links = [&] [[gnu::always_inline]] (const Node& x) noexcept
-        {
-            return std::span{links + x.offset, x.degree};
-        };
-
-        enqueue(k);
         constexpr auto is_queued =
             std::bind(get_bit, queued, std::placeholders::_1);
+        constexpr auto not_queued = std::not_fn(is_queued);
 
-        u32 k_size = 0;
-        while (qs)
         {
-            ++k_size;
-            std::ranges::for_each(get_links(nodes[q[--qs]]), enqueue);
+            u32 qs = 0;
+            std::fill_n(queued, (n / 64) + 1, u64{});
+
+            auto enqueue = [&] [[gnu::always_inline]] (u32 i) noexcept
+            {
+                q[qs] = i;
+                qs += add_bit(queued, i);
+            };
+
+            enqueue(k);
+
+            while (qs)
+            {
+                stdr::for_each(get_links(nodes[q[--qs]]), enqueue);
+            }
         }
 
-        const bool make_full = [&] [[gnu::always_inline]]
-        {
-            if (k_size == n)
-            {
-                return false;
-            }
+        const bool make_full = stdr::any_of(
+            indices | stdv::filter(not_queued),
+            [&] [[gnu::always_inline]] (u32 i)
+            { return stdr::any_of(get_links(nodes[i]), is_queued); });
 
-            for (u32 i = 0; i != n; ++i)
-            {
-                [[unlikely]] if (
-                    !is_queued(i) &&
-                    std::ranges::any_of(get_links(nodes[i]), is_queued))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }();
-
+        std::vector<u32> r;
+        r.reserve(n);
         if (make_full)
         {
-            return std::ranges::to<std::vector>(std::views::iota(u32{}, n));
+            stdr::copy(indices, std::back_inserter(r));
         }
         else
         {
-            std::vector<u32> r;
-            r.reserve(n - k_size);
-
-            for (u32 i = 0; i != n; ++i)
-            {
-                if (!get_bit(queued, i))
-                {
-                    r.emplace_back(i);
-                }
-            }
-
-            return r;
+            stdr::copy(
+                indices | stdv::filter(not_queued),
+                std::back_inserter(r));
         }
+        return r;
     }
 
     std::vector<int> remainingMethods(
