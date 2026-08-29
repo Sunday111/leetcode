@@ -1,0 +1,9 @@
+[project]
+name = "leetcode-automation"
+version = "0.1.0"
+description = "Python dependencies for the LeetCode project automation scripts"
+requires-python = ">=3.10"
+dependencies = [
+    "beautifulsoup4>=4.13",
+    "requests>=2.32",
+]

@@ -18,11 +18,18 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 
--- Workspace root (current working directory)
-local root = vim.loop.cwd()
+-- Workspace root (directory containing this project config)
+local exrc_path = debug.getinfo(1, "S").source:sub(2)
+local root = vim.fs.dirname(vim.fs.normalize(vim.fn.fnamemodify(exrc_path, ":p")))
 
 -- Absolute path to script
 local automation_script_path = root .. "/" .. "scripts/automation.py"
+
+local function automation_cmd(...)
+    local cmd = { "uv", "run", "--project", root, automation_script_path }
+    vim.list_extend(cmd, { ... })
+    return cmd
+end
 
 vim.api.nvim_create_user_command("EmbedIncludes", function(opts)
     local verbose = false
@@ -44,7 +51,7 @@ vim.api.nvim_create_user_command("EmbedIncludes", function(opts)
     end
 
     -- The command
-    local cmd = { automation_script_path, 'embed_includes', file_path }
+    local cmd = automation_cmd('embed_includes', file_path)
 
     local stdout_lines = {}
 
@@ -124,7 +131,7 @@ vim.api.nvim_create_user_command("CreateSolution", function(opts)
     local header_path = root .. "/code/" .. name .. "/" .. name .. ".hpp"
 
     -- The command
-    local cmd = { automation_script_path, 'create', '--name', name }
+    local cmd = automation_cmd('create', '--name', name)
 
     -- Execute
     vim.fn.jobstart(cmd, {
@@ -160,7 +167,7 @@ end, {
 
 vim.api.nvim_create_user_command("CreateSolution2", function(opts)
     local raw_name = table.concat(opts.fargs, " ")
-    local cmd = { automation_script_path, 'create2', '--name', raw_name }
+    local cmd = automation_cmd('create2', '--name', raw_name)
 
     local stdout_lines = {}
 
@@ -225,7 +232,7 @@ end, {
 
 vim.api.nvim_create_user_command("CreateLeetcodeSolution", function(opts)
     local raw_name = table.concat(opts.fargs, " ")
-    local cmd = { automation_script_path, 'create_leetcode', '--name', raw_name }
+    local cmd = automation_cmd('create_leetcode', '--name', raw_name)
 
     local stdout_lines = {}
 
