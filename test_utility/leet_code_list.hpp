@@ -113,7 +113,7 @@ template <ListNodeConcept TNode, typename V>
 template <ListNodeConcept Node>
 struct ConvertExpectedType<Node*, void>
 {
-    using Result = LeetCodeList<Node>;
+    using Result = LeetCodeList<std::remove_cv_t<Node>>;
 };
 
 template <typename Options, is_specialization<LeetCodeList> T>
