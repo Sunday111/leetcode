@@ -7,6 +7,7 @@
 #include <queue>
 #include <span>
 #include <sstream>
+#include <type_traits>
 #include <unordered_set>
 
 #include "cast.hpp"
@@ -55,6 +56,11 @@ struct LeetCodeBinaryTree
     using NodeValue = std::decay_t<decltype(TNode{}.val)>;
     std::deque<TNode> nodes;
     TNode* root = nullptr;
+
+    // NOLINTNEXTLINE
+    operator TNode*() noexcept { return root; }
+    // NOLINTNEXTLINE
+    operator const TNode*() const noexcept { return root; }
 
     [[nodiscard]] TNode* AllocNode(int value)
     {
@@ -248,7 +254,7 @@ void DeleteBinaryTreesWithSharedNodes(std::span<TNode*> nodes)
 template <BinaryTreeNodeConcept Node>
 struct ConvertExpectedType<Node*, void>
 {
-    using Result = LeetCodeBinaryTree<Node>;
+    using Result = LeetCodeBinaryTree<std::remove_cv_t<Node>>;
 };
 
 template <typename Options, is_specialization<LeetCodeBinaryTree> T>
