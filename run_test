@@ -10,6 +10,7 @@ fi
 
 build_dir="${BUILD_DIR:-./build}"
 expression=$1
+parallel_jobs=$(nproc)
 
 # Accept the convenient *.text.* spelling as well as a regular expression.
 # For example, *.2948.* becomes .*2948.*.
@@ -46,5 +47,9 @@ printf 'Building:'
 printf ' %s' "${targets[@]}"
 printf '\n'
 
-cmake --build "$build_dir" --target "${targets[@]}"
-ctest --test-dir "$build_dir" --output-on-failure -R "$regex"
+cmake --build "$build_dir" \
+    --parallel "${CMAKE_BUILD_PARALLEL_LEVEL:-$parallel_jobs}" \
+    --target "${targets[@]}"
+ctest --test-dir "$build_dir" \
+    --parallel "${CTEST_PARALLEL_LEVEL:-$parallel_jobs}" \
+    --output-on-failure -R "$regex"
