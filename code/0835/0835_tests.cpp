@@ -8,7 +8,7 @@ public:
 
 TEST_P(t0835, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
+    auto [inputs, expected] = kCases.at(GetParam());
     Solution instance{};
     auto f = std::bind_front(kMethodToTest, &instance);
     auto actual = std::apply(f, inputs);
