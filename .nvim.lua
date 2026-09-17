@@ -1,3 +1,7 @@
+vim.lsp.config('clangd', {
+    flags = { allow_incremental_sync = false },
+})
+
 vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('my.lsp', {}),
     callback = function(args)
