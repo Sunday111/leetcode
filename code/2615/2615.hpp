@@ -70,7 +70,7 @@ struct HashTable
 class Solution
 {
 public:
-    struct Info
+    struct Interval
     {
         u64 s{};
         u32 n{};
@@ -79,7 +79,7 @@ public:
     template <u32 capacity>
     static void impl(const u32* nums, u64* r, const u32 n) noexcept
     {
-        HashTable<capacity, Info> m;
+        HashTable<capacity, Interval> m;
         for (u64 i{}; i != n; ++i)
         {
             auto& x = m.find_or_add(nums[i]);
