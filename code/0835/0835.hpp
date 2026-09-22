@@ -40,21 +40,24 @@ public:
     [[gnu::always_inline]] static constexpr auto to_bitmap(
         const std::vector<std::vector<int>>& img) noexcept
     {
-        const auto n = img.size();
         std::array<u32, 30> rows{};
         u32 rw = 0;
         u32 rh = 0;
 
-        for (size_t y = 0; y != n; ++y)
+        auto row = rows.begin();
+        u32 y = 0;
+        for (const auto& src : img)
         {
-            const auto& src = img[y];
-            auto& dst = rows[y];
-            for (size_t x = 0; x != n; ++x)
+            auto& dst = *row++;
+            u32 x = 0;
+            for (int pixel : src)
             {
-                dst |= u32{src[x] == 1} << x;
+                dst |= u32{pixel == 1} << x;
+                ++x;
             }
             rw |= dst;
             rh |= u32{dst != 0} << y;
+            ++y;
         }
 
         const u32 x_end = std::bit_width(rw) & 31;
@@ -88,17 +91,23 @@ public:
             for (u32 dx : Interval{0, max_dx + 1}.iota())
             {
                 int x1 = 0, x2 = 0;
-                for (u32 y : ab.iota())
+                for (auto lhs = a.begin() + ab.begin, end = a.begin() + ab.end;
+                     lhs != end;
+                     ++lhs)
                 {
-                    x1 += std::popcount(a[y] & (b[y + dy] << dx));
-                    x2 += std::popcount(a[y] & (b[y + dy] >> dx));
+                    const auto rhs = b.begin() + (lhs - a.begin()) + dy;
+                    x1 += std::popcount(*lhs & (*rhs << dx));
+                    x2 += std::popcount(*lhs & (*rhs >> dx));
                 }
                 r = std::max({r, x1, x2});
                 x1 = 0, x2 = 0;
-                for (u32 y : ba.iota())
+                for (auto lhs = b.begin() + ba.begin, end = b.begin() + ba.end;
+                     lhs != end;
+                     ++lhs)
                 {
-                    x1 += std::popcount(b[y] & (a[y + dy] << dx));
-                    x2 += std::popcount(b[y] & (a[y + dy] >> dx));
+                    const auto rhs = a.begin() + (lhs - b.begin()) + dy;
+                    x1 += std::popcount(*lhs & (*rhs << dx));
+                    x2 += std::popcount(*lhs & (*rhs >> dx));
                 }
                 r = std::max({r, x1, x2});
             }
