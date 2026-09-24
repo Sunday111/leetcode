@@ -3,32 +3,52 @@
 #include <algorithm>
 #include <cassert>
 #include <cctype>
-#include <memory_resource>
 #include <ranges>
 #include <string>
-#include <unordered_set>
 #include <vector>
 
-inline static auto pool = std::pmr::unsynchronized_pool_resource{};  // NOLINT
+#include "namespaces.hpp"
+#include "sync_stdio.hpp"
 
 class Solution
 {
 public:
-    using Set = std::pmr::unordered_set<std::string>;
-    using List = std::pmr::vector<std::string>;
+    using List = std::vector<std::string>;
 
-    [[nodiscard]] static size_t expand_sub(std::string_view e, Set& out)
+    static void multiply(List& words, size_t na, size_t nb)
     {
-        Set tmp;
+        size_t t = na + nb;
+        size_t i = words.size() - t;
+        words.resize(words.size() + na * nb);
+
+        for (size_t x = 0; x != t; ++x)
+        {
+            words[words.size() - (x + 1)] =
+                std::move(words[words.size() - (x + 1 + na * nb)]);
+        }
+
+        for (size_t ia = words.size() - t, a_end = ia + na; ia != a_end; ++ia)
+        {
+            for (size_t ib = a_end; ib != words.size(); ++ib)
+            {
+                words[i++] = words[ia] + words[ib];
+            }
+        }
+
+        words.resize(i);
+    }
+
+    [[nodiscard]] static size_t expand_sub(std::string_view e, List& words)
+    {
+        const size_t ps = words.size();
         size_t i = 0;
-        List local(&pool);
-        local.push_back("");
+        words.push_back("");
         while (i != e.size() && e[i] != ',' && e[i] != '}')
         {
             if (std::isalpha(e[i]))
             {
                 char c = e[i++];
-                for (auto& s : local)
+                for (auto& s : words | stdv::drop(ps))
                 {
                     s.push_back(c);
                 }
@@ -36,48 +56,36 @@ public:
             else
             {
                 assert(e[i] == '{');
-                tmp.clear();
-                i += expand(e.substr(i), tmp);
-                size_t k = local.size();
-                local.reserve(k * tmp.size());
-                for (size_t li = 0; li != k; ++li)
-                {
-                    auto it = tmp.begin();
-                    for (size_t ti = 1; ti < tmp.size(); ++ti, ++it)
-                    {
-                        local.push_back(local[li] + *it);
-                    }
-                    local[li] += *it;
-                }
+                size_t na = words.size() - ps;
+                i += expand(e.substr(i), words);
+                multiply(words, na, words.size() - (na + ps));
             }
-        }
-
-        for (auto& word : local)
-        {
-            out.emplace(std::move(word));
         }
 
         return i;
     }
 
     [[nodiscard]] static size_t
-    expand_inner(std::string_view e, char stop, Set& out)
+    expand_inner(std::string_view e, char stop, List& words)
     {
+        const size_t ps = words.size();
         size_t i = 0;
         while (e[i] != stop)
         {
             i += e[i] == ',';
-            i += expand_sub(e.substr(i), out);
+            i += expand_sub(e.substr(i), words);
         }
+        stdr::sort(words | stdv::drop(ps));
+        words.erase(stdr::unique(words | stdv::drop(ps)).begin(), words.end());
         return i;
     }
 
     // returns the number of consumed characted
-    [[nodiscard]] static size_t expand(std::string_view e, Set& out)
+    [[nodiscard]] static size_t expand(std::string_view e, List& words)
     {
         assert(e.starts_with('{'));
         size_t i = 1;
-        i += expand_inner(e.substr(1), '}', out);
+        i += expand_inner(e.substr(1), '}', words);
         assert(e[i] == '}');
         return i + 1;
     }
@@ -85,11 +93,9 @@ public:
     std::vector<std::string> braceExpansionII(
         const std::string& e) const noexcept
     {
-        Set s;
-        [[maybe_unused]] auto t = expand_inner(e, '\0', s);
+        List words;
+        [[maybe_unused]] auto t = expand_inner(e, '\0', words);
         assert(t == e.size());
-        auto r = s | std::ranges::to<std::vector>();
-        std::ranges::sort(r);
-        return r;
+        return words;
     }
 };
