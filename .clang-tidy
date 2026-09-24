@@ -4,6 +4,7 @@ performance-*,\
 portability-*,\
 -portability-avoid-pragma-once,\
 cert-*,\
+-cert-dcl03-c,\
 clang-analyzer-*,\
 cppcoreguidelines-*,\
 modernize-*\
