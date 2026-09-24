@@ -2,6 +2,7 @@ Checks: "-*,\
 google-*,\
 performance-*,\
 portability-*,\
+-portability-avoid-pragma-once,\
 cert-*,\
 clang-analyzer-*,\
 cppcoreguidelines-*,\

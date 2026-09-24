@@ -100,15 +100,25 @@ vim.api.nvim_create_user_command("EmbedIncludes", function(opts)
                 return
             end
 
-            -- Read and yank
-            local lines = vim.fn.readfile(mono_file)
-            vim.schedule(function()
-                vim.fn.setreg('"', lines, 'l')
-                local clipboard = vim.o.clipboard or ""
-                if clipboard:match("unnamedplus") then
-                    vim.fn.setreg("+", lines, 'l')
-                end
-            end)
+            if vim.fn.executable("clang-format") == 0 then
+                vim.notify("EmbedIncludes: clang-format not found", vim.log.levels.ERROR)
+                return
+            end
+
+            vim.system({ "clang-format", "--style=file", "-i", mono_file }, { text = true },
+                vim.schedule_wrap(function(result)
+                    if result.code ~= 0 then
+                        vim.notify("EmbedIncludes: clang-format failed\n" .. result.stderr, vim.log.levels.ERROR)
+                        return
+                    end
+
+                    local lines = vim.fn.readfile(mono_file)
+                    vim.fn.setreg('"', lines, 'l')
+                    local clipboard = vim.o.clipboard or ""
+                    if clipboard:match("unnamedplus") then
+                        vim.fn.setreg("+", lines, 'l')
+                    end
+                end))
         end,
     })
 end, {

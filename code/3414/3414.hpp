@@ -6,7 +6,7 @@
 
 #include "int_if.hpp"
 #include "integral_aliases.hpp"
-#include "radix_sort_by.hpp"
+#include "radix_sort_indices_by.hpp"
 #include "swap_if_greater.hpp"
 #include "sync_stdio.hpp"
 
@@ -80,7 +80,7 @@ public:
             intervals);
 
         std::ranges::copy(std::views::iota(u16{}, n), sorted);
-        radix_sort_by<8>(
+        radix_sort_indices_by<8>(
             sorted,
             n,
             [](u16 index) { return intervals[index].r; });
