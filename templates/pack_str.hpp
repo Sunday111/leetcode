@@ -9,8 +9,8 @@
 
 // NOLINTBEGIN
 static constexpr u64 BIAS = 0x6060606060606060ull, EXT = 0x1F1F1F1F1F1F1F1Full;
+[[gnu::hot, gnu::target("bmi2")]]
 inline u64 packStr(const std::string& s) noexcept
-    __attribute__((hot, __target__("bmi2")))
 {
     const char* c8 = s.c_str();
     u8 n8 = s.length() & 0xFF;
@@ -50,8 +50,8 @@ inline u64 packStr(const std::string& s) noexcept
     return r;
 }
 
+[[gnu::hot, gnu::target("bmi2")]]
 inline std::string unpackStr(const u64 v) noexcept
-    __attribute__((hot, __target__("bmi2")))
 {
     std::string r(10, '\0');
     char* c8 = r.data();

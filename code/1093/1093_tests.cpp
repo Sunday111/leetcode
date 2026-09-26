@@ -1,5 +1,4 @@
 #include "1093_test_cases.hpp"
-#include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
 class t1093 : public ::testing::TestWithParam<size_t>
@@ -13,9 +12,11 @@ TEST_P(t1093, Test)
     Solution instance{};
     auto f = std::bind_front(kMethodToTest, &instance);
     auto actual = std::apply(f, inputs);
-    EXPECT_THAT(
-        expected,
-        testing::Pointwise(testing::DoubleNear(0.0001), actual));
+    ASSERT_EQ(expected.size(), actual.size());
+    for (size_t i = 0; i < expected.size(); ++i)
+    {
+        EXPECT_NEAR(expected[i], actual[i], 0.0001) << "Element " << i;
+    }
 }
 
 INSTANTIATE_TEST_SUITE_P(
