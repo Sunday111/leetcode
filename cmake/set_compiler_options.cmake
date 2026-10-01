@@ -51,6 +51,7 @@ function(set_generic_compiler_options target_name access)
             -Wsign-conversion # (Clang all versions, GCC >= 4.3) warn on sign conversions
             -Wformat=2 # warn on security issues around functions that format output (ie printf)
             -Wimplicit-fallthrough # warn on statements that fallthrough without an explicit annotation
+            -Wno-char-subscripts
         )
 
         if(CMAKE_CXX_COMPILER_ID STREQUAL "GCC")
