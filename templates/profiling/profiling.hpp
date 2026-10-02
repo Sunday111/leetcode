@@ -118,9 +118,8 @@ public:
 
     void Start(std::source_location location = std::source_location::current())
     {
-        assert(
-            !root_frame_id.IsValid() && !current_frame_id.IsValid() &&
-            !last_child_frame_id.IsValid());
+        assert(!current_frame_id.IsValid() && !last_child_frame_id.IsValid());
+        frames.clear();
         root_frame_id = CreateFrame(RegisterSource(
             SourceInfo{
                 .name = kRootNodeName,
@@ -133,10 +132,9 @@ public:
 
     void Finish()
     {
-        assert(current_frame_id == root_frame_id);
-        auto& root_frame = frames[root_frame_id.GetValue()];
-        root_frame.finish = Clock::now();
-        root_frame.status = Status::Completed;
+        assert(root_frame_id.IsValid() && current_frame_id == root_frame_id);
+        EndFrame(root_frame_id, kInvalidId);
+        last_child_frame_id = kInvalidId;
     }
 
     [[nodiscard]] inline SourceId RegisterSource(SourceInfo&& info)

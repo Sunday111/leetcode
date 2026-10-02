@@ -1,3 +1,5 @@
+#include <print>
+
 #include "gtest/gtest.h"
 #include "next_with_x_popcount_no_bmi2.hpp"
 
