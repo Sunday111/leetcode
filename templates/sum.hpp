@@ -1,16 +1,16 @@
+#include <algorithm>
+#include <functional>
 #include <ranges>
-
-#include "force_inline.hpp"
+#include <utility>
 
 inline static constexpr auto sum =
-    []<typename Range>(
+    []<typename Range,
+       typename T = std::ranges::range_value_t<Range>> [[gnu::always_inline]] (
         Range&& range,
-        auto init = std::ranges::range_value_t<Range>{}) INLINE_LAMBDA
+        T&& init = {}) noexcept
 {
-    for (auto&& v : std::forward<Range>(range))
-    {
-        init += v;
-    }
-
-    return init;
+    return std::ranges::fold_left(
+        std::forward<Range>(range),
+        std::forward<T>(init),
+        std::plus<>{});
 };

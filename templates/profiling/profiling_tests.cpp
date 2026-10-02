@@ -1,3 +1,4 @@
+#include <print>
 #include <thread>
 
 #include "gtest/gtest.h"
@@ -130,4 +131,39 @@ TEST(ProfilingTest, Scope)
     p.Finish();
 
     std::println("{}", profiling::SpeedScopeJSON{p});
+}
+
+TEST(ProfilingTest, RepeatedRecordings)
+{
+    auto& p = profiling::Profiler::Instance();
+    profiling::SourceId source = kInvalidId;
+    for (int recording = 0; recording < 2; ++recording)
+    {
+        p.Start();
+        EXPECT_EQ(p.GetFrames().size(), 1);
+        {
+            profiling::Scope scope{"repeated"};
+            auto current_source = curr_frame().source;
+            if (recording == 0) source = current_source;
+            EXPECT_EQ(current_source, source);
+            EXPECT_EQ(curr_src().name, "repeated");
+        }
+        p.Finish();
+        EXPECT_FALSE(p.current_frame_id.IsValid());
+        EXPECT_FALSE(p.last_child_frame_id.IsValid());
+        ASSERT_EQ(p.GetFrames().size(), 2);
+        const auto& root = p.GetFrames()[p.root_frame_id.GetValue()];
+        EXPECT_EQ(root.status, profiling::Status::Completed);
+        EXPECT_EQ(
+            p.GetFrames()[root.child.GetValue()].status,
+            profiling::Status::LastChild);
+        EXPECT_FALSE(std::format("{}", profiling::SpeedScopeJSON{p}).empty());
+    }
+
+    p.Start();
+    p.Finish();
+    ASSERT_EQ(p.GetFrames().size(), 1);
+    EXPECT_FALSE(p.GetFrames().front().child.IsValid());
+    EXPECT_FALSE(p.current_frame_id.IsValid());
+    EXPECT_FALSE(p.last_child_frame_id.IsValid());
 }

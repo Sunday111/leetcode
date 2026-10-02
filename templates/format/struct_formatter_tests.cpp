@@ -1,3 +1,5 @@
+#include <print>
+
 #include "gtest/gtest.h"
 #include "property_writer.hpp"
 #include "quoted.hpp"

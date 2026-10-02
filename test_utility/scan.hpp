@@ -3,6 +3,7 @@
 #include <charconv>
 #include <concepts>
 #include <format>
+#include <functional>
 #include <string_view>
 #include <type_traits>
 #include <utility>
@@ -48,7 +49,7 @@ template <typename Options>
 [[nodiscard]] FORCE_INLINE constexpr size_t
 skip_whitespaces(const Options& opts, std::string_view s, size_t i) noexcept
 {
-    while (opts.is_ignored_char(s[i])) ++i;
+    while (i < s.size() && opts.is_ignored_char(s[i])) ++i;
     return i;
 }
 
