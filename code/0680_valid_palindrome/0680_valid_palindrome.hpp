@@ -17,8 +17,8 @@ public:
                 if (s[l] != s[r])
                 {
                     return allow_one_mistake &&
-                           (validPalindrome({&s[l + 1], &s[r + 1]}, false) ||
-                            validPalindrome({&s[l], &s[r]}, false));
+                           (validPalindrome(s.substr(l + 1, r - l), false) ||
+                            validPalindrome(s.substr(l, r - l), false));
                 }
             } while (++l < --r);
         }
