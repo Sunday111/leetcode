@@ -1,3 +1,4 @@
+#include <print>
 #include "0407_trapping_rain_water.hpp"
 #include "gtest/gtest.h"
 #include "parse_2d_array.hpp"

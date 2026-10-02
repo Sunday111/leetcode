@@ -4,6 +4,7 @@
 #include <array>
 #include <bitset>
 #include <cassert>
+#include <cstdint>
 #include <span>
 #include <string>
 #include <utility>

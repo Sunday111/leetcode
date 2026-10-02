@@ -1,3 +1,4 @@
+#include <print>
 #include <random>
 
 #include "gtest/gtest.h"

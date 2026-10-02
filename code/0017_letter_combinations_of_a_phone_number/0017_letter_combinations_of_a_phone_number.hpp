@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+#include <bit>
 #include <string>
 #include <string_view>
 #include <utility>

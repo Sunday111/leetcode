@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cstring>
 #include <ranges>
 #include <vector>
 

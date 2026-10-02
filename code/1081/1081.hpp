@@ -1,4 +1,5 @@
 #include <bitset>
+#include <cstdint>
 #include <string>
 
 class Solution

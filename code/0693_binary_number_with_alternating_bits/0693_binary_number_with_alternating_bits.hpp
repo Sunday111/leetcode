@@ -1,4 +1,5 @@
 #include <bit>
+#include <cstdint>
 
 class Solution
 {

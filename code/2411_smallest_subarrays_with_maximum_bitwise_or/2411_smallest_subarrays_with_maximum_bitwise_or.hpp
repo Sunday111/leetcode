@@ -2,6 +2,7 @@
 
 #include <array>
 #include <bit>
+#include <cstdint>
 #include <vector>
 
 using u8 = uint8_t;

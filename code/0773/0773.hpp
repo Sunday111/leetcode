@@ -1,6 +1,7 @@
 // https://leetcode.com/problems/sliding-puzzle/
 
 #include <bit>
+#include <cstdint>
 #include <ranges>
 #include <unordered_set>
 #include <vector>

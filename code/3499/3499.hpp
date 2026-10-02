@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <string>
 
 #include "integral_aliases.hpp"

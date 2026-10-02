@@ -1,7 +1,9 @@
 #pragma once
 
 #include <cassert>
+#include <cctype>
 #include <cstdint>
+#include <string>
 #include <string_view>
 #include <unordered_map>
 #include <unordered_set>

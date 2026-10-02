@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <cstdint>
 #include <vector>
 
 using i64 = int64_t;

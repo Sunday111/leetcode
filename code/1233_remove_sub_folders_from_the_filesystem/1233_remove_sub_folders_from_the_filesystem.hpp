@@ -2,8 +2,10 @@
 
 #include <algorithm>
 #include <bit>
+#include <cstdint>
 #include <span>
 #include <string>
+#include <utility>
 #include <vector>
 
 using u8 = uint8_t;

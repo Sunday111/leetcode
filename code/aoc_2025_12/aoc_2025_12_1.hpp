@@ -1,3 +1,4 @@
+#include <bitset>
 #include "aoc_2025_12.hpp"
 
 namespace part1

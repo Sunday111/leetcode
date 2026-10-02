@@ -1,3 +1,4 @@
+#include <print>
 #include "0131_palindrome_partitioning.hpp"
 #include "gtest/gtest.h"
 

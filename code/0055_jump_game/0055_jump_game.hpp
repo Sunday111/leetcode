@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cstdint>
 #include <span>
 
 class Solution

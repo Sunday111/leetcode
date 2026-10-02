@@ -1,6 +1,9 @@
 #pragma once
 
+#include <array>
 #include <bit>
+#include <cstdint>
+#include <string>
 #include <vector>
 
 class Solution

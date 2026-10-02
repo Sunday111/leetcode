@@ -1,3 +1,4 @@
+#include <print>
 #include "3446_sort_matrix_by_diagonals.hpp"
 #include "gtest/gtest.h"
 

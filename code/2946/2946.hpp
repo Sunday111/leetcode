@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <vector>
 
 // https://leetcode.com/problems/matrix-similarity-after-cyclic-shifts/

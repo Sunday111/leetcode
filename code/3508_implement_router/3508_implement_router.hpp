@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <array>
+#include <cstdint>
 #include <deque>
 #include <unordered_map>
 #include <unordered_set>

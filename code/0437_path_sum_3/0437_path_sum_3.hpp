@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <unordered_map>
 
 #include "lc_tree_node.hpp"

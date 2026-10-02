@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <ranges>
 #include <vector>
 

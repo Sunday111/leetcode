@@ -1,5 +1,6 @@
-#include <vector>
 #include <algorithm>
+#include <array>
+#include <vector>
 
 #include "cast.hpp"
 #include "force_inline.hpp"
