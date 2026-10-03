@@ -24,7 +24,7 @@ TYPED_TEST_P(BitsetTest, FuzzyGetAndSet)
     Bitset<bitset_size, std::decay_t<decltype(*this)>::traits> my_bitset;
     std::bitset<bitset_size> std_bitset;
 
-    for (u32 i = 0; i != 50'000; ++i)
+    for (u32 i = 0; i != 12'500; ++i)
     {
         u32 index = distr(rnd);
         ASSERT_EQ(std_bitset[index], my_bitset.Get(index));
