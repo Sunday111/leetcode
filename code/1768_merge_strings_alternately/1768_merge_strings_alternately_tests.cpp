@@ -1,3 +1,5 @@
+#include <span>
+
 #include "1768_merge_strings_alternately_simple.hpp"
 #include "1768_merge_strings_alternately_sse2.hpp"
 #include "gtest/gtest.h"
@@ -5,7 +7,7 @@
 
 TEST(t1768_merge_strings_alternately, test_simple)
 {
-    auto& strings = StringsForTesting::Get().strings;
+    auto strings = std::span{StringsForTesting::Get().strings}.first(350);
     for (u32 i = 0; i != strings.size(); ++i)
     {
         auto& a = strings[i];

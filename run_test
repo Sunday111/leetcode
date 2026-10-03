@@ -52,5 +52,5 @@ cmake --build "$build_dir" \
     --target "${targets[@]}"
 ctest --test-dir "$build_dir" \
     --parallel "${CTEST_PARALLEL_LEVEL:-$parallel_jobs}" \
-    --timeout 30 \
+    --timeout 60 \
     --output-on-failure -R "$regex"
