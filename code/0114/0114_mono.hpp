@@ -37,7 +37,7 @@ public:
                     {
                         t = std::array{t->right, t->left}[!t->right];
                     }
-                    t->right = nullptr;
+                    t->right = std::exchange(x->right, nullptr);
                 }
 
                 std::swap(x->left, x->right);

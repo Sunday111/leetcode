@@ -20,7 +20,8 @@ public:
                     {
                         t = std::array{t->right, t->left}[!t->right];
                     }
-                    t->right = std::exchange(x->right, nullptr);
+                    t->right = x->right;
+                    x->right = nullptr;
                 }
 
                 std::swap(x->left, x->right);
