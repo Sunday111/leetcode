@@ -1,7 +1,7 @@
 #include <cstdint>
 #include <unordered_map>
 
-#include "lc_tree_node.hpp"
+#include "binary_tree/lc_tree_node.hpp"
 
 class Solution
 {

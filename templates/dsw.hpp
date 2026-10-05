@@ -1,37 +1,13 @@
 #include <bit>
 #include <utility>
 
-#include "force_inline.hpp"
+#include "binary_tree/make_vine.hpp"
 
 namespace dsw_impl
 {
 
 template <typename Node>
-FORCE_INLINE constexpr unsigned bstToVine(Node* grand) noexcept
-{
-    unsigned count = 0;
-    auto tmp = grand->right;
-
-    while (tmp)
-    {
-        if (tmp->left)
-        {
-            auto old = std::exchange(tmp, tmp->left);
-            old->left = std::exchange(tmp->right, old);
-            grand->right = tmp;
-        }
-        else
-        {
-            count++;
-            grand = std::exchange(tmp, tmp->right);
-        }
-    }
-
-    return count;
-}
-
-template <typename Node>
-FORCE_INLINE constexpr void rotate(Node* grand, unsigned m) noexcept
+[[gnu::always_inline]] constexpr void rotate(Node* grand, unsigned m) noexcept
 {
     for (auto tmp = grand->right; m--;)
     {
@@ -44,11 +20,11 @@ FORCE_INLINE constexpr void rotate(Node* grand, unsigned m) noexcept
 }
 
 template <typename Node>
-FORCE_INLINE constexpr auto balanceBST(Node* root) noexcept
+[[gnu::always_inline]] constexpr auto balanceBST(Node* root) noexcept
 {
     Node dummy{0};
     dummy.right = root;
-    unsigned n = bstToVine(&dummy);
+    unsigned n = make_vine(&dummy);
     unsigned m = (1u << (std::bit_width(n + 1u) - 1)) - 1u;
     rotate(&dummy, n - m);
     while (m >>= 1) rotate(&dummy, m);
