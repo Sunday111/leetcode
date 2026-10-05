@@ -1,6 +1,6 @@
 #include <initializer_list>
 
-#include "lc_tree_node.hpp"
+#include "binary_tree/lc_tree_node.hpp"
 
 struct Frame
 {

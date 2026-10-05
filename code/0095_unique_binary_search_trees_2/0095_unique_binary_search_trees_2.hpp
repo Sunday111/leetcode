@@ -1,7 +1,7 @@
 #include <array>
 #include <vector>
 
-#include "lc_tree_node.hpp"
+#include "binary_tree/lc_tree_node.hpp"
 
 using u8 = uint8_t;
 using u16 = uint16_t;

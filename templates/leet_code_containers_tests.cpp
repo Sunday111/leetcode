@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "lc_tree_node.hpp"
+#include "binary_tree/lc_tree_node.hpp"
 #include "leet_code_binary_tree.hpp"
 #include "leet_code_list.hpp"
 #include "singly_linked_list/ll_node.hpp"
