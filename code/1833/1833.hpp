@@ -22,8 +22,9 @@ public:
         }
 
         // Take elements from the queue one by one
-        for (auto x = b.min(); x < b.get_capacity(); x = b.min())
+        while (!b.is_empty())
         {
+            auto x = b.min();
             // t: by as many bars with price 'x' as possible and
             // reset frequency value to make 'freq' self-cleaning
             // to prevent zeroing everything every time

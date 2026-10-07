@@ -38,8 +38,9 @@ public:
 
         u32 ans = 0;
 
-        for (u32 i = bs.min(); i < (1u << 17); i = bs.min())
+        while (!bs.is_empty())
         {
+            u32 i = bs.min();
             u32 x = i / 2, f = 1u + bs.get(i + 1), t = 1;
             bs.remove(i);
             bs.remove(i + 1);
@@ -63,9 +64,9 @@ public:
             upd_max(ans, t - (u32{!f} << 1));
         }
 
-        for (u32 x = roots.min(); x < (1 << 16); x = roots.min())
+        while (!roots.is_empty())
         {
-            roots.remove(x);
+            roots.remove(roots.min());
         }
 
         if (f1 >= 2) upd_max(ans, f1 - !(f1 & 1));
