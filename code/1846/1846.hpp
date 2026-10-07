@@ -36,8 +36,9 @@ public:
             ++f[x];
             bs.add(x);
         }
-        for (u32 x = bs.min(); x <= m; x = bs.min())
+        while (!bs.is_empty())
         {
+            u32 x = bs.min();
             bs.remove(x);
             u32 h = std::exchange(f[x], 0u);
             if constexpr (big)

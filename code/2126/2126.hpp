@@ -21,8 +21,9 @@ public:
 
         bool r = true;
 
-        for (u32 x = b.min(); x < 100'001; x = b.min())
+        while (!b.is_empty())
         {
+            u32 x = b.min();
             bool ok = x <= m;
             r &= ok;
             m += (u64{x} * exch(freq[x], 0)) & -u64{ok};

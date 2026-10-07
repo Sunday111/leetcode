@@ -3,6 +3,7 @@
 #include <array>
 #include <bit>
 #include <cassert>
+#include <cstddef>
 #include <numeric>
 
 #include "cast.hpp"
@@ -26,8 +27,8 @@ public:
         std::array<size_t, kNumLayers> sizes{};
         for (size_t i = 0, x = capacity; i != sizes.size(); ++i)
         {
-            sizes[i] = x;
             x = ceil_div(x, kWordSize);
+            sizes[i] = x;
         }
         return sizes;
     }();
@@ -175,6 +176,7 @@ public:
 
     [[nodiscard, gnu::always_inline]] constexpr ValueType min() const noexcept
     {
+        assert(!is_empty());
         ValueType wi = 0;
         for_each_layer_reversed(
             [&] [[gnu::always_inline]] (auto layer) noexcept

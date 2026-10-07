@@ -4,6 +4,8 @@
 #include "gtest/gtest.h"
 #include "pyramid_bitset.hpp"
 
+static_assert(PyramidBitset<1 << 20>::kTotalWords == 16384 + 256 + 4 + 1);
+
 // List of capacities we want to test
 using BitsetCapacities = ::testing::Types<
     PyramidBitset<1, u8>,
@@ -25,6 +27,21 @@ class PyramidBitsetTypedFuzzyTest : public ::testing::Test
 };
 
 TYPED_TEST_SUITE(PyramidBitsetTypedFuzzyTest, BitsetCapacities);
+
+TYPED_TEST(PyramidBitsetTypedFuzzyTest, NonEmptyMin)
+{
+    using Bitset = TypeParam;
+    using ValueType = typename Bitset::ValueType;
+    constexpr auto capacity = Bitset::get_capacity();
+    Bitset bs{kEmpty};
+
+    EXPECT_TRUE(bs.is_empty());
+    bs.add(cast<ValueType>(capacity - 1));
+    ASSERT_FALSE(bs.is_empty());
+    EXPECT_EQ(bs.min(), capacity - 1);
+    bs.remove(cast<ValueType>(capacity - 1));
+    EXPECT_TRUE(bs.is_empty());
+}
 
 TYPED_TEST(PyramidBitsetTypedFuzzyTest, Fuzzy)
 {
