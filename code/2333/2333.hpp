@@ -1,65 +1,88 @@
-#include <algorithm>
+#include <array>
+#include <bit>
+#include <cstdlib>
+#include <utility>
 #include <vector>
 
 #include "integral_aliases.hpp"
-#include "radix_sorter.hpp"
+#include "pyramid_bitset.hpp"
 #include "sync_stdio.hpp"
 
 class Solution
 {
+    static constexpr u32 kMaxDiff = 100000;
+    static constexpr u32 kNumBlocks = (kMaxDiff + 64) / 64;
+    inline static std::array<u32, kMaxDiff + 1> frequency{};
+    inline static std::array<u64, kNumBlocks> occupied_values{};
+    inline static PyramidBitset<kNumBlocks> occupied_blocks{kEmpty};
+
 public:
     u64 minSumSquareDiff(
-        std::vector<int>& nums1,
+        const std::vector<int>& nums1,
         const std::vector<int>& nums2,
-        u64 k1,
-        u64 k2)
+        u32 k1,
+        u32 k2)
     {
-        u32* const a = reinterpret_cast<u32*>(nums1.data());
-        const u32* const b = reinterpret_cast<const u32*>(nums2.data());
-
-        const u32 n = nums1.size() & ~0u;
-
-        for (u32 i = 0; i != n; ++i)
+        occupied_values[0] = 1;
+        occupied_blocks.add(0);
+        for (size_t i = 0; i < nums1.size(); ++i)
         {
-            u32 v1 = a[i];
-            u32 v2 = b[i];
-            u32 diff = std::max(v1, v2) - std::min(v1, v2);
-            a[i] = diff;
+            u32 diff = static_cast<u32>(std::abs(nums1[i] - nums2[i]));
+            if (frequency[diff]++ == 0)
+            {
+                u32 block = diff >> 6;
+                if (!occupied_values[block])
+                {
+                    occupied_blocks.add(static_cast<u16>(block));
+                }
+                occupied_values[block] |= u64{1} << (diff & 63);
+            }
         }
 
-        radix_sort<8, 4, SortOrder::Descending>(std::span{a, n});
-
-        u64 k = k1 + k2;
-        u64 level = a[0];
-
-        u32 count = 1;
-        for (; count <= n; ++count)
+        u32 block = 0;
+        u64 bits = 0;
+        auto pop_max = [&] [[gnu::always_inline]]
         {
-            u64 next = count < n ? a[count] : 0;
+            if (!bits)
+            {
+                block = occupied_blocks.max();
+                occupied_blocks.remove(static_cast<u16>(block));
+                bits = std::exchange(occupied_values[block], 0);
+            }
+            u32 bit = 63 - static_cast<u32>(std::countl_zero(bits));
+            bits ^= u64{1} << bit;
+            return block * 64 + bit;
+        };
+
+        u32 k = k1 + k2, level = pop_max();
+        u64 count = std::exchange(frequency[level], 0), sum{};
+        while (level)
+        {
+            u32 next = pop_max();
+            u64 next_count = std::exchange(frequency[next], 0);
             u64 cost = (level - next) * count;
             if (k < cost)
             {
+                sum = u64{next} * next * next_count;
                 break;
             }
 
-            k -= cost;
+            k -= static_cast<u32>(cost);
             level = next;
+            count += next_count;
         }
-
-        u64 sum{};
 
         if (level)
         {
-            level -= k / count;
-            u64 remainder = k % count;
-            sum = level * level * (count - remainder) +
-                  (level - 1) * (level - 1) * remainder;
-            for (u32 i = count; i < n; ++i)
-            {
-                sum += u64{a[i]} * a[i];
-            }
+            sum += count * level * level + k / count * (k + k % count) +
+                   k % count - 2 * u64{level} * k;
         }
 
+        while (bits || !occupied_blocks.is_empty())
+        {
+            u32 diff = pop_max();
+            sum += u64{diff} * diff * std::exchange(frequency[diff], 0);
+        }
         return sum;
     }
 };
