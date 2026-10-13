@@ -6,16 +6,26 @@
 class Solution
 {
 public:
-    std::string maxSumOfSquares(size_t num, size_t s) const noexcept
+    std::string maxSumOfSquares(size_t n, size_t s) const noexcept
     {
-        if (num * 9 < s) return {};
-        using std::views::repeat;
-        const size_t q = s / 9, r = s % 9, t = !!r;
-        const char tc = static_cast<char>('0' + r);
-        return std::array{
-                   repeat('9', q),
-                   repeat(tc, t),
-                   repeat('0', num - q - t)} |
-               std::views::join | std::ranges::to<std::string>();
+        if (n * 9 < s) return {};
+
+        size_t q = s / 9;
+        size_t rem = s % 9;
+        bool fill_nines = q <= n - q - !!rem;
+        std::string ans(n, fill_nines ? '0' : '9');
+        if (fill_nines)
+        {
+            std::ranges::fill(ans | std::views::take(q), '9');
+        }
+        else
+        {
+            std::ranges::fill(ans | std::views::drop(q + !!rem), '0');
+        }
+        if (rem)
+        {
+            ans[q] = static_cast<char>('0' + rem);
+        }
+        return ans;
     }
 };
