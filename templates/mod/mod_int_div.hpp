@@ -3,16 +3,18 @@
 #include "mod/mod_int_inv.hpp"  // IWYU pragma: export
 #include "mod/mod_int_mul.hpp"  // IWYU pragma: export
 
-[[gnu::always_inline]] constexpr ModInt& ModInt::operator/=(
+[[gnu::always_inline]] constexpr ModInt& operator/=(
+    ModInt& lhs,
     const ModInt& rhs) noexcept
 {
-    return *this *= rhs.inverse();
+    lhs *= inverse(rhs);
+    return lhs;
 }
 
-[[nodiscard, gnu::always_inline]] constexpr ModInt ModInt::operator/(
-    const ModInt& rhs) const noexcept
+[[nodiscard, gnu::always_inline]] constexpr ModInt operator/(
+    ModInt lhs,
+    const ModInt& rhs) noexcept
 {
-    auto copy = *this;
-    copy /= rhs;
-    return copy;
+    lhs /= rhs;
+    return lhs;
 }

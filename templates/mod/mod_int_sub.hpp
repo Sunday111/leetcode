@@ -2,18 +2,19 @@
 
 #include "mod/mod_int.hpp"  // IWYU pragma: export
 
-[[gnu::always_inline]] constexpr ModInt& ModInt::operator-=(
+[[gnu::always_inline]] constexpr ModInt& operator-=(
+    ModInt& lhs,
     const ModInt& rhs) noexcept
 {
-    value += kMOD & -u32{value < rhs.value};
-    value -= rhs.value;
-    return *this;
+    lhs.value += kMOD & -u32{lhs.value < rhs.value};
+    lhs.value -= rhs.value;
+    return lhs;
 }
 
-[[nodiscard, gnu::always_inline]] constexpr ModInt ModInt::operator-(
-    const ModInt& rhs) const noexcept
+[[nodiscard, gnu::always_inline]] constexpr ModInt operator-(
+    ModInt lhs,
+    const ModInt& rhs) noexcept
 {
-    auto copy = *this;
-    copy -= rhs;
-    return copy;
+    lhs -= rhs;
+    return lhs;
 }

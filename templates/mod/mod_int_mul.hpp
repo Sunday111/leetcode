@@ -3,20 +3,21 @@
 #include "cast.hpp"
 #include "mod/mod_int.hpp"  // IWYU pragma: export
 
-[[gnu::always_inline]] constexpr ModInt& ModInt::operator*=(
+[[gnu::always_inline]] constexpr ModInt& operator*=(
+    ModInt& lhs,
     const ModInt& rhs) noexcept
 {
     u64 v = rhs.value;
-    v *= value;
+    v *= lhs.value;
     if (v >= kMOD) v %= kMOD;
-    value = cast<u32>(v);
-    return *this;
+    lhs.value = cast<u32>(v);
+    return lhs;
 }
 
-[[nodiscard, gnu::always_inline]] constexpr ModInt ModInt::operator*(
-    const ModInt& rhs) const noexcept
+[[nodiscard, gnu::always_inline]] constexpr ModInt operator*(
+    ModInt lhs,
+    const ModInt& rhs) noexcept
 {
-    auto copy = *this;
-    copy *= rhs;
-    return copy;
+    lhs *= rhs;
+    return lhs;
 }

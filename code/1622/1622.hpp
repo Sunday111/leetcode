@@ -16,7 +16,7 @@ public:
 
         for (ModInt base{0}; base.value != r.size(); ++base.value)
         {
-            r[base.value] = base.pow(kMOD - 2);
+            r[base.value] = pow(base, kMOD - 2);
         }
 
         return r;

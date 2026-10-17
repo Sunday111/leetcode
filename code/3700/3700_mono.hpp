@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <array>
 #include <bit>
-#include <concepts>
 #include <cstdint>
 #include <utility>
 
@@ -21,53 +20,24 @@ inline constexpr u32 kMOD = 1'000'000'007;
 
 struct ModInt
 {
-    [[gnu::always_inline]] constexpr ModInt& operator+=(
-        const ModInt& rhs) noexcept;
-
-    [[nodiscard, gnu::always_inline]] constexpr ModInt operator+(
-        const ModInt& rhs) const noexcept;
-
-    [[gnu::always_inline]] constexpr ModInt& operator-=(
-        const ModInt& rhs) noexcept;
-
-    [[nodiscard, gnu::always_inline]] constexpr ModInt operator-(
-        const ModInt& rhs) const noexcept;
-
-    [[gnu::always_inline]] constexpr ModInt& operator*=(
-        const ModInt& rhs) noexcept;
-
-    [[nodiscard, gnu::always_inline]] constexpr ModInt operator*(
-        const ModInt& rhs) const noexcept;
-
-    [[nodiscard, gnu::always_inline]] constexpr ModInt inverse() const noexcept;
-
-    [[gnu::always_inline]] constexpr ModInt& operator/=(
-        const ModInt& rhs) noexcept;
-
-    [[nodiscard, gnu::always_inline]] constexpr ModInt operator/(
-        const ModInt& rhs) const noexcept;
-
-    template <std::unsigned_integral Exp>
-    [[nodiscard, gnu::always_inline]] constexpr ModInt pow(
-        Exp exp) const noexcept;
-
     u32 value = 0;
 };
 
-[[gnu::always_inline]] constexpr ModInt& ModInt::operator+=(
+[[gnu::always_inline]] constexpr ModInt& operator+=(
+    ModInt& lhs,
     const ModInt& rhs) noexcept
 {
-    value += rhs.value;
-    value -= kMOD & -u32{value >= kMOD};
-    return *this;
+    lhs.value += rhs.value;
+    lhs.value -= kMOD & -u32{lhs.value >= kMOD};
+    return lhs;
 }
 
-[[nodiscard, gnu::always_inline]] constexpr ModInt ModInt::operator+(
-    const ModInt& rhs) const noexcept
+[[nodiscard, gnu::always_inline]] constexpr ModInt operator+(
+    ModInt lhs,
+    const ModInt& rhs) noexcept
 {
-    auto copy = *this;
-    copy += rhs;
-    return copy;
+    lhs += rhs;
+    return lhs;
 }
 
 template <size_t k>

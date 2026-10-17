@@ -2,10 +2,9 @@
 
 #include "mod/mod_int.hpp"  // IWYU pragma: export
 
-[[nodiscard, gnu::always_inline]] constexpr ModInt ModInt::inverse()
-    const noexcept
+[[nodiscard, gnu::always_inline]] constexpr ModInt inverse(ModInt x) noexcept
 {
-    auto a = value;
+    auto a = x.value;
     u32 x0 = 1, x1 = 0, mod = kMOD;
     while (a)
     {
