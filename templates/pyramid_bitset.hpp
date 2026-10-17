@@ -210,6 +210,19 @@ public:
         return words[offsets[0] + (v >> kShift)] & (Word{1} << (v & kMask));
     }
 
+    // Both searches exclude v and return capacity when no neighbour exists.
+    [[nodiscard, gnu::always_inline]] constexpr size_t predecessor(
+        ValueType v) const noexcept
+    {
+        return find_neighbour<false>(v);
+    }
+
+    [[nodiscard, gnu::always_inline]] constexpr size_t successor(
+        ValueType v) const noexcept
+    {
+        return find_neighbour<true>(v);
+    }
+
     [[nodiscard, gnu::always_inline]] static constexpr size_t
     get_capacity() noexcept
     {
@@ -249,6 +262,58 @@ public:
     }
 
 private:
+    template <bool forward>
+    [[nodiscard, gnu::always_inline]] constexpr size_t find_neighbour(
+        size_t position) const noexcept
+    {
+        assert(position < capacity);
+        for (size_t layer = 0; layer != kNumLayers; ++layer)
+        {
+            size_t wi = position >> kShift;
+            size_t bi = position & kMask;
+            Word candidates = words[offsets[layer] + wi];
+            if constexpr (forward)
+            {
+                candidates >>= bi;
+                candidates >>= 1;
+            }
+            else
+            {
+                candidates &= (Word{1} << bi) - 1;
+            }
+            if (candidates)
+            {
+                if constexpr (forward)
+                {
+                    position += 1 + cast<size_t>(std::countr_zero(candidates));
+                }
+                else
+                {
+                    position = (wi << kShift) + kMask -
+                               cast<size_t>(std::countl_zero(candidates));
+                }
+                while (layer != 0)
+                {
+                    --layer;
+                    Word word = words[offsets[layer] + position];
+                    size_t bit = 0;
+                    if constexpr (forward)
+                    {
+                        bit = cast<size_t>(std::countr_zero(word));
+                    }
+                    else
+                    {
+                        bit = kMask - cast<size_t>(std::countl_zero(word));
+                    }
+                    position = (position << kShift) + bit;
+                }
+                return position < capacity ? position : capacity;
+            }
+            position = wi;
+        }
+        return capacity;
+    }
+
     template <typename F>
     [[gnu::always_inline]] constexpr static void for_each_layer(F&& f) noexcept
     {
