@@ -1,7 +1,10 @@
 #include <vector>
 
 #include "integral_aliases.hpp"
-#include "pyramid_bitset.hpp"
+#include "pyramid_bitset/pbs_add.hpp"
+#include "pyramid_bitset/pbs_get.hpp"
+#include "pyramid_bitset/pbs_min.hpp"
+#include "pyramid_bitset/pbs_remove.hpp"
 #include "upd_max.hpp"
 
 class Solution
@@ -28,7 +31,7 @@ public:
             u8 digits = 0;
             while (v)
             {
-                num_unique += bs.add_ex(v);
+                num_unique += pbs_add_ex(bs, v);
                 v /= 10;
                 ++digits;
             }
@@ -37,12 +40,12 @@ public:
         u8 r = 0;
         for (u32 v : b)
         {
-            while (v && !bs.get(v)) v /= 10;
+            while (v && !pbs_get(bs, v)) v /= 10;
 
             u8 l = 0;
             while (v)
             {
-                num_unique -= bs.remove_ex(v);
+                num_unique -= pbs_remove_ex(bs, v);
                 ++l;
                 v /= 10;
             }
@@ -51,7 +54,7 @@ public:
         }
 
         // cleanup static bitset
-        while (num_unique--) bs.remove(bs.min());
+        while (num_unique--) pbs_remove(bs, pbs_min(bs));
 
         return r;
     }

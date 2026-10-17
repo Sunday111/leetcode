@@ -5,7 +5,10 @@
 #include <vector>
 
 #include "integral_aliases.hpp"
-#include "pyramid_bitset.hpp"
+#include "pyramid_bitset/pbs_add.hpp"
+#include "pyramid_bitset/pbs_is_empty.hpp"
+#include "pyramid_bitset/pbs_max.hpp"
+#include "pyramid_bitset/pbs_remove.hpp"
 #include "sync_stdio.hpp"
 
 class Solution
@@ -14,7 +17,7 @@ class Solution
     static constexpr u32 kNumBlocks = (kMaxDiff + 64) / 64;
     inline static std::array<u32, kMaxDiff + 1> frequency{};
     inline static std::array<u64, kNumBlocks> occupied_values{};
-    inline static PyramidBitset<kNumBlocks> occupied_blocks{kEmpty};
+    inline static PyramidBitset<kNumBlocks> occupied_blocks{};
 
 public:
     u64 minSumSquareDiff(
@@ -24,7 +27,7 @@ public:
         u32 k2)
     {
         occupied_values[0] = 1;
-        occupied_blocks.add(0);
+        pbs_add(occupied_blocks, 0);
         for (size_t i = 0; i < nums1.size(); ++i)
         {
             u32 diff = static_cast<u32>(std::abs(nums1[i] - nums2[i]));
@@ -33,7 +36,7 @@ public:
                 u32 block = diff >> 6;
                 if (!occupied_values[block])
                 {
-                    occupied_blocks.add(static_cast<u16>(block));
+                    pbs_add(occupied_blocks, static_cast<u16>(block));
                 }
                 occupied_values[block] |= u64{1} << (diff & 63);
             }
@@ -45,8 +48,8 @@ public:
         {
             if (!bits)
             {
-                block = occupied_blocks.max();
-                occupied_blocks.remove(static_cast<u16>(block));
+                block = pbs_max(occupied_blocks);
+                pbs_remove(occupied_blocks, static_cast<u16>(block));
                 bits = std::exchange(occupied_values[block], 0);
             }
             u32 bit = 63 - static_cast<u32>(std::countl_zero(bits));
@@ -78,7 +81,7 @@ public:
                    k % count - 2 * u64{level} * k;
         }
 
-        while (bits || !occupied_blocks.is_empty())
+        while (bits || !pbs_is_empty(occupied_blocks))
         {
             u32 diff = pop_max();
             sum += u64{diff} * diff * std::exchange(frequency[diff], 0);

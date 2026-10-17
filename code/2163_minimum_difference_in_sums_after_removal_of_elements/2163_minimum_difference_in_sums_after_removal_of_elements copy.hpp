@@ -2,7 +2,7 @@
 #include <span>
 #include <vector>
 
-#include "bitset_priority_queue.hpp"
+#include "pyramid_bitset/bitset_priority_queue.hpp"
 #include "reinterpret_range.hpp"
 
 class Solution

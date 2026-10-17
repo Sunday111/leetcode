@@ -1,6 +1,13 @@
+#pragma once
+
 #include <algorithm>
 
-#include "pyramid_bitset.hpp"
+#include "pyramid_bitset/pbs_add.hpp"
+#include "pyramid_bitset/pbs_initialize.hpp"
+#include "pyramid_bitset/pbs_is_empty.hpp"
+#include "pyramid_bitset/pbs_max.hpp"
+#include "pyramid_bitset/pbs_min.hpp"
+#include "pyramid_bitset/pbs_remove.hpp"
 
 template <size_t max_value, size_t max_count>
 class BitsetPriorityQueue
@@ -10,32 +17,32 @@ public:
     using ValueType = B::ValueType;
     using FrequencyType = UintForValue<max_count>;
     std::array<FrequencyType, max_value + 1> freq{};
-    B bits{EmptyType{}};
+    B bits{};
 
     [[gnu::always_inline]] constexpr void add(ValueType v) noexcept
     {
         ++freq[v];
-        bits.add(v);
+        pbs_add(bits, v);
     }
 
     [[gnu::always_inline]] constexpr void remove(ValueType v) noexcept
     {
-        if (0 == --freq[v]) bits.remove(v);
+        if (0 == --freq[v]) pbs_remove(bits, v);
     }
 
     [[nodiscard, gnu::always_inline]] constexpr ValueType min() const noexcept
     {
-        return bits.min();
+        return pbs_min(bits);
     }
 
     [[nodiscard, gnu::always_inline]] constexpr ValueType max() const noexcept
     {
-        return bits.max();
+        return pbs_max(bits);
     }
 
     [[gnu::always_inline]] constexpr void clear() noexcept
     {
-        bits.initialize();
+        pbs_initialize(bits, kEmpty);
         std::ranges::fill(freq, 0);
     }
 
@@ -53,6 +60,6 @@ public:
     }
     [[gnu::always_inline]] constexpr bool is_empty() const noexcept
     {
-        return bits.is_empty();
+        return pbs_is_empty(bits);
     }
 };

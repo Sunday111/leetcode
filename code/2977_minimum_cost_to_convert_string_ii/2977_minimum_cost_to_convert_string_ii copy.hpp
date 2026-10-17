@@ -8,7 +8,13 @@
 #include "bump_hash_map.hpp"
 #include "cast.hpp"
 #include "integral_aliases.hpp"
-#include "pyramid_bitset.hpp"
+#include "pyramid_bitset/pbs_add.hpp"
+#include "pyramid_bitset/pbs_get.hpp"
+#include "pyramid_bitset/pbs_initialize.hpp"
+#include "pyramid_bitset/pbs_is_empty.hpp"
+#include "pyramid_bitset/pbs_min.hpp"
+#include "pyramid_bitset/pbs_remove.hpp"
+#include "signed_integral_aliases.hpp"
 
 using SolutionStorage = GlobalBufferStorage<1u << 16>;
 
@@ -112,7 +118,7 @@ public:
         static std::array<PyramidBitset<256>, 200> bitsets{};
         for (u8 i = 0; i != num_unique_tokens; ++i)
         {
-            bitsets[i].initialize(num_unique_tokens);
+            pbs_initialize(bitsets[i], kEmpty, num_unique_tokens);
         }
 
         for (u32 i = 0; i != original.size(); ++i)
@@ -120,7 +126,7 @@ public:
             u8 from = token_to_index.get()[original[i]];
             u8 to = token_to_index.get()[changed[i]];
             dist[from][to] = std::min(dist[from][to], cast<u32>(cost[i]));
-            bitsets[from].add(to);
+            pbs_add(bitsets[from], to);
         }
 
         for (u8 k = 0; k != num_unique_tokens; ++k)
@@ -128,14 +134,14 @@ public:
             for (u8 i = 0; i != num_unique_tokens; ++i)
             {
                 auto& bi = bitsets[i];
-                if (!bi.get(k)) continue;
+                if (!pbs_get(bi, k)) continue;
 
-                for (auto bk = bitsets[k]; !bk.is_empty();)
+                for (auto bk = bitsets[k]; !pbs_is_empty(bk);)
                 {
-                    u8 j = bk.min();
-                    bk.remove(j);
+                    u8 j = pbs_min(bk);
+                    pbs_remove(bk, j);
                     dist[i][j] = std::min(dist[i][j], dist[i][k] + dist[k][j]);
-                    bi.add(j);
+                    pbs_add(bi, j);
                 }
             }
         }
@@ -165,7 +171,7 @@ public:
                 if (it != token_to_index->end())
                 {
                     u8 tgt_idx = it->second;
-                    if (bitsets[src_idx].get(tgt_idx))
+                    if (pbs_get(bitsets[src_idx], tgt_idx))
                     {
                         x = std::min(x, dist[src_idx][tgt_idx] + dp[i + l]);
                     }

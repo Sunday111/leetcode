@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "bitset_priority_queue.hpp"
+#include "pyramid_bitset/bitset_priority_queue.hpp"
 
 class Solution
 {

@@ -1,7 +1,10 @@
 #include <vector>
 
+#include "cast.hpp"
 #include "integral_aliases.hpp"
-#include "pyramid_bitset.hpp"
+#include "pyramid_bitset/pbs_initialize.hpp"
+#include "pyramid_bitset/pbs_min.hpp"
+#include "pyramid_bitset/pbs_remove.hpp"
 
 class Solution
 {
@@ -11,21 +14,21 @@ public:
         const std::vector<std::vector<int>>& edges)
     {
         static PyramidBitset<100'001> is_root;
-        is_root.initialize(kFull, n + 1);
+        pbs_initialize(is_root, kFull, n + 1);
 
         for (auto& e : edges)
         {
-            is_root.remove(cast<u32>(e[1]));
+            pbs_remove(is_root, cast<u32>(e[1]));
         }
 
         std::vector<int> r;
 
         while (true)
         {
-            auto i = is_root.min();
+            auto i = pbs_min(is_root);
             if (i >= n) break;
             r.emplace_back(static_cast<int>(i));
-            is_root.remove(i);
+            pbs_remove(is_root, i);
         }
 
         return r;

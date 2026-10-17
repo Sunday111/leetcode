@@ -12,7 +12,10 @@
 #include "empty.hpp"
 #include "factorizer.hpp"
 #include "integral_aliases.hpp"
-#include "pyramid_bitset.hpp"
+#include "pyramid_bitset/pbs_add.hpp"
+#include "pyramid_bitset/pbs_initialize.hpp"
+#include "pyramid_bitset/pbs_max.hpp"
+#include "pyramid_bitset/pbs_remove.hpp"
 
 inline static const Factorizer<1'000'001, 100'001> factorizer;
 
@@ -69,7 +72,9 @@ public:
 
         static u64 visited_words[ceil_div(100'000, 64)];
         std::fill_n(visited_words, ceil_div(n, 64), 0);
-        PyramidBitset<100'000> a(kEmpty, n), b(kEmpty, n);
+        PyramidBitset<100'000> a, b;
+        pbs_initialize(a, kEmpty, n);
+        pbs_initialize(b, kEmpty, n);
 
         auto front = &a, back = &b;
 
@@ -85,20 +90,20 @@ public:
         };
 
         u32 queue_size = 1;
-        front->add(0);
+        pbs_add(*front, 0);
 
         for (u32 step = 0;; ++step)
         {
             u32 next_size = 0;
             auto enqueue = [&] [[gnu::always_inline]] (u32 j) noexcept
             {
-                next_size += back->add_ex(j & -u32{!visited(j)});
+                next_size += pbs_add_ex(*back, j & -u32{!visited(j)});
             };
 
             while (queue_size--)
             {
-                u32 i = front->max();
-                front->remove(i);
+                u32 i = pbs_max(*front);
+                pbs_remove(*front, i);
 
                 if (i + 1 == n) return step;
                 if (visited(i)) continue;

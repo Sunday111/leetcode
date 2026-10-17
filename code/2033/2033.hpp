@@ -1,8 +1,8 @@
 #include <ranges>
 #include <vector>
 
-#include "bitset_priority_queue.hpp"
 #include "integral_aliases.hpp"
+#include "pyramid_bitset/bitset_priority_queue.hpp"
 
 class Solution
 {

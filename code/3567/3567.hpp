@@ -1,9 +1,13 @@
 #include <ranges>
 #include <vector>
 
+#include "cast.hpp"
 #include "int_if.hpp"
 #include "integral_aliases.hpp"
-#include "pyramid_bitset.hpp"
+#include "pyramid_bitset/pbs_add.hpp"
+#include "pyramid_bitset/pbs_max.hpp"
+#include "pyramid_bitset/pbs_min.hpp"
+#include "pyramid_bitset/pbs_remove.hpp"
 #include "upd_min.hpp"
 
 // https://leetcode.com/problems/minimum-absolute-difference-in-sliding-submatrix/
@@ -39,20 +43,20 @@ public:
                 {
                     for (u8 x = sx; x != x_end; ++x)
                     {
-                        n += bs.add_ex(grid[y][x]);
+                        n += pbs_add_ex(bs, grid[y][x]);
                     }
                 }
 
                 // Find the minimum absolute difference
                 // AND clear the bitset at the same time
-                u32 prev = bs.min();
-                u32& r = grid[sy][sx] = bs.max() - prev;
-                bs.remove(prev);
+                u32 prev = pbs_min(bs);
+                u32& r = grid[sy][sx] = pbs_max(bs) - prev;
+                pbs_remove(bs, prev);
 
                 while (--n)
                 {
-                    u32 v = bs.min();
-                    bs.remove(v);
+                    u32 v = pbs_min(bs);
+                    pbs_remove(bs, v);
                     u32 delta = v - prev;
                     upd_min(r, iif(delta, delta, r));
                     prev = v;

@@ -2,7 +2,10 @@
 
 #include "cast_view.hpp"
 #include "exch.hpp"
-#include "pyramid_bitset.hpp"
+#include "pyramid_bitset/pbs_add.hpp"
+#include "pyramid_bitset/pbs_is_empty.hpp"
+#include "pyramid_bitset/pbs_min.hpp"
+#include "pyramid_bitset/pbs_remove.hpp"
 
 class Solution
 {
@@ -15,19 +18,19 @@ public:
 
         for (u32 x : a | cast_view<u32>)
         {
-            b.add(x);
+            pbs_add(b, x);
             freq[x]++;
         }
 
         bool r = true;
 
-        while (!b.is_empty())
+        while (!pbs_is_empty(b))
         {
-            u32 x = b.min();
+            u32 x = pbs_min(b);
             bool ok = x <= m;
             r &= ok;
             m += (u64{x} * exch(freq[x], 0)) & -u64{ok};
-            b.remove(x);
+            pbs_remove(b, x);
         }
 
         return r;

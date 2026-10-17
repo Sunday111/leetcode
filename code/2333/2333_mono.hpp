@@ -1,6 +1,5 @@
 #include <array>
 #include <bit>
-#include <cassert>
 #include <concepts>
 #include <cstddef>
 #include <cstdint>
@@ -15,12 +14,24 @@ using u16 = uint16_t;
 using u32 = uint32_t;
 using u64 = uint64_t;
 
-template <typename To>
-inline static constexpr auto cast =
-    []<typename From> [[nodiscard, gnu::always_inline]] (From&& v) noexcept
+template <typename B, typename F>
+[[gnu::always_inline]] constexpr void pbs_for_each_layer(F&& f) noexcept
 {
-    return static_cast<To>(std::forward<From>(v));
-};
+    [&]<size_t... layer> [[gnu::always_inline]] (
+        std::index_sequence<layer...>) noexcept
+    {
+        (f(std::integral_constant<size_t, layer>{}), ...);
+    }(std::make_index_sequence<B::kNumLayers>());
+}
+
+template <typename B, typename F>
+[[gnu::always_inline]] constexpr void pbs_for_each_layer_reversed(
+    F&& f) noexcept
+{
+    pbs_for_each_layer<B>(
+        [&] [[gnu::always_inline]] (auto layer) noexcept
+        { f(std::integral_constant<size_t, B::kNumLayers - (layer + 1)>{}); });
+}
 
 template <std::integral T>
 [[nodiscard, gnu::always_inline]] static constexpr T ceil_div(
@@ -29,18 +40,6 @@ template <std::integral T>
 {
     return (a + (b - 1)) / b;
 }
-
-struct EmptyType
-{
-};
-
-inline static constexpr EmptyType kEmpty{};
-
-struct FullType
-{
-};
-
-inline static constexpr FullType kFull{};
 
 template <u64 value>
 using UintForValue = std::conditional_t < value < (1 << 8),
@@ -52,9 +51,9 @@ using UintForValue = std::conditional_t < value < (1 << 8),
               std::conditional_t<value<(1UL << 32), u32, u64>>>;
 
 template <size_t capacity, typename Word = u64>
-class PyramidBitset
+struct PyramidBitset
 {
-public:
+    static constexpr size_t kCapacity = capacity;
     using ValueType = UintForValue<capacity - 1>;
     static constexpr size_t kWordSize = sizeof(Word) * 8;
     static constexpr u8 kMask = kWordSize - 1;
@@ -75,13 +74,6 @@ public:
         std::accumulate(kLayersSizes.begin(), kLayersSizes.end(), 0UZ);
     std::array<Word, kTotalWords> words;
 
-    template <u8 i>
-    struct LyrIdx
-    {
-        // NOLINTNEXTLINE
-        [[nodiscard]] consteval operator u8() const noexcept { return i; }
-    };
-
     static constexpr auto offsets = []
     {
         std::array<size_t, kNumLayers> offsets;  // NOLINT
@@ -92,220 +84,140 @@ public:
             size_t{});
         return offsets;
     }();
-
-    constexpr PyramidBitset() = default;
-
-    // NOLINTNEXTLINE
-    constexpr PyramidBitset(FullType, size_t size = capacity) noexcept
-    {
-        assert(size <= capacity);
-        initialize(kFull, size);
-    }
-
-    // NOLINTNEXTLINE
-    constexpr PyramidBitset(EmptyType, size_t size = capacity) noexcept
-    {
-        assert(size <= capacity);
-        initialize(kEmpty, size);
-    }
-
-    template <bool v>
-    [[gnu::always_inline]] constexpr void set(ValueType idx) noexcept
-    {
-        if constexpr (v)
-        {
-            add(idx);
-        }
-        else
-        {
-            remove(idx);
-        }
-    }
-
-    [[gnu::always_inline]] constexpr void set(ValueType idx, bool v) noexcept
-    {
-        if (v)
-        {
-            add(idx);
-        }
-        else
-        {
-            remove(idx);
-        }
-    }
-
-    [[gnu::always_inline]] constexpr void add(ValueType v) noexcept
-    {
-        for_each_layer(
-            [&] [[gnu::always_inline]] (auto layer) noexcept
-            {
-                ValueType wi = v >> kShift;
-                words[offsets[layer] + wi] |= Word{1} << (v & kMask);
-                v = wi;
-            });
-    }
-
-    [[gnu::always_inline]] constexpr void add_if(ValueType v, bool c) noexcept
-    {
-        for_each_layer(
-            [&] [[gnu::always_inline]] (auto layer) noexcept
-            {
-                ValueType wi = v >> kShift;
-                words[offsets[layer] + wi] |= Word{c} << (v & kMask);
-                v = wi;
-            });
-    }
-
-    // Returns true if element did not exist previously
-    [[nodiscard, gnu::always_inline]] constexpr bool add_ex(
-        ValueType v) noexcept
-    {
-        bool added = false;
-        for_each_layer(
-            [&] [[gnu::always_inline]] (auto layer) noexcept
-            {
-                ValueType wi = v >> kShift;
-                auto& word = words[offsets[layer] + wi];
-                Word m = Word{1} << (v & kMask);
-                if constexpr (layer == 0)
-                {
-                    added = (word & m) == 0;
-                }
-                word |= m;
-                v = wi;
-            });
-        return added;
-    }
-
-    [[gnu::always_inline]] constexpr void remove(ValueType v) noexcept
-    {
-        bool prev_empty = true;
-        for_each_layer(
-            [&] [[gnu::always_inline]] (auto layer) noexcept
-            {
-                ValueType wi = v >> kShift;
-                auto& w = words[offsets[layer] + wi];
-                w &= ~(Word{prev_empty} << (v & kMask));
-                v = wi;
-                prev_empty = !w;
-            });
-    }
-
-    [[nodiscard, gnu::always_inline]] constexpr bool remove_ex(
-        ValueType v) noexcept
-    {
-        bool prev_empty = true, removed = false;
-        for_each_layer(
-            [&] [[gnu::always_inline]] (auto layer) noexcept
-            {
-                ValueType wi = v >> kShift;
-                auto& w = words[offsets[layer] + wi];
-                if constexpr (layer == 0)
-                {
-                    removed = (w & (Word{1} << (v & kMask)));
-                }
-
-                w &= ~(Word{prev_empty} << (v & kMask));
-                v = wi;
-                prev_empty = !w;
-            });
-
-        return removed;
-    }
-
-    [[nodiscard, gnu::always_inline]] constexpr ValueType min() const noexcept
-    {
-        assert(!is_empty());
-        ValueType wi = 0;
-        for_each_layer_reversed(
-            [&] [[gnu::always_inline]] (auto layer) noexcept
-            {
-                u8 bi = std::countr_zero(words[offsets[layer] + wi]) & 0xFF;
-                ValueType x =
-                    cast<ValueType>(wi << kShift) | cast<ValueType>(bi);
-                wi = x;
-            });
-        return wi;
-    }
-
-    [[nodiscard, gnu::always_inline]] constexpr ValueType max() const noexcept
-    {
-        ValueType wi = 0;
-        for_each_layer_reversed(
-            [&] [[gnu::always_inline]] (auto layer) noexcept
-            {
-                u8 bi =
-                    kMask - std::countl_zero(words[offsets[layer] + wi]) & 0xFF;
-                ValueType x =
-                    cast<ValueType>(wi << kShift) | cast<ValueType>(bi);
-                wi = x;
-            });
-        return wi;
-    }
-
-    [[nodiscard, gnu::always_inline]] constexpr bool get(
-        ValueType v) const noexcept
-    {
-        return words[offsets[0] + (v >> kShift)] & (Word{1} << (v & kMask));
-    }
-
-    [[nodiscard, gnu::always_inline]] static constexpr size_t
-    get_capacity() noexcept
-    {
-        return capacity;
-    }
-
-    [[nodiscard, gnu::always_inline]] constexpr bool is_empty() const noexcept
-    {
-        return words[offsets[kNumLayers - 1]] == 0;
-    }
-
-    [[gnu::always_inline]] constexpr void initialize(
-        FullType,
-        size_t end = capacity) noexcept
-    {
-        initialize<true>(end);
-    }
-
-    [[gnu::always_inline]] constexpr void initialize(
-        EmptyType,
-        size_t end = capacity) noexcept
-    {
-        initialize<false>(end);
-    }
-
-    template <bool value>
-    [[gnu::always_inline]] constexpr void initialize(
-        size_t end = capacity) noexcept
-    {
-        constexpr auto m = value ? ~Word{} : Word{};
-        for_each_layer(
-            [&] [[gnu::always_inline]] (auto layer) noexcept
-            {
-                end = ceil_div<size_t>(end, kWordSize);
-                std::fill_n(std::next(words.begin(), offsets[layer]), end, m);
-            });
-    }
-
-private:
-    template <typename F>
-    [[gnu::always_inline]] constexpr static void for_each_layer(F&& f) noexcept
-    {
-        [&]<size_t... layer> [[gnu::always_inline]] (
-            std::index_sequence<layer...>) noexcept
-        {
-            (f(LyrIdx<layer>{}), ...);
-        }(std::make_index_sequence<kNumLayers>());
-    }
-
-    template <typename F>
-    [[gnu::always_inline]] constexpr static void for_each_layer_reversed(
-        F&& f) noexcept
-    {
-        for_each_layer([&] [[gnu::always_inline]] (auto layer) noexcept
-                       { f(LyrIdx<kNumLayers - (layer + 1)>{}); });
-    }
 };
+
+template <size_t capacity, typename Word>
+[[gnu::always_inline]] constexpr void pbs_add(
+    PyramidBitset<capacity, Word>& bits,
+    typename PyramidBitset<capacity, Word>::ValueType v) noexcept
+{
+    using B = PyramidBitset<capacity, Word>;
+    pbs_for_each_layer<B>(
+        [&] [[gnu::always_inline]] (auto layer) noexcept
+        {
+            typename B::ValueType wi = v >> B::kShift;
+            bits.words[B::offsets[layer] + wi] |= Word{1} << (v & B::kMask);
+            v = wi;
+        });
+}
+
+template <size_t capacity, typename Word>
+[[gnu::always_inline]] constexpr void pbs_add_if(
+    PyramidBitset<capacity, Word>& bits,
+    typename PyramidBitset<capacity, Word>::ValueType v,
+    bool c) noexcept
+{
+    using B = PyramidBitset<capacity, Word>;
+    pbs_for_each_layer<B>(
+        [&] [[gnu::always_inline]] (auto layer) noexcept
+        {
+            typename B::ValueType wi = v >> B::kShift;
+            bits.words[B::offsets[layer] + wi] |= Word{c} << (v & B::kMask);
+            v = wi;
+        });
+}
+
+template <size_t capacity, typename Word>
+[[nodiscard, gnu::always_inline]] constexpr bool pbs_add_ex(
+    PyramidBitset<capacity, Word>& bits,
+    typename PyramidBitset<capacity, Word>::ValueType v) noexcept
+{
+    using B = PyramidBitset<capacity, Word>;
+    bool added = false;
+    pbs_for_each_layer<B>(
+        [&] [[gnu::always_inline]] (auto layer) noexcept
+        {
+            typename B::ValueType wi = v >> B::kShift;
+            auto& word = bits.words[B::offsets[layer] + wi];
+            Word m = Word{1} << (v & B::kMask);
+            if constexpr (layer == 0)
+            {
+                added = (word & m) == 0;
+            }
+            word |= m;
+            v = wi;
+        });
+    return added;
+}
+
+template <size_t capacity, typename Word>
+[[nodiscard, gnu::always_inline]] constexpr bool pbs_is_empty(
+    const PyramidBitset<capacity, Word>& bits) noexcept
+{
+    using B = PyramidBitset<capacity, Word>;
+    return bits.words[B::offsets[B::kNumLayers - 1]] == 0;
+}
+
+template <typename To>
+inline static constexpr auto cast =
+    []<typename From> [[nodiscard, gnu::always_inline]] (From&& v) noexcept
+{
+    return static_cast<To>(std::forward<From>(v));
+};
+
+template <size_t capacity, typename Word>
+[[nodiscard, gnu::always_inline]] constexpr
+    typename PyramidBitset<capacity, Word>::ValueType
+    pbs_max(const PyramidBitset<capacity, Word>& bits) noexcept
+{
+    using B = PyramidBitset<capacity, Word>;
+    typename B::ValueType wi = 0;
+    pbs_for_each_layer_reversed<B>(
+        [&] [[gnu::always_inline]] (auto layer) noexcept
+        {
+            u8 bi = B::kMask -
+                        std::countl_zero(bits.words[B::offsets[layer] + wi]) &
+                    0xFF;
+            typename B::ValueType x =
+                cast<typename B::ValueType>(wi << B::kShift) |
+                cast<typename B::ValueType>(bi);
+            wi = x;
+        });
+    return wi;
+}
+
+template <size_t capacity, typename Word>
+[[gnu::always_inline]] constexpr void pbs_remove(
+    PyramidBitset<capacity, Word>& bits,
+    typename PyramidBitset<capacity, Word>::ValueType v) noexcept
+{
+    using B = PyramidBitset<capacity, Word>;
+    bool prev_empty = true;
+    pbs_for_each_layer<B>(
+        [&] [[gnu::always_inline]] (auto layer) noexcept
+        {
+            typename B::ValueType wi = v >> B::kShift;
+            auto& w = bits.words[B::offsets[layer] + wi];
+            w &= ~(Word{prev_empty} << (v & B::kMask));
+            v = wi;
+            prev_empty = !w;
+        });
+}
+
+template <size_t capacity, typename Word>
+[[nodiscard, gnu::always_inline]] constexpr bool pbs_remove_ex(
+    PyramidBitset<capacity, Word>& bits,
+    typename PyramidBitset<capacity, Word>::ValueType v) noexcept
+{
+    using B = PyramidBitset<capacity, Word>;
+    bool prev_empty = true, removed = false;
+    pbs_for_each_layer<B>(
+        [&] [[gnu::always_inline]] (auto layer) noexcept
+        {
+            typename B::ValueType wi = v >> B::kShift;
+            auto& w = bits.words[B::offsets[layer] + wi];
+            if constexpr (layer == 0)
+            {
+                removed = (w & (Word{1} << (v & B::kMask)));
+            }
+
+            w &= ~(Word{prev_empty} << (v & B::kMask));
+            v = wi;
+            prev_empty = !w;
+        });
+
+    return removed;
+}
 #ifndef LC_LOCAL_BUILD
 auto init = []()
 {
@@ -322,7 +234,7 @@ class Solution
     static constexpr u32 kNumBlocks = (kMaxDiff + 64) / 64;
     inline static std::array<u32, kMaxDiff + 1> frequency{};
     inline static std::array<u64, kNumBlocks> occupied_values{};
-    inline static PyramidBitset<kNumBlocks> occupied_blocks{kEmpty};
+    inline static PyramidBitset<kNumBlocks> occupied_blocks{};
 
 public:
     u64 minSumSquareDiff(
@@ -332,7 +244,7 @@ public:
         u32 k2)
     {
         occupied_values[0] = 1;
-        occupied_blocks.add(0);
+        pbs_add(occupied_blocks, 0);
         for (size_t i = 0; i < nums1.size(); ++i)
         {
             u32 diff = static_cast<u32>(std::abs(nums1[i] - nums2[i]));
@@ -341,7 +253,7 @@ public:
                 u32 block = diff >> 6;
                 if (!occupied_values[block])
                 {
-                    occupied_blocks.add(static_cast<u16>(block));
+                    pbs_add(occupied_blocks, static_cast<u16>(block));
                 }
                 occupied_values[block] |= u64{1} << (diff & 63);
             }
@@ -353,8 +265,8 @@ public:
         {
             if (!bits)
             {
-                block = occupied_blocks.max();
-                occupied_blocks.remove(static_cast<u16>(block));
+                block = pbs_max(occupied_blocks);
+                pbs_remove(occupied_blocks, static_cast<u16>(block));
                 bits = std::exchange(occupied_values[block], 0);
             }
             u32 bit = 63 - static_cast<u32>(std::countl_zero(bits));
@@ -386,7 +298,7 @@ public:
                    k % count - 2 * u64{level} * k;
         }
 
-        while (bits || !occupied_blocks.is_empty())
+        while (bits || !pbs_is_empty(occupied_blocks))
         {
             u32 diff = pop_max();
             sum += u64{diff} * diff * std::exchange(frequency[diff], 0);

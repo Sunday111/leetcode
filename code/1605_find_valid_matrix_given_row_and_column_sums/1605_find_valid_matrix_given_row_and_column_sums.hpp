@@ -1,7 +1,9 @@
 #include <vector>
 
 #include "integral_aliases.hpp"
-#include "pyramid_bitset.hpp"
+#include "pyramid_bitset/pbs_is_empty.hpp"
+#include "pyramid_bitset/pbs_min.hpp"
+#include "pyramid_bitset/pbs_set.hpp"
 
 class Solution
 {
@@ -20,7 +22,7 @@ public:
         auto& last_row = r.back();
         last_row = col_sum;
 
-        for (u16 x = 0; x != w; ++x) src->set(x, last_row[x]);
+        for (u16 x = 0; x != w; ++x) pbs_set(*src, x, last_row[x]);
 
         for (u16 y = 0; y != h - 1; ++y)
         {
@@ -29,13 +31,13 @@ public:
             auto rs = row_sum[y];
 
             dst = src;
-            while (rs && !src->is_empty())
+            while (rs && !pbs_is_empty(*src))
             {
-                auto x = src->min();
+                auto x = pbs_min(*src);
                 int& cs = last_row[x];
                 int t = row[x] = std::min(rs, cs);
                 rs -= t, cs -= t;
-                dst->set(x, cs);
+                pbs_set(*dst, x, cs);
             }
 
             std::swap(src, dst);
