@@ -1,9 +1,11 @@
+#pragma once
+
 #include <array>
 #include <cassert>
 #include <cstddef>
 
 #include "integral_aliases.hpp"
-#include "mod_int.hpp"
+#include "mod/mod_int_div.hpp"
 
 template <std::size_t lim_factorial>
 constexpr ModInt

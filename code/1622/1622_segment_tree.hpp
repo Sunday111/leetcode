@@ -1,7 +1,8 @@
 #include <algorithm>
 #include <bit>
 
-#include "mod_int.hpp"
+#include "mod/mod_int_add.hpp"
+#include "mod/mod_int_mul.hpp"
 
 struct Interval
 {

@@ -3,24 +3,6 @@
 #include <cstdint>
 #include <utility>
 
-
-
-
-
-
-
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
-template <typename To>
-inline static constexpr auto cast = []<typename From>(From&& v) INLINE_LAMBDA
-{
-    return static_cast<To>(std::forward<From>(v));
-};
-
-#define HOT_PATH __attribute__((hot))
-
-
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
@@ -30,109 +12,114 @@ inline constexpr u32 kMOD = 1'000'000'007;
 
 struct ModInt
 {
-    FORCE_INLINE constexpr ModInt& operator+=(
-        const ModInt& rhs) noexcept HOT_PATH
-    {
-        value += rhs.value;
-        if (value >= kMOD) value -= kMOD;
-        return *this;
-    }
+    [[gnu::always_inline]] constexpr ModInt& operator+=(
+        const ModInt& rhs) noexcept;
 
-    [[nodiscard]] FORCE_INLINE constexpr ModInt operator+(
-        const ModInt& rhs) const noexcept
-    {
-        auto copy = *this;
-        copy += rhs;
-        return copy;
-    }
+    [[nodiscard, gnu::always_inline]] constexpr ModInt operator+(
+        const ModInt& rhs) const noexcept;
 
-    FORCE_INLINE constexpr ModInt& operator-=(
-        const ModInt& rhs) noexcept HOT_PATH
-    {
-        value += kMOD & -u32{value < rhs.value};
-        value -= rhs.value;
-        return *this;
-    }
+    [[gnu::always_inline]] constexpr ModInt& operator-=(
+        const ModInt& rhs) noexcept;
 
-    [[nodiscard]] FORCE_INLINE constexpr ModInt operator-(
-        const ModInt& rhs) const noexcept HOT_PATH
-    {
-        auto copy = *this;
-        copy -= rhs;
-        return copy;
-    }
+    [[nodiscard, gnu::always_inline]] constexpr ModInt operator-(
+        const ModInt& rhs) const noexcept;
 
-    FORCE_INLINE constexpr ModInt& operator*=(
-        const ModInt& rhs) noexcept HOT_PATH
-    {
-        u64 v = rhs.value;
-        v *= value;
-        if (v >= kMOD) v %= kMOD;
-        value = cast<u32>(v);
-        return *this;
-    }
+    [[gnu::always_inline]] constexpr ModInt& operator*=(
+        const ModInt& rhs) noexcept;
 
-    [[nodiscard]] FORCE_INLINE constexpr ModInt operator*(
-        const ModInt& rhs) const noexcept HOT_PATH
-    {
-        auto copy = *this;
-        copy *= rhs;
-        return copy;
-    }
+    [[nodiscard, gnu::always_inline]] constexpr ModInt operator*(
+        const ModInt& rhs) const noexcept;
 
-    [[nodiscard]] FORCE_INLINE constexpr ModInt inverse()
-        const noexcept HOT_PATH
-    {
-        auto a = value;
-        u32 x0 = 1, x1 = 0, mod = kMOD;
-        while (a)
-        {
-            u32 q = mod / a;
-            u32 r = mod % a;
-            u32 x2 = x1 - q * x0;
-            mod = a;
-            a = r;
-            x1 = x0;
-            x0 = x2;
-        }
-        return {(x1 + kMOD) % kMOD};
-    }
+    [[nodiscard, gnu::always_inline]] constexpr ModInt inverse() const noexcept;
 
-    FORCE_INLINE constexpr ModInt& operator/=(
-        const ModInt& rhs) noexcept HOT_PATH
-    {
-        return *this *= rhs.inverse();
-    }
+    [[gnu::always_inline]] constexpr ModInt& operator/=(
+        const ModInt& rhs) noexcept;
 
-    [[nodiscard]] FORCE_INLINE constexpr ModInt operator/(
-        const ModInt& rhs) const noexcept HOT_PATH
-    {
-        auto copy = *this;
-        copy /= rhs;
-        return copy;
-    }
+    [[nodiscard, gnu::always_inline]] constexpr ModInt operator/(
+        const ModInt& rhs) const noexcept;
 
     template <std::unsigned_integral Exp>
-    [[nodiscard]] FORCE_INLINE constexpr ModInt pow(
-        Exp exp) const noexcept HOT_PATH
-    {
-        ModInt r{1}, b = *this;
-
-        while (exp)
-        {
-            // these two lines are equal to if (exp & 1) r *= b;
-            u32 t = -(exp & 1);
-            r *= ModInt((b.value & t) + (1u & ~t));
-
-            b *= b;
-            exp >>= 1;
-        }
-
-        return r;
-    }
+    [[nodiscard, gnu::always_inline]] constexpr ModInt pow(
+        Exp exp) const noexcept;
 
     u32 value = 0;
 };
+
+[[gnu::always_inline]] constexpr ModInt& ModInt::operator+=(
+    const ModInt& rhs) noexcept
+{
+    value += rhs.value;
+    value -= kMOD & -u32{value >= kMOD};
+    return *this;
+}
+
+[[nodiscard, gnu::always_inline]] constexpr ModInt ModInt::operator+(
+    const ModInt& rhs) const noexcept
+{
+    auto copy = *this;
+    copy += rhs;
+    return copy;
+}
+
+template <typename To>
+inline static constexpr auto cast =
+    []<typename From> [[nodiscard, gnu::always_inline]] (From&& v) noexcept
+{
+    return static_cast<To>(std::forward<From>(v));
+};
+
+[[gnu::always_inline]] constexpr ModInt& ModInt::operator*=(
+    const ModInt& rhs) noexcept
+{
+    u64 v = rhs.value;
+    v *= value;
+    if (v >= kMOD) v %= kMOD;
+    value = cast<u32>(v);
+    return *this;
+}
+
+[[nodiscard, gnu::always_inline]] constexpr ModInt ModInt::operator*(
+    const ModInt& rhs) const noexcept
+{
+    auto copy = *this;
+    copy *= rhs;
+    return copy;
+}
+
+template <std::unsigned_integral Exp>
+[[nodiscard, gnu::always_inline]] constexpr ModInt ModInt::pow(
+    Exp exp) const noexcept
+{
+    ModInt r{1}, b = *this;
+
+    while (exp)
+    {
+        // these two lines are equal to if (exp & 1) r *= b;
+        u32 t = -(exp & 1);
+        r *= ModInt((b.value & t) + (1u & ~t));
+
+        b *= b;
+        exp >>= 1;
+    }
+
+    return r;
+}
+
+[[gnu::always_inline]] constexpr ModInt& ModInt::operator-=(
+    const ModInt& rhs) noexcept
+{
+    value += kMOD & -u32{value < rhs.value};
+    value -= rhs.value;
+    return *this;
+}
+
+[[nodiscard, gnu::always_inline]] constexpr ModInt ModInt::operator-(
+    const ModInt& rhs) const noexcept
+{
+    auto copy = *this;
+    copy -= rhs;
+    return copy;
+}
 
 class Fancy
 {
@@ -173,12 +160,12 @@ public:
     }
 };
 
-#ifndef __clang__
+#ifndef LC_LOCAL_BUILD
 auto init = []()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout.tie(nullptr);
     return 'c';
 }();
 #endif

@@ -1,7 +1,9 @@
+#pragma once
+
 #include <array>
 
 #include "integral_aliases.hpp"
-#include "mod_int.hpp"
+#include "mod/mod_int_mul.hpp"
 
 template <u32 max_index>
 inline constexpr auto factorials_mods()

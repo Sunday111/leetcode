@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mod_int.hpp"
+#include "mod/mod_int_pow.hpp"
 
 class Solution
 {

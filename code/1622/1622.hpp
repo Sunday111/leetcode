@@ -1,6 +1,8 @@
 #include <array>
 
-#include "mod_int.hpp"
+#include "mod/mod_int_add.hpp"
+#include "mod/mod_int_pow.hpp"
+#include "mod/mod_int_sub.hpp"
 
 class Fancy
 {
