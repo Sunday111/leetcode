@@ -1,8 +1,8 @@
 #include <vector>
 
-#include "binomial_coefficient_mod.hpp"
-#include "factorial_mod.hpp"
 #include "integral_aliases.hpp"
+#include "mod/binomial_coefficient_mod.hpp"
+#include "mod/factorial_mod.hpp"
 #include "sync_stdio.hpp"
 
 struct Node
