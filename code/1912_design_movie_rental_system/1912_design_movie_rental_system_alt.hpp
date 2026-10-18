@@ -15,8 +15,8 @@ class MovieRentingSystem
 private:
     struct PairHash
     {
-        FORCE_INLINE size_t
-        operator()(const std::pair<int, int>& p) const noexcept
+        [[gnu::always_inline]] inline size_t operator()(
+            const std::pair<int, int>& p) const noexcept
         {
             uint64_t v = (u64{std::bit_cast<u32>(p.first)} << 32) |
                          u64{std::bit_cast<u32>(p.second)};

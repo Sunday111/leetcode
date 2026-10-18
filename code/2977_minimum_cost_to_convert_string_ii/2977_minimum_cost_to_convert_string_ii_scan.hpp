@@ -6,7 +6,6 @@
 #include <vector>
 
 #include "cast.hpp"
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 #include "pyramid_bitset/pbs_add.hpp"
 #include "pyramid_bitset/pbs_get.hpp"
@@ -25,7 +24,8 @@ public:
         const std::pair<std::string_view, u8>* sorted;
         u16 begin = 0, end = 0;
 
-        [[nodiscard]] FORCE_INLINE constexpr bool update(u16 l) noexcept
+        [[nodiscard, gnu::always_inline]] inline constexpr bool update(
+            u16 l) noexcept
         {
             if (l > s.size())
             {

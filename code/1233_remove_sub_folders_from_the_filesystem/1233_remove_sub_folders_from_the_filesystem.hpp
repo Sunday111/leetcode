@@ -12,25 +12,19 @@ using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
 
-#ifdef __GNUC__
-#define FORCE_INLINE inline __attribute__((always_inline))
-#else
-#define FORCE_INLINE inline
-#endif
-
 class HashSet
 {
 public:
     static constexpr std::hash<std::string_view> kHasher{};
 
-    FORCE_INLINE void init(u32 size) noexcept
+    [[gnu::always_inline]] inline void init(u32 size) noexcept
     {
         u32 capacity = std::bit_ceil(size * 2);
         std::ranges::fill_n(values_.begin(), capacity, std::string_view{});
         mask_ = capacity - 1;
     }
 
-    FORCE_INLINE void add(std::string_view key) noexcept
+    [[gnu::always_inline]] inline void add(std::string_view key) noexcept
     {
         u32 index = kHasher(key) & mask_;
         while (values_[index].size())
@@ -41,7 +35,8 @@ public:
         values_[index] = key;
     }
 
-    FORCE_INLINE bool contains(std::string_view key) const noexcept
+    [[gnu::always_inline]] inline bool contains(
+        std::string_view key) const noexcept
     {
         u32 index = kHasher(key) & mask_;
         while (values_[index].size() && values_[index] != key)
@@ -98,7 +93,8 @@ struct Node
     u8 token_size = 0;
     bool is_leaf = 0;
 
-    [[nodiscard]] FORCE_INLINE constexpr std::string_view token() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr std::string_view token()
+        const noexcept
     {
         return std::string_view{token_ptr, token_size};
     }
@@ -220,8 +216,8 @@ public:
 class Solution2
 {
 public:
-    [[nodiscard]] FORCE_INLINE static std::vector<std::string> removeSubfolders(
-        std::vector<std::string>& folder) noexcept
+    [[nodiscard, gnu::always_inline]] inline static std::vector<std::string>
+    removeSubfolders(std::vector<std::string>& folder) noexcept
     {
         static Solver solver;
         return solver.removeSubfolders(folder);

@@ -2,15 +2,13 @@
 #include <array>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-
 using u64 = uint64_t;
 using u32 = uint32_t;
 using u16 = uint16_t;
 using u8 = uint8_t;
 
 template <typename To>
-[[nodiscard]] FORCE_INLINE static constexpr To to(auto v) noexcept
+[[nodiscard, gnu::always_inline]] inline static constexpr To to(auto v) noexcept
 {
     return static_cast<To>(v);
 }
@@ -19,43 +17,47 @@ struct Vec2
 {
     u8 x, y;
 
-    [[nodiscard]] FORCE_INLINE constexpr bool operator==(
+    [[nodiscard, gnu::always_inline]] inline constexpr bool operator==(
         const Vec2&) const noexcept = default;
 
-    [[nodiscard]] FORCE_INLINE constexpr Vec2 left() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr Vec2 left()
+        const noexcept
     {
         auto copy = *this;
         --copy.x;
         return copy;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr Vec2 right() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr Vec2 right()
+        const noexcept
     {
         auto copy = *this;
         ++copy.x;
         return copy;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr Vec2 bottom() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr Vec2 bottom()
+        const noexcept
     {
         auto copy = *this;
         --copy.y;
         return copy;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr Vec2 top() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr Vec2 top() const noexcept
     {
         auto copy = *this;
         ++copy.y;
         return copy;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr u16 toIdx() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u16 toIdx()
+        const noexcept
     {
         return cast<u16>((y << 7) | x);
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr bool isValid(
+    [[nodiscard, gnu::always_inline]] inline constexpr bool isValid(
         const Vec2& size) const noexcept
     {
         return x < size.x && y < size.y;
@@ -65,7 +67,7 @@ struct Vec2
 class Solution
 {
 public:
-    [[nodiscard]] FORCE_INLINE static constexpr u64 pack(
+    [[nodiscard, gnu::always_inline]] inline static constexpr u64 pack(
         int effort,
         Vec2 p) noexcept
     {
@@ -77,8 +79,9 @@ public:
         return r;
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr std::tuple<int, Vec2> unpack(
-        u64 e) noexcept
+    [[nodiscard,
+      gnu::always_inline]] inline static constexpr std::tuple<int, Vec2>
+    unpack(u64 e) noexcept
     {
         Vec2 p;  // NOLINT
         p.y = (~e) & 127;

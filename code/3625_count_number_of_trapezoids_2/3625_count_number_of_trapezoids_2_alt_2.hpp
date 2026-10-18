@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "bump_hash_map.hpp"
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 #include "negate_if.hpp"
 
@@ -13,20 +12,21 @@ class Solution
 public:
     inline static constexpr int kBias = 1 << 11;
 
-    FORCE_INLINE static u32 pack(int a, int b) noexcept
+    [[gnu::always_inline]] inline static u32 pack(int a, int b) noexcept
     {
         return std::bit_cast<u32>(i32{a + kBias} << 16) |
                std::bit_cast<u32>(b + kBias);
     }
 
-    FORCE_INLINE static u64 pack(int a, int b, int c) noexcept
+    [[gnu::always_inline]] inline static u64 pack(int a, int b, int c) noexcept
     {
         return std::bit_cast<u64>(i64{a + kBias} << 50) |
                std::bit_cast<u64>(i64{b + kBias} << 30) |
                std::bit_cast<u64>(i64{c + kBias * kBias});
     }
 
-    FORCE_INLINE static u64 pack(int a, int b, int c, int d) noexcept
+    [[gnu::always_inline]] inline static u64
+    pack(int a, int b, int c, int d) noexcept
     {
         return std::bit_cast<u64>(i64{a + kBias} << 48) |
                std::bit_cast<u64>(i64{b + kBias} << 32) |

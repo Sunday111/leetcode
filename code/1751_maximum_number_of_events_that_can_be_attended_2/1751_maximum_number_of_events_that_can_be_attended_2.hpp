@@ -7,16 +7,10 @@
 
 using u32 = uint32_t;
 
-#ifdef __GNUC__
-#define ATTR inline __attribute__((always_inline))
-#else
-#define ATTR inline
-#endif
-
 class Solution
 {
 public:
-    ATTR static u32&
+    [[gnu::always_inline]] inline static u32&
     index(std::array<u32, 2'000'000>& data, u32 i, u32 j, u32 k) noexcept
     {
         return data[i * (k + 1) + j];
@@ -31,7 +25,7 @@ public:
 
     inline static std::array<Event, 1'000'000> events_array;
 
-    ATTR static constexpr u32 maxValue(
+    [[gnu::always_inline]] inline static constexpr u32 maxValue(
         std::vector<std::vector<int>>& events_,
         u32 k) noexcept
     {

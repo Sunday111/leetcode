@@ -25,26 +25,28 @@ public:
         u64 end_time : 57;
     };
 
-    FORCE_INLINE static constexpr auto heap_cmp(Booking a, Booking b) noexcept
+    [[gnu::always_inline]] inline static constexpr auto heap_cmp(
+        Booking a,
+        Booking b) noexcept
     {
         return std::bit_cast<u64>(a) > std::bit_cast<u64>(b);
     };
 
-    FORCE_INLINE static constexpr void bitsetClear(
+    [[gnu::always_inline]] inline static constexpr void bitsetClear(
         std::array<u64, 2>& bs,
         u8 idx) noexcept
     {
         bs[idx > 63] &= ~(u64{1} << (idx & 63));
     }
 
-    FORCE_INLINE static constexpr void bitsetSet(
+    [[gnu::always_inline]] inline static constexpr void bitsetSet(
         std::array<u64, 2>& bs,
         u8 idx) noexcept
     {
         bs[idx > 63] |= u64{1} << iif<u8>(idx > 63, idx - 64, idx);
     }
 
-    FORCE_INLINE static constexpr u8 bitsetFindFirstZero(
+    [[gnu::always_inline]] inline static constexpr u8 bitsetFindFirstZero(
         std::array<u64, 2>& bs) noexcept
     {
         auto a = std::countr_one(bs[0]);

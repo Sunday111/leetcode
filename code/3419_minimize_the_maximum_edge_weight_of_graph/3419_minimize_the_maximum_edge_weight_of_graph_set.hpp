@@ -5,18 +5,20 @@
 #include <span>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-
 template <size_t num_bytes>
 struct GlobalBufferStorage
 {
-    FORCE_INLINE static GlobalBufferStorage& Instance() noexcept
+    [[gnu::always_inline]] inline static GlobalBufferStorage&
+    Instance() noexcept
     {
         static GlobalBufferStorage inst;
         return inst;
     }
 
-    FORCE_INLINE void Reset() noexcept { allocator_offset_ = 0; }
+    [[gnu::always_inline]] inline void Reset() noexcept
+    {
+        allocator_offset_ = 0;
+    }
 
     std::array<std::byte, num_bytes> allocator_memory_;
     size_t allocator_offset_;
@@ -30,12 +32,12 @@ struct BumpAllocator
     BumpAllocator() = default;
 
     template <class U>
-    FORCE_INLINE explicit constexpr BumpAllocator(
+    [[gnu::always_inline]] inline explicit constexpr BumpAllocator(
         const BumpAllocator<U, S>&) noexcept
     {
     }
 
-    [[nodiscard]] FORCE_INLINE T* allocate(std::size_t n) noexcept
+    [[nodiscard, gnu::always_inline]] inline T* allocate(std::size_t n) noexcept
     {
         auto& inst = S::Instance();
 
@@ -62,14 +64,16 @@ struct BumpAllocator
         return static_cast<T*>(p);
     }
 
-    FORCE_INLINE void deallocate(T*, std::size_t) noexcept {}
+    [[gnu::always_inline]] inline void deallocate(T*, std::size_t) noexcept {}
 
     // equality so containers can compare allocators
-    FORCE_INLINE constexpr bool operator==(const BumpAllocator&) const noexcept
+    [[gnu::always_inline]] inline constexpr bool operator==(
+        const BumpAllocator&) const noexcept
     {
         return true;
     }
-    FORCE_INLINE constexpr bool operator!=(const BumpAllocator&) const noexcept
+    [[gnu::always_inline]] inline constexpr bool operator!=(
+        const BumpAllocator&) const noexcept
     {
         return false;
     }
@@ -88,24 +92,24 @@ class BumpSet
     alignas(Set) std::array<std::byte, sizeof(Set)> arr;
 
 public:
-    FORCE_INLINE BumpSet() noexcept { new (&get()) Set(); }
+    [[gnu::always_inline]] inline BumpSet() noexcept { new (&get()) Set(); }
 
-    FORCE_INLINE Set& get() noexcept
+    [[gnu::always_inline]] inline Set& get() noexcept
     {
         return *reinterpret_cast<Set*>(arr.data());  // NOLINT
     }
 
-    FORCE_INLINE const Set& get() const noexcept
+    [[gnu::always_inline]] inline const Set& get() const noexcept
     {
         return *reinterpret_cast<const Set*>(arr.data());  // NOLINT
     }
 
-    FORCE_INLINE Set* operator->() noexcept
+    [[gnu::always_inline]] inline Set* operator->() noexcept
     {
         return reinterpret_cast<Set*>(arr.data());  // NOLINT
     }
 
-    FORCE_INLINE const Set* operator->() const noexcept
+    [[gnu::always_inline]] inline const Set* operator->() const noexcept
     {
         return reinterpret_cast<const Set*>(arr.data());  // NOLINT
     }

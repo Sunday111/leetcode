@@ -8,16 +8,13 @@
 #include <unordered_map>
 #include <vector>
 
-#include "force_inline.hpp"
-#include "hot_path.hpp"
 #include "integral_aliases.hpp"
 #include "no_sanitizers.hpp"
 #include "pack_str.hpp"
 
 struct ShiftHasher
 {
-    size_t operator()(const uint64_t v) const
-        __attribute__((always_inline, hot))
+    [[gnu::always_inline, gnu::hot]] size_t operator()(const uint64_t v) const
     {
         return v ^ (v >> 17) ^ (v >> 43);
     }
@@ -37,21 +34,24 @@ struct BumpAllocator
     BumpAllocator() noexcept = default;
 
     template <class U>
-    FORCE_INLINE explicit constexpr BumpAllocator(
+    [[gnu::always_inline]] inline explicit constexpr BumpAllocator(
         const BumpAllocator<U>&) noexcept
     {
     }
 
-    [[nodiscard]] FORCE_INLINE T* allocate(std::size_t n) noexcept HOT_PATH;
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline T* allocate(
+        std::size_t n) noexcept;
 
-    FORCE_INLINE void deallocate(T*, std::size_t) noexcept {}
+    [[gnu::always_inline]] inline void deallocate(T*, std::size_t) noexcept {}
 
     // equality so containers can compare allocators
-    FORCE_INLINE constexpr bool operator==(const BumpAllocator&) const noexcept
+    [[gnu::always_inline]] inline constexpr bool operator==(
+        const BumpAllocator&) const noexcept
     {
         return true;
     }
-    FORCE_INLINE constexpr bool operator!=(const BumpAllocator&) const noexcept
+    [[gnu::always_inline]] inline constexpr bool operator!=(
+        const BumpAllocator&) const noexcept
     {
         return false;
     }
@@ -59,9 +59,9 @@ struct BumpAllocator
 
 struct SetCmp
 {
-    [[nodiscard]] FORCE_INLINE constexpr bool operator()(
-        const RatedFood& a,
-        const RatedFood& b) const noexcept NO_SANITIZERS HOT_PATH
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr bool
+    operator()(const RatedFood& a, const RatedFood& b) const noexcept
+        NO_SANITIZERS
     {
         if (a.rating != b.rating) return a.rating < b.rating;
         return a.name > b.name;
@@ -100,8 +100,9 @@ public:
         }
     }
 
-    constexpr void changeRating(const std::string& food, int newRating) noexcept
-        HOT_PATH NO_SANITIZERS
+    [[gnu::hot]] constexpr void changeRating(
+        const std::string& food,
+        int newRating) noexcept NO_SANITIZERS
     {
         auto packed_food = packStr(food);
         auto& [rating, cuisine_idx] = food_info_[packed_food];
@@ -112,8 +113,8 @@ public:
         cuisine_set.insert(std::move(node));
     }
 
-    [[nodiscard]] constexpr std::string highestRated(
-        const std::string& cuisine) noexcept HOT_PATH NO_SANITIZERS
+    [[nodiscard, gnu::hot]] constexpr std::string highestRated(
+        const std::string& cuisine) noexcept NO_SANITIZERS
     {
         auto& set = sets_[cuisine_to_idx_[packStr(cuisine)]];  // NOLINT
         return unpackStr(set.rbegin()->name);
@@ -131,7 +132,8 @@ public:
     size_t allocator_offset_ = 0;
     std::array<std::byte, 10'000'000> allocator_memory_;
 
-    [[nodiscard]] FORCE_INLINE static FoodRatingsS& Instance() noexcept
+    [[nodiscard, gnu::always_inline]] inline static FoodRatingsS&
+    Instance() noexcept
     {
         static FoodRatingsS instance;
         return instance;
@@ -139,8 +141,8 @@ public:
 };
 
 template <typename T>
-[[nodiscard]] FORCE_INLINE T* BumpAllocator<T>::allocate(std::size_t n) noexcept
-    NO_SANITIZERS
+[[nodiscard, gnu::always_inline]] inline T* BumpAllocator<T>::allocate(
+    std::size_t n) noexcept NO_SANITIZERS
 {
     auto& inst = FoodRatingsS::Instance();
 
@@ -169,23 +171,23 @@ template <typename T>
 class FoodRatings
 {
 public:
-    FORCE_INLINE FoodRatings(
+    [[gnu::always_inline, gnu::hot]] inline FoodRatings(
         const std::vector<std::string>& foods,
         const std::vector<std::string>& cuisines,
-        const std::vector<int>& ratings) noexcept HOT_PATH NO_SANITIZERS
+        const std::vector<int>& ratings) noexcept NO_SANITIZERS
     {
         FoodRatingsS::Instance().Initialize(foods, cuisines, ratings);
     }
 
-    FORCE_INLINE void changeRating(
+    [[gnu::always_inline, gnu::hot]] inline void changeRating(
         const std::string& food,
-        int newRating) noexcept HOT_PATH NO_SANITIZERS
+        int newRating) noexcept NO_SANITIZERS
     {
         FoodRatingsS::Instance().changeRating(food, newRating);
     }
 
-    FORCE_INLINE std::string highestRated(
-        const std::string& cuisine) noexcept HOT_PATH NO_SANITIZERS
+    [[gnu::always_inline, gnu::hot]] inline std::string highestRated(
+        const std::string& cuisine) noexcept NO_SANITIZERS
     {
         return FoodRatingsS::Instance().highestRated(cuisine);
     }

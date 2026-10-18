@@ -8,9 +8,7 @@ using u8 = uint8_t;
 using u32 = uint32_t;
 using u64 = uint64_t;
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-
-[[nodiscard]] FORCE_INLINE constexpr u8 num_divs(u32 x) noexcept
+[[nodiscard, gnu::always_inline]] inline constexpr u8 num_divs(u32 x) noexcept
 {
     return (16 - (std::countl_zero(x) / 2)) & 0xFF;
 }

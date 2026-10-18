@@ -8,12 +8,6 @@ using u8 = uint8_t;
 using u32 = uint32_t;
 using u64 = uint64_t;
 
-#ifdef __GNUC__
-#define ATTR inline __attribute__((always_inline))
-#else
-#define ATTR inline
-#endif
-
 enum class SortOrder : u8
 {
     Ascending,
@@ -38,7 +32,7 @@ struct RadixSorter
     static constexpr T mask = base - 1;
 
     template <u8 pass>
-    ATTR static void radixSortPass(
+    [[gnu::always_inline]] inline static void radixSortPass(
         std::span<T> arr,
         std::array<T, base>& count) noexcept
     {
@@ -88,7 +82,8 @@ struct RadixSorter
         std::ranges::copy(temp, arr.begin());
     }
 
-    ATTR static void radixSort(std::span<T> arr) noexcept
+    [[gnu::always_inline]] inline static void radixSort(
+        std::span<T> arr) noexcept
     {
         u32 n = static_cast<u32>(arr.size());
         if (n == 0) return;
@@ -110,7 +105,7 @@ class Solution
 {
 public:
     template <typename To, typename From, size_t extent = std::dynamic_extent>
-    [[nodiscard]] ATTR static auto reinterpret_span(
+    [[nodiscard, gnu::always_inline]] inline static auto reinterpret_span(
         std::span<From, extent> in) noexcept
     {
         return std::span<To, extent>{

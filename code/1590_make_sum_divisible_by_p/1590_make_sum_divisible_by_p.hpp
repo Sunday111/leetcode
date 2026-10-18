@@ -24,14 +24,15 @@ struct HashTable
     inline static constexpr u32 kMask = capacity - 1;
     inline static constexpr u32 kNumWords = std::max(1u, capacity / 64);
 
-    FORCE_INLINE HashTable()
+    [[gnu::always_inline]] inline HashTable()
     {
         table = BumpAllocator<Entry, Storage>{}.allocate(capacity);
         bits = BumpAllocator<u64, Storage>{}.allocate(kNumWords);
         std::fill_n(bits, kNumWords, u64{0});
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr u32 hash(u32 x) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr u32 hash(
+        u32 x) noexcept
     {
         u64 z = x;
         z += 0x9e3779b97f4a7c15ULL;
@@ -40,7 +41,7 @@ struct HashTable
         return z >> 32U;
     }
 
-    FORCE_INLINE constexpr void insert(u32 k, u32 v) noexcept
+    [[gnu::always_inline]] inline constexpr void insert(u32 k, u32 v) noexcept
     {
         u32 i = hash(k);
         u32 wi;  // NOLINT
@@ -59,7 +60,7 @@ struct HashTable
         bits[wi] |= m;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr u32* find(u32 k) noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u32* find(u32 k) noexcept
     {
         u32 i = hash(k);
         bool b1, b2;  // NOLINT

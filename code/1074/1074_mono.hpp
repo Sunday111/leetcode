@@ -7,25 +7,17 @@
 
 // https://leetcode.com/problems/number-of-submatrices-that-sum-to-target/
 
-
-
-
-
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
 // simplified std::exchange
 template <typename T>
     requires std::is_trivially_copyable_v<T>
-[[nodiscard]] FORCE_INLINE constexpr T exch(T& x, T new_value) noexcept
+[[nodiscard, gnu::always_inline]] inline constexpr T exch(
+    T& x,
+    T new_value) noexcept
 {
     T tmp = x;
     x = new_value;
     return tmp;
 }
-
-
-
 
 template <typename To>
 inline static constexpr auto cast =
@@ -43,12 +35,10 @@ inline static constexpr auto iif =
     return (a & cast<T>(-c)) + (b & cast<T>(~cast<T>(-c)));
 };
 
-
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
 using u64 = uint64_t;
-
 
 using i8 = int8_t;
 using i16 = int16_t;

@@ -2,14 +2,13 @@
 #include <unordered_set>
 #include <vector>
 
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
 class Solution
 {
 public:
     template <typename F>
-    FORCE_INLINE static constexpr void gen_sides(
+    [[gnu::always_inline]] inline static constexpr void gen_sides(
         std::vector<u32>& fences,
         F f) noexcept
     {
@@ -27,7 +26,7 @@ public:
         }
     }
 
-    FORCE_INLINE static int maximizeSquareArea(
+    [[gnu::always_inline]] inline static int maximizeSquareArea(
         std::vector<u32>& x_fences,
         std::vector<u32>& y_fences) noexcept
     {
@@ -37,7 +36,7 @@ public:
 
         gen_sides(
             x_fences,
-            [&](u32 side) INLINE_LAMBDA
+            [&] [[gnu::always_inline]] (u32 side)
             {
                 seen.insert(side);
                 return false;
@@ -46,7 +45,7 @@ public:
         u32 r = 0;
         gen_sides(
             y_fences,
-            [&](u32 side) INLINE_LAMBDA
+            [&] [[gnu::always_inline]] (u32 side)
             {
                 bool found = seen.contains(side);
                 r = std::max(r, side & -u32{found});

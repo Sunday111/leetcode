@@ -16,19 +16,13 @@ using i16 = int16_t;
 using i32 = int32_t;
 using i64 = int64_t;
 
-#ifdef __GNUC__
-#define ATTR inline __attribute__((always_inline))
-#else
-#define ATTR inline
-#endif
-
 class Solution
 {
 public:
-    [[nodiscard]] ATTR static constexpr u8 charToIdx(char c) noexcept { return (c - 'a') & 0xFF; }
-    [[nodiscard]] ATTR static constexpr char idxToChar(u8 c) noexcept { return static_cast<char>(c + 'a'); }
+    [[nodiscard, gnu::always_inline]] inline static constexpr u8 charToIdx(char c) noexcept { return (c - 'a') & 0xFF; }
+    [[nodiscard, gnu::always_inline]] inline static constexpr char idxToChar(u8 c) noexcept { return static_cast<char>(c + 'a'); }
 
-    [[nodiscard]] ATTR static constexpr std::string longestSubsequenceRepeatedK(std::string& s, u16 k) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr std::string longestSubsequenceRepeatedK(std::string& s, u16 k) noexcept
     {
         // prepare lookup info
         std::array<u16, 26> freq{};
@@ -140,9 +134,9 @@ public:
 class Solution2
 {
 public:
-    [[nodiscard]] ATTR static constexpr u8 charToIdx(char c) noexcept { return (c - 'a') & 0xFF; }
-    [[nodiscard]] ATTR static constexpr char idxToChar(u8 c) noexcept { return static_cast<char>(c + 'a'); }
-    [[nodiscard]] ATTR static constexpr const u16* find_ge(u16* indices, u16 num, u16 start) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr u8 charToIdx(char c) noexcept { return (c - 'a') & 0xFF; }
+    [[nodiscard, gnu::always_inline]] inline static constexpr char idxToChar(u8 c) noexcept { return static_cast<char>(c + 'a'); }
+    [[nodiscard, gnu::always_inline]] inline static constexpr const u16* find_ge(u16* indices, u16 num, u16 start) noexcept
     {
         for (u16 j = 0; j != num; ++j)
         {
@@ -155,7 +149,7 @@ public:
         return nullptr;
     }
 
-    [[nodiscard]] ATTR static constexpr std::string longestSubsequenceRepeatedK(std::string& s, u16 k) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr std::string longestSubsequenceRepeatedK(std::string& s, u16 k) noexcept
     {
         struct CharInfo
         {
@@ -315,8 +309,8 @@ public:
 class Solution3
 {
 public:
-    [[nodiscard]] ATTR static constexpr u8 charToIdx(char c) noexcept { return (c - 'a') & 0xFF; }
-    [[nodiscard]] ATTR static constexpr char idxToChar(u8 c) noexcept { return static_cast<char>(c + 'a'); }
+    [[nodiscard, gnu::always_inline]] inline static constexpr u8 charToIdx(char c) noexcept { return (c - 'a') & 0xFF; }
+    [[nodiscard, gnu::always_inline]] inline static constexpr char idxToChar(u8 c) noexcept { return static_cast<char>(c + 'a'); }
 
     template <u8 v>
     using IC = std::integral_constant<u8, v>;
@@ -332,7 +326,7 @@ public:
     [[nodiscard]] constexpr u16 progSum(u16 num) noexcept { return ((1 + num) * num) / 2; }
 
     template <u8 depth>
-    [[nodiscard]] ATTR constexpr bool pushUpdate(IC<depth>, char push_char) noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr bool pushUpdate(IC<depth>, char push_char) noexcept
     {
         const u8 ci = charToIdx(push_char);
         if (freq[ci] < k) return false;
@@ -383,7 +377,7 @@ public:
         return true;
     }
 
-    [[nodiscard]] ATTR constexpr std::string longestSubsequenceRepeatedK(std::string& s_, u16 k_) noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr std::string longestSubsequenceRepeatedK(std::string& s_, u16 k_) noexcept
     {
         // prepare lookup info
         k = k_;

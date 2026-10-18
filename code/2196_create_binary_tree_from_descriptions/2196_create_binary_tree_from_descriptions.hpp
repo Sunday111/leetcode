@@ -2,7 +2,6 @@
 
 #include "binary_tree/lc_tree_node.hpp"
 #include "cast.hpp"
-#include "force_inline.hpp"
 #include "pyramid_bitset/pbs_add.hpp"
 #include "pyramid_bitset/pbs_get.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
@@ -17,7 +16,7 @@ public:
         static TreeNode nodes[100001];
         PyramidBitset<100001> initialized, roots;
 
-        auto get_node = [&](u32 id) INLINE_LAMBDA -> TreeNode&
+        auto get_node = [&] [[gnu::always_inline]] (u32 id) -> TreeNode&
         {
             auto& x = nodes[id];
             if (!pbs_get(initialized, id))

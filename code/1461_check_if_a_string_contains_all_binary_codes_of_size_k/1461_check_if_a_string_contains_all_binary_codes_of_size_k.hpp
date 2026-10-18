@@ -1,6 +1,5 @@
 #include <string_view>
 
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
 class Solution
@@ -29,7 +28,7 @@ public:
         std::fill_n(bitset_words, (t >> 6) + 1, 0);
 
         u32 v = 0;
-        auto visit = [&](u32 i) INLINE_LAMBDA
+        auto visit = [&] [[gnu::always_inline]] (u32 i)
         {
             u64& w = bitset_words[i >> 6];
             u64 m = (u64{1} << (i & 63));
@@ -38,7 +37,7 @@ public:
         };
 
         u32 x = 0;
-        auto add_bit = [&](char c) INLINE_LAMBDA
+        auto add_bit = [&] [[gnu::always_inline]] (char c)
         {
             x = ((x << 1) | (1 & c)) & m;
         };

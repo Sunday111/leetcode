@@ -3,12 +3,11 @@
 
 using u32 = uint32_t;
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
 // Swaps a and b if a > b. Only for integers. Branchless
 template <std::integral Int>
-FORCE_INLINE static constexpr void swap_if_greater(Int& a, Int& b) noexcept
+[[gnu::always_inline]] inline static constexpr void swap_if_greater(
+    Int& a,
+    Int& b) noexcept
 {
     Int mask = (a ^ b) & -Int{a > b};
     a ^= mask, b ^= mask;

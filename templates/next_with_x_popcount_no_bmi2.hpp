@@ -1,12 +1,12 @@
 #pragma once
-
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 #include "next_with_same_popcount.hpp"
 
 // generates value >= v with exactly x bits set
 
-[[nodiscard]] FORCE_INLINE constexpr u32 next_with_x_popcount(u32 v, u8 x)
+[[nodiscard, gnu::always_inline]] inline constexpr u32 next_with_x_popcount(
+    u32 v,
+    u8 x)
 {
     auto vp = std::popcount(v);
     if (vp == x) return v;

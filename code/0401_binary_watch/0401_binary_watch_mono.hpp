@@ -5,13 +5,6 @@
 #include <string>
 #include <vector>
 
-
-
-
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
-
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
@@ -23,7 +16,7 @@ using i32 = int32_t;
 using i64 = int64_t;
 
 // This is safe for n < 68
-[[nodiscard]] FORCE_INLINE constexpr u64 ncr(u8 n, u8 r) noexcept
+[[nodiscard, gnu::always_inline]] inline constexpr u64 ncr(u8 n, u8 r) noexcept
 {
     if (r > n) return 0;
     if (r > n - r) r = n - r;
@@ -37,14 +30,13 @@ using i64 = int64_t;
     return res;
 }
 
-
-
 /* This is an implementation of Gosper's hack, which is an efficient method of
  * computing the next higher integer with the same number of set bits (popcout,
  * hamming weight)
  */
 template <std::unsigned_integral T>
-[[nodiscard]] FORCE_INLINE constexpr T next_with_same_popcount(T q) noexcept
+[[nodiscard, gnu::always_inline]] inline constexpr T next_with_same_popcount(
+    T q) noexcept
 {
     T r = q & -q;
     T n = q + r;

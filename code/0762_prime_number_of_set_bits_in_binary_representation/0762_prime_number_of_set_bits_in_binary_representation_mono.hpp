@@ -16,15 +16,13 @@ using i16 = int16_t;
 using i32 = int32_t;
 using i64 = int64_t;
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
 /* This is an implementation of Gosper's hack, which is an efficient method of
  * computing the next higher integer with the same number of set bits (popcout,
  * hamming weight)
  */
 template <std::unsigned_integral T>
-[[nodiscard]] FORCE_INLINE constexpr T next_with_same_popcount(T q) noexcept
+[[nodiscard, gnu::always_inline]] inline constexpr T next_with_same_popcount(
+    T q) noexcept
 {
     T r = q & -q;
     T n = q + r;
@@ -35,7 +33,7 @@ template <std::unsigned_integral T>
 #define WITH_BMI2 __attribute__((__target__("bmi2")))
 
 // Returns value >= v such that popcount(value) == x
-[[nodiscard]] FORCE_INLINE WITH_BMI2 u32
+[[nodiscard, gnu::always_inline]] inline WITH_BMI2 u32
 next_with_x_popcount(u32 v, u8 x) noexcept
 {
     u32 vp = std::popcount(v) & 0xFF;

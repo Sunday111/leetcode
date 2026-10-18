@@ -2,11 +2,9 @@
 
 #include <algorithm>
 
-#include "force_inline.hpp"
-
 // Find an iterator to the first
 template <typename Range, typename Proj>
-[[nodiscard]] FORCE_INLINE constexpr auto bisectFirstFalse(
+[[nodiscard, gnu::always_inline]] inline constexpr auto bisectFirstFalse(
     Range&& range,
     Proj&& proj) noexcept
 {
@@ -18,7 +16,7 @@ template <typename Range, typename Proj>
 }
 
 template <typename Range, typename Proj>
-[[nodiscard]] FORCE_INLINE constexpr auto bisectLastTrue(
+[[nodiscard, gnu::always_inline]] inline constexpr auto bisectLastTrue(
     Range&& range,
     Proj&& proj) noexcept
 {

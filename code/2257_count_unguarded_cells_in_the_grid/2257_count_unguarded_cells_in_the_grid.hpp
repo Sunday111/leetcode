@@ -2,29 +2,29 @@
 #include <bit>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-
 using u32 = uint32_t;
 using u64 = uint64_t;
 
 struct BitsetView
 {
-    [[nodiscard]] FORCE_INLINE constexpr bool contains(u32 i) const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr bool contains(
+        u32 i) const noexcept
     {
         return words[i >> 6] & (u64{1} << (i & 63));
     }
 
-    FORCE_INLINE constexpr void add(u32 i) noexcept
+    [[gnu::always_inline]] inline constexpr void add(u32 i) noexcept
     {
         words[i >> 6] |= (u64{1} << (i & 63));
     }
 
-    FORCE_INLINE constexpr void clear() noexcept
+    [[gnu::always_inline]] inline constexpr void clear() noexcept
     {
         std::fill_n(words, num_words, 0);
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr u32 count() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u32 count()
+        const noexcept
     {
         u32 r = 0;
         for (u32 i = 0; i != num_words; ++i)

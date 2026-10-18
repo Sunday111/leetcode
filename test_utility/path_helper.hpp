@@ -2,12 +2,10 @@
 
 #include <string>
 
-#include "force_inline.hpp"
-
 class PathHelper
 {
 public:
-    [[nodiscard]] FORCE_INLINE static const PathHelper& Get()
+    [[nodiscard, gnu::always_inline]] inline static const PathHelper& Get()
     {
         return GetInternal();
     }

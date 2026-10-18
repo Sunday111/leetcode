@@ -3,15 +3,9 @@
 #include <utility>
 #include <vector>
 
-
-
-
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
 template <typename To, typename From, std::size_t extent = std::dynamic_extent>
     requires(sizeof(To) == sizeof(From))
-[[nodiscard]] FORCE_INLINE static auto reinterpret_range(
+[[nodiscard, gnu::always_inline]] inline static auto reinterpret_range(
     std::span<From, extent> in) noexcept
 {
     return std::span<To, extent>{
@@ -21,13 +15,11 @@ template <typename To, typename From, std::size_t extent = std::dynamic_extent>
 
 template <typename To, typename From, typename Allocator>
     requires(sizeof(To) == sizeof(From))
-[[nodiscard]] FORCE_INLINE static std::span<To> reinterpret_range(
+[[nodiscard, gnu::always_inline]] inline static std::span<To> reinterpret_range(
     std::vector<From, Allocator>& v) noexcept
 {
     return reinterpret_range<To>(std::span{v});
 }
-
-
 
 using u8 = uint8_t;
 using u16 = uint16_t;

@@ -3,21 +3,13 @@
 #include <string>
 #include <vector>
 
-
-
-
-
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
-
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
 using u64 = uint64_t;
 
 template <std::unsigned_integral T>
-[[nodiscard]] FORCE_INLINE static constexpr T
+[[nodiscard, gnu::always_inline]] inline static constexpr T
 clear_bit(T x, u8 i, bool condition = true) noexcept
 {
     return x & ~(T{condition} << i);

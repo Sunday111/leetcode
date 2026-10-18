@@ -8,8 +8,6 @@ using ShopID = u32;   // [1; 3 * 10^5]
 using MovieID = u16;  // [1; 10^4]
 using Price = u16;    // [1; 10^4]
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-
 template <u32 capacity, typename K, typename V, typename Hasher = std::hash<K>>
 class HashMap
 {
@@ -84,7 +82,7 @@ public:
     }
 
 private:
-    FORCE_INLINE u32 hash(const K& key) const noexcept
+    [[gnu::always_inline]] inline u32 hash(const K& key) const noexcept
     {
         size_t h = Hasher{}(key);
         // MurmurHash3-style avalanche to mix bits
@@ -126,11 +124,11 @@ private:
         return capacity;
     }
 
-    FORCE_INLINE KV& at_index(u32 index) noexcept
+    [[gnu::always_inline]] inline KV& at_index(u32 index) noexcept
     {
         return reinterpret_cast<KV&>(pairs_[index]);  // NOLINT
     }
-    FORCE_INLINE const KV& at_index(u32 index) const noexcept
+    [[gnu::always_inline]] inline const KV& at_index(u32 index) const noexcept
     {
         return reinterpret_cast<const KV&>(pairs_[index]);  // NOLINT
     }

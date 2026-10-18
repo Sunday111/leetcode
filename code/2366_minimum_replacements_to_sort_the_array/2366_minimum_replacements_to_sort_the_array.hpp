@@ -16,7 +16,7 @@ public:
         return sum(
             a | stdv::reverse | cast_view<u32> |
                 stdv::transform(
-                    [&, p = ~0u >> 1](u32 v) INLINE_LAMBDA mutable
+                    [&, p = ~0u >> 1] [[gnu::always_inline]] (u32 v) mutable
                     {
                         u32 k = ceil_div(v, p);
                         p = v / k;

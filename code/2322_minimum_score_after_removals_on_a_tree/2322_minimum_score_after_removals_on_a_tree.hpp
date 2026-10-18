@@ -4,17 +4,17 @@
 #include <span>
 #include <vector>
 
-#define HOT_PATH __attribute__((hot))
-#define FORCE_INLINE inline __attribute__((always_inline))
-
 template <std::integral T>
-[[nodiscard]] FORCE_INLINE HOT_PATH constexpr T iif(bool c, T a, T b) noexcept
+[[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr T
+iif(bool c, T a, T b) noexcept
 {
     return (a & static_cast<T>(-c)) + (b & static_cast<T>(~static_cast<T>(-c)));
 }
 
 template <std::integral Int>
-FORCE_INLINE HOT_PATH constexpr void swap_if_greater(Int& a, Int& b) noexcept
+[[gnu::always_inline, gnu::hot]] inline constexpr void swap_if_greater(
+    Int& a,
+    Int& b) noexcept
 {
     Int cond = iif(a > b, ~Int{0}, Int{0});
     Int mask = (a ^ b) & cond;
@@ -67,7 +67,7 @@ public:
         node.out = timer++;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr bool isAncestor(
+    [[nodiscard, gnu::always_inline]] inline constexpr bool isAncestor(
         u16 ancestor,
         u16 descendant) const noexcept
     {
@@ -75,7 +75,7 @@ public:
                nodes[descendant].out <= nodes[ancestor].out;
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr int
+    [[nodiscard, gnu::always_inline]] inline static constexpr int
     score(int x, int y, int z) noexcept
     {
         swap_if_greater(x, y);

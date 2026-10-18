@@ -7,12 +7,6 @@
 using u8 = uint8_t;
 using u32 = uint32_t;
 
-#ifdef __GNUC__
-#define ATTR inline __attribute__((always_inline))
-#else
-#define ATTR inline
-#endif
-
 template <u8 bits_per_pass>
 struct RadixSorter
 {
@@ -28,7 +22,7 @@ struct RadixSorter
     static constexpr u32 mask = base - 1;
 
     template <u8 pass>
-    ATTR static void radixSortPass(
+    [[gnu::always_inline]] inline static void radixSortPass(
         std::span<u32> arr,
         std::array<u32, base>& count) noexcept
     {
@@ -55,7 +49,8 @@ struct RadixSorter
         std::ranges::copy(temp, arr.begin());
     }
 
-    ATTR static void radixSort(std::span<u32> arr) noexcept
+    [[gnu::always_inline]] inline static void radixSort(
+        std::span<u32> arr) noexcept
     {
         u32 n = static_cast<u32>(arr.size());
         if (n == 0) return;

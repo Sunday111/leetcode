@@ -10,12 +10,6 @@
 #include <utility>
 #include <vector>
 
-#ifdef __GNUC__
-#define ATTR inline __attribute__((always_inline))
-#else
-#define ATTR inline
-#endif
-
 using u8 = uint8_t;
 using i8 = int8_t;
 
@@ -24,13 +18,15 @@ struct Vec2
     i8 x;
     i8 y;
 
-    ATTR constexpr Vec2& operator+=(const Vec2& v) noexcept
+    [[gnu::always_inline]] inline constexpr Vec2& operator+=(
+        const Vec2& v) noexcept
     {
         x += v.x;  // NOLINT
         y += v.y;  // NOLINT
         return *this;
     }
-    ATTR constexpr bool operator==(const Vec2&) const noexcept = default;
+    [[gnu::always_inline]] inline constexpr bool operator==(
+        const Vec2&) const noexcept = default;
 
     [[nodiscard]] static constexpr Vec2 from_vector(
         const std::vector<int>& vec) noexcept
@@ -86,19 +82,20 @@ class SolutionK
 public:
     static constexpr u8 num_pieces = pieces.size() & 0xFF;
 
-    [[nodiscard]] ATTR static constexpr u8 to_index(
+    [[nodiscard, gnu::always_inline]] inline static constexpr u8 to_index(
         const Vec2& position) noexcept
     {
         return static_cast<u8>(position.y * 8 + position.x);
     }
 
-    [[nodiscard]] ATTR static constexpr bool is_valid(const Vec2& p) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr bool is_valid(
+        const Vec2& p) noexcept
     {
         constexpr u8 mask = 0b111;
         return ((p.x & mask) == p.x) && ((p.y & mask) == p.y);
     }
 
-    [[nodiscard]] constexpr bool ATTR validate_paths(
+    [[nodiscard, gnu::always_inline]] constexpr bool inline validate_paths(
         const std::array<PieceState, num_pieces>& states) const noexcept
     {
         auto positions = start_positions;
@@ -134,7 +131,8 @@ public:
     }
 
     template <u8 piece_index>
-    [[nodiscard]] ATTR static consteval auto& get_piece_directions() noexcept
+    [[nodiscard, gnu::always_inline]] inline static consteval auto&
+    get_piece_directions() noexcept
     {
         if constexpr (pieces[piece_index] == Piece::Bishop)
         {
@@ -151,7 +149,7 @@ public:
     }
 
     template <u8 current_piece>
-    [[nodiscard]] ATTR constexpr uint32_t solve_r(
+    [[nodiscard, gnu::always_inline]] inline constexpr uint32_t solve_r(
         std::array<PieceState, num_pieces>& states) const noexcept
     {
         if constexpr (current_piece == num_pieces)
@@ -205,7 +203,8 @@ public:
     static constexpr std::array<u8, 3> kCntArr{r, b, q};
 
     template <size_t num_pieces>
-    [[nodiscard]] ATTR static constexpr std::array<Vec2, num_pieces>
+    [[nodiscard,
+      gnu::always_inline]] inline static constexpr std::array<Vec2, num_pieces>
     make_coords_array(
         std::span<const u8> indices,
         const std::vector<std::vector<int>>& positions) noexcept
@@ -221,7 +220,8 @@ public:
     }
 
     template <auto cnt_arr>
-    [[nodiscard]] ATTR static constexpr auto cnt_arr_to_pieces() noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr auto
+    cnt_arr_to_pieces() noexcept
     {
         std::array<Piece, cnt_arr[0] + cnt_arr[1] + cnt_arr[2]> r;  // NOLINT
         u8 next = 0;
@@ -232,7 +232,7 @@ public:
     }
 
     template <size_t num_pieces, auto... variants>
-    [[nodiscard]] ATTR static constexpr uint32_t choose(
+    [[nodiscard, gnu::always_inline]] inline static constexpr uint32_t choose(
         const std::array<u8, 3>& cnt,
         const std::array<u8, 4>& indices,
         const std::vector<std::vector<int>>& positions)
@@ -260,7 +260,8 @@ public:
         std::unreachable();
     }
 
-    [[nodiscard]] ATTR static constexpr uint32_t countCombinations(
+    [[nodiscard, gnu::always_inline]] inline static constexpr uint32_t
+    countCombinations(
         std::vector<std::string>& pieces_str,
         std::vector<std::vector<int>>& positions) noexcept
     {

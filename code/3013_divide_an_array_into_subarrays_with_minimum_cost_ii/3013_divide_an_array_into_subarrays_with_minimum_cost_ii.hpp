@@ -10,14 +10,16 @@ class Solution
 public:
     struct sum_n_smallest
     {
-        FORCE_INLINE constexpr void reserve(size_t n) noexcept
+        [[gnu::always_inline]] inline constexpr void reserve(size_t n) noexcept
         {
             larger.reserve(n);
             smaller.reserve(n);
         }
 
         template <class Iter>
-        FORCE_INLINE constexpr void init(Iter begin, Iter end) noexcept
+        [[gnu::always_inline]] inline constexpr void init(
+            Iter begin,
+            Iter end) noexcept
         {
             smaller.init(begin, end);
             for (auto i = begin; i < end; ++i)
@@ -26,7 +28,9 @@ public:
             }
         }
 
-        FORCE_INLINE constexpr void add_and_drop(u32 a, u32 d) noexcept
+        [[gnu::always_inline]] inline constexpr void add_and_drop(
+            u32 a,
+            u32 d) noexcept
         {
             const u32 top_larger = larger.top();
             if (a >= top_larger == d >= top_larger)
@@ -50,7 +54,7 @@ public:
             add(a);
         }
 
-        FORCE_INLINE constexpr void add(u32 i) noexcept
+        [[gnu::always_inline]] inline constexpr void add(u32 i) noexcept
         {
             const u32 old_top = smaller.top();
             if (i < old_top)
@@ -67,7 +71,9 @@ public:
             }
         }
 
-        FORCE_INLINE constexpr void drop(u32 i, u32 old_top) noexcept
+        [[gnu::always_inline]] inline constexpr void drop(
+            u32 i,
+            u32 old_top) noexcept
         {
             if (i < old_top)
             {

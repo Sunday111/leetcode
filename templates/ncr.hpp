@@ -1,10 +1,8 @@
 #pragma once
-
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
 // This is safe for n < 68
-[[nodiscard]] FORCE_INLINE constexpr u64 ncr(u8 n, u8 r) noexcept
+[[nodiscard, gnu::always_inline]] inline constexpr u64 ncr(u8 n, u8 r) noexcept
 {
     if (r > n) return 0;
     if (r > n - r) r = n - r;

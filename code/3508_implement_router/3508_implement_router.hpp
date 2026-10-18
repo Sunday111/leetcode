@@ -6,21 +6,22 @@
 #include <unordered_set>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-
 template <typename T>
-[[nodiscard]] FORCE_INLINE constexpr size_t get_hash(const T& v) noexcept
+[[nodiscard, gnu::always_inline]] inline constexpr size_t get_hash(
+    const T& v) noexcept
 {
     return std::hash<T>{}(v);
 }
 
-FORCE_INLINE void hash_combine(std::size_t& seed, std::size_t h) noexcept
+[[gnu::always_inline]] inline void hash_combine(
+    std::size_t& seed,
+    std::size_t h) noexcept
 {
     seed ^= h + 0x9e3779b9 + (seed << 6) + (seed >> 2);
 }
 
 template <typename... T>
-[[nodiscard]] FORCE_INLINE constexpr size_t hash_combine(
+[[nodiscard, gnu::always_inline]] inline constexpr size_t hash_combine(
     const T&... arg) noexcept
     requires((true && ... && std::same_as<T, size_t>))
 {
@@ -30,7 +31,8 @@ template <typename... T>
 }
 
 template <typename... T>
-[[nodiscard]] FORCE_INLINE constexpr size_t hash_together(T&&... arg) noexcept
+[[nodiscard, gnu::always_inline]] inline constexpr size_t hash_together(
+    T&&... arg) noexcept
 {
     return hash_combine(get_hash(std::forward<T>(arg))...);
 }
@@ -38,7 +40,7 @@ template <typename... T>
 struct TupleHasher
 {
     template <typename... T>
-    FORCE_INLINE constexpr size_t operator()(
+    [[gnu::always_inline]] inline constexpr size_t operator()(
         const std::tuple<T...>& t) const noexcept
     {
         using Tuple = std::tuple<T...>;

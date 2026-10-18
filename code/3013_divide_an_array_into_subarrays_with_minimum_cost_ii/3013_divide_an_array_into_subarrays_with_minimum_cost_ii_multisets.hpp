@@ -1,7 +1,6 @@
 #include <vector>
 
 #include "bump_multiset.hpp"
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
 using SolutionStorage = GlobalBufferStorage<1u << 25>;
@@ -13,7 +12,7 @@ struct SumKSmallest
     BumpMultiset<u32, SolutionStorage> smallest{};
     BumpMultiset<u32, SolutionStorage> other{};
 
-    FORCE_INLINE void insert(u32 v) noexcept
+    [[gnu::always_inline]] inline void insert(u32 v) noexcept
     {
         if (smallest.size() < k)
         {
@@ -40,7 +39,7 @@ struct SumKSmallest
         }
     }
 
-    FORCE_INLINE void erase(u32 v) noexcept
+    [[gnu::always_inline]] inline void erase(u32 v) noexcept
     {
         if (auto it = other.find(v); it != other.end())
         {
@@ -62,7 +61,7 @@ struct SumKSmallest
         }
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr u32 size() noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u32 size() noexcept
     {
         return static_cast<u32>(smallest.size() + other.size());
     }

@@ -3,8 +3,6 @@
 #include <vector>
 
 #include "cast.hpp"
-#include "force_inline.hpp"
-#include "hot_path.hpp"
 #include "integral_aliases.hpp"
 #include "no_sanitizers.hpp"
 
@@ -20,27 +18,31 @@ struct Entry
 };
 
 template <typename To>
-[[nodiscard]] FORCE_INLINE static constexpr To to(auto v) noexcept
+[[nodiscard, gnu::always_inline]] inline static constexpr To to(auto v) noexcept
 {
     return static_cast<To>(v);
 }
 
 struct ArrayBucket
 {
-    [[nodiscard]] FORCE_INLINE u16 size() const noexcept HOT_PATH NO_SANITIZERS
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline u16 size() const noexcept
+        NO_SANITIZERS
     {
         return cast<u16>(data.size());
     }
-    FORCE_INLINE constexpr void clear() noexcept HOT_PATH NO_SANITIZERS
+    [[gnu::always_inline, gnu::hot]] inline constexpr void clear() noexcept
+        NO_SANITIZERS
     {
         data.clear();
     }
-    FORCE_INLINE void push(Vec2 v) noexcept HOT_PATH NO_SANITIZERS
+    [[gnu::always_inline, gnu::hot]] inline void push(Vec2 v) noexcept
+        NO_SANITIZERS
     {
         data.push_back(v);
     }
 
-    [[nodiscard]] FORCE_INLINE Vec2 pop() noexcept HOT_PATH NO_SANITIZERS
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline Vec2 pop() noexcept
+        NO_SANITIZERS
     {
         auto last = data.back();
         data.pop_back();
@@ -52,14 +54,19 @@ struct ArrayBucket
 
 struct VectorBucket  // NOLINT
 {
-    [[nodiscard]] FORCE_INLINE u16 size() const noexcept { return sz; }
-    FORCE_INLINE constexpr void clear() noexcept { sz = 0; }
-    FORCE_INLINE void push(Vec2 v) noexcept HOT_PATH NO_SANITIZERS
+    [[nodiscard, gnu::always_inline]] inline u16 size() const noexcept
+    {
+        return sz;
+    }
+    [[gnu::always_inline]] inline constexpr void clear() noexcept { sz = 0; }
+    [[gnu::always_inline, gnu::hot]] inline void push(Vec2 v) noexcept
+        NO_SANITIZERS
     {
         data[sz++] = v;
     }
 
-    [[nodiscard]] FORCE_INLINE Vec2 pop() noexcept HOT_PATH NO_SANITIZERS
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline Vec2 pop() noexcept
+        NO_SANITIZERS
     {
         return data[--sz];
     }
@@ -84,7 +91,7 @@ struct BucketPriorityQueue
     std::array<u64, kLayer2Size> layer2{};
     u32 layer3 = 0;
 
-    FORCE_INLINE void clear() noexcept HOT_PATH NO_SANITIZERS
+    [[gnu::always_inline, gnu::hot]] inline void clear() noexcept NO_SANITIZERS
     {
         for (auto& b : buckets) b.clear();
         std::ranges::fill(layer1, 0);
@@ -92,7 +99,8 @@ struct BucketPriorityQueue
         layer3 = 0;
     }
 
-    FORCE_INLINE void setBit(u16 h) noexcept HOT_PATH NO_SANITIZERS
+    [[gnu::always_inline, gnu::hot]] inline void setBit(u16 h) noexcept
+        NO_SANITIZERS
     {
         u16 i1 = h / 64;
         u16 i2 = i1 / 64;
@@ -102,7 +110,8 @@ struct BucketPriorityQueue
     }
 
     // Branchless version
-    FORCE_INLINE void clearBit(u16 h) noexcept HOT_PATH NO_SANITIZERS
+    [[gnu::always_inline, gnu::hot]] inline void clearBit(u16 h) noexcept
+        NO_SANITIZERS
     {
         if constexpr (kBranchlessClearBit)
         {
@@ -141,13 +150,14 @@ struct BucketPriorityQueue
         }
     }
 
-    FORCE_INLINE void emplace(Vec2 p, u16 h) noexcept
+    [[gnu::always_inline]] inline void emplace(Vec2 p, u16 h) noexcept
     {
         buckets[h].push(p);
         setBit(h);
     }
 
-    [[nodiscard]] FORCE_INLINE Entry pop() noexcept HOT_PATH NO_SANITIZERS
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline Entry pop() noexcept
+        NO_SANITIZERS
     {
         // branchless min extraction
         u16 idx2 = cast<u16>(std::countr_zero(layer3));
@@ -162,7 +172,8 @@ struct BucketPriorityQueue
         return Entry{v, h};
     }
 
-    [[nodiscard]] FORCE_INLINE operator bool() const noexcept  // NOLINT
+    [[nodiscard, gnu::always_inline]] inline operator bool()
+        const noexcept  // NOLINT
     {
         return layer3 != 0;
     }
@@ -173,21 +184,21 @@ class Solution
 public:
     inline static BucketPriorityQueue q;  // NOLINT
 
-    [[nodiscard]] FORCE_INLINE constexpr static u16 toIdx(
+    [[nodiscard, gnu::always_inline]] inline constexpr static u16 toIdx(
         const Vec2& v) noexcept
     {
         return cast<u16>((u16{v.x} << 8) | v.y);
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr static u16 getH(
+    [[nodiscard, gnu::always_inline]] inline constexpr static u16 getH(
         std::vector<std::vector<int>>& hmap,
         const Vec2& v) noexcept NO_SANITIZERS
     {
         return cast<u16>(hmap[v.y][v.x]);
     }
 
-    [[nodiscard]] static constexpr u32 trapRainWater(
-        std::vector<std::vector<int>>& hmap) noexcept HOT_PATH NO_SANITIZERS
+    [[nodiscard, gnu::hot]] static constexpr u32 trapRainWater(
+        std::vector<std::vector<int>>& hmap) noexcept NO_SANITIZERS
     {
         const Vec2 size{
             cast<u8>(hmap[0].size()),

@@ -6,8 +6,6 @@
 #include <span>
 
 #include "cast.hpp"
-#include "force_inline.hpp"
-#include "hot_path.hpp"
 #include "integral_aliases.hpp"
 #include "no_sanitizers.hpp"
 #include "reinterpret_range.hpp"
@@ -40,8 +38,8 @@ class RadixSorter
     inline static std::array<UT, capacity> temp;
 
     template <u8 pass_index>
-    FORCE_INLINE static void do_pass(std::span<UT> arr) noexcept
-        NO_SANITIZERS HOT_PATH
+    [[gnu::always_inline, gnu::hot]] static void do_pass(
+        std::span<UT> arr) noexcept
     {
         count.fill(0);
         constexpr UT shift = pass_index * bits_per_pass;
@@ -109,17 +107,16 @@ class RadixSorter
 
     // Invokes do_pass for each pass_index.
     template <u8... pass_index>
-    FORCE_INLINE static void do_passes(
+    [[gnu::always_inline, gnu::hot]] inline static void do_passes(
         std::span<UT> arr,
-        std::integer_sequence<u8, pass_index...>) noexcept
-        NO_SANITIZERS HOT_PATH
+        std::integer_sequence<u8, pass_index...>) noexcept NO_SANITIZERS
     {
         (do_pass<pass_index>(arr), ...);
     }
 
 public:
-    FORCE_INLINE static void sort(std::span<T> arr) noexcept
-        NO_SANITIZERS HOT_PATH
+    [[gnu::always_inline, gnu::hot]] inline static void sort(
+        std::span<T> arr) noexcept NO_SANITIZERS
     {
         if (arr.size()) do_passes(reinterpret_range<UT>(arr), pass_idx_seq);
     }
@@ -131,7 +128,8 @@ template <
     SortOrder order = SortOrder::Ascending,
     u32 capacity = 100'001,
     std::integral T>
-FORCE_INLINE void radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
+[[gnu::always_inline]] inline void radix_sort(std::span<T> arr) noexcept
+    NO_SANITIZERS
 {
     constexpr u32 np =
         num_passes == 0xFFFFFFFF
@@ -146,7 +144,8 @@ template <
     SortOrder order = SortOrder::Ascending,
     u32 capacity = 100'001,
     std::integral T>
-FORCE_INLINE void stable_radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
+[[gnu::always_inline]] inline void stable_radix_sort(std::span<T> arr) noexcept
+    NO_SANITIZERS
 {
     constexpr u32 np =
         num_passes == 0xFFFFFFFF

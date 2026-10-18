@@ -2,14 +2,12 @@
 #include <cstdint>
 #include <vector>
 
-#include "force_inline.hpp"
-
 class Solution
 {
 public:
     using u32 = uint32_t;
 
-    [[nodiscard]] FORCE_INLINE static constexpr u32 dist(
+    [[nodiscard, gnu::always_inline]] inline static constexpr u32 dist(
         const std::vector<int>& query) noexcept
     {
         return static_cast<u32>(std::abs(query[0]) + std::abs(query[1]));

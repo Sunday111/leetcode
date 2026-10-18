@@ -2,9 +2,6 @@
 #include <cstdint>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
@@ -14,7 +11,7 @@ class Solution
 public:
     static constexpr u16 NN = 80 * (1u << 7);
 
-    FORCE_INLINE static u16 idx(u8 i, u8 j) noexcept
+    [[gnu::always_inline]] inline static u16 idx(u8 i, u8 j) noexcept
     {
         return ((u16{i} << 7) | j) & 0xFFFF;
     }

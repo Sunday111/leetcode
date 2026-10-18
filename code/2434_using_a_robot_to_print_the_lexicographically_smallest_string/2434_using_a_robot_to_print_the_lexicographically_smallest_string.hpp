@@ -5,12 +5,6 @@
 #include <cstdint>
 #include <string>
 
-#ifdef __GNUC__
-#define ATTR inline __attribute__((always_inline))
-#else
-#define ATTR inline
-#endif
-
 class Solution
 {
 public:
@@ -18,13 +12,14 @@ public:
     using u16 = uint16_t;
     using u32 = uint32_t;
 
-    [[nodiscard]] ATTR static constexpr u8 to_idx(char c) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr u8 to_idx(
+        char c) noexcept
     {
         return static_cast<u8>(c - 'a');
     }
 
-    [[nodiscard]] ATTR static constexpr std::string robotWithString(
-        std::string s) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr std::string
+    robotWithString(std::string s) noexcept
     {
         std::string t;
         t.reserve(s.size());

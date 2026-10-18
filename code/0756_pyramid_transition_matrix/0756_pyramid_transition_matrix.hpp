@@ -2,13 +2,13 @@
 #include <string>
 #include <vector>
 
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
 class Solution
 {
 public:
-    [[nodiscard]] FORCE_INLINE static u32 encode(const std::string& s) noexcept
+    [[nodiscard, gnu::always_inline]] inline static u32 encode(
+        const std::string& s) noexcept
     {
         u32 ans = 0;
         for (char c : s) ans = ans * 7 + ((c - 'A') & 0xFF);

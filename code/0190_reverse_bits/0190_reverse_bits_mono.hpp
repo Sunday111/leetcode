@@ -1,11 +1,5 @@
 #include <cstdint>
 
-
-
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
-
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
@@ -16,7 +10,7 @@ using i16 = int16_t;
 using i32 = int32_t;
 using i64 = int64_t;
 
-FORCE_INLINE constexpr u32 reverse32(u32 x) noexcept
+[[gnu::always_inline]] inline constexpr u32 reverse32(u32 x) noexcept
 {
     x = ((x & 0x55555555) << 1) | ((x >> 1) & 0x55555555);
     x = ((x & 0x33333333) << 2) | ((x >> 2) & 0x33333333);

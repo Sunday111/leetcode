@@ -3,7 +3,6 @@
 #include <array>
 #include <bit>
 
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
 template <u8 n>
@@ -52,7 +51,7 @@ class Solution
 {
 public:
     template <u8 n>
-    [[nodiscard]] FORCE_INLINE static u32 solve() noexcept
+    [[nodiscard, gnu::always_inline]] inline static u32 solve() noexcept
     {
         SolutionT<n> s{};
         s.solve();

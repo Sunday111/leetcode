@@ -5,19 +5,15 @@
 #include <unordered_map>
 #include <vector>
 
-#ifdef __GNUC__
-#define ATTR inline __attribute__((always_inline))
-#else
-#define ATTR inline
-#endif
-
 class FindSumPairs
 {
 public:
     using u32 = uint32_t;
     using i32 = int32_t;
 
-    [[nodiscard]] ATTR static std::unordered_map<i32, u32>& freq2() noexcept
+    [[nodiscard,
+      gnu::always_inline]] inline static std::unordered_map<i32, u32>&
+    freq2() noexcept
     {
         static auto m = []()
         {
@@ -28,7 +24,9 @@ public:
         return m;
     }
 
-    ATTR FindSumPairs(std::vector<i32>& nums1, std::vector<i32>& nums2) noexcept
+    [[gnu::always_inline]] inline FindSumPairs(
+        std::vector<i32>& nums1,
+        std::vector<i32>& nums2) noexcept
         : n1{nums1},
           n2{nums2}
     {
@@ -37,7 +35,7 @@ public:
         for (i32 v : n2) ++freq2()[v];
     }
 
-    ATTR void add(i32 index, i32 val) noexcept
+    [[gnu::always_inline]] inline void add(i32 index, i32 val) noexcept
     {
         i32& v = n2[std::bit_cast<u32>(index)];
         --freq2()[v];
@@ -45,7 +43,7 @@ public:
         ++freq2()[v];
     }
 
-    [[nodiscard]] ATTR i32 count(i32 tot) const noexcept
+    [[nodiscard, gnu::always_inline]] inline i32 count(i32 tot) const noexcept
     {
         u32 r = 0;
         for (i32 v : n1)

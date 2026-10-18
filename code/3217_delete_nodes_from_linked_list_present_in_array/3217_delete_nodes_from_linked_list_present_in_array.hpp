@@ -1,7 +1,6 @@
 #include <cstdint>
 #include <vector>
 
-#include "force_inline.hpp"
 #include "ptr_if.hpp"
 
 struct ListNode
@@ -17,7 +16,7 @@ public:
     inline static u64 b[(100'001 / 64) + 1];
     inline static int dirty = 0;
 
-    [[nodiscard]] FORCE_INLINE static bool is_set(int v) noexcept
+    [[nodiscard, gnu::always_inline]] inline static bool is_set(int v) noexcept
     {
         return b[v >> 6] & (u64{1} << (v & 63));
     }

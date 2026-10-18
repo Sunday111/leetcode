@@ -5,7 +5,7 @@
 #include "with_bmi2.hpp"
 
 // Returns value >= v such that popcount(value) == x
-[[nodiscard]] FORCE_INLINE WITH_BMI2 u32
+[[nodiscard, gnu::always_inline]] inline WITH_BMI2 u32
 next_with_x_popcount(u32 v, u8 x) noexcept
 {
     u32 vp = std::popcount(v) & 0xFF;

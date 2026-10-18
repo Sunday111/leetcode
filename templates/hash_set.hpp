@@ -4,7 +4,6 @@
 #include <bit>
 #include <span>
 
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
 template <
@@ -27,7 +26,7 @@ public:
         std::ranges::fill(data_, empty);
     }
 
-    FORCE_INLINE void add(const Value& v) noexcept
+    [[gnu::always_inline]] inline void add(const Value& v) noexcept
     {
         u32 index = kHasher(key_proj(v)) & kHashMask;
         while (has_value(data_[index]))
@@ -39,7 +38,7 @@ public:
     }
 
     template <typename U>
-    FORCE_INLINE bool contains(const U& key) const noexcept
+    [[gnu::always_inline]] inline bool contains(const U& key) const noexcept
     {
         u32 index = kHasher(key) & kHashMask;
         while (has_value(data_[index]) && key_proj(data_[index]) != key)
@@ -51,7 +50,7 @@ public:
     }
 
     template <typename U>
-    [[nodiscard]] FORCE_INLINE Value* find(const U& key) noexcept
+    [[nodiscard, gnu::always_inline]] inline Value* find(const U& key) noexcept
     {
         u32 index = kHasher(key) & kHashMask;
         while (has_value(data_[index]) && key_proj(data_[index]) != key)
@@ -63,7 +62,7 @@ public:
         return has_value(*p) && key_proj(*p) == key ? p : nullptr;
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr bool has_value(
+    [[nodiscard, gnu::always_inline]] inline static constexpr bool has_value(
         const Value& v) noexcept
     {
         return key_proj(v) != empty_key;

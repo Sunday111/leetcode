@@ -10,12 +10,11 @@
 #include <vector>
 
 #include "concept/is_specialization.hpp"
-#include "force_inline.hpp"
 
 struct DefaultScannerOptions
 {
-    [[nodiscard]] FORCE_INLINE static constexpr bool is_ignored_char(
-        [[maybe_unused]] char c) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr bool
+    is_ignored_char([[maybe_unused]] char c) noexcept
     {
         return std::isspace(c);
     }
@@ -46,7 +45,7 @@ constexpr void scan_expect(std::string_view s, size_t i, char c)
 }
 
 template <typename Options>
-[[nodiscard]] FORCE_INLINE constexpr size_t
+[[nodiscard, gnu::always_inline]] inline constexpr size_t
 skip_whitespaces(const Options& opts, std::string_view s, size_t i) noexcept
 {
     while (i < s.size() && opts.is_ignored_char(s[i])) ++i;
@@ -226,7 +225,7 @@ do_scan(const Options& opts, std::string_view s, size_t start, T& result)
 
     if (s[i] == ']') return start + 2;
 
-    auto parse_element = [&]() INLINE_LAMBDA
+    auto parse_element = [&] [[gnu::always_inline]] ()
     {
         i = skip_whitespaces(opts, s, i);
 
@@ -262,9 +261,8 @@ do_scan(const Options& opts, std::string_view s, size_t start, T& result)
 
     constexpr auto n = std::tuple_size_v<T>;
 
-    auto parse_element =
-        [&]<size_t element_index>(std::integral_constant<size_t, element_index>)
-            INLINE_LAMBDA
+    auto parse_element = [&]<size_t element_index> [[gnu::always_inline]] (
+                             std::integral_constant<size_t, element_index>)
     {
         i = skip_whitespaces(opts, s, i);
         if constexpr (element_index > 0)

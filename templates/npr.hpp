@@ -1,9 +1,7 @@
 #pragma once
-
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
-[[nodiscard]] FORCE_INLINE constexpr u64 npr(u8 n, u8 r) noexcept
+[[nodiscard, gnu::always_inline]] inline constexpr u64 npr(u8 n, u8 r) noexcept
 {
     if (r > n) return 0;
 

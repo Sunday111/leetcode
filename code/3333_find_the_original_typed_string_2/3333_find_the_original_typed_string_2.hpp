@@ -6,12 +6,6 @@
 #include <span>
 #include <string>
 
-#ifdef __GNUC__
-#define ATTR inline __attribute__((always_inline))
-#else
-#define ATTR inline
-#endif
-
 using u8 = uint8_t;
 using u32 = uint32_t;
 using u64 = uint64_t;
@@ -19,7 +13,8 @@ static constexpr int kMOD = 1'000'000'007;
 
 struct ModInt
 {
-    ATTR constexpr ModInt& operator+=(const ModInt& rhs) noexcept
+    [[gnu::always_inline]] inline constexpr ModInt& operator+=(
+        const ModInt& rhs) noexcept
     {
         value += rhs.value;
         const u32 gt = value > kMOD;
@@ -28,7 +23,7 @@ struct ModInt
         return *this;
     }
 
-    [[nodiscard]] ATTR constexpr ModInt operator+(
+    [[nodiscard, gnu::always_inline]] inline constexpr ModInt operator+(
         const ModInt& rhs) const noexcept
     {
         auto copy = *this;
@@ -36,7 +31,8 @@ struct ModInt
         return copy;
     }
 
-    ATTR constexpr ModInt& operator-=(const ModInt& rhs) noexcept
+    [[gnu::always_inline]] inline constexpr ModInt& operator-=(
+        const ModInt& rhs) noexcept
     {
         value += kMOD;
         value -= rhs.value;
@@ -44,7 +40,7 @@ struct ModInt
         return *this;
     }
 
-    [[nodiscard]] ATTR constexpr ModInt operator-(
+    [[nodiscard, gnu::always_inline]] inline constexpr ModInt operator-(
         const ModInt& rhs) const noexcept
     {
         auto copy = *this;
@@ -52,7 +48,8 @@ struct ModInt
         return copy;
     }
 
-    ATTR constexpr ModInt& operator*=(const ModInt& rhs) noexcept
+    [[gnu::always_inline]] inline constexpr ModInt& operator*=(
+        const ModInt& rhs) noexcept
     {
         u64 v = rhs.value;
         v *= value;
@@ -61,7 +58,7 @@ struct ModInt
         return *this;
     }
 
-    [[nodiscard]] ATTR constexpr ModInt operator*(
+    [[nodiscard, gnu::always_inline]] inline constexpr ModInt operator*(
         const ModInt& rhs) const noexcept
     {
         auto copy = *this;

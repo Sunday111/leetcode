@@ -1,17 +1,17 @@
 #include <array>
 #include <vector>
 
-#define HOT_PATH __attribute__((hot))
-#define FORCE_INLINE inline __attribute__((always_inline))
-
 template <std::integral T>
-[[nodiscard]] FORCE_INLINE HOT_PATH constexpr T iif(bool c, T a, T b) noexcept
+[[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr T
+iif(bool c, T a, T b) noexcept
 {
     return (a & static_cast<T>(-c)) + (b & static_cast<T>(~static_cast<T>(-c)));
 }
 
 template <std::integral Int>
-FORCE_INLINE HOT_PATH constexpr void swap_if_greater(Int& a, Int& b) noexcept
+[[gnu::always_inline, gnu::hot]] inline constexpr void swap_if_greater(
+    Int& a,
+    Int& b) noexcept
 {
     Int cond = iif(a > b, ~Int{0}, Int{0});
     Int mask = (a ^ b) & cond;
@@ -26,7 +26,7 @@ private:
     using u64 = uint64_t;
     using u32 = uint32_t;
 
-    FORCE_INLINE HOT_PATH static constexpr void
+    [[gnu::always_inline, gnu::hot]] inline static constexpr void
     ins(const u32 v, u32& a, u32& b) noexcept
     {
         // inserting v into descending-sorted list [a, b] excluding the bottom
@@ -38,9 +38,8 @@ private:
     }
 
     template <std::integral T>
-    FORCE_INLINE HOT_PATH static constexpr void swap_if_greater(
-        T& a,
-        T& b) noexcept
+    [[gnu::always_inline, gnu::hot]] inline static constexpr void
+    swap_if_greater(T& a, T& b) noexcept
     {
         T cond = (a > b) ? ~T{0} : 0;
         T mask = (a ^ b) & cond;
@@ -48,7 +47,7 @@ private:
     }
 
 public:
-    [[nodiscard]] FORCE_INLINE static u64 maxSubarrays(
+    [[nodiscard, gnu::always_inline]] inline static u64 maxSubarrays(
         const u32 n,
         const std::vector<std::vector<int>>& conflictingPairs) noexcept
     {

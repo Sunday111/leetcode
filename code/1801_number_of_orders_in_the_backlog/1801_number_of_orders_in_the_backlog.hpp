@@ -3,12 +3,6 @@
 #include <algorithm>
 #include <vector>
 
-#ifdef __GNUC__
-#define ATTR inline __attribute__((always_inline))
-#else
-#define ATTR inline
-#endif
-
 class Solution
 {
 public:
@@ -23,7 +17,7 @@ public:
     };
 
     template <auto offers_cmp, auto queue_cmp>
-    ATTR static constexpr void processOrder(
+    [[gnu::always_inline]] inline static constexpr void processOrder(
         Order order,
         std::vector<Order>& offers,
         std::vector<Order>& queue) noexcept

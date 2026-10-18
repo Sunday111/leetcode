@@ -31,7 +31,8 @@ public:
     }();
 
     template <u8 base, u8 num_digits, bool lead = true, typename Callback>
-    FORCE_INLINE static constexpr void genPalindromes(Callback cb)
+    [[gnu::always_inline]] inline static constexpr void genPalindromes(
+        Callback cb)
     {
         if constexpr (base == 2)
         {
@@ -84,8 +85,8 @@ public:
         }
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr bool isPalindromeBase10(
-        u64 v) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr bool
+    isPalindromeBase10(u64 v) noexcept
     {
         std::array<u8, 20> digits;  // NOLINT
         u8 n = 0;
@@ -175,7 +176,8 @@ public:
         return result;
     }();
 
-    [[nodiscard]] FORCE_INLINE static constexpr u32 reverseBits(u32 n) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr u32 reverseBits(
+        u32 n) noexcept
     {
         const u32 a = kReverseByteTable[(n >> 0) & 0xFF];
         const u32 b = kReverseByteTable[(n >> 8) & 0xFF];
@@ -263,8 +265,8 @@ public:
         }
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr bool isPalindromeBase10(
-        u64 v) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr bool
+    isPalindromeBase10(u64 v) noexcept
     {
         std::array<u8, 20> digits;  // NOLINT
         u8 n = 0;
@@ -280,7 +282,7 @@ public:
             full.last(n / 2) | std::views::reverse);
     }
 
-    FORCE_INLINE constexpr void testValue(u64 v)
+    [[gnu::always_inline]] inline constexpr void testValue(u64 v)
     {
         if (isPalindromeBase10(v))
         {
@@ -344,9 +346,8 @@ public:
     };
 
     template <u8 base>
-    [[nodiscard]] FORCE_INLINE static constexpr std::span<u8> toDigits(
-        u64 x,
-        std::array<u8, 64>& digit) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr std::span<u8>
+    toDigits(u64 x, std::array<u8, 64>& digit) noexcept
     {
         u8 len = 0;
         if constexpr (std::popcount(base) == 1)
@@ -364,7 +365,8 @@ public:
     }
 
     template <u8 base>
-    [[nodiscard]] FORCE_INLINE static constexpr bool isMirror(u64 x) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr bool isMirror(
+        u64 x) noexcept
     {
         std::array<u8, 64> arr;  // NOLINT
         auto digits = toDigits<base>(x, arr);
@@ -373,7 +375,8 @@ public:
             digits.last(digits.size() / 2) | std::views::reverse);
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr u64 rev(u64 x) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr u64 rev(
+        u64 x) noexcept
     {
         u64 ans = 0;
         for (; x > 0; x /= 10) ans = ans * 10 + x % 10;
@@ -440,7 +443,7 @@ public:
     }();
 
     template <u8 num_digits, u8 out_p, u8 first_digit = 1>
-    FORCE_INLINE constexpr void genPalindromes(u64 outer_add)
+    [[gnu::always_inline]] inline constexpr void genPalindromes(u64 outer_add)
     {
         if constexpr (num_digits == 0)
         {
@@ -468,7 +471,7 @@ public:
         }
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr bool isPalindrome(
+    [[nodiscard, gnu::always_inline]] inline static constexpr bool isPalindrome(
         u64 v) noexcept
     {
         std::array<u8, 64> digits;  // NOLINT
@@ -485,7 +488,7 @@ public:
             full.last(n / 2) | std::views::reverse);
     }
 
-    FORCE_INLINE constexpr void testValue(u64 v)
+    [[gnu::always_inline]] inline constexpr void testValue(u64 v)
     {
         if (isPalindrome(v))
         {
@@ -494,7 +497,8 @@ public:
         }
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr u64 kMirror(u8 n_) noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u64 kMirror(
+        u8 n_) noexcept
     {
         r = 0;
         n = n_;
@@ -534,7 +538,9 @@ public:
         kMirrorT<9>,
     };
 
-    [[nodiscard]] FORCE_INLINE constexpr u64 kMirror(u8 k, u8 n_) noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u64 kMirror(
+        u8 k,
+        u8 n_) noexcept
     {
         return kFunctions[k - 2](n_);
     }

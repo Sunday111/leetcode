@@ -9,12 +9,6 @@
 using u8 = uint8_t;
 using u32 = uint32_t;
 
-#ifdef __GNUC__
-#define ATTR inline __attribute__((always_inline))
-#else
-#define ATTR inline
-#endif
-
 class Solution
 {
 public:
@@ -24,8 +18,8 @@ public:
         u32 end;
     };
 
-    [[nodiscard]] ATTR static std::span<Event> to_events_span(
-        const std::vector<std::vector<int>>& in_events) noexcept
+    [[nodiscard, gnu::always_inline]] inline static std::span<Event>
+    to_events_span(const std::vector<std::vector<int>>& in_events) noexcept
     {
         static std::array<Event, 100'001> arr;  // NOLINT
 

@@ -62,15 +62,18 @@ TYPED_TEST(UnstableRadixSortTest, RandomizedCorrectness)
 template <auto kBitsPerPass, auto kNumPasses>
 struct StableSortParams
 {
-    [[nodiscard]] FORCE_INLINE static constexpr auto num_sorted_bits() noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr auto
+    num_sorted_bits() noexcept
     {
         return kBitsPerPass * kNumPasses;
     }
-    [[nodiscard]] FORCE_INLINE static constexpr auto bits_per_pass() noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr auto
+    bits_per_pass() noexcept
     {
         return kBitsPerPass;
     }
-    [[nodiscard]] FORCE_INLINE static constexpr auto num_passes() noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr auto
+    num_passes() noexcept
     {
         return kNumPasses;
     }
@@ -108,9 +111,8 @@ protected:
     }
 
     template <u32 kMask, template <typename> typename Cmp>
-    [[nodiscard]] FORCE_INLINE static constexpr bool mask_and_compare(
-        u32 v1,
-        u32 v2) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr bool
+    mask_and_compare(u32 v1, u32 v2) noexcept
     {
         return Cmp<u32>{}((v1 & kMask), (v2 & kMask));
     }

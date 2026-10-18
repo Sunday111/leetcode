@@ -6,14 +6,6 @@
 #include <span>
 #include <vector>
 
-#ifdef __GNUC__
-#define INLINE inline __attribute__((always_inline))
-#define HOT __attribute__((hot))
-#else
-#define INLINE inline
-#define HOT
-#endif
-
 using u8 = uint8_t;
 using u32 = uint32_t;
 using u64 = uint64_t;
@@ -27,7 +19,8 @@ template <typename To, typename From, size_t extent = std::dynamic_extent>
         in.size()};
 }
 
-[[nodiscard]] INLINE constexpr u32 modAfterAdd(u32 v) noexcept
+[[nodiscard, gnu::always_inline]] inline constexpr u32 modAfterAdd(
+    u32 v) noexcept
 {
     const u32 gt = v > kMOD;
     return v - (-gt & kMOD);
@@ -35,14 +28,15 @@ template <typename To, typename From, size_t extent = std::dynamic_extent>
 
 struct ModInt
 {
-    INLINE constexpr ModInt& operator+=(const ModInt& rhs) noexcept HOT
+    [[gnu::always_inline, gnu::hot]] inline constexpr ModInt& operator+=(
+        const ModInt& rhs) noexcept
     {
         value += rhs.value;
         if (value >= kMOD) value -= kMOD;
         return *this;
     }
 
-    [[nodiscard]] INLINE constexpr ModInt operator+(
+    [[nodiscard, gnu::always_inline]] inline constexpr ModInt operator+(
         const ModInt& rhs) const noexcept
     {
         auto copy = *this;
@@ -50,21 +44,23 @@ struct ModInt
         return copy;
     }
 
-    INLINE constexpr ModInt& operator-=(const ModInt& rhs) noexcept HOT
+    [[gnu::always_inline, gnu::hot]] inline constexpr ModInt& operator-=(
+        const ModInt& rhs) noexcept
     {
         value -= rhs.value;
         return *this;
     }
 
-    [[nodiscard]] INLINE constexpr ModInt operator-(
-        const ModInt& rhs) const noexcept HOT
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr ModInt
+    operator-(const ModInt& rhs) const noexcept
     {
         auto copy = *this;
         copy -= rhs;
         return copy;
     }
 
-    INLINE constexpr ModInt& operator*=(const ModInt& rhs) noexcept HOT
+    [[gnu::always_inline, gnu::hot]] inline constexpr ModInt& operator*=(
+        const ModInt& rhs) noexcept
     {
         u64 v = rhs.value;
         v *= value;
@@ -73,15 +69,16 @@ struct ModInt
         return *this;
     }
 
-    [[nodiscard]] INLINE constexpr ModInt operator*(
-        const ModInt& rhs) const noexcept HOT
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr ModInt
+    operator*(const ModInt& rhs) const noexcept
     {
         auto copy = *this;
         copy *= rhs;
         return copy;
     }
 
-    [[nodiscard]] INLINE constexpr ModInt inverse() const noexcept HOT
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr ModInt
+    inverse() const noexcept
     {
         auto a = value;
         u32 x0 = 1, x1 = 0, mod = kMOD;
@@ -98,20 +95,22 @@ struct ModInt
         return {(x1 + kMOD) % kMOD};
     }
 
-    INLINE constexpr ModInt& operator/=(const ModInt& rhs) noexcept HOT
+    [[gnu::always_inline, gnu::hot]] inline constexpr ModInt& operator/=(
+        const ModInt& rhs) noexcept
     {
         return *this *= rhs.inverse();
     }
 
-    [[nodiscard]] INLINE constexpr ModInt operator/(
-        const ModInt& rhs) const noexcept HOT
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr ModInt
+    operator/(const ModInt& rhs) const noexcept
     {
         auto copy = *this;
         copy /= rhs;
         return copy;
     }
 
-    [[nodiscard]] INLINE constexpr ModInt pow(u32 exp) const noexcept HOT
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr ModInt pow(
+        u32 exp) const noexcept
     {
         if (exp == 0) return {1};
         std::bitset<32> bits(exp);
@@ -132,19 +131,21 @@ struct ModInt
 class Solution
 {
 public:
-    [[nodiscard]] INLINE static u32 numSubseq(
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline static u32 numSubseq(
         std::vector<int>& nums_,
-        u32 target) noexcept HOT
+        u32 target) noexcept
     {
         return numSubseq(reinterpret_span<u32>(std::span{nums_}), target);
     }
 
-    [[nodiscard]] INLINE static constexpr u32 dist(auto a, auto b) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr u32 dist(
+        auto a,
+        auto b) noexcept
     {
         return static_cast<u32>(std::distance(a, b));
     }
 
-    INLINE static void init() noexcept
+    [[gnu::always_inline]] inline static void init() noexcept
     {
         auto& r = getPowersOfTwo();
         r.reserve(1'000'000);
@@ -163,9 +164,8 @@ public:
         return r;
     }
 
-    [[nodiscard]] INLINE static constexpr u32 numSubseq(
-        std::span<u32> nums,
-        u32 target) noexcept HOT
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline static constexpr u32
+    numSubseq(std::span<u32> nums, u32 target) noexcept
     {
         // counting sort
         {

@@ -1,9 +1,6 @@
 #include <algorithm>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
 using u32 = uint32_t;
 using u64 = uint64_t;
 using i64 = int64_t;
@@ -93,23 +90,23 @@ public:
 
         std::ranges::make_heap(heap, heap + hs, heap_cmp);
 
-        auto push = [&]() INLINE_LAMBDA
+        auto push = [&] [[gnu::always_inline]] ()
         {
             std::ranges::push_heap(heap, heap + hs, heap_cmp);
         };
 
-        auto pop = [&]() INLINE_LAMBDA
+        auto pop = [&] [[gnu::always_inline]] ()
         {
             std::ranges::pop_heap(heap, heap + hs, heap_cmp);
         };
 
-        auto mark = [&](u32 i, bool v) INLINE_LAMBDA
+        auto mark = [&] [[gnu::always_inline]] (u32 i, bool v)
         {
             num_bad -= nodes[i].bad;
             num_bad += (nodes[i].bad = v);
         };
 
-        auto check_node = [&](u32 i) INLINE_LAMBDA
+        auto check_node = [&] [[gnu::always_inline]] (u32 i)
         {
             auto& curr = nodes[i];
             mark(i, curr.v > nodes[curr.next].v);

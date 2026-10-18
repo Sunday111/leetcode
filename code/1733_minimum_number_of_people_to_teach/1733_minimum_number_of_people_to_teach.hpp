@@ -12,7 +12,8 @@ class Solution
 {
 public:
     template <u16 max_langs, u16 max_users>
-    [[nodiscard]] FORCE_INLINE static constexpr u16 test_languages(
+    [[nodiscard, gnu::always_inline]] inline static constexpr u16
+    test_languages(
         std::span<const std::pair<u16, u16>> friends,
         std::array<std::bitset<max_langs>, max_users>& know,
         std::bitset<max_langs>& languages,

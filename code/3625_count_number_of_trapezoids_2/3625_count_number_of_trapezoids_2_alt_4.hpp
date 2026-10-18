@@ -19,7 +19,7 @@ struct HashTable
     inline static constexpr u32 kMask = capacity - 1;
     inline static constexpr u32 kNumWords = std::max(1u, capacity / 64);
 
-    FORCE_INLINE HashTable()
+    [[gnu::always_inline]] inline HashTable()
     {
         tk = BumpAllocator<Key, Storage>{}.allocate(capacity);
         tv = BumpAllocator<u32, Storage>{}.allocate(capacity);
@@ -27,7 +27,8 @@ struct HashTable
         std::fill_n(bits, kNumWords, u64{0});
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr u32 hash(u32 x) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr u32 hash(
+        u32 x) noexcept
     {
         u64 z = u64{x} + 0x9e3779b97f4a7c15ULL;
         z = (z ^ (z >> 30U)) * 0xbf58476d1ce4e5b9ULL;
@@ -35,7 +36,8 @@ struct HashTable
         return z >> 32U;
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr u32 hash(u64 x) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr u32 hash(
+        u64 x) noexcept
     {
         u64 z = u64{x} + 0x9e3779b97f4a7c15ULL;
         z = (z ^ (z >> 30U)) * 0xbf58476d1ce4e5b9ULL;
@@ -43,7 +45,7 @@ struct HashTable
         return z >> 32U;
     }
 
-    FORCE_INLINE constexpr u32* insert(Key k, u32 v) noexcept
+    [[gnu::always_inline]] inline constexpr u32* insert(Key k, u32 v) noexcept
     {
         u32 i = hash(k);
         u32 wi;  // NOLINT
@@ -62,7 +64,7 @@ struct HashTable
         return tv + i;
     }
 
-    FORCE_INLINE constexpr u32& get_or_add(Key k) noexcept
+    [[gnu::always_inline]] inline constexpr u32& get_or_add(Key k) noexcept
     {
         u32 i = hash(k);
         u32 wi;  // NOLINT
@@ -81,7 +83,7 @@ struct HashTable
         return tv[i];
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr u32* find(Key k) noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u32* find(Key k) noexcept
     {
         u32 i = hash(k);
         bool b1, b2;  // NOLINT
@@ -105,14 +107,14 @@ public:
     inline static constexpr int kBias = 1 << 11;
 
     template <u32 mm = 0>
-    FORCE_INLINE static u32 pack(int a, int b) noexcept
+    [[gnu::always_inline]] inline static u32 pack(int a, int b) noexcept
     {
         return std::bit_cast<u32>(i32{a + kBias} << 16) |
                std::bit_cast<u32>(b + kBias) | mm;
     }
 
     template <u64 mm = 0>
-    FORCE_INLINE static u64 pack(int a, int b, int c) noexcept
+    [[gnu::always_inline]] inline static u64 pack(int a, int b, int c) noexcept
     {
         return std::bit_cast<u64>(i64{a + kBias} << 50) |
                std::bit_cast<u64>(i64{b + kBias} << 30) |
@@ -120,7 +122,8 @@ public:
     }
 
     template <u64 mm = 0>
-    FORCE_INLINE static u64 pack(int a, int b, int c, int d) noexcept
+    [[gnu::always_inline]] inline static u64
+    pack(int a, int b, int c, int d) noexcept
     {
         return std::bit_cast<u64>(i64{a + kBias} << 48) |
                std::bit_cast<u64>(i64{b + kBias} << 32) |

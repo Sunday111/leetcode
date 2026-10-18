@@ -5,9 +5,6 @@
 #include <cstdint>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define HOT_PATH __attribute__((hot))
-
 class Solution
 {
 public:
@@ -19,8 +16,8 @@ public:
     {
         Coord x, y;
 
-        [[nodiscard]] FORCE_INLINE HOT_PATH constexpr bool operator<(
-            const Point& r) const noexcept
+        [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr bool
+        operator<(const Point& r) const noexcept
         {
             return (x < r.x) || (x == r.x && y > r.y);
         }

@@ -13,8 +13,9 @@ public:
     ObjectWithoutDtor<BumpVector<std::array<u32, 3>, SolutionStorage>> freq{};
     u32 n = 0;
 
-    [[nodiscard]] static u32 one_char(char target, std::string_view s) noexcept
-        HOT_PATH NO_SANITIZERS
+    [[nodiscard, gnu::hot]] static u32 one_char(
+        char target,
+        std::string_view s) noexcept NO_SANITIZERS
     {
         u32 l = 0, r = 0;
         for (char c : s)
@@ -28,8 +29,8 @@ public:
         return std::max(r, l);
     }
 
-    [[nodiscard]] u32 two_chars(char c1, char c2, char c3)
-        const noexcept HOT_PATH NO_SANITIZERS
+    [[nodiscard, gnu::hot]] u32 two_chars(char c1, char c2, char c3)
+        const noexcept NO_SANITIZERS
     {
         const auto scoped_arena = SolutionStorage::Instance().StartArena();
 
@@ -67,7 +68,7 @@ public:
         return r;
     }
 
-    [[nodiscard]] u32 three_chars() const noexcept HOT_PATH NO_SANITIZERS
+    [[nodiscard, gnu::hot]] u32 three_chars() const noexcept NO_SANITIZERS
     {
         const auto scoped_arena = SolutionStorage::Instance().StartArena();
 
@@ -94,7 +95,7 @@ public:
         return r;
     }
 
-    [[nodiscard]] u32 longestBalanced(const std::string& s) noexcept HOT_PATH
+    [[nodiscard, gnu::hot]] u32 longestBalanced(const std::string& s) noexcept
         NO_SANITIZERS
     {
         const auto scoped_arena = SolutionStorage::Instance().StartArena();

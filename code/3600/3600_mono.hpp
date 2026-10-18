@@ -4,18 +4,10 @@
 #include <utility>
 #include <vector>
 
-
-
-
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
 using u64 = uint64_t;
-
-
-
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
 
 template <typename T>
 class UnionFind
@@ -27,13 +19,15 @@ public:
         T parent;
     };
 
-    FORCE_INLINE constexpr UnionFind(Node* buffer, T size) noexcept
+    [[gnu::always_inline]] inline constexpr UnionFind(
+        Node* buffer,
+        T size) noexcept
         : nodes(buffer)
     {
         for (T x = 0; x != size; ++x) nodes[x] = {.size = 1, .parent = x};
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr T find(T x) noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr T find(T x) noexcept
     {
         // Path halving
         while (nodes[x].parent != x)
@@ -45,7 +39,7 @@ public:
     }
 
     // Returns true if subgraphs have been merged
-    FORCE_INLINE constexpr bool merge(T x, T y) noexcept
+    [[gnu::always_inline]] inline constexpr bool merge(T x, T y) noexcept
     {
         // Union by size
         x = find(x);
@@ -64,17 +58,13 @@ public:
     Node* nodes;
 };
 
-
-
-
 inline static constexpr auto min2 =
-    []<typename T> [[gnu::always_inline, nodiscard]] (
+    []<typename T> [[nodiscard, gnu::always_inline]] (
         const T& a,
         const T& b) noexcept -> const T&
 {
     return std::min(a, b);
 };
-
 
 inline static constexpr auto upd =
     []<typename T, typename F> [[gnu::always_inline]] (

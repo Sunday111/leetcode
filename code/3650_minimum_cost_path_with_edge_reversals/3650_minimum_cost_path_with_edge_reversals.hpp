@@ -6,8 +6,6 @@ using u16 = uint16_t;
 using u32 = uint32_t;
 using u64 = uint64_t;
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-
 class Solution
 {
 public:
@@ -25,12 +23,14 @@ public:
         u32 min_queued = ~u32{};
     };
 
-    [[nodiscard]] FORCE_INLINE static u64 pack(u16 id, u32 w) noexcept
+    [[nodiscard, gnu::always_inline]] inline static u64 pack(
+        u16 id,
+        u32 w) noexcept
     {
         return (u64{w} << 16) | u64{id};
     }
 
-    [[nodiscard]] FORCE_INLINE static std::pair<u16, u32> unpack(
+    [[nodiscard, gnu::always_inline]] inline static std::pair<u16, u32> unpack(
         u64 packed) noexcept
     {
         return {packed & 0xFFFF, static_cast<u32>(packed >> 16)};

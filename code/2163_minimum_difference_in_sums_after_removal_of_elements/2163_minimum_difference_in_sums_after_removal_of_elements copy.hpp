@@ -77,7 +77,7 @@ public:
         return min_sum;
     }
 
-    [[nodiscard]] FORCE_INLINE static i64 minimumDifference(
+    [[nodiscard, gnu::always_inline]] inline static i64 minimumDifference(
         std::vector<int>& nums) noexcept
     {
         return minimumDifference(reinterpret_range<const u32>(nums));

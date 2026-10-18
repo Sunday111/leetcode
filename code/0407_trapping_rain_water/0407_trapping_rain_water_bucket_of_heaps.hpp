@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "cast.hpp"
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
 struct Vec2
@@ -24,7 +23,7 @@ struct PriorityQueue  // NOLINT
     u16 size = 0;
 
     template <typename Op>
-    FORCE_INLINE constexpr void heapOp(Op&& op) noexcept
+    [[gnu::always_inline]] inline constexpr void heapOp(Op&& op) noexcept
     {
         std::forward<Op>(op)(
             std::begin(data),
@@ -34,24 +33,25 @@ struct PriorityQueue  // NOLINT
     }
 
     template <typename... Args>
-    FORCE_INLINE constexpr void emplace(Args&&... args) noexcept
+    [[gnu::always_inline]] inline constexpr void emplace(
+        Args&&... args) noexcept
     {
         data[size++] = {std::forward<Args>(args)...};
         heapOp(std::ranges::push_heap);
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr auto pop() noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr auto pop() noexcept
     {
         heapOp(std::ranges::pop_heap);
         return data[--size];
     }
 
-    FORCE_INLINE constexpr void initialize() noexcept
+    [[gnu::always_inline]] inline constexpr void initialize() noexcept
     {
         heapOp(std::ranges::make_heap);
     }
 
-    FORCE_INLINE constexpr void clear() { size = 0; }
+    [[gnu::always_inline]] inline constexpr void clear() { size = 0; }
 };
 
 struct BucketPriorityQueue
@@ -64,25 +64,25 @@ struct BucketPriorityQueue
     std::array<Bucket, kNumBuckets> buckets;
     u16 minh = kNumBuckets;
 
-    FORCE_INLINE constexpr void clear() noexcept
+    [[gnu::always_inline]] inline constexpr void clear() noexcept
     {
         std::ranges::for_each(buckets, &Bucket::clear);
         minh = kNumBuckets;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr auto pop() noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr auto pop() noexcept
     {
         return buckets[minh].pop();
     }
 
-    FORCE_INLINE constexpr void emplace(Vec2 p, u16 h) noexcept
+    [[gnu::always_inline]] inline constexpr void emplace(Vec2 p, u16 h) noexcept
     {
         u16 bucketIndex = h / kSegment;
         buckets[bucketIndex].emplace(p, h);
         minh = std::min(bucketIndex, minh);
     }
 
-    [[nodiscard]] FORCE_INLINE operator bool() noexcept  // NOLINT
+    [[nodiscard, gnu::always_inline]] inline operator bool() noexcept  // NOLINT
     {
         while (minh != kNumBuckets && buckets[minh].size == 0)
         {
@@ -97,18 +97,19 @@ class Solution
 {
 public:
     template <typename To>
-    [[nodiscard]] FORCE_INLINE static constexpr To to(auto v) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr To to(
+        auto v) noexcept
     {
         return static_cast<To>(v);
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr static u16 toIdx(
+    [[nodiscard, gnu::always_inline]] inline constexpr static u16 toIdx(
         const Vec2& v) noexcept
     {
         return cast<u16>((u16{v.x} << 8) | v.y);
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr static u16 getH(
+    [[nodiscard, gnu::always_inline]] inline constexpr static u16 getH(
         std::vector<std::vector<int>>& hmap,
         const Vec2& v) noexcept
     {

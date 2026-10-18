@@ -8,17 +8,17 @@
 #include <utility>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
 template <typename To>
-inline static constexpr auto cast = []<typename From>(From&& v) INLINE_LAMBDA
+inline static constexpr auto cast =
+    []<typename From> [[gnu::always_inline]] (From&& v)
 {
     return static_cast<To>(std::forward<From>(v));
 };
 
 template <std::integral T>
-[[nodiscard]] FORCE_INLINE static constexpr T ceil_div(T a, T b) noexcept
+[[nodiscard, gnu::always_inline]] inline static constexpr T ceil_div(
+    T a,
+    T b) noexcept
 {
     return (a + (b - 1)) / b;
 }
@@ -84,7 +84,7 @@ public:
     }
 
     template <bool v>
-    FORCE_INLINE constexpr void set(ValueType idx) noexcept
+    [[gnu::always_inline]] inline constexpr void set(ValueType idx) noexcept
     {
         if constexpr (v)
         {
@@ -96,7 +96,7 @@ public:
         }
     }
 
-    FORCE_INLINE constexpr void add(ValueType v) noexcept
+    [[gnu::always_inline]] inline constexpr void add(ValueType v) noexcept
     {
         [&]<size_t... layer>(std::index_sequence<layer...>)
         {
@@ -104,7 +104,7 @@ public:
         }(std::make_index_sequence<kNumLayers>());
     }
 
-    FORCE_INLINE constexpr void remove(ValueType v) noexcept
+    [[gnu::always_inline]] inline constexpr void remove(ValueType v) noexcept
     {
         [&]<size_t... layer>(std::index_sequence<layer...>)
         {
@@ -113,7 +113,8 @@ public:
         }(std::make_index_sequence<kNumLayers>());
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr ValueType min() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr ValueType min()
+        const noexcept
     {
         ValueType x = 0;
         [&]<size_t... layer>(std::index_sequence<layer...>)
@@ -123,22 +124,25 @@ public:
         return x;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr bool get(ValueType v) const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr bool get(
+        ValueType v) const noexcept
     {
         return words[offsets[0] + (v >> kShift)] & (Word{1} << (v & kMask));
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr size_t get_capacity() noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr size_t
+    get_capacity() noexcept
     {
         return capacity;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr bool is_empty() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr bool is_empty()
+        const noexcept
     {
         return words[offsets[kNumLayers - 1]] == 0;
     }
 
-    FORCE_INLINE constexpr void initialize(size_t end) noexcept
+    [[gnu::always_inline]] inline constexpr void initialize(size_t end) noexcept
     {
         [&]<size_t... layer>(std::index_sequence<layer...>)
         {
@@ -148,14 +152,14 @@ public:
 
 private:
     template <size_t layer>
-    FORCE_INLINE constexpr void init_layer(size_t& x) noexcept
+    [[gnu::always_inline]] inline constexpr void init_layer(size_t& x) noexcept
     {
         x = ceil_div<size_t>(x, kWordSize);
         std::fill_n(std::next(words.begin(), offsets[layer]), x, 0);
     }
 
     template <size_t layer>
-    FORCE_INLINE constexpr void add_impl(ValueType& v) noexcept
+    [[gnu::always_inline]] inline constexpr void add_impl(ValueType& v) noexcept
     {
         ValueType wi = v >> kShift;
         words[offsets[layer] + wi] |= Word{1} << (v & kMask);
@@ -163,7 +167,7 @@ private:
     }
 
     template <size_t layer>
-    FORCE_INLINE constexpr void rem_impl(
+    [[gnu::always_inline]] inline constexpr void rem_impl(
         ValueType& v,
         bool& prev_empty) noexcept
     {
@@ -175,7 +179,8 @@ private:
     }
 
     template <size_t layer>
-    FORCE_INLINE constexpr void min_impl(ValueType& wi) const noexcept
+    [[gnu::always_inline]] inline constexpr void min_impl(
+        ValueType& wi) const noexcept
     {
         u8 bi = std::countr_zero(words[offsets[layer] + wi]) & 0xFF;
         ValueType x = cast<ValueType>(wi << kShift) | cast<ValueType>(bi);
@@ -193,23 +198,23 @@ public:
     std::array<FrequencyType, max_value + 1> freq{};
     B bits{};
 
-    FORCE_INLINE constexpr void add(ValueType v) noexcept
+    [[gnu::always_inline]] inline constexpr void add(ValueType v) noexcept
     {
         ++freq[v];
         bits.add(v);
     }
 
-    FORCE_INLINE constexpr void remove(ValueType v) noexcept
+    [[gnu::always_inline]] inline constexpr void remove(ValueType v) noexcept
     {
         if (0 == --freq[v]) bits.remove(v);
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr ValueType min() noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr ValueType min() noexcept
     {
         return bits.min();
     }
 
-    FORCE_INLINE constexpr ValueType pop_min() noexcept
+    [[gnu::always_inline]] inline constexpr ValueType pop_min() noexcept
     {
         auto lo = min();
         remove(lo);

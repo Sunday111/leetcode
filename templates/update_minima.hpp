@@ -5,7 +5,7 @@
 #include "swap_if_greater.hpp"
 
 template <std::integral Int, size_t n>
-FORCE_INLINE static constexpr void update_minima(
+[[gnu::always_inline]] inline static constexpr void update_minima(
     Int x,
     std::array<Int, n>& vals) noexcept
 {

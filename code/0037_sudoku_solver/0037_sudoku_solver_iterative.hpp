@@ -9,18 +9,21 @@
 
 struct OptionsBitset
 {
-    FORCE_INLINE constexpr void SetBit(u8 idx, bool value) noexcept
+    [[gnu::always_inline]] inline constexpr void SetBit(
+        u8 idx,
+        bool value) noexcept
     {
         u16 mask = (0b1 << idx) & 0xFFFF;
         bits = iif<u16>(value, bits | mask, bits & ~mask);
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr bool HasBit(u8 idx) const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr bool HasBit(
+        u8 idx) const noexcept
     {
         return bits & (0b1 << idx);
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr OptionsBitset operator&(
+    [[nodiscard, gnu::always_inline]] inline constexpr OptionsBitset operator&(
         const OptionsBitset& rhs) const noexcept
     {
         auto r = *this;
@@ -28,19 +31,20 @@ struct OptionsBitset
         return r;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr u8 get_min() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u8 get_min()
+        const noexcept
     {
         return std::countr_zero(bits) & 0xFF;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr u8 pop_min() noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u8 pop_min() noexcept
     {
         auto m = get_min();
         bits &= ~(1 << m);
         return m;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr u8 num() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u8 num() const noexcept
     {
         return std::popcount(bits) & 0xFF;
     }
@@ -50,17 +54,20 @@ struct OptionsBitset
 
 struct SudokuBoard
 {
-    [[nodiscard]] FORCE_INLINE constexpr const u8& cell(u8 x, u8 y)
-        const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr const u8& cell(
+        u8 x,
+        u8 y) const noexcept
     {
         return board[y][x];
     }
-    [[nodiscard]] FORCE_INLINE constexpr u8& cell(u8 x, u8 y) noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u8& cell(
+        u8 x,
+        u8 y) noexcept
     {
         return board[y][x];
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr u8 regionIndex(
+    [[nodiscard, gnu::always_inline]] inline static constexpr u8 regionIndex(
         u8 x,
         u8 y) noexcept
     {
@@ -111,7 +118,7 @@ struct SudokuBoard
         }
     }
 
-    [[nodiscard]] HOT_PATH constexpr std::tuple<u8, u8, OptionsBitset>
+    [[nodiscard, gnu::hot]] constexpr std::tuple<u8, u8, OptionsBitset>
     findBestCandidate() const noexcept
     {
         u8 min_vairance = 10, rx = 10, ry = 10;
@@ -141,7 +148,7 @@ struct SudokuBoard
         return {rx, ry, best_opts};
     }
 
-    HOT_PATH constexpr bool setCellAndCheck(u8 x, u8 y, u8 v) noexcept
+    [[gnu::hot]] constexpr bool setCellAndCheck(u8 x, u8 y, u8 v) noexcept
     {
         cell(x, y) = v;
 

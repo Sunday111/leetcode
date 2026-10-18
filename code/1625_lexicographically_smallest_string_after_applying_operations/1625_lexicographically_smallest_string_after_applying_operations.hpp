@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
-#include <force_inline.hpp>
 #include <string>
 #include <string_view>
 #include <unordered_set>
@@ -14,24 +13,25 @@ struct SmallString
     std::array<char, 101> data{};
     uint8_t len = 0;
 
-    [[nodiscard]] FORCE_INLINE std::string_view view() const noexcept
+    [[nodiscard, gnu::always_inline]] inline std::string_view view()
+        const noexcept
     {
         return std::string_view{data.begin(), len};
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr bool operator<(
+    [[nodiscard, gnu::always_inline]] inline constexpr bool operator<(
         const SmallString& s) const noexcept
     {
         return view() < s.view();
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr bool operator==(
+    [[nodiscard, gnu::always_inline]] inline constexpr bool operator==(
         const SmallString& s) const noexcept = default;
 
     struct Hasher
     {
-        [[nodiscard]] FORCE_INLINE size_t
-        operator()(const SmallString& s) const noexcept
+        [[nodiscard, gnu::always_inline]] inline size_t operator()(
+            const SmallString& s) const noexcept
         {
             return std::hash<std::string_view>{}(s.view());
         }

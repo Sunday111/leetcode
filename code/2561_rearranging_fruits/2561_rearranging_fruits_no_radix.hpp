@@ -9,14 +9,12 @@ using u64 = uint64_t;
 using i32 = int32_t;
 using i64 = int64_t;
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-
 class Solution
 {
     template <typename To, typename From, typename Allocator>
         requires(sizeof(To) == sizeof(From))
-    [[nodiscard]] FORCE_INLINE static std::span<To> reinterpret_range(
-        std::vector<From, Allocator>& v) noexcept
+    [[nodiscard, gnu::always_inline]] inline static std::span<To>
+    reinterpret_range(std::vector<From, Allocator>& v) noexcept
     {
         return std::span<To>{
             reinterpret_cast<To*>(v.data()),  // NOLINT

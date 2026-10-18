@@ -2,7 +2,9 @@
 
 #include <vector>
 
-#include "min_max_int.hpp"
+#include "int_if.hpp"
+#include "max2.hpp"
+#include "min2.hpp"
 
 class Solution
 {
@@ -20,8 +22,8 @@ public:
             // for (u16 x = 0; x != w; ++x)
             // {
             //     has_some |= r[x];
-            //     min_x = iif(r[x], int_min(min_x, x), min_x);
-            //     max_x = iif(r[x], int_max(max_x, x), max_x);
+            //     min_x = iif(r[x], min2(min_x, x), min_x);
+            //     max_x = iif(r[x], max2(max_x, x), max_x);
             // }
 
             for (u16 x = 0; x != min_x; ++x)
@@ -34,7 +36,7 @@ public:
                 }
             }
 
-            max_x = int_max(max_x, min_x);
+            max_x = max2(max_x, min_x);
             for (u16 x = w - 1; x > max_x; --x)
             {
                 if (r[x])
@@ -57,7 +59,7 @@ public:
                 }
             }
 
-            min_y = iif(has_some, int_min(min_y, y), min_y);
+            min_y = iif(has_some, min2(min_y, y), min_y);
             max_y = iif(has_some, y, max_y);
         }
 

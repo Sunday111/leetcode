@@ -4,9 +4,9 @@
 class Solution
 {
 public:
-    [[nodiscard]] static constexpr i64 pass(
+    [[nodiscard, gnu::hot]] static constexpr i64 pass(
         const std::vector<int>& nums,
-        i32 max) noexcept NO_SANITIZERS HOT_PATH
+        i32 max) noexcept NO_SANITIZERS
     {
         i64 count = 0;
         auto l = nums.begin(), r = nums.end() - 1;

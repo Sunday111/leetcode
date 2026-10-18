@@ -3,15 +3,13 @@
 #include <ranges>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-
 using u64 = uint64_t;
 using u32 = uint32_t;
 using u16 = uint16_t;
 using u8 = uint8_t;
 
 template <typename To>
-[[nodiscard]] FORCE_INLINE static constexpr To to(auto v) noexcept
+[[nodiscard, gnu::always_inline]] inline static constexpr To to(auto v) noexcept
 {
     return static_cast<To>(v);
 }

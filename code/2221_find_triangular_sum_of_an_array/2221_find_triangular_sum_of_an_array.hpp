@@ -8,8 +8,6 @@ using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-
 class BinomialMod10
 {
 public:
@@ -34,7 +32,7 @@ public:
     }();
 
     // Compute C(n, k) % 2 using bitwise logic
-    [[nodiscard]] FORCE_INLINE static constexpr u8 binom_mod2(
+    [[nodiscard, gnu::always_inline]] inline static constexpr u8 binom_mod2(
         u16 n,
         u16 k) noexcept
     {
@@ -42,7 +40,7 @@ public:
     }
 
     // Compute C(n, k) % 5 using Lucas's theorem and constexpr table
-    [[nodiscard]] FORCE_INLINE static constexpr u8 binom_mod5(
+    [[nodiscard, gnu::always_inline]] inline static constexpr u8 binom_mod5(
         u32 n,
         u32 k) noexcept
     {
@@ -58,7 +56,7 @@ public:
     }
 
     // Combine mod 2 and mod 5 using brute-force CRT
-    [[nodiscard]] FORCE_INLINE static constexpr u8 crt_mod10(
+    [[nodiscard, gnu::always_inline]] inline static constexpr u8 crt_mod10(
         u16 mod2,
         u16 mod5) noexcept
     {
@@ -68,7 +66,7 @@ public:
     }
 
     // Final C(n, k) % 10 using mod2, mod5, and CRT
-    [[nodiscard]] FORCE_INLINE static constexpr u8 binom_mod10(
+    [[nodiscard, gnu::always_inline]] inline static constexpr u8 binom_mod10(
         u16 n,
         u16 k) noexcept
     {

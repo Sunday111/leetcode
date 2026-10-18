@@ -3,7 +3,6 @@
 #include <ranges>
 #include <vector>
 
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
 namespace stdr = std::ranges;
@@ -19,7 +18,7 @@ public:
     {
         const u8 h = g.size() & 0xFF, w = g[0].size() & 0xFF;
 
-        auto diagGetter = [&](u8 x, u8 y) INLINE_LAMBDA
+        auto diagGetter = [&] [[gnu::always_inline]] (u8 x, u8 y)
         {
             return [&, x, y](u8 i) -> int&
             {
@@ -27,7 +26,7 @@ public:
             };
         };
 
-        auto sortDiag = [&](u8 x, u8 y) INLINE_LAMBDA
+        auto sortDiag = [&] [[gnu::always_inline]] (u8 x, u8 y)
         {
             const u8 l = std::min<u8>(h - y, w - x);
             stdr::sort(

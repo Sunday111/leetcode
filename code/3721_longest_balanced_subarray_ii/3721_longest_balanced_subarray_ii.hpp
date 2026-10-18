@@ -3,7 +3,6 @@
 #include <optional>
 #include <vector>
 
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
 [[nodiscard]] inline constexpr u32 num_required_nodes(u32 n) noexcept
@@ -16,31 +15,32 @@ struct Interval
     u32 begin = 0;
     u32 end = 0;
 
-    [[nodiscard]] FORCE_INLINE constexpr u32 size() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u32 size() const noexcept
     {
         return end - begin;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr u32 mid() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u32 mid() const noexcept
     {
         u32 mid = begin + size() / 2;
         return mid;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr std::pair<Interval, Interval> split()
-        const noexcept
+    [[nodiscard,
+      gnu::always_inline]] inline constexpr std::pair<Interval, Interval>
+    split() const noexcept
     {
         u32 m = mid();
         return {{.begin = begin, .end = m}, {.begin = m, .end = end}};
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr bool contains(
+    [[nodiscard, gnu::always_inline]] inline constexpr bool contains(
         const Interval& interval) const noexcept
     {
         return begin <= interval.begin && end >= interval.end;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr bool disjoint(
+    [[nodiscard, gnu::always_inline]] inline constexpr bool disjoint(
         const Interval& interval) const noexcept
     {
         return end <= interval.begin || begin >= interval.end;
@@ -67,7 +67,7 @@ public:
         std::fill_n(nodes, num_required_nodes(n), Node{0, 0, 0});
     }
 
-    FORCE_INLINE constexpr void push(
+    [[gnu::always_inline]] inline constexpr void push(
         u32 node_id,
         Interval node_interval) noexcept
     {
@@ -90,7 +90,7 @@ public:
         }
     }
 
-    FORCE_INLINE constexpr void update(
+    [[gnu::always_inline]] inline constexpr void update(
         Interval change_interval,
         Interval node_interval,
         u32 node_id,
@@ -122,7 +122,7 @@ public:
         node.max = std::max(nodes[left_node_id].max, nodes[right_node_id].max);
     }
 
-    FORCE_INLINE constexpr void update(
+    [[gnu::always_inline]] inline constexpr void update(
         Interval change_interval,
         int delta) noexcept
     {
@@ -142,7 +142,7 @@ public:
     }
     constexpr int query(u32 idx) noexcept { return query(idx, 1, all); }
 
-    FORCE_INLINE constexpr std::optional<u32> find_first(
+    [[gnu::always_inline]] inline constexpr std::optional<u32> find_first(
         int value,
         Interval search_interval,
         u32 node_id,
@@ -168,7 +168,7 @@ public:
         return x;
     }
 
-    FORCE_INLINE constexpr std::optional<u32> find_first(
+    [[gnu::always_inline]] inline constexpr std::optional<u32> find_first(
         int value,
         Interval search_interval) noexcept
     {

@@ -4,11 +4,6 @@
 #include <cstdint>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
-#define HOT_PATH __attribute__((hot))
-
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
@@ -27,9 +22,12 @@ struct ScopedArena
     u32 rollback_offset = 0;
     u32* offset = nullptr;
 
-    FORCE_INLINE void Reset() const noexcept { *offset = rollback_offset; }
+    [[gnu::always_inline]] inline void Reset() const noexcept
+    {
+        *offset = rollback_offset;
+    }
 
-    FORCE_INLINE ~ScopedArena() noexcept
+    [[gnu::always_inline]] inline ~ScopedArena() noexcept
     {
         if (offset)
         {
@@ -42,15 +40,19 @@ struct ScopedArena
 template <u32 num_bytes>
 struct GlobalBufferStorage
 {
-    FORCE_INLINE static GlobalBufferStorage& Instance() noexcept
+    [[gnu::always_inline]] inline static GlobalBufferStorage&
+    Instance() noexcept
     {
         static GlobalBufferStorage inst;
         return inst;
     }
 
-    FORCE_INLINE void Reset() noexcept { allocator_offset_ = 0; }
+    [[gnu::always_inline]] inline void Reset() noexcept
+    {
+        allocator_offset_ = 0;
+    }
 
-    [[nodiscard]] FORCE_INLINE ScopedArena StartArena() noexcept
+    [[nodiscard, gnu::always_inline]] inline ScopedArena StartArena() noexcept
     {
         return {allocator_offset_, &allocator_offset_};
     }
@@ -67,13 +69,13 @@ struct BumpAllocator
     BumpAllocator() = default;
 
     template <class U>
-    FORCE_INLINE explicit constexpr BumpAllocator(
+    [[gnu::always_inline]] inline explicit constexpr BumpAllocator(
         const BumpAllocator<U, S>&) noexcept
     {
     }
 
-    [[nodiscard]] FORCE_INLINE T* allocate(u32 n) noexcept HOT_PATH
-        NO_SANITIZERS
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline T* allocate(
+        u32 n) noexcept NO_SANITIZERS
     {
         auto& inst = S::Instance();
 
@@ -92,14 +94,16 @@ struct BumpAllocator
             inst.allocator_memory_.data() + aligned_offset);  // NOLINT
     }
 
-    FORCE_INLINE void deallocate(T*, u32) noexcept {}
+    [[gnu::always_inline]] inline void deallocate(T*, u32) noexcept {}
 
     // equality so containers can compare allocators
-    FORCE_INLINE constexpr bool operator==(const BumpAllocator&) const noexcept
+    [[gnu::always_inline]] inline constexpr bool operator==(
+        const BumpAllocator&) const noexcept
     {
         return true;
     }
-    FORCE_INLINE constexpr bool operator!=(const BumpAllocator&) const noexcept
+    [[gnu::always_inline]] inline constexpr bool operator!=(
+        const BumpAllocator&) const noexcept
     {
         return false;
     }
@@ -111,25 +115,25 @@ class ObjectWithoutDtor
     alignas(T) std::array<std::byte, sizeof(T)> arr;
 
 public:
-    FORCE_INLINE ObjectWithoutDtor() noexcept { Reset(); }
-    FORCE_INLINE void Reset() noexcept { new (&get()) T(); }
+    [[gnu::always_inline]] inline ObjectWithoutDtor() noexcept { Reset(); }
+    [[gnu::always_inline]] inline void Reset() noexcept { new (&get()) T(); }
 
-    FORCE_INLINE T& get() noexcept
+    [[gnu::always_inline]] inline T& get() noexcept
     {
         return *reinterpret_cast<T*>(arr.data());  // NOLINT
     }
 
-    FORCE_INLINE const T& get() const noexcept
+    [[gnu::always_inline]] inline const T& get() const noexcept
     {
         return *reinterpret_cast<const T*>(arr.data());  // NOLINT
     }
 
-    FORCE_INLINE T* operator->() noexcept
+    [[gnu::always_inline]] inline T* operator->() noexcept
     {
         return reinterpret_cast<T*>(arr.data());  // NOLINT
     }
 
-    FORCE_INLINE const T* operator->() const noexcept
+    [[gnu::always_inline]] inline const T* operator->() const noexcept
     {
         return reinterpret_cast<const T*>(arr.data());  // NOLINT
     }
@@ -143,67 +147,78 @@ template <
 struct heap_with_erase
 {
     template <typename Op>
-    FORCE_INLINE constexpr static void heap_op(
+    [[gnu::always_inline]] inline constexpr static void heap_op(
         Op&& op,
         std::vector<T>& rng) noexcept
     {
         std::forward<Op>(op)(rng, Cmp{});
     }
 
-    FORCE_INLINE constexpr static void push_(std::vector<T>& rng, T v) noexcept
+    [[gnu::always_inline]] inline constexpr static void push_(
+        std::vector<T>& rng,
+        T v) noexcept
     {
         rng.push_back(v);
         heap_op(std::ranges::push_heap, rng);
     }
 
-    FORCE_INLINE constexpr static void pop_(std::vector<T>& rng) noexcept
+    [[gnu::always_inline]] inline constexpr static void pop_(
+        std::vector<T>& rng) noexcept
     {
         heap_op(std::ranges::pop_heap, rng);
         rng.pop_back();
     }
 
-    FORCE_INLINE constexpr void reserve(size_t n) noexcept
+    [[gnu::always_inline]] inline constexpr void reserve(size_t n) noexcept
     {
         queued.reserve(n);
         erased.reserve(n);
     }
 
     template <typename It>
-    FORCE_INLINE constexpr void init(It begin, It end) noexcept
+    [[gnu::always_inline]] inline constexpr void init(It begin, It end) noexcept
     {
         assert(empty());
         queued.insert(queued.end(), begin, end);
         heap_op(std::ranges::make_heap, queued);
     }
 
-    [[nodiscard]] FORCE_INLINE const T& top() const noexcept
+    [[nodiscard, gnu::always_inline]] inline const T& top() const noexcept
     {
         purge();
         return queued.front();
     }
 
-    FORCE_INLINE constexpr void pop() noexcept
+    [[gnu::always_inline]] inline constexpr void pop() noexcept
     {
         purge();
         pop_(queued);
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr bool empty() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr bool empty()
+        const noexcept
     {
         return queued.size() == erased.size();
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr size_t size() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr size_t size()
+        const noexcept
     {
         return queued.size() - erased.size();
     }
 
-    FORCE_INLINE constexpr void push(const T& v) noexcept { push_(queued, v); }
+    [[gnu::always_inline]] inline constexpr void push(const T& v) noexcept
+    {
+        push_(queued, v);
+    }
 
-    FORCE_INLINE constexpr void erase(const T& v) noexcept { push_(erased, v); }
+    [[gnu::always_inline]] inline constexpr void erase(const T& v) noexcept
+    {
+        push_(erased, v);
+    }
 
 private:
-    [[nodiscard]] FORCE_INLINE static constexpr bool eq(
+    [[nodiscard, gnu::always_inline]] inline static constexpr bool eq(
         const T& a,
         const T& b) noexcept
     {
@@ -213,7 +228,7 @@ private:
         return c(pa, pb) == c(pb, pa);
     }
 
-    FORCE_INLINE constexpr void purge() const noexcept
+    [[gnu::always_inline]] inline constexpr void purge() const noexcept
     {
         while (!erased.empty() && eq(erased.front(), queued.front()))
         {
@@ -244,14 +259,16 @@ class Solution
 public:
     struct sum_n_smallest
     {
-        FORCE_INLINE constexpr void reserve(size_t n) noexcept
+        [[gnu::always_inline]] inline constexpr void reserve(size_t n) noexcept
         {
             larger.reserve(n);
             smaller.reserve(n);
         }
 
         template <class Iter>
-        FORCE_INLINE constexpr void init(Iter begin, Iter end) noexcept
+        [[gnu::always_inline]] inline constexpr void init(
+            Iter begin,
+            Iter end) noexcept
         {
             smaller.init(begin, end);
             for (auto i = begin; i < end; ++i)
@@ -260,7 +277,9 @@ public:
             }
         }
 
-        FORCE_INLINE constexpr void add_and_drop(u32 a, u32 d) noexcept
+        [[gnu::always_inline]] inline constexpr void add_and_drop(
+            u32 a,
+            u32 d) noexcept
         {
             const u32 top_larger = larger.top();
             if (a >= top_larger == d >= top_larger)
@@ -284,7 +303,7 @@ public:
             add(a);
         }
 
-        FORCE_INLINE constexpr void add(u32 i) noexcept
+        [[gnu::always_inline]] inline constexpr void add(u32 i) noexcept
         {
             const u32 old_top = smaller.top();
             if (i < old_top)
@@ -301,7 +320,9 @@ public:
             }
         }
 
-        FORCE_INLINE constexpr void drop(u32 i, u32 old_top) noexcept
+        [[gnu::always_inline]] inline constexpr void drop(
+            u32 i,
+            u32 old_top) noexcept
         {
             if (i < old_top)
             {

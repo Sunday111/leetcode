@@ -4,7 +4,6 @@
 
 #include "cast.hpp"
 #include "ceil_div.hpp"
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
 template <u32 kCapacity, typename Word = u64>
@@ -23,14 +22,14 @@ class HierBitset
     Word l2;
 
 public:
-    FORCE_INLINE constexpr void clear(u32 n) noexcept
+    [[gnu::always_inline]] inline constexpr void clear(u32 n) noexcept
     {
         l2 = 0;
         std::fill_n(std::begin(l1), ceil_div<u32>(n, kWordBits * kWordBits), 0);
         std::fill_n(std::begin(l0), ceil_div<u32>(n, kWordBits), 0);
     }
 
-    FORCE_INLINE constexpr void add(u32 i) noexcept
+    [[gnu::always_inline]] inline constexpr void add(u32 i) noexcept
     {
         const u32 i0 = i >> kShift;
         const u32 i1 = i0 >> kShift;
@@ -39,7 +38,7 @@ public:
         l2 |= Word{1} << (i1 & kMask);
     }
 
-    FORCE_INLINE constexpr void remove(u32 i) noexcept
+    [[gnu::always_inline]] inline constexpr void remove(u32 i) noexcept
     {
         const u32 i0 = i >> kShift;
         const Word w0 = l0[i0] & ~(Word{1} << (i & kMask));
@@ -51,7 +50,7 @@ public:
     }
 
     template <bool v>
-    FORCE_INLINE constexpr void set(u32 i) noexcept
+    [[gnu::always_inline]] inline constexpr void set(u32 i) noexcept
     {
         if constexpr (v)
         {
@@ -63,22 +62,25 @@ public:
         }
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr u32 capacity() noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr u32
+    capacity() noexcept
     {
         return kCapacity;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr bool empty() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr bool empty()
+        const noexcept
     {
         return l2 == 0;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr bool test(u32 pos) const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr bool test(
+        u32 pos) const noexcept
     {
         return (l0[pos >> kShift] >> (pos & kMask)) & 1u;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr u32 min() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u32 min() const noexcept
     {
         const u32 i2 = cast<u32>(std::countr_zero(l2));
         const u32 i1 = cast<u32>(std::countr_zero(l1[i2]));
@@ -86,7 +88,7 @@ public:
         return (i2 << (kShift << 1)) | (i1 << kShift) | i0;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr u32 max() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u32 max() const noexcept
     {
         const u32 i2 = kWordBits - 1 - cast<u32>(std::countl_zero(l2));
         const u32 i1 = kWordBits - 1 - cast<u32>(std::countl_zero(l1[i2]));

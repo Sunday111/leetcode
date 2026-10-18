@@ -4,9 +4,6 @@
 #include <span>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define HOT_PATH __attribute__((hot))
-
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
@@ -20,7 +17,8 @@ using i64 = int64_t;
 class SegmentTree
 {
 public:
-    FORCE_INLINE constexpr void Build(std::span<const int> data_) noexcept
+    [[gnu::always_inline]] inline constexpr void Build(
+        std::span<const int> data_) noexcept
     {
         data = data_;
         n = static_cast<u32>(data.size());
@@ -41,7 +39,9 @@ public:
         nodes[node] = std::max(nodes[2 * node + 1], nodes[2 * node + 2]);
     }
 
-    FORCE_INLINE constexpr void Update(u32 idx, int val) noexcept
+    [[gnu::always_inline]] inline constexpr void Update(
+        u32 idx,
+        int val) noexcept
     {
         // Leaf node index in the segment tree array
         u32 node = 0, l = 0, r = n - 1;
@@ -74,7 +74,7 @@ public:
     }
 
     template <typename Cmp>
-    [[nodiscard]] FORCE_INLINE HOT_PATH constexpr u32
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr u32
     UpdateFirst(int val, const Cmp& cmp, int replace_val) noexcept
     {
         u32 node = 0, l = 0, r = n - 1;
@@ -114,8 +114,9 @@ public:
     }
 
     template <typename Cmp>
-    [[nodiscard]] FORCE_INLINE constexpr u32 FindFirst(int val, const Cmp& cmp)
-        const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u32 FindFirst(
+        int val,
+        const Cmp& cmp) const noexcept
     {
         u32 node = 0, l = 0, r = n - 1;
 

@@ -1,14 +1,14 @@
-#include "min_max_int.hpp"
-
 #include <gtest/gtest.h>
 
 #include <limits>
 #include <random>
 #include <type_traits>
 
+#include "max2.hpp"
+
 // === Typed test fixture ===
 template <typename T>
-class BranchlessMaxTest : public ::testing::Test
+class MaxTest : public ::testing::Test
 {
 };
 
@@ -22,10 +22,10 @@ using IntegralTypes = ::testing::Types<
     int64_t,
     uint64_t>;
 
-TYPED_TEST_SUITE(BranchlessMaxTest, IntegralTypes);
+TYPED_TEST_SUITE(MaxTest, IntegralTypes);
 
 // === Fuzzy test with random inputs ===
-TYPED_TEST(BranchlessMaxTest, FuzzyCorrectness)
+TYPED_TEST(MaxTest, FuzzyCorrectness)
 {
     using T = TypeParam;
     using Limits = std::numeric_limits<T>;
@@ -40,7 +40,7 @@ TYPED_TEST(BranchlessMaxTest, FuzzyCorrectness)
     {
         const T a = static_cast<T>(dist(rng)), b = static_cast<T>(dist(rng));
         T expected = std::max(a, b);
-        T actual = int_max(a, b);
+        T actual = max2(a, b);
         ASSERT_EQ(actual, expected) << "Failed for a=" << +a << ", b=" << +b;
     }
 }

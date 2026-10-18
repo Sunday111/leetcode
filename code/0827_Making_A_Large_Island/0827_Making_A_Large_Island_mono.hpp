@@ -3,12 +3,6 @@
 #include <utility>
 #include <vector>
 
-
-
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
-
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
@@ -18,8 +12,6 @@ using i8 = int8_t;
 using i16 = int16_t;
 using i32 = int32_t;
 using i64 = int64_t;
-
-
 
 template <typename T>
 class UnionFind
@@ -31,13 +23,15 @@ public:
         T parent;
     };
 
-    FORCE_INLINE constexpr UnionFind(Node* buffer, T size) noexcept
+    [[gnu::always_inline]] inline constexpr UnionFind(
+        Node* buffer,
+        T size) noexcept
         : nodes(buffer)
     {
         for (T x = 0; x != size; ++x) nodes[x] = {.size = 1, .parent = x};
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr T find(T x) noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr T find(T x) noexcept
     {
         // Path halving
         while (nodes[x].parent != x)
@@ -48,7 +42,7 @@ public:
         return x;
     }
 
-    FORCE_INLINE constexpr void merge(T x, T y) noexcept
+    [[gnu::always_inline]] inline constexpr void merge(T x, T y) noexcept
     {
         // Union by size
         x = find(x);
@@ -82,7 +76,7 @@ public:
         constexpr u16 dx[4]{0xFFFF, 1, 0, 0};
         constexpr u16 dy[4]{0, 0, 0xFFFF, 1};
 
-        auto to_idx = [&](u16 x, u16 y) INLINE_LAMBDA noexcept
+        auto to_idx = [&] [[gnu::always_inline]] (u16 x, u16 y) noexcept
         {
             return u32{y} * u32{w} + u32{x};
         };

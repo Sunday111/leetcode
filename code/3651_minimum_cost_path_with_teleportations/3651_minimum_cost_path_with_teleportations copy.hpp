@@ -7,18 +7,30 @@
 struct Vec2
 {
     // NOLINTNEXTLINE
-    FORCE_INLINE constexpr Vec2(u8 fill) noexcept : x{fill}, y{fill} {}
-    FORCE_INLINE constexpr Vec2(u8 X, u8 Y) noexcept : x{X}, y{Y} {}
+    [[gnu::always_inline]] inline constexpr Vec2(u8 fill) noexcept
+        : x{fill},
+          y{fill}
+    {
+    }
+    [[gnu::always_inline]] inline constexpr Vec2(u8 X, u8 Y) noexcept
+        : x{X},
+          y{Y}
+    {
+    }
 
     u8 x, y;
 };
 
-[[nodiscard]] FORCE_INLINE constexpr Vec2 operator+(Vec2 a, Vec2 b) noexcept
+[[nodiscard, gnu::always_inline]] inline constexpr Vec2 operator+(
+    Vec2 a,
+    Vec2 b) noexcept
 {
     return {cast<u8>(a.x + b.x), cast<u8>(a.y + b.y)};
 }
 
-[[nodiscard]] FORCE_INLINE constexpr Vec2 operator-(Vec2 a, Vec2 b) noexcept
+[[nodiscard, gnu::always_inline]] inline constexpr Vec2 operator-(
+    Vec2 a,
+    Vec2 b) noexcept
 {
     return {cast<u8>(a.x - b.x), cast<u8>(a.y - b.y)};
 }
@@ -50,12 +62,12 @@ public:
         for (u32 x = 0; x <= size.x; ++x) dp[size.y][x] = kHuge;
         for (u32 y = 0; y <= size.y; ++y) dp[size.x][y] = kHuge;
 
-        auto weight_at = [&](Vec2 p) INLINE_LAMBDA -> const u32&
+        auto weight_at = [&] [[gnu::always_inline]] (Vec2 p) -> const u32&
         {
             return grid[p.y][p.x];
         };
 
-        auto dp_at = [&](Vec2 p) INLINE_LAMBDA -> u32&
+        auto dp_at = [&] [[gnu::always_inline]] (Vec2 p) -> u32&
         {
             return dp[p.y][p.x];
         };
@@ -63,7 +75,7 @@ public:
         std::ranges::sort(sorted_coords, std::less{}, weight_at);
         constexpr Vec2 right{1, 0}, left{0xFF, 0}, bottom{0, 1};
 
-        auto update_dp = [&](Vec2 p, u32 v) INLINE_LAMBDA
+        auto update_dp = [&] [[gnu::always_inline]] (Vec2 p, u32 v)
         {
             dp_at(p) = v;
 

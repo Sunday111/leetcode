@@ -8,15 +8,6 @@
 #include <utility>
 #include <vector>
 
-
-
-
-
-
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
-
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
@@ -42,7 +33,7 @@ public:
         std::ranges::fill(data_, empty);
     }
 
-    FORCE_INLINE void add(const Value& v) noexcept
+    [[gnu::always_inline]] inline void add(const Value& v) noexcept
     {
         u32 index = kHasher(key_proj(v)) & kHashMask;
         while (has_value(data_[index]))
@@ -54,7 +45,7 @@ public:
     }
 
     template <typename U>
-    FORCE_INLINE bool contains(const U& key) const noexcept
+    [[gnu::always_inline]] inline bool contains(const U& key) const noexcept
     {
         u32 index = kHasher(key) & kHashMask;
         while (has_value(data_[index]) && key_proj(data_[index]) != key)
@@ -66,7 +57,7 @@ public:
     }
 
     template <typename U>
-    [[nodiscard]] FORCE_INLINE Value* find(const U& key) noexcept
+    [[nodiscard, gnu::always_inline]] inline Value* find(const U& key) noexcept
     {
         u32 index = kHasher(key) & kHashMask;
         while (has_value(data_[index]) && key_proj(data_[index]) != key)
@@ -78,7 +69,7 @@ public:
         return has_value(*p) && key_proj(*p) == key ? p : nullptr;
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr bool has_value(
+    [[nodiscard, gnu::always_inline]] inline static constexpr bool has_value(
         const Value& v) noexcept
     {
         return key_proj(v) != empty_key;
@@ -86,9 +77,6 @@ public:
 
     std::span<Value, capacity> data_;
 };
-
-
-
 
 template <typename To>
 inline static constexpr auto cast =
@@ -105,7 +93,6 @@ inline static constexpr auto iif =
 {
     return (a & cast<T>(-c)) + (b & cast<T>(~cast<T>(-c)));
 };
-
 
 using i8 = int8_t;
 using i16 = int16_t;

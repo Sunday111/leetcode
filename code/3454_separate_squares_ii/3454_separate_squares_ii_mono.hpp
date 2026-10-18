@@ -7,11 +7,6 @@
 #include <utility>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
-#define HOT_PATH __attribute__((hot))
-
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
@@ -30,9 +25,12 @@ struct ScopedArena
     u32 rollback_offset = 0;
     u32* offset = nullptr;
 
-    FORCE_INLINE void Reset() const noexcept { *offset = rollback_offset; }
+    [[gnu::always_inline]] inline void Reset() const noexcept
+    {
+        *offset = rollback_offset;
+    }
 
-    FORCE_INLINE ~ScopedArena() noexcept
+    [[gnu::always_inline]] inline ~ScopedArena() noexcept
     {
         if (offset)
         {
@@ -45,15 +43,19 @@ struct ScopedArena
 template <u32 num_bytes>
 struct GlobalBufferStorage
 {
-    FORCE_INLINE static GlobalBufferStorage& Instance() noexcept
+    [[gnu::always_inline]] inline static GlobalBufferStorage&
+    Instance() noexcept
     {
         static GlobalBufferStorage inst;
         return inst;
     }
 
-    FORCE_INLINE void Reset() noexcept { allocator_offset_ = 0; }
+    [[gnu::always_inline]] inline void Reset() noexcept
+    {
+        allocator_offset_ = 0;
+    }
 
-    [[nodiscard]] FORCE_INLINE ScopedArena StartArena() noexcept
+    [[nodiscard, gnu::always_inline]] inline ScopedArena StartArena() noexcept
     {
         return {allocator_offset_, &allocator_offset_};
     }
@@ -70,13 +72,13 @@ struct BumpAllocator
     BumpAllocator() = default;
 
     template <class U>
-    FORCE_INLINE explicit constexpr BumpAllocator(
+    [[gnu::always_inline]] inline explicit constexpr BumpAllocator(
         const BumpAllocator<U, S>&) noexcept
     {
     }
 
-    [[nodiscard]] FORCE_INLINE T* allocate(u32 n) noexcept HOT_PATH
-        NO_SANITIZERS
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline T* allocate(
+        u32 n) noexcept NO_SANITIZERS
     {
         auto& inst = S::Instance();
 
@@ -95,14 +97,16 @@ struct BumpAllocator
             inst.allocator_memory_.data() + aligned_offset);  // NOLINT
     }
 
-    FORCE_INLINE void deallocate(T*, u32) noexcept {}
+    [[gnu::always_inline]] inline void deallocate(T*, u32) noexcept {}
 
     // equality so containers can compare allocators
-    FORCE_INLINE constexpr bool operator==(const BumpAllocator&) const noexcept
+    [[gnu::always_inline]] inline constexpr bool operator==(
+        const BumpAllocator&) const noexcept
     {
         return true;
     }
-    FORCE_INLINE constexpr bool operator!=(const BumpAllocator&) const noexcept
+    [[gnu::always_inline]] inline constexpr bool operator!=(
+        const BumpAllocator&) const noexcept
     {
         return false;
     }
@@ -114,25 +118,25 @@ class ObjectWithoutDtor
     alignas(T) std::array<std::byte, sizeof(T)> arr;
 
 public:
-    FORCE_INLINE ObjectWithoutDtor() noexcept { Reset(); }
-    FORCE_INLINE void Reset() noexcept { new (&get()) T(); }
+    [[gnu::always_inline]] inline ObjectWithoutDtor() noexcept { Reset(); }
+    [[gnu::always_inline]] inline void Reset() noexcept { new (&get()) T(); }
 
-    FORCE_INLINE T& get() noexcept
+    [[gnu::always_inline]] inline T& get() noexcept
     {
         return *reinterpret_cast<T*>(arr.data());  // NOLINT
     }
 
-    FORCE_INLINE const T& get() const noexcept
+    [[gnu::always_inline]] inline const T& get() const noexcept
     {
         return *reinterpret_cast<const T*>(arr.data());  // NOLINT
     }
 
-    FORCE_INLINE T* operator->() noexcept
+    [[gnu::always_inline]] inline T* operator->() noexcept
     {
         return reinterpret_cast<T*>(arr.data());  // NOLINT
     }
 
-    FORCE_INLINE const T* operator->() const noexcept
+    [[gnu::always_inline]] inline const T* operator->() const noexcept
     {
         return reinterpret_cast<const T*>(arr.data());  // NOLINT
     }
@@ -149,7 +153,8 @@ template <typename Value, typename Storage>
 using BumpVector = std::vector<Value, BumpAllocator<Value, Storage>>;
 
 template <typename To>
-inline static constexpr auto cast = []<typename From>(From&& v) INLINE_LAMBDA
+inline static constexpr auto cast =
+    []<typename From> [[gnu::always_inline]] (From&& v)
 {
     return static_cast<To>(std::forward<From>(v));
 };

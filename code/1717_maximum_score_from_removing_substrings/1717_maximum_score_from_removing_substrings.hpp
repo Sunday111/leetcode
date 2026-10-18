@@ -2,19 +2,13 @@
 
 #include <string>
 
-#ifdef __GNUC__
-#define FORCE_INLINE inline __attribute__((always_inline))
-#else
-#define FORCE_INLINE inline
-#endif
-
 class Solution
 {
 public:
     using u32 = uint32_t;
 
     template <char cx, char cy>
-    [[nodiscard]] FORCE_INLINE static constexpr u32 one_pass(
+    [[nodiscard, gnu::always_inline]] inline static constexpr u32 one_pass(
         std::string& s,
         u32 x) noexcept
     {
@@ -40,14 +34,14 @@ public:
     }
 
     template <char cx, char cy>
-    [[nodiscard]] FORCE_INLINE static constexpr u32
+    [[nodiscard, gnu::always_inline]] inline static constexpr u32
     impl(std::string& s, u32 x, u32 y) noexcept
     {
         u32 r = one_pass<cx, cy>(s, x);
         return r + one_pass<cy, cx>(s, y);
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr u32
+    [[nodiscard, gnu::always_inline]] inline static constexpr u32
     maximumGain(std::string& s, u32 x, u32 y) noexcept
     {
         if (x > y)

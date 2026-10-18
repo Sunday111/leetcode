@@ -1,12 +1,6 @@
 #include <cstdint>
 #include <string_view>
 
-
-
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
-
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
@@ -38,7 +32,7 @@ public:
         std::fill_n(bitset_words, (t >> 6) + 1, 0);
 
         u32 v = 0;
-        auto visit = [&](u32 i) INLINE_LAMBDA
+        auto visit = [&] [[gnu::always_inline]] (u32 i)
         {
             u64& w = bitset_words[i >> 6];
             u64 m = (u64{1} << (i & 63));
@@ -47,7 +41,7 @@ public:
         };
 
         u32 x = 0;
-        auto add_bit = [&](char c) INLINE_LAMBDA
+        auto add_bit = [&] [[gnu::always_inline]] (char c)
         {
             x = ((x << 1) | (1 & c)) & m;
         };

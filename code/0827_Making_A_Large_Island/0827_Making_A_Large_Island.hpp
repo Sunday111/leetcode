@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <vector>
 
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 #include "union_find.hpp"
 
@@ -22,7 +21,7 @@ public:
         constexpr u16 dx[4]{0xFFFF, 1, 0, 0};
         constexpr u16 dy[4]{0, 0, 0xFFFF, 1};
 
-        auto to_idx = [&](u16 x, u16 y) INLINE_LAMBDA noexcept
+        auto to_idx = [&] [[gnu::always_inline]] (u16 x, u16 y) noexcept
         {
             return u32{y} * u32{w} + u32{x};
         };

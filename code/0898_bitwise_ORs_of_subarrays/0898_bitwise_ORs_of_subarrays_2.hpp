@@ -5,12 +5,6 @@
 using u32 = uint32_t;
 using i32 = int32_t;
 
-#ifdef __GNUC__
-#define FORCE_INLINE inline __attribute__((always_inline))
-#else
-#define FORCE_INLINE inline
-#endif
-
 class HashSet
 {
 public:
@@ -19,9 +13,12 @@ public:
     static constexpr std::hash<KeyType> kHasher{};
     static constexpr u32 mask_ = (~u32{0}) >> (32 - 21);
 
-    FORCE_INLINE void clear() noexcept { values_.fill(kInvalidKey); }
+    [[gnu::always_inline]] inline void clear() noexcept
+    {
+        values_.fill(kInvalidKey);
+    }
 
-    FORCE_INLINE bool add(KeyType key) noexcept
+    [[gnu::always_inline]] inline bool add(KeyType key) noexcept
     {
         u32 index = kHasher(key) & mask_;
         while (values_[index] != kInvalidKey && values_[index] != key)

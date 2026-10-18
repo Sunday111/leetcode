@@ -7,11 +7,6 @@
 #include <utility>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
-#define HOT_PATH __attribute__((hot))
-
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
@@ -30,9 +25,12 @@ struct ScopedArena
     u32 rollback_offset = 0;
     u32* offset = nullptr;
 
-    FORCE_INLINE void Reset() const noexcept { *offset = rollback_offset; }
+    [[gnu::always_inline]] inline void Reset() const noexcept
+    {
+        *offset = rollback_offset;
+    }
 
-    FORCE_INLINE ~ScopedArena() noexcept
+    [[gnu::always_inline]] inline ~ScopedArena() noexcept
     {
         if (offset)
         {
@@ -45,15 +43,19 @@ struct ScopedArena
 template <u32 num_bytes>
 struct GlobalBufferStorage
 {
-    FORCE_INLINE static GlobalBufferStorage& Instance() noexcept
+    [[gnu::always_inline]] inline static GlobalBufferStorage&
+    Instance() noexcept
     {
         static GlobalBufferStorage inst;
         return inst;
     }
 
-    FORCE_INLINE void Reset() noexcept { allocator_offset_ = 0; }
+    [[gnu::always_inline]] inline void Reset() noexcept
+    {
+        allocator_offset_ = 0;
+    }
 
-    [[nodiscard]] FORCE_INLINE ScopedArena StartArena() noexcept
+    [[nodiscard, gnu::always_inline]] inline ScopedArena StartArena() noexcept
     {
         return {allocator_offset_, &allocator_offset_};
     }
@@ -70,13 +72,13 @@ struct BumpAllocator
     BumpAllocator() = default;
 
     template <class U>
-    FORCE_INLINE explicit constexpr BumpAllocator(
+    [[gnu::always_inline]] inline explicit constexpr BumpAllocator(
         const BumpAllocator<U, S>&) noexcept
     {
     }
 
-    [[nodiscard]] FORCE_INLINE T* allocate(u32 n) noexcept HOT_PATH
-        NO_SANITIZERS
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline T* allocate(
+        u32 n) noexcept NO_SANITIZERS
     {
         auto& inst = S::Instance();
 
@@ -95,14 +97,16 @@ struct BumpAllocator
             inst.allocator_memory_.data() + aligned_offset);  // NOLINT
     }
 
-    FORCE_INLINE void deallocate(T*, u32) noexcept {}
+    [[gnu::always_inline]] inline void deallocate(T*, u32) noexcept {}
 
     // equality so containers can compare allocators
-    FORCE_INLINE constexpr bool operator==(const BumpAllocator&) const noexcept
+    [[gnu::always_inline]] inline constexpr bool operator==(
+        const BumpAllocator&) const noexcept
     {
         return true;
     }
-    FORCE_INLINE constexpr bool operator!=(const BumpAllocator&) const noexcept
+    [[gnu::always_inline]] inline constexpr bool operator!=(
+        const BumpAllocator&) const noexcept
     {
         return false;
     }
@@ -114,44 +118,48 @@ class ObjectWithoutDtor
     alignas(T) std::array<std::byte, sizeof(T)> arr;
 
 public:
-    FORCE_INLINE ObjectWithoutDtor() noexcept { Reset(); }
-    FORCE_INLINE void Reset() noexcept { new (&get()) T(); }
+    [[gnu::always_inline]] inline ObjectWithoutDtor() noexcept { Reset(); }
+    [[gnu::always_inline]] inline void Reset() noexcept { new (&get()) T(); }
 
-    FORCE_INLINE T& get() noexcept
+    [[gnu::always_inline]] inline T& get() noexcept
     {
         return *reinterpret_cast<T*>(arr.data());  // NOLINT
     }
 
-    FORCE_INLINE const T& get() const noexcept
+    [[gnu::always_inline]] inline const T& get() const noexcept
     {
         return *reinterpret_cast<const T*>(arr.data());  // NOLINT
     }
 
-    FORCE_INLINE T* operator->() noexcept
+    [[gnu::always_inline]] inline T* operator->() noexcept
     {
         return reinterpret_cast<T*>(arr.data());  // NOLINT
     }
 
-    FORCE_INLINE const T* operator->() const noexcept
+    [[gnu::always_inline]] inline const T* operator->() const noexcept
     {
         return reinterpret_cast<const T*>(arr.data());  // NOLINT
     }
 };
 
 template <typename To>
-inline static constexpr auto cast = []<typename From>(From&& v) INLINE_LAMBDA
+inline static constexpr auto cast =
+    []<typename From> [[gnu::always_inline]] (From&& v)
 {
     return static_cast<To>(std::forward<From>(v));
 };
 
 template <std::integral T>
-[[nodiscard]] FORCE_INLINE constexpr T iif(bool c, T a, T b) noexcept
+[[nodiscard, gnu::always_inline]] inline constexpr T
+iif(bool c, T a, T b) noexcept
 {
     return (a & cast<T>(-c)) + (b & cast<T>(~cast<T>(-c)));
 }
 
 template <std::integral T>
-[[nodiscard]] FORCE_INLINE HOT_PATH constexpr T negate_if(bool c, T v) noexcept
+[[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr T negate_if(
+    bool c,
+    T v) noexcept
 {
     return iif(c, -v, v);
 }
@@ -169,7 +177,7 @@ struct HashTable
     inline static constexpr u32 kMask = capacity - 1;
     inline static constexpr u32 kNumWords = std::max(1u, capacity / 64);
 
-    FORCE_INLINE HashTable()
+    [[gnu::always_inline]] inline HashTable()
     {
         tk = BumpAllocator<Key, Storage>{}.allocate(capacity);
         tv = BumpAllocator<u32, Storage>{}.allocate(capacity);
@@ -177,7 +185,8 @@ struct HashTable
         std::fill_n(bits, kNumWords, u64{0});
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr u32 hash(u32 x) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr u32 hash(
+        u32 x) noexcept
     {
         u64 z = u64{x} + 0x9e3779b97f4a7c15ULL;
         z = (z ^ (z >> 30U)) * 0xbf58476d1ce4e5b9ULL;
@@ -185,7 +194,8 @@ struct HashTable
         return z >> 32U;
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr u32 hash(u64 x) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr u32 hash(
+        u64 x) noexcept
     {
         u64 z = u64{x} + 0x9e3779b97f4a7c15ULL;
         z = (z ^ (z >> 30U)) * 0xbf58476d1ce4e5b9ULL;
@@ -193,7 +203,7 @@ struct HashTable
         return z >> 32U;
     }
 
-    FORCE_INLINE constexpr u32* insert(Key k, u32 v) noexcept
+    [[gnu::always_inline]] inline constexpr u32* insert(Key k, u32 v) noexcept
     {
         u32 i = hash(k);
         u32 wi;  // NOLINT
@@ -212,7 +222,7 @@ struct HashTable
         return tv + i;
     }
 
-    FORCE_INLINE constexpr u32& get_or_add(Key k) noexcept
+    [[gnu::always_inline]] inline constexpr u32& get_or_add(Key k) noexcept
     {
         u32 i = hash(k);
         u32 wi;  // NOLINT
@@ -231,7 +241,7 @@ struct HashTable
         return tv[i];
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr u32* find(Key k) noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u32* find(Key k) noexcept
     {
         u32 i = hash(k);
         bool b1, b2;  // NOLINT
@@ -255,7 +265,7 @@ public:
     inline static constexpr int kBias = 1 << 11;
 
     template <u64 mm = 0>
-    FORCE_INLINE static u64 pack(int a, int b) noexcept
+    [[gnu::always_inline]] inline static u64 pack(int a, int b) noexcept
     {
         return (u64{std::bit_cast<u32>(i32{a + kBias} << 16) |
                     std::bit_cast<u32>(b + kBias)}
@@ -264,7 +274,7 @@ public:
     }
 
     template <u64 mm = 0>
-    FORCE_INLINE static u64 pack(int a, int b, int c) noexcept
+    [[gnu::always_inline]] inline static u64 pack(int a, int b, int c) noexcept
     {
         return std::bit_cast<u64>(i64{a + kBias} << 50) |
                std::bit_cast<u64>(i64{b + kBias} << 30) |
@@ -272,7 +282,8 @@ public:
     }
 
     template <u64 mm = 0>
-    FORCE_INLINE static u64 pack(int a, int b, int c, int d) noexcept
+    [[gnu::always_inline]] inline static u64
+    pack(int a, int b, int c, int d) noexcept
     {
         return std::bit_cast<u64>(i64{a + kBias} << 48) |
                std::bit_cast<u64>(i64{b + kBias} << 32) |

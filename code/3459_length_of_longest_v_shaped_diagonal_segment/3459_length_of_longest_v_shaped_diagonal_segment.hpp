@@ -4,8 +4,6 @@
 #include <array>
 #include <vector>
 
-#include "force_inline.hpp"
-#include "hot_path.hpp"
 #include "integral_aliases.hpp"
 #include "signed_integral_aliases.hpp"
 
@@ -14,7 +12,7 @@ struct Vec2
     i16 x{};
     i16 y{};
 
-    FORCE_INLINE HOT_PATH constexpr Vec2& operator+=(
+    [[gnu::always_inline, gnu::hot]] inline constexpr Vec2& operator+=(
         const Vec2& another) noexcept
     {
         x += another.x;  // NOLINT
@@ -22,7 +20,7 @@ struct Vec2
         return *this;
     }
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH constexpr Vec2 operator+(
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr Vec2 operator+(
         const Vec2& another) const noexcept
     {
         auto cpy = *this;
@@ -45,7 +43,8 @@ public:
 
     static constexpr std::array<int, 2> kSeq{2, 0};
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH static constexpr u16 longestSeqFrom(
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline static constexpr u16
+    longestSeqFrom(
         const Grid& grid,
         const Vec2& size,
         const Vec2& start,
@@ -64,7 +63,8 @@ public:
         return len;
     }
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH static constexpr u16 longestVFrom(
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline static constexpr u16
+    longestVFrom(
         const Grid& grid,
         const Vec2& size,
         const Vec2& start,
@@ -87,17 +87,17 @@ public:
         return max_length;
     }
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH static constexpr bool isValid(
-        const Vec2& v,
-        const Vec2& size) noexcept
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline static constexpr bool
+    isValid(const Vec2& v, const Vec2& size) noexcept
     {
         return std::bit_cast<u16>(v.x) < std::bit_cast<u16>(size.x) &&
                std::bit_cast<u16>(v.y) < std::bit_cast<u16>(size.y);
     }
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH static constexpr const int& cell(
-        const Grid& grid,
-        const Vec2& pos) noexcept
+    [[nodiscard,
+      gnu::always_inline,
+      gnu::hot]] inline static constexpr const int&
+    cell(const Grid& grid, const Vec2& pos) noexcept
     {
         return grid[static_cast<u16>(pos.y)][static_cast<u16>(pos.x)];
     }

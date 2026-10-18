@@ -3,27 +3,19 @@
 #include <string_view>
 #include <utility>
 
-
-
-
-
-
-
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
 template <typename To>
-inline static constexpr auto cast = []<typename From>(From&& v) INLINE_LAMBDA
+inline static constexpr auto cast =
+    []<typename From> [[gnu::always_inline]] (From&& v)
 {
     return static_cast<To>(std::forward<From>(v));
 };
 
 template <std::integral T>
-[[nodiscard]] FORCE_INLINE constexpr T iif(bool c, T a, T b) noexcept
+[[nodiscard, gnu::always_inline]] inline constexpr T
+iif(bool c, T a, T b) noexcept
 {
     return (a & cast<T>(-c)) + (b & cast<T>(~cast<T>(-c)));
 }
-
 
 using u8 = uint8_t;
 using u16 = uint16_t;
@@ -42,7 +34,7 @@ public:
     static constexpr u32 kBitsetCapacity = (2000 * kTableWidth) / 8;
     inline static u64 words[kBitsetCapacity];
 
-    [[nodiscard]] FORCE_INLINE static constexpr u64
+    [[nodiscard, gnu::always_inline]] inline static constexpr u64
     set_bit(u64 bs, u8 i, bool value) noexcept
     {
         u64 a = (u64{1} << i) | bs;
@@ -50,14 +42,14 @@ public:
         return iif(value, a, b);
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr bool get_bit(
+    [[nodiscard, gnu::always_inline]] inline static constexpr bool get_bit(
         u64 bs,
         u8 i) noexcept
     {
         return bs & (u64{1} << i);
     }
 
-    FORCE_INLINE static constexpr void
+    [[gnu::always_inline]] inline static constexpr void
     set_is_palindrome(u16 i, u16 j, bool value) noexcept
     {
         u32 row_offset = i * kTableWidth;
@@ -67,9 +59,8 @@ public:
         words[word_index] = set_bit(words[word_index], bit_index, value);
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr bool get_is_palindrome(
-        u16 i,
-        u16 j) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr bool
+    get_is_palindrome(u16 i, u16 j) noexcept
     {
         u32 row_offset = i * kTableWidth;
         u32 global_bit_index = row_offset + j;
@@ -78,7 +69,7 @@ public:
         return get_bit(words[word_index], bit_index);
     }
 
-    FORCE_INLINE static int minCut(std::string_view s) noexcept
+    [[gnu::always_inline]] inline static int minCut(std::string_view s) noexcept
     {
         static u16 min_num_dp[2001];
 

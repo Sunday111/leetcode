@@ -8,9 +8,7 @@
 #include <vector>
 
 #if defined(__GNUC__) || defined(__clang__)
-#define ALWAYS_INLINE inline __attribute__((always_inline))
 #else
-#define ALWAYS_INLINE inline
 #endif
 
 struct Node
@@ -73,7 +71,9 @@ struct UndirectedTree
     }
 
     template <typename F>
-    ALWAYS_INLINE constexpr auto ForEachNeighbor(uint16_t node_id, F f) const
+    [[gnu::always_inline]] inline constexpr auto ForEachNeighbor(
+        uint16_t node_id,
+        F f) const
     {
         using CallbackReturn = std::decay_t<decltype(f(0))>;
         const auto& node = nodes[node_id];

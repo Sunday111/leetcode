@@ -2,7 +2,6 @@
 #include <cstdint>
 #include <string>
 
-#include "hot_path.hpp"
 #include "int_if.hpp"
 
 class Solution
@@ -12,7 +11,7 @@ public:
     using u16 = uint16_t;
     using u32 = uint32_t;
 
-    static u16 longestBalanced(const std::string& s) noexcept HOT_PATH
+    [[gnu::hot]] static u16 longestBalanced(const std::string& s) noexcept
     {
         const u16 n = static_cast<u16>(s.size());
 

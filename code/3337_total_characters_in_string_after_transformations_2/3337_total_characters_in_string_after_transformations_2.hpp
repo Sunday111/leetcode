@@ -8,23 +8,25 @@
 #include <string_view>
 #include <vector>
 
-#define ATTRS __attribute__((no_sanitize("all"))) __attribute__((always_inline))
-
 class Solution
 {
 public:
     static constexpr uint32_t kMOD = 1'000'000'007;
 
-    [[nodiscard]]
-    ATTRS constexpr uint32_t static modAdd(uint32_t a, uint32_t b) noexcept
+    [[nodiscard, gnu::always_inline]]
+    __attribute__((no_sanitize("all"))) constexpr uint32_t static modAdd(
+        uint32_t a,
+        uint32_t b) noexcept
     {
         uint64_t r = a + b;
         if (r >= kMOD) r -= kMOD;
         return static_cast<uint32_t>(r);
     }
 
-    [[nodiscard]]
-    ATTRS constexpr uint32_t static modMul(uint64_t a, uint64_t b) noexcept
+    [[nodiscard, gnu::always_inline]]
+    __attribute__((no_sanitize("all"))) constexpr uint32_t static modMul(
+        uint64_t a,
+        uint64_t b) noexcept
     {
         auto r = a * b;
         if (r < kMOD) return static_cast<uint32_t>(r);
@@ -38,10 +40,9 @@ public:
     using Matrix = std::array<Vector<k>, k>;
 
     template <size_t k>
-    [[nodiscard]]
-    ATTRS inline static constexpr Matrix<k> multiply(
-        const Matrix<k>& a,
-        const Matrix<k>& b)
+    [[nodiscard, gnu::always_inline]]
+    __attribute__((no_sanitize("all"))) inline static constexpr Matrix<k>
+    multiply(const Matrix<k>& a, const Matrix<k>& b)
     {
         Matrix<k> c{};
         for (size_t i = 0; i != k; ++i)
@@ -60,10 +61,9 @@ public:
     }
 
     template <size_t k>
-    [[nodiscard]]
-    ATTRS inline static constexpr Matrix<k> matrix_power(
-        Matrix<k> base,
-        uint32_t exp)
+    [[nodiscard, gnu::always_inline]]
+    __attribute__((no_sanitize("all"))) inline static constexpr Matrix<k>
+    matrix_power(Matrix<k> base, uint32_t exp)
     {
         [[unlikely]] if (exp == 0)
         {
@@ -87,8 +87,8 @@ public:
     }
 
     template <size_t k>
-    [[nodiscard]]
-    ATTRS inline static constexpr uint32_t
+    [[nodiscard, gnu::always_inline]]
+    __attribute__((no_sanitize("all"))) inline static constexpr uint32_t
     solve_reccurence(const Matrix<k>& base, const Vector<k>& counts, uint32_t r)
     {
         const auto mp = matrix_power(base, r);

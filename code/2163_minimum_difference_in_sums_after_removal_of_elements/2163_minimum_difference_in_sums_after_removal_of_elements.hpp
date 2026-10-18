@@ -5,8 +5,6 @@
 #include <utility>
 #include <vector>
 
-#include "force_inline.hpp"
-#include "hot_path.hpp"
 #include "int_if.hpp"
 #include "integral_aliases.hpp"
 #include "reinterpret_range.hpp"
@@ -19,7 +17,7 @@ template <typename Word, u32 num_words>
 class RecursiveBitsetLayer
 {
 public:
-    FORCE_INLINE constexpr void Fill(bool value) noexcept
+    [[gnu::always_inline]] inline constexpr void Fill(bool value) noexcept
     {
         std::ranges::fill(
             words,
@@ -28,8 +26,8 @@ public:
 
     // Returns word index and
     // boolean which will be true if word became non-zero
-    FORCE_INLINE HOT_PATH constexpr std::pair<u32, bool> SetBitExtra(
-        u32 index) noexcept
+    [[gnu::always_inline, gnu::hot]] inline constexpr std::pair<u32, bool>
+    SetBitExtra(u32 index) noexcept
     {
         if constexpr (num_words == 1)
         {
@@ -46,7 +44,7 @@ public:
         }
     }
 
-    FORCE_INLINE HOT_PATH constexpr void SetBit(u32 index)
+    [[gnu::always_inline, gnu::hot]] inline constexpr void SetBit(u32 index)
     {
         if constexpr (num_words == 1)
         {
@@ -60,8 +58,8 @@ public:
 
     // Returns word index and
     // boolean which will be true if word became zero
-    FORCE_INLINE HOT_PATH constexpr std::pair<u32, bool> ClearBitExtra(
-        u32 index) noexcept
+    [[gnu::always_inline, gnu::hot]] inline constexpr std::pair<u32, bool>
+    ClearBitExtra(u32 index) noexcept
     {
         ClearBit(index);
         if constexpr (num_words == 1)
@@ -75,7 +73,8 @@ public:
         }
     }
 
-    FORCE_INLINE HOT_PATH constexpr void ClearBit(u32 index) noexcept
+    [[gnu::always_inline, gnu::hot]] inline constexpr void ClearBit(
+        u32 index) noexcept
     {
         if constexpr (num_words == 1)
         {
@@ -93,7 +92,7 @@ public:
 class Lookup
 {
 public:
-    FORCE_INLINE constexpr void Clear() noexcept
+    [[gnu::always_inline]] inline constexpr void Clear() noexcept
     {
         std::ranges::fill(freq, 0);
         bs0.Fill(false);
@@ -101,7 +100,8 @@ public:
         bs2.Fill(false);
     }
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH constexpr u32 Min() const noexcept
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr u32 Min()
+        const noexcept
     {
         u32 wi1 = static_cast<u32>(std::countr_zero(bs2.words[0]));
         u32 bi1 = static_cast<u32>(std::countr_zero(bs1.words[wi1]));
@@ -110,7 +110,8 @@ public:
         return wi0 * 64 + bi0;
     }
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH constexpr u32 Max() const noexcept
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr u32 Max()
+        const noexcept
     {
         u32 wi1 = static_cast<u32>(63 - std::countl_zero(bs2.words[0]));
         u32 bi1 = static_cast<u32>(63 - std::countl_zero(bs1.words[wi1]));
@@ -119,7 +120,8 @@ public:
         return wi0 * 64 + bi0;
     }
 
-    FORCE_INLINE HOT_PATH constexpr void Add(u32 value) noexcept
+    [[gnu::always_inline, gnu::hot]] inline constexpr void Add(
+        u32 value) noexcept
     {
         if (freq[value]++ == 0)
         {
@@ -134,7 +136,8 @@ public:
         }
     }
 
-    FORCE_INLINE HOT_PATH constexpr void Remove(u32 value) noexcept
+    [[gnu::always_inline, gnu::hot]] inline constexpr void Remove(
+        u32 value) noexcept
     {
         if (--freq[value] == 0)
         {
@@ -227,7 +230,7 @@ public:
         return min_sum;
     }
 
-    [[nodiscard]] FORCE_INLINE static i64 minimumDifference(
+    [[nodiscard, gnu::always_inline]] inline static i64 minimumDifference(
         std::vector<int>& nums) noexcept
     {
         return minimumDifference(reinterpret_range<const u32>(nums));
@@ -242,7 +245,7 @@ namespace two_branches
 class Lookup
 {
 public:
-    FORCE_INLINE constexpr void Clear() noexcept
+    [[gnu::always_inline]] inline constexpr void Clear() noexcept
     {
         std::ranges::fill(freq, 0);
         std::ranges::fill(bs0, 0);
@@ -250,7 +253,8 @@ public:
         bs2 = 0;
     }
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH constexpr u32 Min() const noexcept
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr u32 Min()
+        const noexcept
     {
         u32 wi1 = static_cast<u32>(std::countr_zero(bs2));
         u32 bi1 = static_cast<u32>(std::countr_zero(bs1[wi1]));
@@ -259,7 +263,8 @@ public:
         return wi0 * 64 + bi0;
     }
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH constexpr u32 Max() const noexcept
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr u32 Max()
+        const noexcept
     {
         u32 wi1 = static_cast<u32>(63 - std::countl_zero(bs2));
         u32 bi1 = static_cast<u32>(63 - std::countl_zero(bs1[wi1]));
@@ -268,7 +273,8 @@ public:
         return wi0 * 64 + bi0;
     }
 
-    FORCE_INLINE HOT_PATH constexpr void Add(u32 value) noexcept
+    [[gnu::always_inline, gnu::hot]] inline constexpr void Add(
+        u32 value) noexcept
     {
         if (freq[value]++ == 0)
         {
@@ -285,7 +291,8 @@ public:
         }
     }
 
-    FORCE_INLINE HOT_PATH constexpr void Remove(u32 value) noexcept
+    [[gnu::always_inline, gnu::hot]] inline constexpr void Remove(
+        u32 value) noexcept
     {
         if (--freq[value] == 0)
         {
@@ -378,7 +385,7 @@ public:
         return min_sum;
     }
 
-    [[nodiscard]] FORCE_INLINE static i64 minimumDifference(
+    [[nodiscard, gnu::always_inline]] inline static i64 minimumDifference(
         std::vector<int>& nums) noexcept
     {
         return minimumDifference(reinterpret_range<const u32>(nums));
@@ -393,7 +400,7 @@ namespace one_branch
 class Lookup
 {
 public:
-    FORCE_INLINE constexpr void Clear() noexcept
+    [[gnu::always_inline]] inline constexpr void Clear() noexcept
     {
         std::ranges::fill(freq, 0);
         std::ranges::fill(bs0, 0);
@@ -401,7 +408,8 @@ public:
         bs2 = 0;
     }
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH constexpr u32 Min() const noexcept
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr u32 Min()
+        const noexcept
     {
         u32 wi1 = static_cast<u32>(std::countr_zero(bs2));
         u32 bi1 = static_cast<u32>(std::countr_zero(bs1[wi1]));
@@ -410,7 +418,8 @@ public:
         return wi0 * 64 + bi0;
     }
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH constexpr u32 Max() const noexcept
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr u32 Max()
+        const noexcept
     {
         u32 wi1 = static_cast<u32>(63 - std::countl_zero(bs2));
         u32 bi1 = static_cast<u32>(63 - std::countl_zero(bs1[wi1]));
@@ -419,7 +428,8 @@ public:
         return wi0 * 64 + bi0;
     }
 
-    FORCE_INLINE HOT_PATH constexpr void Add(u32 value) noexcept
+    [[gnu::always_inline, gnu::hot]] inline constexpr void Add(
+        u32 value) noexcept
     {
         if (freq[value]++ == 0)
         {
@@ -431,7 +441,8 @@ public:
         }
     }
 
-    FORCE_INLINE HOT_PATH constexpr void Remove(u32 value) noexcept
+    [[gnu::always_inline, gnu::hot]] inline constexpr void Remove(
+        u32 value) noexcept
     {
         if (--freq[value] == 0)
         {
@@ -523,7 +534,7 @@ public:
         return min_sum;
     }
 
-    [[nodiscard]] FORCE_INLINE static i64 minimumDifference(
+    [[nodiscard, gnu::always_inline]] inline static i64 minimumDifference(
         std::vector<int>& nums) noexcept
     {
         return minimumDifference(reinterpret_range<const u32>(nums));
@@ -538,7 +549,7 @@ namespace branchless
 class Lookup
 {
 public:
-    FORCE_INLINE HOT_PATH constexpr void Clear() noexcept
+    [[gnu::always_inline, gnu::hot]] inline constexpr void Clear() noexcept
     {
         std::ranges::fill(freq, 0);
         std::ranges::fill(bs0, 0);
@@ -546,7 +557,8 @@ public:
         bs2 = 0;
     }
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH constexpr u32 Min() const noexcept
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr u32 Min()
+        const noexcept
     {
         u32 wi1 = static_cast<u32>(std::countr_zero(bs2));
         u32 bi1 = static_cast<u32>(std::countr_zero(bs1[wi1]));
@@ -555,7 +567,8 @@ public:
         return wi0 * 64 + bi0;
     }
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH constexpr u32 Max() const noexcept
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr u32 Max()
+        const noexcept
     {
         u32 wi1 = static_cast<u32>(63 - std::countl_zero(bs2));
         u32 bi1 = static_cast<u32>(63 - std::countl_zero(bs1[wi1]));
@@ -564,7 +577,8 @@ public:
         return wi0 * 64 + bi0;
     }
 
-    FORCE_INLINE HOT_PATH constexpr void Add(u32 value) noexcept
+    [[gnu::always_inline, gnu::hot]] inline constexpr void Add(
+        u32 value) noexcept
     {
         freq[value]++;
         const u32 wi0 = value / 64;
@@ -574,7 +588,8 @@ public:
         bs2 |= (u64{1} << (wi1 % 64));
     }
 
-    FORCE_INLINE HOT_PATH constexpr void Remove(u32 value) noexcept
+    [[gnu::always_inline, gnu::hot]] inline constexpr void Remove(
+        u32 value) noexcept
     {
         --freq[value];
         const u32 wi0 = value / 64;
@@ -664,7 +679,7 @@ public:
         return min_sum;
     }
 
-    [[nodiscard]] FORCE_INLINE static i64 minimumDifference(
+    [[nodiscard, gnu::always_inline]] inline static i64 minimumDifference(
         std::vector<int>& nums) noexcept
     {
         return minimumDifference(reinterpret_range<const u32>(nums));
@@ -679,7 +694,7 @@ namespace lazy_clear
 class Lookup
 {
 public:
-    FORCE_INLINE constexpr void Clear() noexcept
+    [[gnu::always_inline]] inline constexpr void Clear() noexcept
     {
         // std::ranges::fill(freq, 0);
         std::ranges::fill(bs0, 0);
@@ -687,7 +702,8 @@ public:
         bs2 = 0;
     }
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH constexpr u32 Min() const noexcept
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr u32 Min()
+        const noexcept
     {
         u32 wi1 = static_cast<u32>(std::countr_zero(bs2));
         u32 bi1 = static_cast<u32>(std::countr_zero(bs1[wi1]));
@@ -696,7 +712,8 @@ public:
         return wi0 * 64 + bi0;
     }
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH constexpr u32 Max() const noexcept
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr u32 Max()
+        const noexcept
     {
         u32 wi1 = static_cast<u32>(63 - std::countl_zero(bs2));
         u32 bi1 = static_cast<u32>(63 - std::countl_zero(bs1[wi1]));
@@ -705,7 +722,8 @@ public:
         return wi0 * 64 + bi0;
     }
 
-    FORCE_INLINE HOT_PATH constexpr void Add(u32 value) noexcept
+    [[gnu::always_inline, gnu::hot]] inline constexpr void Add(
+        u32 value) noexcept
     {
         const u32 wi0 = value / 64;
         u64& w0 = bs0[wi0];
@@ -716,7 +734,8 @@ public:
         bs2 |= (u64{1} << (wi1 % 64));
     }
 
-    FORCE_INLINE HOT_PATH constexpr void Remove(u32 value) noexcept
+    [[gnu::always_inline, gnu::hot]] inline constexpr void Remove(
+        u32 value) noexcept
     {
         if (--freq[value] == 0)
         {
@@ -809,7 +828,7 @@ public:
         return min_sum;
     }
 
-    [[nodiscard]] FORCE_INLINE static i64 minimumDifference(
+    [[nodiscard, gnu::always_inline]] inline static i64 minimumDifference(
         std::vector<int>& nums) noexcept
     {
         return minimumDifference(reinterpret_range<const u32>(nums));

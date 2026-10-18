@@ -9,9 +9,6 @@
 #include <unordered_set>
 #include <vector>
 
-#include "force_inline.hpp"
-#include "hot_path.hpp"
-
 class Solution
 {
 public:
@@ -28,14 +25,15 @@ public:
         return bs;
     }();
 
-    FORCE_INLINE HOT_PATH static constexpr bool is_vowel(u8 c) noexcept
+    [[gnu::always_inline, gnu::hot]] inline static constexpr bool is_vowel(
+        u8 c) noexcept
     {
         assert(c >= 64);
         return is_vowel_bitset & (uint64_t{1} << (c - 64));
     }
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH static constexpr u64 str_to_bstr(
-        const std::string& str) noexcept
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline static constexpr u64
+    str_to_bstr(const std::string& str) noexcept
     {
         u64 r = 0;
         u8 l = str.length() & 0xFF;
@@ -50,7 +48,7 @@ public:
         return r;
     }
 
-    FORCE_INLINE HOT_PATH static constexpr void bstr_to_str(
+    [[gnu::always_inline, gnu::hot]] inline static constexpr void bstr_to_str(
         u64 bstr,
         std::string& s)
     {
@@ -64,8 +62,8 @@ public:
         }
     }
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH static constexpr u64 to_lower(
-        const u64 bstr) noexcept
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline static constexpr u64
+    to_lower(const u64 bstr) noexcept
     {
         u64 r = 0;
 
@@ -79,8 +77,8 @@ public:
         return r;
     }
 
-    [[nodiscard]] FORCE_INLINE HOT_PATH static constexpr u64 remove_vowels(
-        const u64 bstr) noexcept
+    [[nodiscard, gnu::always_inline, gnu::hot]] inline static constexpr u64
+    remove_vowels(const u64 bstr) noexcept
     {
         u64 r = 0;
 
@@ -133,8 +131,9 @@ public:
                 result = l_it->second;
             }
 
-            else if (auto nv_it = no_vowels_lookup.find(remove_vowels(lowered));
-                     nv_it != no_vowels_lookup.end())
+            else if (
+                auto nv_it = no_vowels_lookup.find(remove_vowels(lowered));
+                nv_it != no_vowels_lookup.end())
             {
                 result = nv_it->second;
             }

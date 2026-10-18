@@ -4,12 +4,6 @@
 #include <ranges>
 #include <vector>
 
-
-
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
-
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
@@ -28,7 +22,7 @@ public:
     {
         const u8 h = g.size() & 0xFF, w = g[0].size() & 0xFF;
 
-        auto diagGetter = [&](u8 x, u8 y) INLINE_LAMBDA
+        auto diagGetter = [&] [[gnu::always_inline]] (u8 x, u8 y)
         {
             return [&, x, y](u8 i) -> int&
             {
@@ -36,7 +30,7 @@ public:
             };
         };
 
-        auto sortDiag = [&](u8 x, u8 y) INLINE_LAMBDA
+        auto sortDiag = [&] [[gnu::always_inline]] (u8 x, u8 y)
         {
             const u8 l = std::min<u8>(h - y, w - x);
             stdr::sort(

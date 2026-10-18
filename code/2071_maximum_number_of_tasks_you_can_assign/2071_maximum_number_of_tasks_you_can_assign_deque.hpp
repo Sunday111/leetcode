@@ -8,16 +8,19 @@
 #include "radix_sorter.hpp"
 
 template <typename To>
-[[nodiscard]] FORCE_INLINE static constexpr To to(auto v) noexcept
+[[nodiscard, gnu::always_inline]] inline static constexpr To to(auto v) noexcept
 {
     return static_cast<To>(v);
 }
 
 struct NoPrefixSumCheck
 {
-    FORCE_INLINE constexpr static void InitPrefixSumCheck(auto&&...) {}
-    [[nodiscard]] FORCE_INLINE static constexpr bool CheckPrefixSum(
-        auto&&...) noexcept
+    [[gnu::always_inline]] inline constexpr static void InitPrefixSumCheck(
+        auto&&...)
+    {
+    }
+    [[nodiscard, gnu::always_inline]] inline static constexpr bool
+    CheckPrefixSum(auto&&...) noexcept
     {
         return true;
     }
@@ -25,7 +28,7 @@ struct NoPrefixSumCheck
 
 struct PrefixSumCheck
 {
-    FORCE_INLINE static void InitPrefixSumCheck(
+    [[gnu::always_inline]] inline static void InitPrefixSumCheck(
         std::vector<int>& tasks,
         std::vector<int>& workers) noexcept
     {
@@ -41,7 +44,8 @@ struct PrefixSumCheck
             ws.begin());
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr bool CheckPrefixSum(
+    [[nodiscard, gnu::always_inline]] inline static constexpr bool
+    CheckPrefixSum(
         u32 num_tasks,
         u32 num_workers,
         u32 pills,

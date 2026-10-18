@@ -7,8 +7,6 @@
 #include <utility>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-
 using u32 = uint32_t;
 using u64 = uint64_t;
 
@@ -30,15 +28,19 @@ struct ScopedArena
 template <size_t num_bytes>
 struct GlobalBufferStorage
 {
-    FORCE_INLINE static GlobalBufferStorage& Instance() noexcept
+    [[gnu::always_inline]] inline static GlobalBufferStorage&
+    Instance() noexcept
     {
         static GlobalBufferStorage inst;
         return inst;
     }
 
-    FORCE_INLINE void Reset() noexcept { allocator_offset_ = 0; }
+    [[gnu::always_inline]] inline void Reset() noexcept
+    {
+        allocator_offset_ = 0;
+    }
 
-    [[nodiscard]] FORCE_INLINE ScopedArena StartArena() noexcept
+    [[nodiscard, gnu::always_inline]] inline ScopedArena StartArena() noexcept
     {
         return {allocator_offset_, &allocator_offset_};
     }
@@ -55,12 +57,12 @@ struct BumpAllocator
     BumpAllocator() = default;
 
     template <class U>
-    FORCE_INLINE explicit constexpr BumpAllocator(
+    [[gnu::always_inline]] inline explicit constexpr BumpAllocator(
         const BumpAllocator<U, S>&) noexcept
     {
     }
 
-    [[nodiscard]] FORCE_INLINE T* allocate(std::size_t n) noexcept
+    [[nodiscard, gnu::always_inline]] inline T* allocate(std::size_t n) noexcept
     {
         auto& inst = S::Instance();
 
@@ -87,14 +89,16 @@ struct BumpAllocator
         return static_cast<T*>(p);
     }
 
-    FORCE_INLINE void deallocate(T*, std::size_t) noexcept {}
+    [[gnu::always_inline]] inline void deallocate(T*, std::size_t) noexcept {}
 
     // equality so containers can compare allocators
-    FORCE_INLINE constexpr bool operator==(const BumpAllocator&) const noexcept
+    [[gnu::always_inline]] inline constexpr bool operator==(
+        const BumpAllocator&) const noexcept
     {
         return true;
     }
-    FORCE_INLINE constexpr bool operator!=(const BumpAllocator&) const noexcept
+    [[gnu::always_inline]] inline constexpr bool operator!=(
+        const BumpAllocator&) const noexcept
     {
         return false;
     }
@@ -106,7 +110,8 @@ class Solution
 {
 public:
     template <typename To>
-    [[nodiscard]] FORCE_INLINE static constexpr To to(auto v) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr To to(
+        auto v) noexcept
     {
         return static_cast<To>(v);
     }

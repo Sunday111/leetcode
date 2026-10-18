@@ -3,11 +3,10 @@
 #include <span>
 #include <vector>
 
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
 template <typename T>
-FORCE_INLINE constexpr void acc_max(T& acc, T val) noexcept
+[[gnu::always_inline]] inline constexpr void acc_max(T& acc, T val) noexcept
 {
     acc = std::max(acc, val);
 }
@@ -41,13 +40,15 @@ public:
         std::copy_n(merged, b1, dst);
     }
 
-    FORCE_INLINE std::pair<int*, int*> get_node_profits(u8 node_id) noexcept
+    [[gnu::always_inline]] inline std::pair<int*, int*> get_node_profits(
+        u8 node_id) noexcept
     {
         auto base = nodes_profits_buf.data() + u32{b1} * u32{node_id} * 2;
         return {base, base + b1};
     }
 
-    FORCE_INLINE std::pair<u8*, u8*> children(u8 node_id) noexcept
+    [[gnu::always_inline]] inline std::pair<u8*, u8*> children(
+        u8 node_id) noexcept
     {
         u8* begin = links.data() + node_offset[node_id];
         return {begin, begin + node_deg[node_id]};

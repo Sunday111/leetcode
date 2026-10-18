@@ -2,9 +2,6 @@
 #include <utility>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
@@ -25,13 +22,15 @@ public:
         T parent;
     };
 
-    FORCE_INLINE constexpr UnionFind(Node* buffer, T size) noexcept
+    [[gnu::always_inline]] inline constexpr UnionFind(
+        Node* buffer,
+        T size) noexcept
         : nodes(buffer)
     {
         for (T x = 0; x != size; ++x) nodes[x] = {.size = 1, .parent = x};
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr T find(T x) noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr T find(T x) noexcept
     {
         // Path halving
         while (nodes[x].parent != x)
@@ -42,7 +41,7 @@ public:
         return x;
     }
 
-    FORCE_INLINE constexpr void merge(T x, T y) noexcept
+    [[gnu::always_inline]] inline constexpr void merge(T x, T y) noexcept
     {
         // Union by size
         x = find(x);
@@ -62,14 +61,14 @@ public:
 class Solution
 {
 public:
-    [[nodiscard]] FORCE_INLINE bool bitset_contains(
+    [[nodiscard, gnu::always_inline]] inline bool bitset_contains(
         const u64* bitset,
         u16 i) noexcept
     {
         return bitset[i >> 6] & (1ul << (i & 63));
     }
 
-    FORCE_INLINE void bitset_add(u64* bitset, u16 i) noexcept
+    [[gnu::always_inline]] inline void bitset_add(u64* bitset, u16 i) noexcept
     {
         bitset[i >> 6] |= (1ul << (i & 63));
     }

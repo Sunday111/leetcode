@@ -35,9 +35,6 @@ inline static constexpr auto cast =
     return static_cast<To>(std::forward<From>(v));
 };
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
 template <typename B, typename F>
 [[gnu::always_inline]] constexpr void pbs_for_each_layer(F&& f) noexcept
 {
@@ -259,7 +256,7 @@ public:
         static TreeNode nodes[100001];
         PyramidBitset<100001> initialized, roots;
 
-        auto get_node = [&](u32 id) INLINE_LAMBDA -> TreeNode&
+        auto get_node = [&] [[gnu::always_inline]] (u32 id) -> TreeNode&
         {
             auto& x = nodes[id];
             if (!pbs_get(initialized, id))

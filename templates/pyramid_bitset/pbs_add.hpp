@@ -1,5 +1,6 @@
 #pragma once
 
+#include "cast.hpp"
 #include "pyramid_bitset/pbs_layers.hpp"
 #include "pyramid_bitset/pyramid_bitset.hpp"  // IWYU pragma: export
 
@@ -46,7 +47,7 @@ template <size_t capacity, typename Word>
         {
             typename B::ValueType wi = v >> B::kShift;
             auto& word = bits.words[B::offsets[layer] + wi];
-            Word m = Word{1} << (v & B::kMask);
+            Word m = cast<Word>(Word{1} << (v & B::kMask));
             if constexpr (layer == 0)
             {
                 added = (word & m) == 0;

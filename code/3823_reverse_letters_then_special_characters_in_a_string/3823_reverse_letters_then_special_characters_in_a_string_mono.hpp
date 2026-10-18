@@ -2,16 +2,9 @@
 #include <concepts>
 #include <string>
 
-
-
-
-
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
 // Swaps a and b if condition is true. Only for integers. Branchless
 template <std::integral Int>
-FORCE_INLINE static constexpr void
+[[gnu::always_inline]] inline static constexpr void
 swap_if(bool condition, Int& a, Int& b) noexcept
 {
     Int mask = static_cast<Int>(static_cast<Int>(a ^ b) & -Int{condition});

@@ -2,7 +2,6 @@
 #include <string>
 #include <vector>
 
-#include "force_inline.hpp"
 #include "int_if.hpp"
 #include "integral_aliases.hpp"
 
@@ -11,7 +10,7 @@ struct State
     u32 chars = 0;
     u16 partitions = 0;
 
-    FORCE_INLINE constexpr void add_char(char c, u8 k) noexcept
+    [[gnu::always_inline]] inline constexpr void add_char(char c, u8 k) noexcept
     {
         u32 m = 1u << ((c - 'a') & 0x1F);
         u32 new_chars = chars | m;

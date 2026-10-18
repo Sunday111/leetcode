@@ -2,20 +2,21 @@
 #include <numeric>
 #include <vector>
 
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
 class Solution
 {
 public:
-    [[nodiscard]] static FORCE_INLINE int gcd_abs(int a, int b) noexcept
+    [[nodiscard, gnu::always_inline]] static inline int gcd_abs(
+        int a,
+        int b) noexcept
     {
         if (a == 0) return std::abs(b);
         if (b == 0) return std::abs(a);
         return std::gcd(abs(a), abs(b));
     }
 
-    [[nodiscard]] FORCE_INLINE static constexpr auto comb_2(
+    [[nodiscard, gnu::always_inline]] inline static constexpr auto comb_2(
         std::integral auto n) noexcept
     {
         return (n * (n - 1)) / 2;

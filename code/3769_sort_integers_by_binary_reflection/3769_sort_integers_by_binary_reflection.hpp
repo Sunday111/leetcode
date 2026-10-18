@@ -6,12 +6,13 @@
 class Solution
 {
 public:
-    FORCE_INLINE static constexpr u32 reverse(u32 x) noexcept
+    [[gnu::always_inline]] inline static constexpr u32 reverse(u32 x) noexcept
     {
         return reverse32(x) >> std::countl_zero(x);
     }
 
-    FORCE_INLINE static constexpr std::pair<u32, int> proj(int x) noexcept
+    [[gnu::always_inline]] inline static constexpr std::pair<u32, int> proj(
+        int x) noexcept
     {
         return {reverse(std::bit_cast<u32>(x)), x};
     }

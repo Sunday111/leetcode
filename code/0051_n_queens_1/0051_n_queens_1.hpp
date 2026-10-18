@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 
-#include "force_inline.hpp"
 #include "integral_aliases.hpp"
 
 template <u8 n>
@@ -60,7 +59,8 @@ class Solution
 {
 public:
     template <u8 n>
-    [[nodiscard]] FORCE_INLINE static constexpr auto solve() noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr auto
+    solve() noexcept
     {
         SolutionT<n> s{};
         s.solve();

@@ -5,11 +5,9 @@
 #include <utility>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
 template <typename To>
-inline static constexpr auto cast = []<typename From>(From&& v) INLINE_LAMBDA
+inline static constexpr auto cast =
+    []<typename From> [[gnu::always_inline]] (From&& v)
 {
     return static_cast<To>(std::forward<From>(v));
 };

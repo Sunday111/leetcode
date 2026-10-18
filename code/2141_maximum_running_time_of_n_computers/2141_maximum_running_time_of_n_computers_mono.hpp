@@ -7,12 +7,9 @@
 #include <utility>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
 // Find an iterator to the first
 template <typename Range, typename Proj>
-[[nodiscard]] FORCE_INLINE constexpr auto bisectFirstFalse(
+[[nodiscard, gnu::always_inline]] inline constexpr auto bisectFirstFalse(
     Range&& range,
     Proj&& proj) noexcept
 {
@@ -24,7 +21,7 @@ template <typename Range, typename Proj>
 }
 
 template <typename Range, typename Proj>
-[[nodiscard]] FORCE_INLINE constexpr auto bisectLastTrue(
+[[nodiscard, gnu::always_inline]] inline constexpr auto bisectLastTrue(
     Range&& range,
     Proj&& proj) noexcept
 {
@@ -45,19 +42,18 @@ using i32 = int32_t;
 using i64 = int64_t;
 
 template <typename To>
-inline static constexpr auto cast = []<typename From>(From&& v) INLINE_LAMBDA
+inline static constexpr auto cast =
+    []<typename From> [[gnu::always_inline]] (From&& v)
 {
     return static_cast<To>(std::forward<From>(v));
 };
-
-#define HOT_PATH __attribute__((hot))
 
 #define NO_SANITIZERS \
     __attribute__((no_sanitize("undefined", "address", "coverage", "thread")))
 
 template <typename To, typename From, std::size_t extent = std::dynamic_extent>
     requires(sizeof(To) == sizeof(From))
-[[nodiscard]] FORCE_INLINE static auto reinterpret_range(
+[[nodiscard, gnu::always_inline]] inline static auto reinterpret_range(
     std::span<From, extent> in) noexcept
 {
     return std::span<To, extent>{
@@ -67,7 +63,7 @@ template <typename To, typename From, std::size_t extent = std::dynamic_extent>
 
 template <typename To, typename From, typename Allocator>
     requires(sizeof(To) == sizeof(From))
-[[nodiscard]] FORCE_INLINE static std::span<To> reinterpret_range(
+[[nodiscard, gnu::always_inline]] inline static std::span<To> reinterpret_range(
     std::vector<From, Allocator>& v) noexcept
 {
     return reinterpret_range<To>(std::span{v});
@@ -100,8 +96,8 @@ class RadixSorter
     inline static std::array<UT, 100'001> temp;
 
     template <u8 pass_index>
-    FORCE_INLINE static void do_pass(std::span<UT> arr) noexcept
-        NO_SANITIZERS HOT_PATH
+    [[gnu::always_inline, gnu::hot]] inline static void do_pass(
+        std::span<UT> arr) noexcept NO_SANITIZERS
     {
         count.fill(0);
         constexpr UT shift = pass_index * bits_per_pass;
@@ -169,17 +165,16 @@ class RadixSorter
 
     // Invokes do_pass for each pass_index.
     template <u8... pass_index>
-    FORCE_INLINE static void do_passes(
+    [[gnu::always_inline, gnu::hot]] inline static void do_passes(
         std::span<UT> arr,
-        std::integer_sequence<u8, pass_index...>) noexcept
-        NO_SANITIZERS HOT_PATH
+        std::integer_sequence<u8, pass_index...>) noexcept NO_SANITIZERS
     {
         (do_pass<pass_index>(arr), ...);
     }
 
 public:
-    FORCE_INLINE static void sort(std::span<T> arr) noexcept
-        NO_SANITIZERS HOT_PATH
+    [[gnu::always_inline, gnu::hot]] inline static void sort(
+        std::span<T> arr) noexcept NO_SANITIZERS
     {
         if (arr.size()) do_passes(reinterpret_range<UT>(arr), pass_idx_seq);
     }
@@ -190,7 +185,8 @@ template <
     u32 num_passes = 0xFFFFFFFF,
     SortOrder order = SortOrder::Ascending,
     std::integral T>
-FORCE_INLINE void radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
+[[gnu::always_inline]] inline void radix_sort(std::span<T> arr) noexcept
+    NO_SANITIZERS
 {
     constexpr u32 np =
         num_passes == 0xFFFFFFFF
@@ -204,7 +200,8 @@ template <
     u32 num_passes = 0xFFFFFFFF,
     SortOrder order = SortOrder::Ascending,
     std::integral T>
-FORCE_INLINE void stable_radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
+[[gnu::always_inline]] inline void stable_radix_sort(std::span<T> arr) noexcept
+    NO_SANITIZERS
 {
     constexpr u32 np =
         num_passes == 0xFFFFFFFF
@@ -214,9 +211,9 @@ FORCE_INLINE void stable_radix_sort(std::span<T> arr) noexcept NO_SANITIZERS
 }
 
 inline static constexpr auto sum =
-    []<typename Range>(
+    []<typename Range> [[gnu::always_inline]] (
         Range&& range,
-        auto init = std::ranges::range_value_t<Range>{}) INLINE_LAMBDA
+        auto init = std::ranges::range_value_t<Range>{})
 {
     for (auto&& v : std::forward<Range>(range))
     {

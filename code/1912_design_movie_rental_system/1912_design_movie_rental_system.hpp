@@ -14,8 +14,6 @@ using PriceAndShop = std::pair<Price, ShopID>;
 using ShopAndPrice = std::pair<ShopID, Price>;
 using PriceShopMovie = std::tuple<Price, ShopID, MovieID>;
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-
 inline constexpr auto toInt = [](std::integral auto v)
 {
     return static_cast<int>(v);
@@ -32,7 +30,8 @@ inline static auto nodesPool =  // NOLINT
 }();
 
 template <typename T>
-[[nodiscard]] FORCE_INLINE constexpr auto takeLast(T& arr) noexcept
+[[nodiscard, gnu::always_inline]] inline constexpr auto takeLast(
+    T& arr) noexcept
 {
     auto r = std::move(arr.back());
     arr.pop_back();
@@ -40,7 +39,9 @@ template <typename T>
 }
 
 template <typename T, typename... Args>
-FORCE_INLINE constexpr void setEmplace(std::set<T>& s, Args&&... args) noexcept
+[[gnu::always_inline]] inline constexpr void setEmplace(
+    std::set<T>& s,
+    Args&&... args) noexcept
 {
     if (nodesPool<T>.empty())
     {
@@ -55,7 +56,9 @@ FORCE_INLINE constexpr void setEmplace(std::set<T>& s, Args&&... args) noexcept
 }
 
 template <typename T>
-FORCE_INLINE constexpr void setErase(std::set<T>& s, const T& value) noexcept
+[[gnu::always_inline]] inline constexpr void setErase(
+    std::set<T>& s,
+    const T& value) noexcept
 {
     nodesPool<T>.emplace_back(s.extract(value));
 }
@@ -67,13 +70,15 @@ struct MovieInfo
     std::unordered_map<ShopID, Price> shopsAndPrices;
     std::unordered_map<ShopID, Price> rentedShopsAndPrices;
 
-    FORCE_INLINE constexpr void add(ShopID shop, Price price) noexcept
+    [[gnu::always_inline]] inline constexpr void add(
+        ShopID shop,
+        Price price) noexcept
     {
         setEmplace(pricesAndShops, price, shop);
         shopsAndPrices.emplace(shop, price);
     }
 
-    FORCE_INLINE constexpr Price rent(u32 shop) noexcept
+    [[gnu::always_inline]] inline constexpr Price rent(u32 shop) noexcept
     {
         auto it = shopsAndPrices.find(shop);
         auto price = it->second;
@@ -83,7 +88,7 @@ struct MovieInfo
         return price;
     }
 
-    FORCE_INLINE constexpr Price returnCopy(u32 shop) noexcept
+    [[gnu::always_inline]] inline constexpr Price returnCopy(u32 shop) noexcept
     {
         auto it = rentedShopsAndPrices.find(shop);
         auto price = it->second;
@@ -93,7 +98,8 @@ struct MovieInfo
         return price;
     }
 
-    FORCE_INLINE constexpr std::vector<int> top_cheapest() const noexcept
+    [[gnu::always_inline]] inline constexpr std::vector<int> top_cheapest()
+        const noexcept
     {
         return std::ranges::to<std::vector>(
             pricesAndShops | std::views::take(5) |

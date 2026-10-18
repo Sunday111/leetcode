@@ -4,11 +4,10 @@
 #include <string_view>
 #include <vector>
 
-#include "force_inline.hpp"
 #include "scan.hpp"
 
 template <typename T, typename Options = DefaultScannerOptions>
-[[nodiscard]] FORCE_INLINE constexpr T parse_from_string(
+[[nodiscard, gnu::always_inline]] inline constexpr T parse_from_string(
     std::string_view s,
     const Options& opts = Options{})
 {
@@ -26,8 +25,8 @@ template <typename T, typename Options = DefaultScannerOptions>
     return r;
 }
 
-[[nodiscard]] FORCE_INLINE constexpr std::vector<std::vector<int>> parse2DArray(
-    std::string_view s)
+[[nodiscard, gnu::always_inline]] inline constexpr std::vector<std::vector<int>>
+parse2DArray(std::string_view s)
 {
     return parse_from_string<std::vector<std::vector<int>>>(s);
 }

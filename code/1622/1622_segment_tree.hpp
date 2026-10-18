@@ -9,31 +9,32 @@ struct Interval
     u32 begin = 0;
     u32 end = 0;
 
-    [[nodiscard]] FORCE_INLINE constexpr u32 size() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u32 size() const noexcept
     {
         return end - begin;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr u32 mid() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr u32 mid() const noexcept
     {
         u32 mid = begin + size() / 2;
         return mid;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr std::pair<Interval, Interval> split()
-        const noexcept
+    [[nodiscard,
+      gnu::always_inline]] inline constexpr std::pair<Interval, Interval>
+    split() const noexcept
     {
         u32 m = mid();
         return {{.begin = begin, .end = m}, {.begin = m, .end = end}};
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr bool contains(
+    [[nodiscard, gnu::always_inline]] inline constexpr bool contains(
         const Interval& interval) const noexcept
     {
         return begin <= interval.begin && end >= interval.end;
     }
 
-    [[nodiscard]] FORCE_INLINE constexpr bool disjoint(
+    [[nodiscard, gnu::always_inline]] inline constexpr bool disjoint(
         const Interval& interval) const noexcept
     {
         return end <= interval.begin || begin >= interval.end;
@@ -64,7 +65,7 @@ public:
         std::ranges::fill(nodes, Node{{1}, {0}});
     }
 
-    FORCE_INLINE static constexpr void
+    [[gnu::always_inline]] inline static constexpr void
     node_mul_add(Node& node, ModInt m, ModInt a)
     {
         // node.mul * (x * m + a) + node.add
@@ -73,18 +74,22 @@ public:
         node.mul *= m;
     }
 
-    FORCE_INLINE static constexpr void node_mul(Node& node, ModInt m)
+    [[gnu::always_inline]] inline static constexpr void node_mul(
+        Node& node,
+        ModInt m)
     {
         node.add *= m;
         node.mul *= m;
     }
 
-    FORCE_INLINE static constexpr void node_add(Node& node, ModInt a)
+    [[gnu::always_inline]] inline static constexpr void node_add(
+        Node& node,
+        ModInt a)
     {
         node.add = node.add + a;
     }
 
-    FORCE_INLINE constexpr void push(
+    [[gnu::always_inline]] inline constexpr void push(
         u32 node_id,
         Interval node_interval) noexcept
     {
@@ -106,7 +111,7 @@ public:
         }
     }
 
-    FORCE_INLINE constexpr void update(
+    [[gnu::always_inline]] inline constexpr void update(
         Interval change_interval,
         Interval node_interval,
         u32 node_id,
@@ -135,13 +140,13 @@ public:
         update(change_interval, r, right_node_id, mul, add);
     }
 
-    FORCE_INLINE constexpr void
+    [[gnu::always_inline]] inline constexpr void
     update(Interval change_interval, ModInt mul, ModInt add) noexcept
     {
         update(change_interval, all, 1, mul, add);
     }
 
-    FORCE_INLINE constexpr void update_mul(
+    [[gnu::always_inline]] inline constexpr void update_mul(
         Interval change_interval,
         Interval node_interval,
         u32 node_id,
@@ -169,14 +174,14 @@ public:
         update_mul(change_interval, r, right_node_id, mul);
     }
 
-    FORCE_INLINE constexpr void update_mul(
+    [[gnu::always_inline]] inline constexpr void update_mul(
         Interval change_interval,
         ModInt mul) noexcept
     {
         update_mul(change_interval, all, 1, mul);
     }
 
-    FORCE_INLINE constexpr void update_add(
+    [[gnu::always_inline]] inline constexpr void update_add(
         Interval change_interval,
         Interval node_interval,
         u32 node_id,
@@ -204,7 +209,7 @@ public:
         update_add(change_interval, r, right_node_id, add);
     }
 
-    FORCE_INLINE constexpr void update_add(
+    [[gnu::always_inline]] inline constexpr void update_add(
         Interval change_interval,
         ModInt add) noexcept
     {

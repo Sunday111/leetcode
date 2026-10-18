@@ -1,11 +1,6 @@
 #include <span>
 #include <vector>
 
-
-
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
 class Solution
 {
     [[nodiscard]] std::vector<std::vector<int>> impl(
@@ -21,8 +16,8 @@ class Solution
     }
 
 public:
-    [[nodiscard]] FORCE_INLINE std::vector<std::vector<int>> subsets(
-        std::vector<int>& nums) noexcept
+    [[nodiscard, gnu::always_inline]] inline std::vector<std::vector<int>>
+    subsets(std::vector<int>& nums) noexcept
     {
         return impl(std::span{nums});
     }

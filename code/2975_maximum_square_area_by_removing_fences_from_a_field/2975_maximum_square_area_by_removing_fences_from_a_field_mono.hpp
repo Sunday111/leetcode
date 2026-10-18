@@ -3,9 +3,6 @@
 #include <unordered_set>
 #include <vector>
 
-#define FORCE_INLINE inline __attribute__((always_inline))
-#define INLINE_LAMBDA __attribute__((always_inline))
-
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
@@ -20,7 +17,7 @@ class Solution
 {
 public:
     template <typename F>
-    FORCE_INLINE static constexpr void gen_sides(
+    [[gnu::always_inline]] inline static constexpr void gen_sides(
         std::vector<u32>& fences,
         F f) noexcept
     {
@@ -38,7 +35,7 @@ public:
         }
     }
 
-    FORCE_INLINE static int maximizeSquareArea(
+    [[gnu::always_inline]] inline static int maximizeSquareArea(
         std::vector<u32>& x_fences,
         std::vector<u32>& y_fences) noexcept
     {

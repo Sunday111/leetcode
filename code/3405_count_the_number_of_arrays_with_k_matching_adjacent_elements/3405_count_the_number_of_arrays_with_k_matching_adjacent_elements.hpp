@@ -3,12 +3,6 @@
 #include <array>
 #include <bitset>
 
-#ifdef __GNUC__
-#define ATTR inline __attribute__((always_inline))
-#else
-#define ATTR inline
-#endif
-
 using u8 = uint8_t;
 using u32 = uint32_t;
 using u64 = uint64_t;
@@ -16,21 +10,24 @@ static constexpr int kMOD = 1'000'000'007;
 
 struct ModInt
 {
-    ATTR constexpr ModInt& operator+=(const ModInt& rhs) noexcept
+    [[gnu::always_inline]] inline constexpr ModInt& operator+=(
+        const ModInt& rhs) noexcept
     {
         value += rhs.value;
         if (value >= kMOD) value -= kMOD;
         return *this;
     }
 
-    [[nodiscard]] ATTR constexpr ModInt operator+(const ModInt& rhs) noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr ModInt operator+(
+        const ModInt& rhs) noexcept
     {
         auto copy = *this;
         copy += rhs;
         return copy;
     }
 
-    ATTR constexpr ModInt& operator*=(const ModInt& rhs) noexcept
+    [[gnu::always_inline]] inline constexpr ModInt& operator*=(
+        const ModInt& rhs) noexcept
     {
         u64 v = rhs.value;
         v *= value;
@@ -39,7 +36,7 @@ struct ModInt
         return *this;
     }
 
-    [[nodiscard]] ATTR constexpr ModInt operator*(
+    [[nodiscard, gnu::always_inline]] inline constexpr ModInt operator*(
         const ModInt& rhs) const noexcept
     {
         auto copy = *this;
@@ -47,7 +44,8 @@ struct ModInt
         return copy;
     }
 
-    [[nodiscard]] ATTR constexpr ModInt inverse() const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr ModInt inverse()
+        const noexcept
     {
         auto a = value;
         u32 x0 = 1, x1 = 0, mod = kMOD;
@@ -64,12 +62,13 @@ struct ModInt
         return {(x1 + kMOD) % kMOD};
     }
 
-    ATTR constexpr ModInt& operator/=(const ModInt& rhs) noexcept
+    [[gnu::always_inline]] inline constexpr ModInt& operator/=(
+        const ModInt& rhs) noexcept
     {
         return *this *= rhs.inverse();
     }
 
-    [[nodiscard]] ATTR constexpr ModInt operator/(
+    [[nodiscard, gnu::always_inline]] inline constexpr ModInt operator/(
         const ModInt& rhs) const noexcept
     {
         auto copy = *this;
@@ -77,7 +76,8 @@ struct ModInt
         return copy;
     }
 
-    [[nodiscard]] ATTR constexpr ModInt pow(u32 exp) const noexcept
+    [[nodiscard, gnu::always_inline]] inline constexpr ModInt pow(
+        u32 exp) const noexcept
     {
         if (exp == 0) return {1};
         std::bitset<32> bits(exp);
@@ -113,9 +113,8 @@ public:
         return fact;
     }();
 
-    [[nodiscard]] ATTR static constexpr ModInt combinationsCount(
-        u32 n,
-        u32 k) noexcept
+    [[nodiscard, gnu::always_inline]] inline static constexpr ModInt
+    combinationsCount(u32 n, u32 k) noexcept
     {
         auto r = kFactorials[n];
         r /= kFactorials[k];
@@ -123,7 +122,7 @@ public:
         return r;
     }
 
-    [[nodiscard]] ATTR static constexpr u32
+    [[nodiscard, gnu::always_inline]] inline static constexpr u32
     countGoodArrays(u32 n, u32 m, u32 k) noexcept
     {
         return (ModInt{m} * ModInt{m - 1}.pow(n - k - 1) *
