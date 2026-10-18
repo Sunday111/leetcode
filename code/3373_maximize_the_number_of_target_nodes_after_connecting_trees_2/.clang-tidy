@@ -3,6 +3,7 @@ google-*,\
 performance-*,\
 portability-*,\
 cert-*,\
+-cert-dcl03-c,\
 clang-analyzer-*,\
 cppcoreguidelines-*,\
 modernize-*\
