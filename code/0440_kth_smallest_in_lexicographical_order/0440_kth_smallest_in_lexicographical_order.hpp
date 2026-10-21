@@ -2,6 +2,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
+#include <utility>
 
 class Solution
 {

@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cstdint>
 #include <functional>
 #include <ranges>
 #include <utility>

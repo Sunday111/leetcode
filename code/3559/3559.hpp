@@ -1,9 +1,10 @@
+#include <algorithm>
 #include "integral_aliases.hpp"
 #include "int_if.hpp"
 
-#include <vector>
-#include <ranges>
 #include <bit>
+#include <ranges>
+#include <vector>
 
 struct Node
 {

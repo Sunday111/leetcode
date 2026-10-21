@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <vector>
 
 #include "sync_stdio.hpp"

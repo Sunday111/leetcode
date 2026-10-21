@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <cstdint>
 #include <string_view>
 
 inline static constexpr int kMOD = 1'000'000'007;

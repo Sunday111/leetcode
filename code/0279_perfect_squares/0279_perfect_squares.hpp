@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <bitset>
+#include <cstdint>
 #include <span>
 
 template <typename value_type, auto generator>

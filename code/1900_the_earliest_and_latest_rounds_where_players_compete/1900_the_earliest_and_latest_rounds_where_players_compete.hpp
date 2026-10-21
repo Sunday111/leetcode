@@ -1,8 +1,10 @@
 #pragma once
 
 #include <algorithm>
+#include <array>
 #include <bit>
 #include <cassert>
+#include <cstdint>
 #include <vector>
 
 using u8 = uint8_t;

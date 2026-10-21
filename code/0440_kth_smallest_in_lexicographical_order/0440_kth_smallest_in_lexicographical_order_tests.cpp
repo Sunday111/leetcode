@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <print>
 
 #include "0440_kth_smallest_in_lexicographical_order.hpp"
 #include "gtest/gtest.h"

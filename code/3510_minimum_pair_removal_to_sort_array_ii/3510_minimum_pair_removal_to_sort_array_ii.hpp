@@ -1,5 +1,6 @@
 #include <bitset>
 #include <set>
+#include <utility>
 #include <vector>
 
 #include "bump_set.hpp"

@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cstdint>
 #include <string>
 
 #include "lc_tree_node.hpp"

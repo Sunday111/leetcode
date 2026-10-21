@@ -1,3 +1,5 @@
+#include <print>
+
 #include "0166_fraction_to_recurring_decimal.hpp"
 #include "gtest/gtest.h"
 

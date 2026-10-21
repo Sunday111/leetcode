@@ -1,4 +1,6 @@
+#include <cstdint>
 #include <string_view>
+#include <utility>
 
 #include "int_if.hpp"
 #include "no_sanitizers.hpp"

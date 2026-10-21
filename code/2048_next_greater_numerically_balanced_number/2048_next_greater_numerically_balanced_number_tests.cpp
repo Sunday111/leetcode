@@ -1,4 +1,5 @@
 // #include "2048_next_greater_numerically_balanced_number.hpp"
+#include <print>
 #include "gtest/gtest.h"
 #include "integral_aliases.hpp"
 

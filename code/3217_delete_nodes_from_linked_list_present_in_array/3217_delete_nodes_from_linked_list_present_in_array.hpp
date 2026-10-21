@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <vector>
 
 #include "force_inline.hpp"

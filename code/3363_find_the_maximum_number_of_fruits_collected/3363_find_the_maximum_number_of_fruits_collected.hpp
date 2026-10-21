@@ -1,3 +1,5 @@
+#include <cstdint>
+#include <utility>
 #include <vector>
 
 class Solution

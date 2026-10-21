@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <array>
+#include <cstdint>
 #include <force_inline.hpp>
 #include <string>
 #include <string_view>

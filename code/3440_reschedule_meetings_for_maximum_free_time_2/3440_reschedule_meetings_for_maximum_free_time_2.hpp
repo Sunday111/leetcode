@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <cstdint>
 #include <vector>
 
 #define HOT_PATH __attribute__((hot))

@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <cstdint>
+#include <utility>
 #include <vector>
 
 using u32 = uint32_t;

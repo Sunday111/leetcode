@@ -1,3 +1,4 @@
+#include <print>
 #include "0417_pacific_atlantic_water_flow.hpp"
 #include "gtest/gtest.h"
 #include "parse_2d_array.hpp"

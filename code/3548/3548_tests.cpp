@@ -1,3 +1,4 @@
+#include <print>
 #include "3548_test_cases.hpp"
 #include "gtest/gtest.h"
 

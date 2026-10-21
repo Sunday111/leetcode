@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cstdint>
 #include <vector>
 
 #include "int_if.hpp"

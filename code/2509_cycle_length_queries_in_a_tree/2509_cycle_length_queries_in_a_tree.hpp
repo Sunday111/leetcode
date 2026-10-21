@@ -1,6 +1,7 @@
 #pragma once
 
 #include <bit>
+#include <cstdint>
 #include <vector>
 
 // 32 - countl_zero(node value) -> branch length

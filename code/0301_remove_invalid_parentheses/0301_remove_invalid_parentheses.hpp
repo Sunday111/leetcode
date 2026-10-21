@@ -3,6 +3,7 @@
 #include <bit>
 #include <bitset>
 #include <cassert>
+#include <cstdint>
 #include <ranges>
 #include <string>
 #include <string_view>

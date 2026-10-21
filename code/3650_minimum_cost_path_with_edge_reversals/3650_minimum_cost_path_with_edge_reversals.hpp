@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cstdint>
 #include <vector>
 
 using u16 = uint16_t;

@@ -1,4 +1,5 @@
 #include <cctype>
+#include <cstdint>
 #include <string>
 
 #include "swap_if.hpp"

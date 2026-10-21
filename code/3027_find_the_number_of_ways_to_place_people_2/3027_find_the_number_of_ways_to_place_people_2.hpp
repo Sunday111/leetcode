@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cstdint>
 #include <vector>
 
 #define FORCE_INLINE inline __attribute__((always_inline))

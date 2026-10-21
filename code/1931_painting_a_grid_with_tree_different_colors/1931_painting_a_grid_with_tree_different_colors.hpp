@@ -3,6 +3,7 @@
 #include <array>
 #include <bit>
 #include <bitset>
+#include <cstdint>
 
 static constexpr uint32_t kMOD = 1'000'000'007;
 

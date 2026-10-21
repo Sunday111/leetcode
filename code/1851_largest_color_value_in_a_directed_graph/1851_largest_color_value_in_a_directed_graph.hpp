@@ -2,8 +2,10 @@
 
 #include <algorithm>
 #include <bitset>
+#include <cstdint>
 #include <span>
 #include <string>
+#include <utility>
 #include <vector>
 
 #define DEBUG_PRINT 0

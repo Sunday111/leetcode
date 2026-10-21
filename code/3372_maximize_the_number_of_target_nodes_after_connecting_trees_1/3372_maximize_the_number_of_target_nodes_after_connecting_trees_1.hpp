@@ -2,7 +2,9 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
 #include <unordered_set>
+#include <utility>
 #include <vector>
 
 #if defined(__GNUC__) || defined(__clang__)

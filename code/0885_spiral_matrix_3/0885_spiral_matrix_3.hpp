@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <ranges>
 #include <vector>
 

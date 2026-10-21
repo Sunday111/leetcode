@@ -1,7 +1,10 @@
 #include <algorithm>
+#include <array>
 #include <cassert>
+#include <cstdint>
 #include <deque>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #define FORCE_INLINE inline __attribute__((always_inline))

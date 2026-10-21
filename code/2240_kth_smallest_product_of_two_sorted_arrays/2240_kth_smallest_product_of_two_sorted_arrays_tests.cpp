@@ -1,3 +1,4 @@
+#include <print>
 #include "2240_kth_smallest_product_of_two_sorted_arrays.hpp"
 #include "gtest/gtest.h"
 

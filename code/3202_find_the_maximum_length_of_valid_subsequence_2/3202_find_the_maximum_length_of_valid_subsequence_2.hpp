@@ -1,7 +1,9 @@
 #pragma once
 
 #include <algorithm>
+#include <array>
 #include <bitset>
+#include <cstdint>
 #include <vector>
 
 class Solution
