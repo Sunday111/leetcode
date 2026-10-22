@@ -8,6 +8,7 @@
 #include <span>
 #include <sstream>
 #include <type_traits>
+#include <unordered_map>
 #include <unordered_set>
 
 #include "cast.hpp"
@@ -56,6 +57,30 @@ struct LeetCodeBinaryTree
     using NodeValue = std::decay_t<decltype(TNode{}.val)>;
     std::deque<TNode> nodes;
     TNode* root = nullptr;
+
+    LeetCodeBinaryTree() = default;
+    LeetCodeBinaryTree(LeetCodeBinaryTree&&) = default;
+    LeetCodeBinaryTree& operator=(LeetCodeBinaryTree&&) = default;
+
+    LeetCodeBinaryTree(const LeetCodeBinaryTree& other) : nodes(other.nodes)
+    {
+        std::unordered_map<const TNode*, TNode*> copies{{nullptr, nullptr}};
+        for (size_t i = 0; i != nodes.size(); ++i)
+        {
+            copies.emplace(&other.nodes[i], &nodes[i]);
+        }
+        for (auto& node : nodes)
+        {
+            node.left = copies.at(node.left);
+            node.right = copies.at(node.right);
+        }
+        root = copies.at(other.root);
+    }
+
+    LeetCodeBinaryTree& operator=(const LeetCodeBinaryTree& other)
+    {
+        return *this = LeetCodeBinaryTree(other);
+    }
 
     // NOLINTNEXTLINE
     operator TNode*() noexcept { return root; }

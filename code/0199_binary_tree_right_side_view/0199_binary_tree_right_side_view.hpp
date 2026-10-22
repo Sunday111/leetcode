@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <vector>
 
 #include "lc_tree_node.hpp"
@@ -28,7 +29,9 @@ public:
                 if (node->right) q.push_back(node->right);
             }
 
-            q.erase(q.begin(), std::next(q.begin(), static_cast<ssize_t>(k)));
+            q.erase(
+                q.begin(),
+                std::next(q.begin(), static_cast<std::ptrdiff_t>(k)));
         }
 
         return r;

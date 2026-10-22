@@ -11,6 +11,9 @@ add_executable(${target_name}
 
 target_link_libraries(${target_name} PUBLIC test_utility)
 set_generic_compiler_options(${target_name} PUBLIC)
+target_compile_options(${target_name} PRIVATE
+    $<$<CXX_COMPILER_ID:Clang>:-fconstexpr-steps=4194304>
+)
 
 enable_testing()
 include(GoogleTest)

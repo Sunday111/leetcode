@@ -70,7 +70,7 @@ public:
     {
         const size_t ps = words.size();
         size_t i = 0;
-        while (e[i] != stop)
+        while (i != e.size() && e[i] != stop)
         {
             i += e[i] == ',';
             i += expand_sub(e.substr(i), words);

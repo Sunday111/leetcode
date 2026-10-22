@@ -6,6 +6,7 @@
 #include <format>
 #include <ranges>
 #include <span>
+#include <unordered_map>
 
 #include "convert_expected_type.hpp"  // IWYU pragma: export
 #include "parse_2d_array.hpp"
@@ -30,6 +31,26 @@ struct LeetCodeList
 
     std::deque<TNode> nodes;
     TNode* head = nullptr;
+
+    LeetCodeList() = default;
+    LeetCodeList(LeetCodeList&&) = default;
+    LeetCodeList& operator=(LeetCodeList&&) = default;
+
+    LeetCodeList(const LeetCodeList& other) : nodes(other.nodes)
+    {
+        std::unordered_map<const TNode*, TNode*> copies{{nullptr, nullptr}};
+        for (size_t i = 0; i != nodes.size(); ++i)
+        {
+            copies.emplace(&other.nodes[i], &nodes[i]);
+        }
+        for (auto& node : nodes) node.next = copies.at(node.next);
+        head = copies.at(other.head);
+    }
+
+    LeetCodeList& operator=(const LeetCodeList& other)
+    {
+        return *this = LeetCodeList(other);
+    }
 
     [[nodiscard]] TNode* AllocNode(int value)
     {
