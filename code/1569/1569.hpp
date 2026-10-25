@@ -3,6 +3,7 @@
 #include "integral_aliases.hpp"
 #include "mod/binomial_coefficient_mod.hpp"
 #include "mod/factorial_mod.hpp"
+#include "mod/mod_int_inv_precompute.hpp"
 #include "sync_stdio.hpp"
 
 struct Node
@@ -18,8 +19,10 @@ public:
     inline static Node nodes[1001];
     inline static u16 q[1001];
     inline static constexpr auto factorials = factorials_mods<1000>();
+    inline static constexpr auto inverse_factorials =
+        mod_int_inv_precompute(factorials);
 
-    u32 numOfWays(std::vector<int>& nums)
+    u32 numOfWays(const std::vector<int>& nums) noexcept
     {
         u16 next_node = 0;
 
@@ -58,7 +61,11 @@ public:
 
             if ((!!num) & (num != rnum))
             {
-                ways *= binomial_coefficient(factorials, num, rnum);
+                ways *= binomial_coefficient(
+                    factorials,
+                    inverse_factorials,
+                    num,
+                    rnum);
             }
 
             return {num + 1, ways};

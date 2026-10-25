@@ -1,6 +1,5 @@
 #include <array>
 #include <cassert>
-#include <concepts>
 #include <cstddef>
 #include <cstdint>
 #include <utility>
@@ -11,47 +10,66 @@ using u16 = uint16_t;
 using u32 = uint32_t;
 using u64 = uint64_t;
 
+template <typename To>
+inline static constexpr auto cast =
+    []<typename From> [[nodiscard, gnu::always_inline]] (From&& v) noexcept
+{
+    return static_cast<To>(std::forward<From>(v));
+};
+
 inline constexpr u32 kMOD = 1'000'000'007;
 
 struct ModInt
 {
-    [[gnu::always_inline]] constexpr ModInt& operator+=(
-        const ModInt& rhs) noexcept;
-
-    [[nodiscard, gnu::always_inline]] constexpr ModInt operator+(
-        const ModInt& rhs) const noexcept;
-
-    [[gnu::always_inline]] constexpr ModInt& operator-=(
-        const ModInt& rhs) noexcept;
-
-    [[nodiscard, gnu::always_inline]] constexpr ModInt operator-(
-        const ModInt& rhs) const noexcept;
-
-    [[gnu::always_inline]] constexpr ModInt& operator*=(
-        const ModInt& rhs) noexcept;
-
-    [[nodiscard, gnu::always_inline]] constexpr ModInt operator*(
-        const ModInt& rhs) const noexcept;
-
-    [[nodiscard, gnu::always_inline]] constexpr ModInt inverse() const noexcept;
-
-    [[gnu::always_inline]] constexpr ModInt& operator/=(
-        const ModInt& rhs) noexcept;
-
-    [[nodiscard, gnu::always_inline]] constexpr ModInt operator/(
-        const ModInt& rhs) const noexcept;
-
-    template <std::unsigned_integral Exp>
-    [[nodiscard, gnu::always_inline]] constexpr ModInt pow(
-        Exp exp) const noexcept;
-
     u32 value = 0;
 };
 
-[[nodiscard, gnu::always_inline]] constexpr ModInt ModInt::inverse()
-    const noexcept
+[[gnu::always_inline]] constexpr ModInt& operator*=(
+    ModInt& lhs,
+    const ModInt& rhs) noexcept
 {
-    auto a = value;
+    u64 v = rhs.value;
+    v *= lhs.value;
+    if (v >= kMOD) v %= kMOD;
+    lhs.value = cast<u32>(v);
+    return lhs;
+}
+
+[[nodiscard, gnu::always_inline]] constexpr ModInt operator*(
+    ModInt lhs,
+    const ModInt& rhs) noexcept
+{
+    lhs *= rhs;
+    return lhs;
+}
+
+template <std::size_t lim_factorial>
+constexpr ModInt binomial_coefficient(
+    const std::array<ModInt, lim_factorial>& factorials,
+    const std::array<ModInt, lim_factorial>& inverse_factorials,
+    u32 n,
+    u32 k) noexcept
+{
+    assert(n >= k);
+    return factorials[n] * inverse_factorials[k] * inverse_factorials[n - k];
+}
+
+template <u32 max_index>
+inline constexpr auto factorials_mods()
+{
+    std::array<ModInt, max_index + 1> r;  // NOLINT
+    r[0] = ModInt{1};
+    for (u32 i = 1; i != r.size(); ++i)
+    {
+        r[i] = r[i - 1] * ModInt{i};
+    }
+
+    return r;
+}
+
+[[nodiscard, gnu::always_inline]] constexpr ModInt inverse(ModInt x) noexcept
+{
+    auto a = x.value;
     u32 x0 = 1, x1 = 0, mod = kMOD;
     while (a)
     {
@@ -66,64 +84,17 @@ struct ModInt
     return {(x1 + kMOD) % kMOD};
 }
 
-template <typename To>
-inline static constexpr auto cast =
-    []<typename From> [[nodiscard, gnu::always_inline]] (From&& v) noexcept
+template <std::size_t size>
+inline constexpr auto mod_int_inv_precompute(
+    const std::array<ModInt, size>& divisors)
 {
-    return static_cast<To>(std::forward<From>(v));
-};
-
-[[gnu::always_inline]] constexpr ModInt& ModInt::operator*=(
-    const ModInt& rhs) noexcept
-{
-    u64 v = rhs.value;
-    v *= value;
-    if (v >= kMOD) v %= kMOD;
-    value = cast<u32>(v);
-    return *this;
-}
-
-[[nodiscard, gnu::always_inline]] constexpr ModInt ModInt::operator*(
-    const ModInt& rhs) const noexcept
-{
-    auto copy = *this;
-    copy *= rhs;
-    return copy;
-}
-
-[[gnu::always_inline]] constexpr ModInt& ModInt::operator/=(
-    const ModInt& rhs) noexcept
-{
-    return *this *= rhs.inverse();
-}
-
-[[nodiscard, gnu::always_inline]] constexpr ModInt ModInt::operator/(
-    const ModInt& rhs) const noexcept
-{
-    auto copy = *this;
-    copy /= rhs;
-    return copy;
-}
-
-template <std::size_t lim_factorial>
-constexpr ModInt
-binomial_coefficient(const std::array<ModInt, lim_factorial>& f, u32 n, u32 k)
-{
-    assert(n >= k);
-    return f[n] / (f[k] * f[n - k]);
-}
-
-template <u32 max_index>
-inline constexpr auto factorials_mods()
-{
-    std::array<ModInt, max_index + 1> r;  // NOLINT
-    r[0] = ModInt{1};
-    for (u32 i = 1; i != r.size(); ++i)
+    std::array<ModInt, size> inverses;
+    for (std::size_t i = 0; i != size; ++i)
     {
-        r[i] = r[i - 1] * ModInt{i};
+        assert(divisors[i].value != 0);
+        inverses[i] = inverse(divisors[i]);
     }
-
-    return r;
+    return inverses;
 }
 #ifndef LC_LOCAL_BUILD
 auto init = []()
@@ -148,8 +119,10 @@ public:
     inline static Node nodes[1001];
     inline static u16 q[1001];
     inline static constexpr auto factorials = factorials_mods<1000>();
+    inline static constexpr auto inverse_factorials =
+        mod_int_inv_precompute(factorials);
 
-    u32 numOfWays(std::vector<int>& nums)
+    u32 numOfWays(const std::vector<int>& nums) noexcept
     {
         u16 next_node = 0;
 
@@ -188,7 +161,11 @@ public:
 
             if ((!!num) & (num != rnum))
             {
-                ways *= binomial_coefficient(factorials, num, rnum);
+                ways *= binomial_coefficient(
+                    factorials,
+                    inverse_factorials,
+                    num,
+                    rnum);
             }
 
             return {num + 1, ways};
