@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <iterator>
 #include <random>
 #include <set>
 
@@ -17,6 +19,7 @@ using BitsetCapacities = ::testing::Types<
     PyramidBitset<13593, u32>,
     PyramidBitset<32 * 32 * 32, u32>,
     PyramidBitset<1024, u64>,
+    PyramidBitset<1001, u64>,
     PyramidBitset<4096, u64>,
     PyramidBitset<13593, u64>,
     PyramidBitset<64 * 64 * 64, u64>>;
@@ -85,5 +88,67 @@ TYPED_TEST(PyramidBitsetTypedFuzzyTest, Fuzzy)
                 ASSERT_EQ(*std_set.rbegin(), bs.max());
             }
         }
+    }
+}
+
+TYPED_TEST(PyramidBitsetTypedFuzzyTest, NeighbourSearch)
+{
+    using Bitset = TypeParam;
+    using ValueType = typename Bitset::ValueType;
+    constexpr auto capacity = Bitset::get_capacity();
+    Bitset bs{kEmpty};
+    std::set<ValueType> reference;
+    auto check = [&](ValueType v)
+    {
+        auto next = reference.upper_bound(v);
+        auto prev = reference.lower_bound(v);
+        EXPECT_EQ(bs.successor(v), next == reference.end() ? capacity : *next);
+        EXPECT_EQ(
+            bs.predecessor(v),
+            prev == reference.begin() ? capacity : *std::prev(prev));
+    };
+
+    check(0);
+    check(cast<ValueType>(capacity - 1));
+    for (size_t boundary = 1; boundary < capacity;
+         boundary *= Bitset::kWordSize)
+    {
+        for (auto v :
+             {boundary - 1, boundary, std::min(boundary + 1, capacity - 1)})
+        {
+            bs.add(cast<ValueType>(v));
+            reference.insert(cast<ValueType>(v));
+        }
+    }
+    bs.add(cast<ValueType>(capacity - 1));
+    reference.insert(cast<ValueType>(capacity - 1));
+    for (auto v : reference) check(v);
+
+    std::mt19937 rng{1569};
+    std::uniform_int_distribution<size_t> values(0, capacity - 1);
+    for (u32 i = 0; i != 1000; ++i)
+    {
+        auto v = cast<ValueType>(values(rng));
+        if (reference.erase(v))
+        {
+            bs.remove(v);
+        }
+        else
+        {
+            bs.add(v);
+            reference.insert(v);
+        }
+        check(v);
+        check(cast<ValueType>(values(rng)));
+    }
+
+    bs.initialize(kFull);
+    EXPECT_EQ(bs.predecessor(0), capacity);
+    EXPECT_EQ(bs.successor(cast<ValueType>(capacity - 1)), capacity);
+    for (u32 i = 0; i != 100; ++i)
+    {
+        auto v = cast<ValueType>(values(rng));
+        EXPECT_EQ(bs.predecessor(v), v == 0 ? capacity : size_t{v} - 1);
+        EXPECT_EQ(bs.successor(v), size_t{v} + 1);
     }
 }
