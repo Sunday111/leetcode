@@ -149,25 +149,25 @@ def embed_includes(target_file_path: Path):
     included: set[Path] = set()
     not_included: dict[str, str] = dict()
 
-    src: list[str] = list()
+    src: list[tuple[str, Path]] = list()
     with open(file=target_file_path, mode="rt", encoding="utf-8") as target_file:
         for line in target_file:
-            src.append(line.rstrip())
+            src.append((line.rstrip(), target_file_path.parent))
 
-    result: list[str] = list()
+    result: list[tuple[str, Path]] = list()
 
     added_one = 1
     while added_one:
         added_one = False
         include = "#include "
-        for line in src:
+        for line, source_dir in src:
             if "#pragma once" in line:
                 continue
 
             idx = line.find(include)
 
             if idx == -1 or added_one:
-                result.append(line)
+                result.append((line, source_dir))
                 continue
 
             part = line[idx + len(include) :].strip()
@@ -181,6 +181,10 @@ def embed_includes(target_file_path: Path):
             assert part[-1] in '">'
             include_val = part[1:-1]
             include_path = (templates_dir / include_val).resolve()
+            if part[0] == '"':
+                relative_path = (source_dir / include_val).resolve()
+                if relative_path.is_file():
+                    include_path = relative_path
 
             if include_path in included:
                 print(f"{include_val}: skip")
@@ -190,7 +194,7 @@ def embed_includes(target_file_path: Path):
             if include_path.is_file():
                 with open(file=include_path, mode="rt", encoding="utf-8") as included_file:
                     for included_line in included_file:
-                        result.append(included_line.rstrip())
+                        result.append((included_line.rstrip(), include_path.parent))
 
                 included.add(include_path)
                 added_one = True
@@ -213,7 +217,7 @@ def embed_includes(target_file_path: Path):
 
         result_file.write("\n")
 
-        for line in src:
+        for line, _ in src:
             result_file.write(line)
             result_file.write("\n")
 

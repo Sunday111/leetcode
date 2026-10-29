@@ -5,7 +5,6 @@
 
 #include "ft_prefix.hpp"
 
-// Op must be associative and commutative; Inv must undo it.
 // Returns the aggregate over [begin, end).
 template <typename T, std::unsigned_integral Index, typename Traits>
 [[nodiscard, gnu::always_inline]] constexpr T ft_range(
