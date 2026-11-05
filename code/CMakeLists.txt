@@ -506,6 +506,7 @@ add_subdirectory(2654_minimum_number_of_operations_to_make_all_array_elements_eq
 add_subdirectory(2657)
 add_subdirectory(2685)
 add_subdirectory(2698_find_the_punishment_number_of_an_integer)
+add_subdirectory(2747)
 add_subdirectory(2749_minimum_operations_to_make_the_integer_zero)
 add_subdirectory(2751)
 add_subdirectory(2761_prime_pairs_with_target_sum)
