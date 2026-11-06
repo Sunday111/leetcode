@@ -7,7 +7,7 @@
 #include "pyramid_bitset/pbs_layers.hpp"
 #include "pyramid_bitset/pyramid_bitset.hpp"  // IWYU pragma: export
 
-template <size_t capacity, typename Word>
+template <u32 capacity, typename Word>
 [[nodiscard, gnu::always_inline]] constexpr
     typename PyramidBitset<capacity, Word>::ValueType
     pbs_min(const PyramidBitset<capacity, Word>& bits) noexcept

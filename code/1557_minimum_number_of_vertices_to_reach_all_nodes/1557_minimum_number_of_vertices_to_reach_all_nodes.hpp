@@ -3,6 +3,7 @@
 #include "cast.hpp"
 #include "integral_aliases.hpp"
 #include "pyramid_bitset/pbs_initialize.hpp"
+#include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
 
@@ -13,7 +14,8 @@ public:
         const u32 n,
         const std::vector<std::vector<int>>& edges)
     {
-        static PyramidBitset<100'001> is_root;
+        static u64 is_root_words[PyramidBitset<100'001>::kTotalWords]{};
+        static auto is_root = pbs_make<100'001>(is_root_words);
         pbs_initialize(is_root, kFull, n + 1);
 
         for (auto& e : edges)

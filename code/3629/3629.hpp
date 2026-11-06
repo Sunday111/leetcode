@@ -13,7 +13,9 @@
 #include "factorizer.hpp"
 #include "integral_aliases.hpp"
 #include "pyramid_bitset/pbs_add.hpp"
+#include "pyramid_bitset/pbs_add_ex.hpp"
 #include "pyramid_bitset/pbs_initialize.hpp"
+#include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_max.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
 
@@ -72,7 +74,10 @@ public:
 
         static u64 visited_words[ceil_div(100'000, 64)];
         std::fill_n(visited_words, ceil_div(n, 64), 0);
-        PyramidBitset<100'000> a, b;
+        u64 a_words[PyramidBitset<100'000>::kTotalWords]{};
+        auto a = pbs_make<100'000>(a_words);
+        u64 b_words[PyramidBitset<100'000>::kTotalWords]{};
+        auto b = pbs_make<100'000>(b_words);
         pbs_initialize(a, kEmpty, n);
         pbs_initialize(b, kEmpty, n);
 

@@ -5,7 +5,6 @@
 #include <concepts>
 #include <cstddef>
 #include <cstdint>
-#include <numeric>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -138,50 +137,63 @@ using UintForValue = std::conditional_t < value < (1 << 8),
               u16,
               std::conditional_t<value<(1UL << 32), u32, u64>>>;
 
-template <size_t capacity, typename Word = u64>
+template <u32 capacity, typename Word = u64>
 struct PyramidBitset
 {
-    static constexpr size_t kCapacity = capacity;
+    static_assert(capacity > 0);
+    using WordType = std::remove_cv_t<Word>;
+    static constexpr u32 kCapacity = capacity;
     using ValueType = UintForValue<capacity - 1>;
     static constexpr size_t kWordSize = sizeof(Word) * 8;
     static constexpr u8 kMask = kWordSize - 1;
     static constexpr int kShift = std::bit_width(kMask);
-    static constexpr size_t kNumLayers =
-        ceil_div(std::bit_width(capacity), kShift);
-    static constexpr auto kLayersSizes = []
+    static constexpr size_t kNumLayers = []
     {
-        std::array<size_t, kNumLayers> sizes{};
-        for (size_t i = 0, x = capacity; i != sizes.size(); ++i)
+        size_t layers = 1;
+        for (size_t n = capacity; n > kWordSize; n = ceil_div(n, kWordSize))
+        {
+            ++layers;
+        }
+        return layers;
+    }();
+
+private:
+    struct Layout
+    {
+        size_t sizes[kNumLayers];
+        size_t offsets[kNumLayers];
+        size_t total;
+    };
+
+    static constexpr Layout kLayout = []
+    {
+        Layout layout{};
+        for (size_t i = 0, x = capacity; i != kNumLayers; ++i)
         {
             x = ceil_div(x, kWordSize);
-            sizes[i] = x;
+            layout.sizes[i] = x;
+            layout.offsets[i] = layout.total;
+            layout.total += x;
         }
-        return sizes;
+        return layout;
     }();
-    static constexpr size_t kTotalWords =
-        std::accumulate(kLayersSizes.begin(), kLayersSizes.end(), 0UZ);
-    std::array<Word, kTotalWords> words;
 
-    static constexpr auto offsets = []
-    {
-        std::array<size_t, kNumLayers> offsets;  // NOLINT
-        std::exclusive_scan(
-            kLayersSizes.begin(),
-            kLayersSizes.end(),
-            offsets.begin(),
-            size_t{});
-        return offsets;
-    }();
+public:
+    static constexpr auto& kLayersSizes = kLayout.sizes;
+    static constexpr auto& offsets = kLayout.offsets;
+    static constexpr size_t kTotalWords = kLayout.total;
+    Word* words;
 };
 
-template <size_t capacity, typename Word>
+template <u32 capacity, typename Word>
 [[gnu::always_inline]] constexpr void pbs_add(
-    PyramidBitset<capacity, Word>& bits,
+    const PyramidBitset<capacity, Word>& bits,
     typename PyramidBitset<capacity, Word>::ValueType v) noexcept
 {
     using B = PyramidBitset<capacity, Word>;
     pbs_for_each_layer<B>(
-        [&] [[gnu::always_inline]] (auto layer) noexcept
+        [&]<size_t layer> [[gnu::always_inline]] (
+            std::integral_constant<size_t, layer>) noexcept
         {
             typename B::ValueType wi = v >> B::kShift;
             bits.words[B::offsets[layer] + wi] |= Word{1} << (v & B::kMask);
@@ -189,48 +201,17 @@ template <size_t capacity, typename Word>
         });
 }
 
-template <size_t capacity, typename Word>
-[[gnu::always_inline]] constexpr void pbs_add_if(
-    PyramidBitset<capacity, Word>& bits,
-    typename PyramidBitset<capacity, Word>::ValueType v,
-    bool c) noexcept
+// Buffer holds kTotalWords; construction preserves its contents.
+template <u32 capacity, typename Word>
+[[nodiscard, gnu::always_inline]] constexpr PyramidBitset<capacity, Word>
+pbs_make(Word* buffer) noexcept
 {
-    using B = PyramidBitset<capacity, Word>;
-    pbs_for_each_layer<B>(
-        [&] [[gnu::always_inline]] (auto layer) noexcept
-        {
-            typename B::ValueType wi = v >> B::kShift;
-            bits.words[B::offsets[layer] + wi] |= Word{c} << (v & B::kMask);
-            v = wi;
-        });
-}
-
-template <size_t capacity, typename Word>
-[[nodiscard, gnu::always_inline]] constexpr bool pbs_add_ex(
-    PyramidBitset<capacity, Word>& bits,
-    typename PyramidBitset<capacity, Word>::ValueType v) noexcept
-{
-    using B = PyramidBitset<capacity, Word>;
-    bool added = false;
-    pbs_for_each_layer<B>(
-        [&] [[gnu::always_inline]] (auto layer) noexcept
-        {
-            typename B::ValueType wi = v >> B::kShift;
-            auto& word = bits.words[B::offsets[layer] + wi];
-            Word m = Word{1} << (v & B::kMask);
-            if constexpr (layer == 0)
-            {
-                added = (word & m) == 0;
-            }
-            word |= m;
-            v = wi;
-        });
-    return added;
+    return {buffer};
 }
 
 // Strict successor; returns capacity when absent.
 // One top-down pass takes O(log_word_size(capacity)).
-template <size_t capacity, typename Word>
+template <u32 capacity, typename Word>
 [[nodiscard, gnu::always_inline]] constexpr size_t pbs_next(
     const PyramidBitset<capacity, Word>& bits,
     size_t position) noexcept
@@ -258,7 +239,8 @@ template <size_t capacity, typename Word>
             const size_t query = position >> (layer * B::kShift);
             const size_t wi = query >> B::kShift;
             const size_t bi = query & B::kMask;
-            Word candidates = bits.words[B::offsets[layer] + wi];
+            typename B::WordType candidates =
+                bits.words[B::offsets[layer] + wi];
             // Separate shifts avoid shifting by the word width.
             candidates >>= bi;
             candidates >>= 1;
@@ -267,12 +249,12 @@ template <size_t capacity, typename Word>
             const size_t mask = size_t{0} - size_t{candidates != 0};
             result ^= (result ^ candidate) & mask;
         });
-    return std::min(result, capacity);
+    return std::min<size_t>(result, capacity);
 }
 
 // Strict predecessor; returns capacity when absent.
 // One top-down pass takes O(log_word_size(capacity)).
-template <size_t capacity, typename Word>
+template <u32 capacity, typename Word>
 [[nodiscard, gnu::always_inline]] constexpr size_t pbs_prev(
     const PyramidBitset<capacity, Word>& bits,
     size_t position) noexcept
@@ -300,14 +282,15 @@ template <size_t capacity, typename Word>
             const size_t query = position >> (layer * B::kShift);
             const size_t wi = query >> B::kShift;
             const size_t bi = query & B::kMask;
-            Word candidates = bits.words[B::offsets[layer] + wi];
+            typename B::WordType candidates =
+                bits.words[B::offsets[layer] + wi];
             candidates &= (Word{1} << bi) - 1;
             const size_t candidate = (wi << B::kShift) + B::kMask -
                                      cast<size_t>(std::countl_zero(candidates));
             const size_t mask = size_t{0} - size_t{candidates != 0};
             result ^= (result ^ candidate) & mask;
         });
-    return std::min(result, capacity);
+    return std::min<size_t>(result, capacity);
 }
 #ifndef LC_LOCAL_BUILD
 auto init = []()
@@ -345,7 +328,8 @@ public:
     {
         nodes[0] = {};
         nodes[0].v = nums[0] & 1023;
-        PyramidBitset<1001> inserted{};
+        u64 inserted_words[PyramidBitset<1001>::kTotalWords]{};
+        auto inserted = pbs_make<1001>(inserted_words);
         // A missing neighbour selects the root (the earliest inserted node).
         node_id_map[inserted.kCapacity] = 0;
         node_id_map[nodes[0].v] = 0;

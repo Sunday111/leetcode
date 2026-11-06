@@ -9,7 +9,7 @@
 
 // Strict predecessor; returns capacity when absent.
 // One top-down pass takes O(log_word_size(capacity)).
-template <size_t capacity, typename Word>
+template <u32 capacity, typename Word>
 [[nodiscard, gnu::always_inline]] constexpr size_t pbs_prev(
     const PyramidBitset<capacity, Word>& bits,
     size_t position) noexcept
@@ -37,12 +37,13 @@ template <size_t capacity, typename Word>
             const size_t query = position >> (layer * B::kShift);
             const size_t wi = query >> B::kShift;
             const size_t bi = query & B::kMask;
-            Word candidates = bits.words[B::offsets[layer] + wi];
+            typename B::WordType candidates =
+                bits.words[B::offsets[layer] + wi];
             candidates &= (Word{1} << bi) - 1;
             const size_t candidate = (wi << B::kShift) + B::kMask -
                                      cast<size_t>(std::countl_zero(candidates));
             const size_t mask = size_t{0} - size_t{candidates != 0};
             result ^= (result ^ candidate) & mask;
         });
-    return std::min(result, capacity);
+    return std::min<size_t>(result, capacity);
 }

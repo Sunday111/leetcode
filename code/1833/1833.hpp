@@ -3,6 +3,7 @@
 #include "cast.hpp"
 #include "pyramid_bitset/pbs_add.hpp"
 #include "pyramid_bitset/pbs_is_empty.hpp"
+#include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
 
@@ -10,7 +11,8 @@ class Solution
 {
 public:
     inline static u32 freq[100'001];
-    inline static PyramidBitset<100'001> b{};
+    inline static u64 b_words[PyramidBitset<100'001>::kTotalWords]{};
+    inline static auto b = pbs_make<100'001>(b_words);
 
     [[nodiscard]] auto maxIceCream(const std::vector<int>& costs, u32 coins)
         const noexcept

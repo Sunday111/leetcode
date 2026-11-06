@@ -4,6 +4,7 @@
 #include "integral_aliases.hpp"
 #include "pyramid_bitset/pbs_add.hpp"
 #include "pyramid_bitset/pbs_is_empty.hpp"
+#include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
 #include "sync_stdio.hpp"
@@ -13,7 +14,8 @@ class Solution
 public:
     static constexpr u32 m = 100'000;
     inline static u16 f[m + 1];
-    inline static PyramidBitset<m + 1> bs{};
+    inline static u64 bs_words[PyramidBitset<m + 1>::kTotalWords]{};
+    inline static auto bs = pbs_make<m + 1>(bs_words);
     template <bool big>
     static u32 impl(const std::vector<int>& nums) noexcept
     {

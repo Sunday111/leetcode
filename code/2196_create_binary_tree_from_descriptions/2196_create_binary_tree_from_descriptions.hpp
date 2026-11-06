@@ -4,6 +4,7 @@
 #include "cast.hpp"
 #include "pyramid_bitset/pbs_add.hpp"
 #include "pyramid_bitset/pbs_get.hpp"
+#include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
 
@@ -14,7 +15,10 @@ public:
         const std::vector<std::vector<int>>& descriptions)
     {
         static TreeNode nodes[100001];
-        PyramidBitset<100001> initialized, roots;
+        u64 initialized_words[PyramidBitset<100001>::kTotalWords]{};
+        auto initialized = pbs_make<100001>(initialized_words);
+        u64 roots_words[PyramidBitset<100001>::kTotalWords]{};
+        auto roots = pbs_make<100001>(roots_words);
 
         auto get_node = [&] [[gnu::always_inline]] (u32 id) -> TreeNode&
         {

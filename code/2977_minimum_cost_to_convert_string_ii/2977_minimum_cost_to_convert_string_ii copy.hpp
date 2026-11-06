@@ -12,6 +12,7 @@
 #include "pyramid_bitset/pbs_get.hpp"
 #include "pyramid_bitset/pbs_initialize.hpp"
 #include "pyramid_bitset/pbs_is_empty.hpp"
+#include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
 #include "signed_integral_aliases.hpp"
@@ -115,7 +116,12 @@ public:
         }
 
         // Reset bitsets
-        static std::array<PyramidBitset<256>, 200> bitsets{};
+        static u64 bitset_words[200][PyramidBitset<256>::kTotalWords]{};
+        PyramidBitset<256> bitsets[200];
+        for (u32 i = 0; i != 200; ++i)
+        {
+            bitsets[i] = pbs_make<256>(bitset_words[i]);
+        }
         for (u8 i = 0; i != num_unique_tokens; ++i)
         {
             pbs_initialize(bitsets[i], kEmpty, num_unique_tokens);
@@ -136,7 +142,12 @@ public:
                 auto& bi = bitsets[i];
                 if (!pbs_get(bi, k)) continue;
 
-                for (auto bk = bitsets[k]; !pbs_is_empty(bk);)
+                u64 snapshot[PyramidBitset<256>::kTotalWords];
+                std::copy_n(
+                    bitsets[k].words,
+                    PyramidBitset<256>::kTotalWords,
+                    snapshot);
+                for (auto bk = pbs_make<256>(snapshot); !pbs_is_empty(bk);)
                 {
                     u8 j = pbs_min(bk);
                     pbs_remove(bk, j);

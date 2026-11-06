@@ -4,7 +4,8 @@
 #include "cast.hpp"
 #include "int_if.hpp"
 #include "integral_aliases.hpp"
-#include "pyramid_bitset/pbs_add.hpp"
+#include "pyramid_bitset/pbs_add_ex.hpp"
+#include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_max.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
@@ -27,7 +28,9 @@ public:
         const u8 h = cast<u8>(grid.size()), w = cast<u8>(grid[0].size());
         const u8 hh = h + 1 - k, ww = w + 1 - k;
 
-        static PyramidBitset<200'001> bs{};
+        static u64 bs_words[PyramidBitset<200'001>::kTotalWords]{};
+
+        static auto bs = pbs_make<200'001>(bs_words);
 
         for (u8 sy = 0; sy != hh; ++sy)
         {

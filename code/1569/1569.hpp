@@ -6,6 +6,7 @@
 #include "mod/factorial_mod.hpp"
 #include "mod/mod_int_inv_precompute.hpp"
 #include "pyramid_bitset/pbs_add.hpp"
+#include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_next.hpp"
 #include "pyramid_bitset/pbs_prev.hpp"
 #include "sync_stdio.hpp"
@@ -36,7 +37,8 @@ public:
     {
         nodes[0] = {};
         nodes[0].v = nums[0] & 1023;
-        PyramidBitset<1001> inserted{};
+        u64 inserted_words[PyramidBitset<1001>::kTotalWords]{};
+        auto inserted = pbs_make<1001>(inserted_words);
         // A missing neighbour selects the root (the earliest inserted node).
         node_id_map[inserted.kCapacity] = 0;
         node_id_map[nodes[0].v] = 0;

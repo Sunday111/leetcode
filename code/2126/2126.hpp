@@ -4,6 +4,7 @@
 #include "exch.hpp"
 #include "pyramid_bitset/pbs_add.hpp"
 #include "pyramid_bitset/pbs_is_empty.hpp"
+#include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
 
@@ -13,7 +14,8 @@ public:
     [[nodiscard]] bool asteroidsDestroyed(u64 m, const std::vector<int>& a)
         const noexcept
     {
-        static PyramidBitset<100'001> b;
+        static u64 b_words[PyramidBitset<100'001>::kTotalWords]{};
+        static auto b = pbs_make<100'001>(b_words);
         static u32 freq[100'001];
 
         for (u32 x : a | cast_view<u32>)

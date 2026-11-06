@@ -7,6 +7,7 @@
 #include "integral_aliases.hpp"
 #include "pyramid_bitset/pbs_add.hpp"
 #include "pyramid_bitset/pbs_is_empty.hpp"
+#include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_max.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
 #include "sync_stdio.hpp"
@@ -17,7 +18,10 @@ class Solution
     static constexpr u32 kNumBlocks = (kMaxDiff + 64) / 64;
     inline static std::array<u32, kMaxDiff + 1> frequency{};
     inline static std::array<u64, kNumBlocks> occupied_values{};
-    inline static PyramidBitset<kNumBlocks> occupied_blocks{};
+    inline static u64
+        occupied_blocks_words[PyramidBitset<kNumBlocks>::kTotalWords]{};
+    inline static auto occupied_blocks =
+        pbs_make<kNumBlocks>(occupied_blocks_words);
 
 public:
     u64 minSumSquareDiff(

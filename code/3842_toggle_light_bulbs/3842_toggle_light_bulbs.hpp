@@ -1,6 +1,7 @@
 #include <vector>
 
 #include "pyramid_bitset/pbs_get.hpp"
+#include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
 #include "pyramid_bitset/pbs_set.hpp"
@@ -11,7 +12,8 @@ public:
     [[nodiscard]] static constexpr auto toggleLightBulbs(
         const std::vector<int>& bulbs) noexcept
     {
-        PyramidBitset<128> b{};
+        u64 b_words[PyramidBitset<128>::kTotalWords]{};
+        auto b = pbs_make<128>(b_words);
 
         u8 n = 0;
         for (int i : bulbs)

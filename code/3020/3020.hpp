@@ -2,19 +2,24 @@
 #include <vector>
 
 #include "integral_aliases.hpp"
-#include "pyramid_bitset/pbs_add.hpp"
+#include "pyramid_bitset/pbs_add_ex.hpp"
+#include "pyramid_bitset/pbs_add_if.hpp"
 #include "pyramid_bitset/pbs_get.hpp"
 #include "pyramid_bitset/pbs_is_empty.hpp"
+#include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
+#include "pyramid_bitset/pbs_remove_ex.hpp"
 #include "sync_stdio.hpp"
 #include "upd_max.hpp"
 
 class Solution
 {
 public:
-    inline static PyramidBitset<1 << 17> bs{};
-    inline static PyramidBitset<(1 << 16) + 1> roots{};
+    inline static u64 bs_words[PyramidBitset<1 << 17>::kTotalWords]{};
+    inline static auto bs = pbs_make<1 << 17>(bs_words);
+    inline static u64 roots_words[PyramidBitset<(1 << 16) + 1>::kTotalWords]{};
+    inline static auto roots = pbs_make<(1 << 16) + 1>(roots_words);
     static u32 impl(const std::vector<u32>& nums) noexcept
     {
         constexpr u32 tt = 31623;  // sqrt(10^9)+1

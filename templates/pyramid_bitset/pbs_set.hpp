@@ -3,9 +3,9 @@
 #include "pyramid_bitset/pbs_add.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
 
-template <bool v, size_t capacity, typename Word>
+template <bool v, u32 capacity, typename Word>
 [[gnu::always_inline]] constexpr void pbs_set(
-    PyramidBitset<capacity, Word>& bits,
+    const PyramidBitset<capacity, Word>& bits,
     typename PyramidBitset<capacity, Word>::ValueType idx) noexcept
 {
     if constexpr (v)
@@ -18,9 +18,9 @@ template <bool v, size_t capacity, typename Word>
     }
 }
 
-template <size_t capacity, typename Word>
+template <u32 capacity, typename Word>
 [[gnu::always_inline]] constexpr void pbs_set(
-    PyramidBitset<capacity, Word>& bits,
+    const PyramidBitset<capacity, Word>& bits,
     typename PyramidBitset<capacity, Word>::ValueType idx,
     bool v) noexcept
 {
