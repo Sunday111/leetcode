@@ -54,73 +54,38 @@ vim.api.nvim_create_user_command("EmbedIncludes", function(opts)
         return
     end
 
-    -- The command
-    local cmd = automation_cmd('embed_includes', file_path)
+    if vim.fn.executable("clang-format") == 0 then
+        vim.notify("EmbedIncludes: clang-format not found", vim.log.levels.ERROR)
+        return
+    end
 
-    local stdout_lines = {}
-
-    -- Execute
-    vim.fn.jobstart(cmd, {
-
-        on_stdout = function(_, data)
-            if not data then return end
-            for _, line in ipairs(data) do
-                if line ~= "" then
-                    table.insert(stdout_lines, line)
-                end
-            end
-        end,
-
-        on_stderr = function(_, data)
-            if data and #data > 0 then
-                vim.notify(table.concat(data, "\n"), vim.log.levels.ERROR)
-            end
-        end,
-
-        on_exit = function(_, code)
-            if verbose then
-                if #stdout_lines > 0 then
-                    vim.notify(table.concat(stdout_lines, "\n"))
-                end
-            end
-
-            if code ~= 0 then
-                vim.notify("EmbedIncludes failed", vim.log.levels.ERROR)
+    vim.system(automation_cmd('embed_includes', file_path), { text = true },
+        vim.schedule_wrap(function(embedded)
+            if embedded.code ~= 0 then
+                vim.notify("EmbedIncludes failed\n" .. embedded.stderr, vim.log.levels.ERROR)
                 return
             end
-
-            -- Build mono file path: suffix before extension
-            local dir       = vim.fn.fnamemodify(file_path, ":h")
-            local base      = vim.fn.fnamemodify(file_path, ":t:r")
-            local ext       = vim.fn.fnamemodify(file_path, ":e")
-            local mono_file = string.format("%s/%s_mono.%s", dir, base, ext)
-
-            if vim.fn.filereadable(mono_file) == 0 then
-                vim.notify("Mono file not found: " .. mono_file, vim.log.levels.ERROR)
-                return
+            if verbose and embedded.stderr ~= "" then
+                vim.notify(embedded.stderr)
             end
 
-            if vim.fn.executable("clang-format") == 0 then
-                vim.notify("EmbedIncludes: clang-format not found", vim.log.levels.ERROR)
-                return
-            end
-
-            vim.system({ "clang-format", "--style=file", "-i", mono_file }, { text = true },
-                vim.schedule_wrap(function(result)
-                    if result.code ~= 0 then
-                        vim.notify("EmbedIncludes: clang-format failed\n" .. result.stderr, vim.log.levels.ERROR)
+            vim.system({ "clang-format", "--style=file", "--assume-filename=" .. file_path },
+                { text = true, stdin = embedded.stdout },
+                vim.schedule_wrap(function(formatted)
+                    if formatted.code ~= 0 then
+                        vim.notify("EmbedIncludes: clang-format failed\n" .. formatted.stderr, vim.log.levels.ERROR)
                         return
                     end
 
-                    local lines = vim.fn.readfile(mono_file)
+                    local lines = vim.split(formatted.stdout, "\n", { plain = true })
+                    if lines[#lines] == "" then table.remove(lines) end
                     vim.fn.setreg('"', lines, 'l')
                     local clipboard = vim.o.clipboard or ""
                     if clipboard:match("unnamedplus") then
                         vim.fn.setreg("+", lines, 'l')
                     end
                 end))
-        end,
-    })
+        end))
 end, {
     nargs = "*",
     complete = function()

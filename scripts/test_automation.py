@@ -3,6 +3,7 @@ import io
 from pathlib import Path
 import tempfile
 import unittest
+import sys
 from unittest.mock import patch
 
 import automation
@@ -17,9 +18,23 @@ class EmbedIncludesTests(unittest.TestCase):
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(content, encoding="utf-8")
             with patch.object(automation, "ROOT_DIR", root):
-                with contextlib.redirect_stdout(io.StringIO()):
-                    automation.embed_includes(root / "solution.hpp")
-            return (root / "solution_mono.hpp").read_text(encoding="utf-8")
+                with contextlib.redirect_stderr(io.StringIO()):
+                    result = automation.embed_includes(root / "solution.hpp")
+            self.assertEqual({str(p.relative_to(root)) for p in root.rglob("*")
+                              if p.is_file()}, set(files))
+            return result
+
+    def test_cli_separates_source_from_diagnostics(self):
+        with tempfile.TemporaryDirectory(prefix="leetcode-embed-") as directory:
+            source = Path(directory) / "solution.hpp"
+            source.write_text('#include <vector>\n\nint answer = 42;\n')
+            stdout, stderr = io.StringIO(), io.StringIO()
+            with patch.object(sys, "argv", ["automation.py", "embed_includes", str(source)]):
+                with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+                    automation.main()
+            self.assertEqual(stdout.getvalue(), '#include <vector>\n\n\nint answer = 42;\n')
+            self.assertIn("vector: embed", stderr.getvalue())
+            self.assertEqual(list(Path(directory).iterdir()), [source])
 
     def test_nested_relative_headers_precede_template_root(self):
         result = self.embed({

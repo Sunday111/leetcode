@@ -5,6 +5,7 @@ import shutil
 import argparse
 import re
 import json
+import sys
 import leetcode_fetch
 
 SCRIPTS_DIR = Path(__file__).parent.resolve()
@@ -141,7 +142,7 @@ def update_projects_list():
                 f.write(f'add_subdirectory({path.name})\n')
 
 
-def embed_includes(target_file_path: Path):
+def embed_includes(target_file_path: Path) -> str:
     templates_dir = ROOT_DIR / "templates"
     if not (target_file_path.exists() and target_file_path.is_file()):
         raise FileNotFoundError()
@@ -187,9 +188,9 @@ def embed_includes(target_file_path: Path):
                     include_path = relative_path
 
             if include_path in included:
-                print(f"{include_val}: skip")
+                print(f"{include_val}: skip", file=sys.stderr)
                 continue
-            print(f"{include_val}: embed")
+            print(f"{include_val}: embed", file=sys.stderr)
 
             if include_path.is_file():
                 with open(file=include_path, mode="rt", encoding="utf-8") as included_file:
@@ -204,22 +205,15 @@ def embed_includes(target_file_path: Path):
         src = result
         result = list()
 
-    result_file_path = target_file_path.with_name(f"{target_file_path.stem}_mono{target_file_path.suffix}")
-
     mirror = {
         "<": ">",
         '"': '"',
     }
-    with open(file=result_file_path, mode="wt", encoding="utf-8") as result_file:
-        for val in sorted(not_included.keys()):
-            c = not_included[val]
-            result_file.write(f"#include {c}{val}{mirror[c]}\n")
-
-        result_file.write("\n")
-
-        for line, _ in src:
-            result_file.write(line)
-            result_file.write("\n")
+    lines = [f"#include {c}{val}{mirror[c]}"
+             for val, c in sorted(not_included.items())]
+    lines.append("")
+    lines.extend(line for line, _ in src)
+    return "\n".join(lines) + "\n"
 
 
 def leetcode_get_all_problems() -> dict:
@@ -275,7 +269,7 @@ def main():
         case 'update_projects_list':
             update_projects_list()
         case 'embed_includes':
-            embed_includes(args.path.resolve())
+            sys.stdout.write(embed_includes(args.path.resolve()))
 
 
 if __name__ == '__main__':
