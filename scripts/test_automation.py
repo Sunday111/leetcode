@@ -1,5 +1,6 @@
 import contextlib
 import io
+import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -66,6 +67,39 @@ class EmbedIncludesTests(unittest.TestCase):
         })
         self.assertEqual(result.strip(),
                          '#include "external.hpp"\n#include <vector>\n\nstruct Shared {};\nvoid local();')
+
+
+class CreateSolutionTests(unittest.TestCase):
+    def test_leetcode_project_has_one_self_contained_test_file(self):
+        with tempfile.TemporaryDirectory(prefix="leetcode-create-") as directory:
+            with patch.object(automation, "CODE_DIR", Path(directory)):
+                with patch.multiple(automation.leetcode_fetch,
+                                    get_slug_by_number=lambda *_: "example",
+                                    problem_details_by_slug=lambda *_: {"title": "Example"},
+                                    get_sample_inputs=lambda *_: ["1", "2"],
+                                    get_sample_outputs=lambda *_: ["2", "3"],
+                                    get_method_name=lambda *_: "next",
+                                    get_cpp_template=lambda *_: "class Solution { public: int next(int x) { return x + 1; } };"):
+                    project = automation.create_leetcode_project(
+                        {}, 42, False, automation.SCRIPTS_DIR / "leetcode_solution_template")
+            self.assertEqual([p.name for p in project.glob("*tests.cpp")], ["0042_tests.cpp"])
+            self.assertEqual(list(project.glob("*_test_cases.hpp")), [])
+            tests = (project / "0042_tests.cpp").read_text()
+            self.assertIn('#include "0042.hpp"', tests)
+            self.assertIn("&Solution::next", tests)
+            self.assertIn("1\n2\n\n2\n3", tests)
+            self.assertIn("TEST_P(t0042, Test)", tests)
+            self.assertNotIn("____", tests)
+            metadata = json.loads((project / "0042.json").read_text())
+            self.assertEqual(metadata["path_to_solution_header"], "0042.hpp")
+
+    def test_generic_project_still_has_one_test_file(self):
+        with tempfile.TemporaryDirectory(prefix="leetcode-create-") as directory:
+            with patch.object(automation, "CODE_DIR", Path(directory)):
+                project = automation.create_project(
+                    "example", False, automation.SCRIPTS_DIR / "solution_template")
+            self.assertEqual([p.name for p in project.glob("*tests.cpp")], ["example_tests.cpp"])
+            self.assertEqual(list(project.glob("*_test_cases.hpp")), [])
 
 
 if __name__ == "__main__":
