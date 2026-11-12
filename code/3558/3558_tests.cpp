@@ -1,5 +1,17 @@
-#include "3558_test_cases.hpp"
+#include "3558.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::assignEdgeWeights;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+[[1,2]]
+1
+
+[[1,2],[1,3],[3,4],[3,5]]
+2
+
+
+)");
 
 class t3558 : public ::testing::TestWithParam<size_t>
 {

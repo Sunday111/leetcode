@@ -1,5 +1,13 @@
-#include "0442_test_cases.hpp"
+#include "0442.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::findDuplicates;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+[4,3,2,7,8,2,3,1] [2,3]
+[1,1,2]           [1]
+[1]               []
+)");
 
 class t0442 : public ::testing::TestWithParam<size_t>
 {

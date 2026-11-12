@@ -1,5 +1,30 @@
-#include "3734_test_cases.hpp"
+#include "3734.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest =
+    &Solution::lexPalindromicPermutation;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+"baba"
+"abba"
+"baab"
+
+"baba"
+"bbaa"
+""
+
+"abc"
+"abb"
+""
+
+"aac"
+"abb"
+"aca"
+
+"a"
+"z"
+""
+)");
 
 class t3734 : public ::testing::TestWithParam<size_t>
 {

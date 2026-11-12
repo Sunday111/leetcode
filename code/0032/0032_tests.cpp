@@ -1,5 +1,14 @@
-#include "0032_test_cases.hpp"
+#include "0032.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::longestValidParentheses;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+"(()"           2
+")()())"        4
+""              0
+")()())()()("   4
+)cases");
 
 class t0032 : public ::testing::TestWithParam<size_t>
 {

@@ -1,5 +1,13 @@
-#include "1320_test_cases.hpp"
+#include "1320.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::minimumDistance;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+"CAKE" 3
+"HAPPY" 6
+"OPVUWZLCKTDPSUKGHAXIDWHLZFKNBDZEWHBSURTVCADUGTSDMCLDBTAGFWDPGXZBVARNTDICHCUJLNFBQOBTDWMGILXPSFWVGYBZVFFKQIDTOVFAPVNSQJULMVIERWAOXCKXBRI" 295
+)");
 
 class t1320 : public ::testing::TestWithParam<size_t>
 {

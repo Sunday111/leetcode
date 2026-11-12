@@ -1,5 +1,17 @@
-#include "3612_test_cases.hpp"
+#include "3612.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::processStr;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+"a#b%*"
+"ba"
+
+"z*#"
+""
+
+
+)");
 
 class t3612 : public ::testing::TestWithParam<size_t>
 {

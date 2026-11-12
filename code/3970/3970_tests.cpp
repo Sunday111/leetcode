@@ -1,5 +1,29 @@
-#include "3970_test_cases.hpp"
+#include "3970.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::shortestPath;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+3
+[[0,1,1],[1,2,1],[0,2,3]]
+"aab"
+1
+3
+
+3
+[[0,1,1],[1,2,1],[0,2,3]]
+"aab"
+2
+2
+
+3
+[[0,1,1],[1,2,1]]
+"aaa"
+2
+-1
+
+
+)");
 
 class t3970 : public ::testing::TestWithParam<size_t>
 {

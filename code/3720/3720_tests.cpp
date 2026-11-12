@@ -1,5 +1,23 @@
-#include "3720_test_cases.hpp"
+#include "3720.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::lexGreaterPermutation;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+"abc"
+"bba"
+"bca"
+
+"leet"
+"code"
+"eelt"
+
+"baba"
+"bbaa"
+""
+
+
+)");
 
 class t3720 : public ::testing::TestWithParam<size_t>
 {

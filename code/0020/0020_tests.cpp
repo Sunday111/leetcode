@@ -1,5 +1,26 @@
-#include "0020_test_cases.hpp"
+#include "0020.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::isValid;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+"()"
+true
+
+"()[]{}"
+true
+
+"(]"
+false
+
+"([])"
+true
+
+"([)]"
+false
+
+
+)cases");
 
 class t0020 : public ::testing::TestWithParam<size_t>
 {

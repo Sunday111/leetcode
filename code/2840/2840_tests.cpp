@@ -1,5 +1,17 @@
-#include "2840_test_cases.hpp"
+#include "2840.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::checkStrings;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+"abcdba"
+"cabdab"
+true
+
+"abe"
+"bea"
+false
+)");
 
 class t2840 : public ::testing::TestWithParam<size_t>
 {

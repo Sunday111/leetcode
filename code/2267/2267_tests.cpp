@@ -1,5 +1,12 @@
-#include "2267_test_cases.hpp"
+#include "2267.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::hasValidPath;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+[["(","(","("],[")","(",")"],["(","(",")"],["(","(",")"]]   true
+[[")",")"],["(","("]]                                       false
+)cases");
 
 class t2267 : public ::testing::TestWithParam<size_t>
 {

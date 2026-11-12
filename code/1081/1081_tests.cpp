@@ -1,5 +1,12 @@
-#include "1081_test_cases.hpp"
+#include "1081.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::smallestSubsequence;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+"bcabc"     "abc"
+"cbacdcbc"  "acdb"
+)");
 
 class t1081 : public ::testing::TestWithParam<size_t>
 {

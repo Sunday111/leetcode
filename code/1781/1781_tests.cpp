@@ -1,5 +1,12 @@
-#include "1781_test_cases.hpp"
+#include "1781.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::beautySum;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+    "aabcb"     5
+    "aabcbaa"   17
+)");
 
 class t1781 : public ::testing::TestWithParam<size_t>
 {

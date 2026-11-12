@@ -1,5 +1,12 @@
-#include "0316_test_cases.hpp"
+#include "0316.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::removeDuplicateLetters;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+"bcabc"    "abc"
+"cbacdcbc" "acdb"
+)");
 
 class t0316 : public ::testing::TestWithParam<size_t>
 {

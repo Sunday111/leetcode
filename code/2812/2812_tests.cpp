@@ -1,5 +1,13 @@
-#include "2812_test_cases.hpp"
+#include "2812.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::maximumSafenessFactor;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+[[1,0,0],[0,0,0],[0,0,1]]                       0
+[[0,0,1],[0,0,0],[0,0,0]]                       2
+[[0,0,0,1],[0,0,0,0],[0,0,0,0],[1,0,0,0]]       2
+)");
 
 class t2812 : public ::testing::TestWithParam<size_t>
 {

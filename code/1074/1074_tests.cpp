@@ -1,5 +1,21 @@
-#include "1074_test_cases.hpp"
+#include "1074.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::numSubmatrixSumTarget;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+[[0,1,0],[1,1,1],[0,1,0]]
+0
+4
+
+[[1,-1],[-1,1]]
+0
+5
+
+[[904]]
+0
+0
+)");
 
 class t1074 : public ::testing::TestWithParam<size_t>
 {

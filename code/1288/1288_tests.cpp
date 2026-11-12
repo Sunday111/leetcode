@@ -1,5 +1,12 @@
-#include "1288_test_cases.hpp"
+#include "1288.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::removeCoveredIntervals;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+[[1,4],[3,6],[2,8]]     2
+[[1,4],[2,3]]           1
+)");
 
 class t1288 : public ::testing::TestWithParam<size_t>
 {

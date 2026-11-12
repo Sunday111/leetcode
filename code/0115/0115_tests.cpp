@@ -1,5 +1,12 @@
-#include "0115_test_cases.hpp"
+#include "0115.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::numDistinct;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+"rabbbit"   "rabbit"  3
+"babgbag"   "bag"     5
+)");
 
 class t0115 : public ::testing::TestWithParam<size_t>
 {

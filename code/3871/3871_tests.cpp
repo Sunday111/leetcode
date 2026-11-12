@@ -1,5 +1,17 @@
-#include "3871_test_cases.hpp"
+#include "3871.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::countCommas;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+1002
+3
+
+998
+0
+
+
+)");
 
 class t3871 : public ::testing::TestWithParam<size_t>
 {

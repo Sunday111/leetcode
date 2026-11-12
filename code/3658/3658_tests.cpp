@@ -1,5 +1,17 @@
-#include "3658_test_cases.hpp"
+#include "3658.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::gcdOfOddEvenSums;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+4
+4
+
+5
+5
+
+
+)");
 
 class t3658 : public ::testing::TestWithParam<size_t>
 {

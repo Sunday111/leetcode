@@ -1,5 +1,17 @@
-#include "0796_test_cases.hpp"
+#include "0796.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::rotateString;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+"abcde"
+"cdeab"
+true
+
+"abcde"
+"abced"
+false
+)");
 
 class t0796 : public ::testing::TestWithParam<size_t>
 {

@@ -1,5 +1,21 @@
-#include "1641_test_cases.hpp"
+#include "1641.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::countVowelStrings;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+1
+5
+
+2
+15
+
+33
+66045
+
+50
+316251
+)");
 
 class t1641 : public ::testing::TestWithParam<size_t>
 {

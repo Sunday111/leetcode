@@ -1,5 +1,20 @@
-#include "3536_test_cases.hpp"
+#include "3536.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::maxProduct;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+31
+3
+
+22
+4
+
+124
+8
+
+
+)");
 
 class t3536 : public ::testing::TestWithParam<size_t>
 {

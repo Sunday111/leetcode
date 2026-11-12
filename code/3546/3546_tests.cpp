@@ -1,5 +1,17 @@
-#include "3546_test_cases.hpp"
+#include "3546.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::canPartitionGrid;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+[[1,4],[2,3]]
+true
+
+[[1,3],[2,4]]
+false
+
+
+)");
 
 class t3546 : public ::testing::TestWithParam<size_t>
 {

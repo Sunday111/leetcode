@@ -1,7 +1,15 @@
 #include <unordered_set>
 
-#include "0022_test_cases.hpp"
+#include "0022.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::generateParenthesis;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+1       ["()"]
+2       ["()()","(())"]
+3       ["()()()","()(())","(())()","(()())","((()))"]
+)cases");
 
 static_assert(Solution::data[0].empty());
 static_assert(Solution::data[8].size() == 16 * kCatalan64[8]);

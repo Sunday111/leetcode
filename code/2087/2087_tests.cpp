@@ -1,5 +1,21 @@
-#include "2087_test_cases.hpp"
+#include "2087.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+
+inline static constexpr auto kMethodToTest = &Solution::minCost;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+[1,0]
+[2,3]
+[5,4,3]
+[8,2,6,7]
+18
+
+[0,0]
+[0,0]
+[5]
+[26]
+0
+)");
 
 class t2087 : public ::testing::TestWithParam<size_t>
 {
