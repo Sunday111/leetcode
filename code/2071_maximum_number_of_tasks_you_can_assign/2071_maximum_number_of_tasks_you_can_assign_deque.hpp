@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <array>
 #include <deque>
+#include <numeric>
 #include <ranges>
 #include <vector>
 

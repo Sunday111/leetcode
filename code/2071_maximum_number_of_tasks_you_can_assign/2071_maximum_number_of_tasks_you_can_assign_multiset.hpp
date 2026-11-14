@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <array>
+#include <numeric>
 #include <ranges>
 #include <set>
 #include <vector>
