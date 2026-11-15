@@ -1,3 +1,4 @@
+#include <limits>
 #include <random>
 
 #include "gtest/gtest.h"
@@ -51,12 +52,57 @@ protected:
     }
 };
 
-using TestTypes = ::testing::Types<int16_t, int32_t, uint16_t, uint32_t>;
+using TestTypes =
+    ::testing::Types<int16_t, int32_t, int64_t, uint16_t, uint32_t, uint64_t>;
 TYPED_TEST_SUITE(UnstableRadixSortTest, TestTypes);
 
 TYPED_TEST(UnstableRadixSortTest, RandomizedCorrectness)
 {
     this->run_sort_tests();
+}
+
+TYPED_TEST(UnstableRadixSortTest, EmptySingletonAndLimits)
+{
+    using T = TypeParam;
+    for (std::vector<T> values :
+         {std::vector<T>{},
+          std::vector<T>{std::numeric_limits<T>::max()},
+          std::vector<T>{
+              std::numeric_limits<T>::max(),
+              T{1},
+              std::numeric_limits<T>::lowest(),
+              T{0},
+              std::numeric_limits<T>::max(),
+              std::numeric_limits<T>::lowest()}})
+    {
+        auto expected = values;
+        std::ranges::sort(expected);
+        radix_sort<4>(std::span{values});
+        ASSERT_EQ(values, expected);
+        std::ranges::reverse(expected);
+        radix_sort<4, 0xFFFFFFFF, SortOrder::Descending>(std::span{values});
+        ASSERT_EQ(values, expected);
+    }
+}
+
+TEST(RadixSort, MoreElementsThanTheValueTypeCanCount)
+{
+    std::vector<u16> values(70'000);
+    u32 remaining = 70'000;
+    for (auto& value : values) value = remaining-- & 0xFFFF;
+    auto expected = values;
+    std::ranges::sort(expected);
+    radix_sort<4>(std::span{values});
+    ASSERT_EQ(values, expected);
+}
+
+TEST(RadixSort, ExactSmallCapacity)
+{
+    std::vector<u32> values{9, 1, 5, 3, 7, 0, 8, 2, 6, 4};
+    auto expected = values;
+    std::ranges::sort(expected);
+    radix_sort<4, 8, SortOrder::Ascending, 10>(values.data(), 10);
+    ASSERT_EQ(values, expected);
 }
 
 template <auto kBitsPerPass, auto kNumPasses>
