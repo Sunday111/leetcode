@@ -1,5 +1,5 @@
 #include "3775_reverse_words_with_same_vowel_count.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::reverseWords;
@@ -7,23 +7,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "cat and mice" "cat dna mice"
 )cases");
 
-class t3775_reverse_words_with_same_vowel_count
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t3775_reverse_words_with_same_vowel_count = SolutionTests<Solution>;
 
 TEST_P(t3775_reverse_words_with_same_vowel_count, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.reverseWords(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.reverseWords(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t3775_reverse_words_with_same_vowel_count,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t3775_reverse_words_with_same_vowel_count::parameters(kCases.size()),
+    t3775_reverse_words_with_same_vowel_count::name);
