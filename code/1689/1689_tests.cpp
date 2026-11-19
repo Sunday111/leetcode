@@ -1,15 +1,24 @@
-#include "1689_test_cases.hpp"
+#include "1689.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
-inline static const auto kCases = parse_test_cases<kMethodToTest>(kTestCases);
+inline static constexpr auto kMethodToTest = &Solution::minPartitions;
 
-using t1689_partitioning_into_minimum_number_of_decibinary_numbers =
-    SolutionTests<Solution>;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+"32"
+3
 
-TEST_P(
-    t1689_partitioning_into_minimum_number_of_decibinary_numbers,
-    MinOperations)
+"82734"
+8
+
+"27346209830709182346"
+9
+
+)");
+
+using t1689 = SolutionTests<Solution>;
+
+TEST_P(t1689, MinOperations)
 {
     check(
         kCases,
@@ -19,7 +28,6 @@ TEST_P(
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1689_partitioning_into_minimum_number_of_decibinary_numbers,
-    t1689_partitioning_into_minimum_number_of_decibinary_numbers::parameters(
-        kCases.size()),
-    t1689_partitioning_into_minimum_number_of_decibinary_numbers::name);
+    t1689,
+    t1689::parameters(kCases.size()),
+    t1689::name);
