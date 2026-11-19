@@ -10,9 +10,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [1,100] false
 )cases");
 
-using t0965_univalued_binary_tree = SolutionTests<Solution>;
+using t0965 = SolutionTests<Solution>;
 
-TEST_P(t0965_univalued_binary_tree, Test)
+TEST_P(t0965, Test)
 {
     check(
         kCases,
@@ -22,6 +22,6 @@ TEST_P(t0965_univalued_binary_tree, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0965_univalued_binary_tree,
-    t0965_univalued_binary_tree::parameters(kCases.size()),
-    t0965_univalued_binary_tree::name);
+    t0965,
+    t0965::parameters(kCases.size()),
+    t0965::name);
