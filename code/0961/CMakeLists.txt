@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.25)
 
 include(set_compiler_options)
 
-set(target_name 0961_n_repeated_element_in_size_2n_array)
+set(target_name 0961)
 set(tests_target_name ${target_name}_tests)
 
 add_library(${target_name} INTERFACE ${target_name}.hpp)
