@@ -1,4 +1,4 @@
-#include "1143_longest_common_subsequence.hpp"
+#include "1143.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -19,9 +19,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "jijiijjpji" "jjji" 4
 )cases");
 
-using t1143_longest_common_subsequence = SolutionTests<Solution>;
+using t1143 = SolutionTests<Solution>;
 
-TEST_P(t1143_longest_common_subsequence, Test)
+TEST_P(t1143, Test)
 {
     check(
         kCases,
@@ -31,6 +31,6 @@ TEST_P(t1143_longest_common_subsequence, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1143_longest_common_subsequence,
-    t1143_longest_common_subsequence::parameters(kCases.size()),
-    t1143_longest_common_subsequence::name);
+    t1143,
+    t1143::parameters(kCases.size()),
+    t1143::name);
