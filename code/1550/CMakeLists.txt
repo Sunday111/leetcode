@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 1550_three_consequtive_odds_tests)
 
 add_executable(${target_name}
-    1550_three_consequtive_odds.hpp
-    1550_three_consequtive_odds_tests.cpp
+    1550.hpp
+    1550_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)
