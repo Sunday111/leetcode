@@ -1,4 +1,4 @@
-#include "0052_n_queens_2.hpp"
+#include "0052.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -7,9 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 4 2
 )cases");
 
-using t0052_n_queens_2 = SolutionTests<Solution>;
+using t0052 = SolutionTests<Solution>;
 
-TEST_P(t0052_n_queens_2, Test)
+TEST_P(t0052, Test)
 {
     check(
         kCases,
@@ -19,6 +19,6 @@ TEST_P(t0052_n_queens_2, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0052_n_queens_2,
-    t0052_n_queens_2::parameters(kCases.size()),
-    t0052_n_queens_2::name);
+    t0052,
+    t0052::parameters(kCases.size()),
+    t0052::name);
