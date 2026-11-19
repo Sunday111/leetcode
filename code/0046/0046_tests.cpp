@@ -1,4 +1,4 @@
-#include "0046_permutationstest_cases.hpp"
+#include "0046_test_cases.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 

@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-#include "0046_permutations.hpp"
+#include "0046.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::permute;
 inline static constexpr std::string_view kTestCases = R"(
