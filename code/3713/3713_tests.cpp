@@ -1,4 +1,4 @@
-#include "3713_longest_balanced_substring_i.hpp"
+#include "3713.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "nlllk" 3
 )cases");
 
-using t3713_longest_balanced_substring_i = SolutionTests<Solution>;
+using t3713 = SolutionTests<Solution>;
 
-TEST_P(t3713_longest_balanced_substring_i, Test)
+TEST_P(t3713, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t3713_longest_balanced_substring_i, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3713_longest_balanced_substring_i,
-    t3713_longest_balanced_substring_i::parameters(kCases.size()),
-    t3713_longest_balanced_substring_i::name);
+    t3713,
+    t3713::parameters(kCases.size()),
+    t3713::name);
