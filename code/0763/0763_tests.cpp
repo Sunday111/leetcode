@@ -1,9 +1,19 @@
-#include "0763_test_cases.hpp"
+#include "0763.hpp"
 #include "solution_tests.hpp"
+#include "test_cases_helpers.hpp"
 
-using t0763_partition_labels = SolutionTests<Solution>;
+inline static constexpr auto kMethodToTest = &Solution::partitionLabels;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+"ababcbacadefegdehijhklij"
+[9,7,8]
 
-TEST_P(t0763_partition_labels, MinOperations)
+"eccbbbbdec"
+[10]
+)");
+
+using t0763 = SolutionTests<Solution>;
+
+TEST_P(t0763, MinOperations)
 {
     check(
         kCases,
@@ -13,6 +23,6 @@ TEST_P(t0763_partition_labels, MinOperations)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0763_partition_labels,
-    t0763_partition_labels::parameters(kCases.size()),
-    t0763_partition_labels::name);
+    t0763,
+    t0763::parameters(kCases.size()),
+    t0763::name);
