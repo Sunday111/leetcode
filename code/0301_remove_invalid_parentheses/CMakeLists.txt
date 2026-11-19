@@ -13,6 +13,8 @@ set(CMAKE_EXPERIMENTAL_CXX_MODULE_MAP_FLAG "@<MODULE_MAP_FILE>")
 target_link_libraries(0301_remove_invalid_parentheses_tests PUBLIC gtest_main)
 set_generic_compiler_options(0301_remove_invalid_parentheses_tests PUBLIC)
 
+target_link_libraries(0301_remove_invalid_parentheses_tests PRIVATE test_utility)
+
 enable_testing()
 include(GoogleTest)
 gtest_discover_tests(0301_remove_invalid_parentheses_tests)

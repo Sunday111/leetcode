@@ -3,77 +3,44 @@
 
 #include "0301_remove_invalid_parentheses.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t0301_remove_invalid_parentheses, test_1)
+static constexpr auto kMethodToTest = &Solution::removeInvalidParentheses;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+"()())()" ["(())()","()()()"]
+
+"))((" [""]
+
+")()(" ["()"]
+
+"((((((((((((((((((aaaaa))" ["((aaaaa))"]
+
+"(((k()((" ["(k)","k()"]
+
+"()(()m)" ["()(()m)"]
+
+"())(((()m)(" ["()(()m)"]
+)cases");
+
+class t0301_remove_invalid_parentheses : public ::testing::TestWithParam<size_t>
 {
-    Solution s{};
-    std::vector<std::string> expected{"(())()", "()()()"};
+};
+
+TEST_P(t0301_remove_invalid_parentheses, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args)
+        { return Solution{}.removeInvalidParentheses(args...); },
+        inputs);
     std::ranges::sort(expected);
-
-    auto result = s.removeInvalidParentheses("()())()");
-    std::ranges::sort(result);
-
-    ASSERT_EQ(result, expected);
+    std::ranges::sort(actual);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t0301_remove_invalid_parentheses, test_2)
-{
-    Solution s{};
-    std::vector<std::string> expected{""};
-    ASSERT_EQ(s.removeInvalidParentheses("))(("), expected);
-}
-
-TEST(t0301_remove_invalid_parentheses, test_3)
-{
-    Solution s{};
-    std::vector<std::string> expected{"()"};
-    ASSERT_EQ(s.removeInvalidParentheses(")()("), expected);
-}
-
-TEST(t0301_remove_invalid_parentheses, test_4)
-{
-    Solution s{};
-    std::vector<std::string> expected{"((aaaaa))"};
-    std::ranges::sort(expected);
-
-    auto result = s.removeInvalidParentheses("((((((((((((((((((aaaaa))");
-    std::ranges::sort(result);
-
-    ASSERT_EQ(result, expected);
-}
-
-TEST(t0301_remove_invalid_parentheses, test_5)
-{
-    Solution s{};
-    std::vector<std::string> expected{"k()", "(k)"};
-    std::ranges::sort(expected);
-
-    auto result = s.removeInvalidParentheses("(((k()((");
-    std::ranges::sort(result);
-
-    ASSERT_EQ(result, expected);
-}
-
-TEST(t0301_remove_invalid_parentheses, test_6)
-{
-    Solution s{};
-    std::vector<std::string> expected{"()(()m)"};
-    std::ranges::sort(expected);
-
-    auto result = s.removeInvalidParentheses("()(()m)");
-    std::ranges::sort(result);
-
-    ASSERT_EQ(result, expected);
-}
-
-TEST(t0301_remove_invalid_parentheses, test_7)
-{
-    Solution s{};
-    std::vector<std::string> expected{"()(()m)"};
-    std::ranges::sort(expected);
-
-    auto result = s.removeInvalidParentheses("())(((()m)(");
-    std::ranges::sort(result);
-
-    ASSERT_EQ(result, expected);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0301_remove_invalid_parentheses,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
