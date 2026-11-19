@@ -1,37 +1,38 @@
-#include <fstream>
+#include <string>
+#include <string_view>
 
 #include "3714_longest_balanced_substring_ii.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t3714_longest_balanced_substring_ii, test_1)
+static constexpr auto kMethodToTest = &Solution::longestBalanced;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+"abbac" 4
+
+"aabcc" 3
+
+"aba" 2
+
+"bacbbc" 4
+)cases");
+
+class t3714_longest_balanced_substring_ii
+    : public ::testing::TestWithParam<size_t>
 {
-    ASSERT_EQ(Solution{}.longestBalanced("abbac"), 4);
+};
+
+TEST_P(t3714_longest_balanced_substring_ii, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.longestBalanced(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t3714_longest_balanced_substring_ii, test_2)
-{
-    ASSERT_EQ(Solution{}.longestBalanced("aabcc"), 3);
-}
-
-TEST(t3714_longest_balanced_substring_ii, test_3)
-{
-    ASSERT_EQ(Solution{}.longestBalanced("aba"), 2);
-}
-
-TEST(t3714_longest_balanced_substring_ii, test_4)
-{
-    std::string path = LC_TARGET_SRC_PATH;
-    path += "/big_test_case.txt";
-    ASSERT_EQ(Solution{}.longestBalanced("aba"), 2);
-    std::ifstream file(path);
-    ASSERT_TRUE(file.is_open());
-    std::string content;
-    ASSERT_TRUE(std::getline(file, content));
-
-    ASSERT_EQ(Solution{}.longestBalanced(content), 14355);
-}
-
-TEST(t3714_longest_balanced_substring_ii, test_5)
-{
-    ASSERT_EQ(Solution{}.longestBalanced("bacbbc"), 4);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t3714_longest_balanced_substring_ii,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
