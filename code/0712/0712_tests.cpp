@@ -1,4 +1,4 @@
-#include "0712_minimum_ascii_delete_sum_for_two_strings.hpp"
+#include "0712.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "delete" "leet" 403
 )cases");
 
-using t0712_minimum_ascii_delete_sum_for_two_strings = SolutionTests<Solution>;
+using t0712 = SolutionTests<Solution>;
 
-TEST_P(t0712_minimum_ascii_delete_sum_for_two_strings, Test)
+TEST_P(t0712, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t0712_minimum_ascii_delete_sum_for_two_strings, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0712_minimum_ascii_delete_sum_for_two_strings,
-    t0712_minimum_ascii_delete_sum_for_two_strings::parameters(kCases.size()),
-    t0712_minimum_ascii_delete_sum_for_two_strings::name);
+    t0712,
+    t0712::parameters(kCases.size()),
+    t0712::name);
