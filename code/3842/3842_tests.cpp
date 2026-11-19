@@ -1,4 +1,4 @@
-#include "3842_toggle_light_bulbs.hpp"
+#include "3842.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [100,100] []
 )cases");
 
-using t3842_toggle_light_bulbs = SolutionTests<Solution>;
+using t3842 = SolutionTests<Solution>;
 
-TEST_P(t3842_toggle_light_bulbs, Test)
+TEST_P(t3842, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t3842_toggle_light_bulbs, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3842_toggle_light_bulbs,
-    t3842_toggle_light_bulbs::parameters(kCases.size()),
-    t3842_toggle_light_bulbs::name);
+    t3842,
+    t3842::parameters(kCases.size()),
+    t3842::name);
