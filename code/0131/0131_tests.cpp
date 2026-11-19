@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <print>
 
-#include "0131_palindrome_partitioning.hpp"
+#include "0131.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -12,8 +12,8 @@ static const auto kCases = parse_test_cases_with_types<
 "aaa" [["a","a","a"],["a","aa"],["aa","a"],["aaa"]]
 )cases");
 
-using t0131_palindrome_partitioning = SolutionTests<Solution>;
-TEST_P(t0131_palindrome_partitioning, Test)
+using t0131 = SolutionTests<Solution>;
+TEST_P(t0131, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -26,6 +26,6 @@ TEST_P(t0131_palindrome_partitioning, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0131_palindrome_partitioning,
-    t0131_palindrome_partitioning::parameters(kCases.size()),
-    t0131_palindrome_partitioning::name);
+    t0131,
+    t0131::parameters(kCases.size()),
+    t0131::name);
