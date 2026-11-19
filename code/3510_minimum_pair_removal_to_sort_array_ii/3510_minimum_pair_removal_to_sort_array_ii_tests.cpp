@@ -1,37 +1,37 @@
 #include "3510_minimum_pair_removal_to_sort_array_ii.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t3510_minimum_pair_removal_to_sort_array_ii, test_1)
+static constexpr auto kMethodToTest = &Solution::minimumPairRemoval;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+[5,2,3,1] 2
+
+[1,2,2] 0
+
+[1,1,4,1] 2
+
+[1,1,4,4,2,-4,-1] 5
+
+[3,6,-9,6,3,-4] 4
+)cases");
+
+class t3510_minimum_pair_removal_to_sort_array_ii
+    : public ::testing::TestWithParam<size_t>
 {
-    std::vector nums{5, 2, 3, 1};
-    int expected = 2;
-    ASSERT_EQ(Solution{}.minimumPairRemoval(nums), expected);
+};
+
+TEST_P(t3510_minimum_pair_removal_to_sort_array_ii, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.minimumPairRemoval(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t3510_minimum_pair_removal_to_sort_array_ii, test_2)
-{
-    std::vector nums{1, 2, 2};
-    int expected = 0;
-    ASSERT_EQ(Solution{}.minimumPairRemoval(nums), expected);
-}
-
-TEST(t3510_minimum_pair_removal_to_sort_array_ii, test_3)
-{
-    std::vector nums{1, 1, 4, 1};
-    int expected = 2;
-    ASSERT_EQ(Solution{}.minimumPairRemoval(nums), expected);
-}
-
-TEST(t3510_minimum_pair_removal_to_sort_array_ii, test_4)
-{
-    std::vector nums{1, 1, 4, 4, 2, -4, -1};
-    int expected = 5;
-    ASSERT_EQ(Solution{}.minimumPairRemoval(nums), expected);
-}
-
-TEST(t3510_minimum_pair_removal_to_sort_array_ii, test_5)
-{
-    std::vector nums{3, 6, -9, 6, 3, -4};
-    int expected = 4;
-    ASSERT_EQ(Solution{}.minimumPairRemoval(nums), expected);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t3510_minimum_pair_removal_to_sort_array_ii,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
