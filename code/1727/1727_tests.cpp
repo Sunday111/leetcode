@@ -1,5 +1,5 @@
 #include "1727.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::largestSubmatrix;
@@ -12,23 +12,18 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 2
 )");
 
-class t1727 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t1727 = SolutionTests<Solution>;
 
 TEST_P(t1727, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.largestSubmatrix(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1727,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1727::parameters(kCases.size()),
+    t1727::name);
