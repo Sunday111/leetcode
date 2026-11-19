@@ -1,5 +1,5 @@
 #include "3186_maximum_total_damage_with_spell_casting.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::maximumTotalDamage;
@@ -9,23 +9,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [3,4,5,6,6,7,1,1,1,1,1,9,9,9,9,9,9,9,9,9,6] 104
 )cases");
 
-class t3186_maximum_total_damage_with_spell_casting
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t3186_maximum_total_damage_with_spell_casting = SolutionTests<Solution>;
 
 TEST_P(t3186_maximum_total_damage_with_spell_casting, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.maximumTotalDamage(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.maximumTotalDamage(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t3186_maximum_total_damage_with_spell_casting,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t3186_maximum_total_damage_with_spell_casting::parameters(kCases.size()),
+    t3186_maximum_total_damage_with_spell_casting::name);
