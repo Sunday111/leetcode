@@ -1,4 +1,4 @@
-#include "1823_find_the_winner_of_the_circular_game.hpp"
+#include "1823.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -10,8 +10,8 @@ static const auto kCases =
 1 1 1
 )cases");
 
-using t1823_find_the_winner_of_the_circular_game = SolutionTests<Solution>;
-TEST_P(t1823_find_the_winner_of_the_circular_game, Test)
+using t1823 = SolutionTests<Solution>;
+TEST_P(t1823, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -22,6 +22,6 @@ TEST_P(t1823_find_the_winner_of_the_circular_game, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1823_find_the_winner_of_the_circular_game,
-    t1823_find_the_winner_of_the_circular_game::parameters(kCases.size()),
-    t1823_find_the_winner_of_the_circular_game::name);
+    t1823,
+    t1823::parameters(kCases.size()),
+    t1823::name);
