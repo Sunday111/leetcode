@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0019_remove_nth_node_from_end_of_list_tests)
 
 add_executable(${target_name}
-    0019_remove_nth_node_from_end_of_list.hpp
-    0019_remove_nth_node_from_end_of_list_tests.cpp
+    0019.hpp
+    0019_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

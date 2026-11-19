@@ -1,6 +1,6 @@
 #include <cassert>
 
-#include "0019_remove_nth_node_from_end_of_list.hpp"
+#include "0019.hpp"
 #include "leet_code_list.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
