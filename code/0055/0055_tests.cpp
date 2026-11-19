@@ -1,4 +1,4 @@
-#include "0055_jump_game.hpp"
+#include "0055.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -10,9 +10,9 @@ static const auto kCases =
 [3,2,1,0,4] 0
 )cases");
 
-using t0055_jump_game = SolutionTests<Solution>;
+using t0055 = SolutionTests<Solution>;
 
-TEST_P(t0055_jump_game, Test)
+TEST_P(t0055, Test)
 {
     check(
         kCases,
@@ -22,6 +22,6 @@ TEST_P(t0055_jump_game, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0055_jump_game,
-    t0055_jump_game::parameters(kCases.size()),
-    t0055_jump_game::name);
+    t0055,
+    t0055::parameters(kCases.size()),
+    t0055::name);
