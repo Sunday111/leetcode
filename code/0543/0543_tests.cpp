@@ -1,4 +1,4 @@
-#include "0543_diameter_of_binary_tree.hpp"
+#include "0543.hpp"
 #include "leet_code_binary_tree.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"

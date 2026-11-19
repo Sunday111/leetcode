@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0543_diameter_of_binary_tree_tests)
 
 add_executable(${target_name}
-    0543_diameter_of_binary_tree.hpp
-    0543_diameter_of_binary_tree_tests.cpp
+    0543.hpp
+    0543_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)
