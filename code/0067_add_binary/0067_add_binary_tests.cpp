@@ -1,16 +1,30 @@
 #include "0067_add_binary.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t0067_add_binary, test_1)
+static constexpr auto kMethodToTest = &Solution::addBinary;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+"11" "1" "100"
+
+"1010" "1011" "10101"
+)cases");
+
+class t0067_add_binary : public ::testing::TestWithParam<size_t>
 {
-    std::string a = "11", b = "1";
-    std::string expected = "100";
-    ASSERT_EQ(Solution{}.addBinary(a, b), expected);
+};
+
+TEST_P(t0067_add_binary, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.addBinary(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t0067_add_binary, test_2)
-{
-    std::string a = "1010", b = "1011";
-    std::string expected = "10101";
-    ASSERT_EQ(Solution{}.addBinary(a, b), expected);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0067_add_binary,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
