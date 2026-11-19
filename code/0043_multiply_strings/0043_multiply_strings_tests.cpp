@@ -1,5 +1,5 @@
 #include "0043_multiply_strings.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases = parse_test_cases_with_types<
@@ -11,18 +11,18 @@ static const auto kCases = parse_test_cases_with_types<
 "99" "99" "9801"
 )cases");
 
-class t0043_multiply_strings : public ::testing::TestWithParam<size_t>
-{
-};
+using t0043_multiply_strings = SolutionTests<Solution>;
 TEST_P(t0043_multiply_strings, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto& [a, b] = inputs;
-    ASSERT_EQ(expected, Solution{}.multiply(a, b));
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            auto& [a, b] = inputs;
+            ASSERT_EQ(expected, solution.multiply(a, b));
+        });
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0043_multiply_strings,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0043_multiply_strings::parameters(kCases.size()),
+    t0043_multiply_strings::name);
