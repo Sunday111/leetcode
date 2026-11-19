@@ -1,17 +1,29 @@
 #include "0024_swap_nodes_in_pairs.hpp"
 #include "gtest/gtest.h"
+#include "leet_code_list.hpp"
+#include "test_cases_helpers.hpp"
 
-TEST(t0024_swap_nodes_in_pairs, test_1)
+static constexpr auto kMethodToTest = &Solution::swapPairs;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+[1,2,3,4] [2,1,4,3]
+)");
+
+class t0024_swap_nodes_in_pairs : public ::testing::TestWithParam<size_t>
 {
-    std::array<ListNode, 4> nodes;  // NOLINT
-    nodes[0].next = &nodes[1];
-    nodes[0].val = 1;
-    nodes[1].next = &nodes[2];
-    nodes[1].val = 2;
-    nodes[2].next = &nodes[3];
-    nodes[2].val = 3;
-    nodes[3].next = nullptr;
-    nodes[3].val = 4;
+};
 
-    [[maybe_unused]] auto r = Solution::swapPairs(nodes.data());
+TEST_P(t0024_swap_nodes_in_pairs, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.swapPairs(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
+
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0024_swap_nodes_in_pairs,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
