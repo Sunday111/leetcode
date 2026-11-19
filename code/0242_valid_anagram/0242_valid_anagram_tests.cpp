@@ -1,5 +1,5 @@
 #include "0242_valid_anagram.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::isAnagram;
@@ -9,22 +9,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "rat" "car" false
 )cases");
 
-class t0242_valid_anagram : public ::testing::TestWithParam<size_t>
-{
-};
+using t0242_valid_anagram = SolutionTests<Solution>;
 
 TEST_P(t0242_valid_anagram, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.isAnagram(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.isAnagram(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0242_valid_anagram,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0242_valid_anagram::parameters(kCases.size()),
+    t0242_valid_anagram::name);
