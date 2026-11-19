@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.25)
 
 include(set_compiler_options)
 
-set(target_name 3227_vowels_game_in_a_string)
+set(target_name 3227)
 set(tests_target_name ${target_name}_tests)
 
 add_library(${target_name} INTERFACE ${target_name}.hpp)
