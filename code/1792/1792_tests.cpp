@@ -1,7 +1,7 @@
-// #include "1792_maximum_average_pass_ratio.hpp"
+// #include "1792.hpp"
 // #include "gtest/gtest.h"
 
-// TEST(t1792_maximum_average_pass_ratio, test_1)
+// TEST(t1792, test_1)
 // {
 //     Solution s{};
 // }
