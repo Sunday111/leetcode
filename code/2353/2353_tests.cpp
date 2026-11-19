@@ -1,7 +1,7 @@
-// #include "2353_design_a_food_rating_system.hpp"
+// #include "2353.hpp"
 // #include "gtest/gtest.h"
 
-// TEST(t2353_design_a_food_rating_system, test_1)
+// TEST(t2353, test_1)
 // {
 //     Solution s{};
 // }
