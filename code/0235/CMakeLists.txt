@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0235_lowest_common_ancestor_of_binary_search_tree_tests)
 
 add_executable(${target_name}
-    0235_lowest_common_ancestor_of_binary_search_tree.hpp
-    0235_lowest_common_ancestor_of_binary_search_tree_tests.cpp
+    0235.hpp
+    0235_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)
