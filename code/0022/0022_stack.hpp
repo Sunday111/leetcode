@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "signed_integral_aliases.hpp"
+#include "solution_name.hpp"
 // class Solution
 // {
 // public:
@@ -50,7 +51,7 @@
 //     }
 // };
 
-class Solution
+class LC_SOLUTION_NAME(stack)
 {
 public:
     std::vector<std::string> generateParenthesis(uint8_t n)

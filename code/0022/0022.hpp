@@ -1,3 +1,5 @@
+#pragma once
+
 #include <algorithm>
 #include <array>
 #include <span>
@@ -6,6 +8,7 @@
 
 #include "catalan_64.hpp"
 #include "namespaces.hpp"
+#include "solution_name.hpp"
 #include "uint_for_value.hpp"
 
 template <u32 N>
@@ -69,7 +72,7 @@ struct Data<0>
     }
 };
 
-class Solution
+class LC_SOLUTION_NAME(precomputed)
 {
 public:
     inline static constexpr u8 kMaxN = 8;

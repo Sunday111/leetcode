@@ -1,28 +1,37 @@
+#include <algorithm>
 #include <unordered_set>
 
 #include "0022.hpp"
+#include "0022_stack.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
-inline static constexpr auto kMethodToTest = &Solution::generateParenthesis;
+inline static constexpr auto kMethodToTest =
+    &Solution_precomputed::generateParenthesis;
 inline static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
-1       ["()"]
-2       ["()()","(())"]
-3       ["()()()","()(())","(())()","(()())","((()))"]
+1 ["()"]
+2 ["()()","(())"]
+3 ["()()()","()(())","(())()","(()())","((()))"]
 )cases");
 
-static_assert(Solution::data[0].empty());
-static_assert(Solution::data[8].size() == 16 * kCatalan64[8]);
-static_assert(Solution::data[1][0] == '(' && Solution::data[1][1] == ')');
+static_assert(Solution_precomputed::data[0].empty());
+static_assert(Solution_precomputed::data[8].size() == 16 * kCatalan64[8]);
+static_assert(
+    Solution_precomputed::data[1][0] == '(' &&
+    Solution_precomputed::data[1][1] == ')');
 
-using t0022 = SolutionTests<Solution>;
+using t0022 = SolutionTests<Solution_precomputed, Solution_stack>;
 
 TEST_P(t0022, Test)
 {
-    check(
-        kCases,
-        [](auto& solution, auto&... args)
-        { return solution.generateParenthesis(args...); });
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            auto actual = solution.generateParenthesis(std::get<0>(inputs));
+            std::ranges::sort(expected);
+            std::ranges::sort(actual);
+            ASSERT_EQ(expected, actual);
+        });
 }
 
 INSTANTIATE_TEST_SUITE_P(
@@ -33,8 +42,8 @@ INSTANTIATE_TEST_SUITE_P(
 
 TEST(ParenthesisStorageTest, AllLevels)
 {
-    Solution solution;
-    for (u8 n = 1; n <= Solution::kMaxN; ++n)
+    Solution_precomputed solution;
+    for (u8 n = 1; n <= Solution_precomputed::kMaxN; ++n)
     {
         SCOPED_TRACE(n);
         auto strings = solution.generateParenthesis(n);
