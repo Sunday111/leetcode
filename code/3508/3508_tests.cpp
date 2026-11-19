@@ -1,4 +1,4 @@
-#include "3508_implement_router.hpp"
+#include "3508.hpp"
 #include "gtest/gtest.h"
 #include "integral_aliases.hpp"
 #include "test_cases_helpers.hpp"
@@ -9,10 +9,10 @@ static const auto kCases = parse_test_cases_with_types<
 3 [[1,4,90],[2,5,90],[1,4,90],[3,5,95],[4,5,105]] [true,true,false,true,true]
 )cases");
 
-class t3508_implement_router : public ::testing::TestWithParam<size_t>
+class t3508 : public ::testing::TestWithParam<size_t>
 {
 };
-TEST_P(t3508_implement_router, Test)
+TEST_P(t3508, Test)
 {
     auto [inputs, expected] = kCases.at(GetParam());
     auto& [capacity, packets] = inputs;
@@ -28,7 +28,7 @@ TEST_P(t3508_implement_router, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3508_implement_router,
+    t3508,
     ::testing::Range(size_t{0}, kCases.size()),
     [](const testing::TestParamInfo<size_t>& info)
     { return "C" + std::to_string(info.index); });
