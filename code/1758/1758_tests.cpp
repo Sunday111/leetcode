@@ -1,13 +1,24 @@
-#include "1758_test_cases.hpp"
+#include "1758.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
-inline static const auto kCases = parse_test_cases<kMethodToTest>(kTestCases);
+inline static constexpr auto kMethodToTest = &Solution::minOperations;
 
-using t1758_minimum_changes_to_make_alternating_binary_string =
-    SolutionTests<Solution>;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+"0100"
+1
 
-TEST_P(t1758_minimum_changes_to_make_alternating_binary_string, MinOperations)
+"10"
+0
+
+"1111"
+2
+
+)");
+
+using t1758 = SolutionTests<Solution>;
+
+TEST_P(t1758, MinOperations)
 {
     check(
         kCases,
@@ -17,7 +28,6 @@ TEST_P(t1758_minimum_changes_to_make_alternating_binary_string, MinOperations)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1758_minimum_changes_to_make_alternating_binary_string,
-    t1758_minimum_changes_to_make_alternating_binary_string::parameters(
-        kCases.size()),
-    t1758_minimum_changes_to_make_alternating_binary_string::name);
+    t1758,
+    t1758::parameters(kCases.size()),
+    t1758::name);
