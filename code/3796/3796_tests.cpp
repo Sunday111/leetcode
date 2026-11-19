@@ -1,5 +1,5 @@
 #include "3796.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::findMaxVal;
@@ -17,23 +17,18 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 
 )");
 
-class t3796 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t3796 = SolutionTests<Solution>;
 
 TEST_P(t3796, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.findMaxVal(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t3796,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t3796::parameters(kCases.size()),
+    t3796::name);
