@@ -1,6 +1,6 @@
 #include "0449_serialize_and_desrialize_bst.hpp"
-#include "gtest/gtest.h"
 #include "leet_code_binary_tree.hpp"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases =
@@ -9,21 +9,20 @@ static const auto kCases =
 "" ""
 )cases");
 
-class t0449_serialize_and_desrialize_bst
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t0449_serialize_and_desrialize_bst = SolutionTests<Codec>;
 TEST_P(t0449_serialize_and_desrialize_bst, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto* tree = Codec::deserialize(std::get<0>(inputs));
-    auto actual = Codec::serialize(tree);
-    DeleteBinaryTree(tree);
-    ASSERT_EQ(expected, actual);
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            auto* tree = solution.deserialize(std::get<0>(inputs));
+            auto actual = solution.serialize(tree);
+            DeleteBinaryTree(tree);
+            ASSERT_EQ(expected, actual);
+        });
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0449_serialize_and_desrialize_bst,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0449_serialize_and_desrialize_bst::parameters(kCases.size()),
+    t0449_serialize_and_desrialize_bst::name);
