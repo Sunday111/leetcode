@@ -5,44 +5,34 @@
 
 #include "1409_queries_on_a_permutation_with_key.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t1409, Example)
+static constexpr auto kMethodToTest = &Solution::processQueries;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+[3,1,2,1] 5 [2,1,2,1]
+
+[4,4,4,4] 4 [3,0,0,0]
+)cases");
+
+class t1409_queries_on_a_permutation_with_key
+    : public ::testing::TestWithParam<size_t>
 {
-    std::vector<int> queries{3, 1, 2, 1};
-    EXPECT_EQ(
-        Solution::processQueries(queries, 5),
-        (std::vector<int>{2, 1, 2, 1}));
-    EXPECT_EQ(queries, (std::vector<int>{3, 1, 2, 1}));
+};
+
+TEST_P(t1409_queries_on_a_permutation_with_key, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    const auto original = inputs;
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.processQueries(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
+    ASSERT_EQ(original, inputs);
 }
 
-TEST(t1409, MatchesMoveToFrontReference)
-{
-    for (uint16_t m = 1; m != 9; ++m)
-    {
-        SCOPED_TRACE(m);
-        std::vector<int> permutation(m);
-        std::iota(permutation.begin(), permutation.end(), 1);
-        std::vector<int> queries;
-        std::vector<int> expected;
-        const auto count = static_cast<uint16_t>(3 * m);
-        for (uint16_t i = 0; i != count; ++i)
-        {
-            const int value = (i + m / 2) % m + 1;
-            queries.push_back(value);
-            const auto position = std::ranges::find(permutation, value);
-            expected.push_back(
-                static_cast<int>(position - permutation.begin()));
-            permutation.erase(position);
-            permutation.insert(permutation.begin(), value);
-        }
-        EXPECT_EQ(Solution::processQueries(queries, m), expected);
-    }
-}
-
-TEST(t1409, RepeatedQuery)
-{
-    std::vector<int> queries{4, 4, 4, 4};
-    EXPECT_EQ(
-        Solution::processQueries(queries, 4),
-        (std::vector<int>{3, 0, 0, 0}));
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t1409_queries_on_a_permutation_with_key,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
