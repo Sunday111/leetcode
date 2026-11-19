@@ -1,34 +1,36 @@
 #include "3634_minimum_removals_to_balance_array.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t3634_minimum_removals_to_balance_array, test_1)
+static const auto kCases = parse_test_cases_with_types<
+    std::tuple<std::vector<int>, unsigned int>,
+    unsigned int>(R"cases(
+[2,1,5] 2 1
+
+[1,6,2,9] 3 2
+
+[4,6] 2 0
+
+[1,34,23] 2 1
+)cases");
+
+class t3634_minimum_removals_to_balance_array
+    : public ::testing::TestWithParam<size_t>
 {
-    std::vector nums{2, 1, 5};
-    u32 k = 2;
-    u32 expected = 1;
-    ASSERT_EQ(Solution{}.minRemoval(nums, k), expected);
+};
+
+TEST_P(t3634_minimum_removals_to_balance_array, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.minRemoval(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t3634_minimum_removals_to_balance_array, test_2)
-{
-    std::vector nums{1, 6, 2, 9};
-    u32 k = 3;
-    u32 expected = 2;
-    ASSERT_EQ(Solution{}.minRemoval(nums, k), expected);
-}
-
-TEST(t3634_minimum_removals_to_balance_array, test_3)
-{
-    std::vector nums{4, 6};
-    u32 k = 2;
-    u32 expected = 0;
-    ASSERT_EQ(Solution{}.minRemoval(nums, k), expected);
-}
-
-TEST(t3634_minimum_removals_to_balance_array, test_4)
-{
-    std::vector nums{1, 34, 23};
-    u32 k = 2;
-    u32 expected = 1;
-    ASSERT_EQ(Solution{}.minRemoval(nums, k), expected);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t3634_minimum_removals_to_balance_array,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
