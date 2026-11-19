@@ -1,4 +1,4 @@
-#include "3346_maximum_frequency_of_an_element_after_performing_operations_i.hpp"
+#include "3346.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
