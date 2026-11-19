@@ -1,4 +1,4 @@
-#include "0024_swap_nodes_in_pairs.hpp"
+#include "0024.hpp"
 #include "leet_code_list.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -8,9 +8,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [1,2,3,4] [2,1,4,3]
 )");
 
-using t0024_swap_nodes_in_pairs = SolutionTests<Solution>;
+using t0024 = SolutionTests<Solution>;
 
-TEST_P(t0024_swap_nodes_in_pairs, Test)
+TEST_P(t0024, Test)
 {
     check(
         kCases,
@@ -20,6 +20,6 @@ TEST_P(t0024_swap_nodes_in_pairs, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0024_swap_nodes_in_pairs,
-    t0024_swap_nodes_in_pairs::parameters(kCases.size()),
-    t0024_swap_nodes_in_pairs::name);
+    t0024,
+    t0024::parameters(kCases.size()),
+    t0024::name);
