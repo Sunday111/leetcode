@@ -1,5 +1,5 @@
 #include "2273_find_resultant_array_after_removing_anagrams.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::removeAnagrams;
@@ -9,23 +9,20 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 ["abba","baba","bbaa","cd","cd"] ["abba","cd"]
 )cases");
 
-class t2273_find_resultant_array_after_removing_anagrams
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t2273_find_resultant_array_after_removing_anagrams =
+    SolutionTests<Solution>;
 
 TEST_P(t2273_find_resultant_array_after_removing_anagrams, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.removeAnagrams(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.removeAnagrams(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2273_find_resultant_array_after_removing_anagrams,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2273_find_resultant_array_after_removing_anagrams::parameters(
+        kCases.size()),
+    t2273_find_resultant_array_after_removing_anagrams::name);
