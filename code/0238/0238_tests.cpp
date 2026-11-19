@@ -1,4 +1,4 @@
-#include "0238_product_of_array_except_self.hpp"
+#include "0238.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 

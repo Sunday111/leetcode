@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.25)
 include(set_compiler_options)
 
 add_executable(0238_product_of_array_except_self_tests
-    0238_product_of_array_except_self.hpp
-    0238_product_of_array_except_self_tests.cpp
+    0238.hpp
+    0238_tests.cpp
 )
 
 target_link_libraries(0238_product_of_array_except_self_tests PUBLIC gtest_main)
