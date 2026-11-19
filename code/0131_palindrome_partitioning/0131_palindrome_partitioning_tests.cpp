@@ -2,7 +2,7 @@
 #include <print>
 
 #include "0131_palindrome_partitioning.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases = parse_test_cases_with_types<
@@ -12,20 +12,20 @@ static const auto kCases = parse_test_cases_with_types<
 "aaa" [["a","a","a"],["a","aa"],["aa","a"],["aaa"]]
 )cases");
 
-class t0131_palindrome_partitioning : public ::testing::TestWithParam<size_t>
-{
-};
+using t0131_palindrome_partitioning = SolutionTests<Solution>;
 TEST_P(t0131_palindrome_partitioning, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = Solution{}.partition(std::get<0>(inputs));
-    std::ranges::sort(expected);
-    std::ranges::sort(actual);
-    ASSERT_EQ(expected, actual);
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            auto actual = solution.partition(std::get<0>(inputs));
+            std::ranges::sort(expected);
+            std::ranges::sort(actual);
+            ASSERT_EQ(expected, actual);
+        });
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0131_palindrome_partitioning,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0131_palindrome_partitioning::parameters(kCases.size()),
+    t0131_palindrome_partitioning::name);
