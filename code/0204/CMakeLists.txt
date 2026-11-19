@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0204_count_primes_tests)
 
 add_executable(${target_name}
-    0204_count_primes.hpp
-    0204_count_primes_tests.cpp
+    0204.hpp
+    0204_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

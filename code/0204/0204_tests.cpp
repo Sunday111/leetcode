@@ -1,4 +1,4 @@
-#include "0204_count_primes.hpp"
+#include "0204.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
