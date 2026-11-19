@@ -1,4 +1,4 @@
-#include "1680_concatenation_of_consecutive_binary_numbers.hpp"
+#include "1680.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -15,10 +15,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 100000 757631812
 )cases");
 
-using t1680_concatenation_of_consecutive_binary_numbers =
-    SolutionTests<Solution>;
+using t1680 = SolutionTests<Solution>;
 
-TEST_P(t1680_concatenation_of_consecutive_binary_numbers, Test)
+TEST_P(t1680, Test)
 {
     check(
         kCases,
@@ -28,7 +27,6 @@ TEST_P(t1680_concatenation_of_consecutive_binary_numbers, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1680_concatenation_of_consecutive_binary_numbers,
-    t1680_concatenation_of_consecutive_binary_numbers::parameters(
-        kCases.size()),
-    t1680_concatenation_of_consecutive_binary_numbers::name);
+    t1680,
+    t1680::parameters(kCases.size()),
+    t1680::name);
