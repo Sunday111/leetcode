@@ -1,4 +1,4 @@
-#include "2311_longest_binary_subsequence_less_than_or_equal_to_k.hpp"
+#include "2311.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
