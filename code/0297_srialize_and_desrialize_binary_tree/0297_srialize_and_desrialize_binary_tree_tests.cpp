@@ -1,36 +1,32 @@
 #include "0297_srialize_and_desrialize_binary_tree.hpp"
 #include "gtest/gtest.h"
 #include "leet_code_binary_tree.hpp"
+#include "test_cases_helpers.hpp"
 
-bool TestCase(std::string_view s)
-{
-    auto node = Codec::deserialize(s);
-    bool result = Codec::serialize(node) == s;
-    DeleteBinaryTree(node);
-    return result;
-}
+static const auto kCases =
+    parse_test_cases_with_types<std::tuple<std::string>, std::string>(R"cases(
+"1b,2n,3b,4n,5n" "1b,2n,3b,4n,5n"
+"" ""
+"1b,2n,-13b,4n,5n" "1b,2n,-13b,4n,5n"
+"1l,2n" "1l,2n"
+"1n" "1n"
+)cases");
 
-TEST(t0297_srialize_and_desrialize_binary_tree, test_1)
+class t0297_srialize_and_desrialize_binary_tree
+    : public ::testing::TestWithParam<size_t>
 {
-    TestCase("1b,2n,3b,4n,5n");
-}
-
-TEST(t0297_srialize_and_desrialize_binary_tree, test_2)
+};
+TEST_P(t0297_srialize_and_desrialize_binary_tree, Test)
 {
-    TestCase("");
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto* tree = Codec::deserialize(std::get<0>(inputs));
+    auto actual = Codec::serialize(tree);
+    DeleteBinaryTree(tree);
+    ASSERT_EQ(expected, actual);
 }
-
-TEST(t0297_srialize_and_desrialize_binary_tree, test_3)
-{
-    TestCase("1b,2n,-13b,4n,5n");
-}
-
-TEST(t0297_srialize_and_desrialize_binary_tree, test_4)
-{
-    TestCase("1l,2n");
-}
-
-TEST(t0297_srialize_and_desrialize_binary_tree, test_5)
-{
-    TestCase("1n");
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0297_srialize_and_desrialize_binary_tree,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
