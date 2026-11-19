@@ -1,4 +1,4 @@
-#include "0110_Balanced_Binary_Tree.hpp"
+#include "0110.hpp"
 #include "leet_code_binary_tree.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -10,8 +10,8 @@ static const auto kCases =
 [1,2,2,3,3,null,null,4,4] false
 )cases");
 
-using t0110_Balanced_Binary_Tree = SolutionTests<Solution>;
-TEST_P(t0110_Balanced_Binary_Tree, Test)
+using t0110 = SolutionTests<Solution>;
+TEST_P(t0110, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -22,6 +22,6 @@ TEST_P(t0110_Balanced_Binary_Tree, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0110_Balanced_Binary_Tree,
-    t0110_Balanced_Binary_Tree::parameters(kCases.size()),
-    t0110_Balanced_Binary_Tree::name);
+    t0110,
+    t0110::parameters(kCases.size()),
+    t0110::name);
