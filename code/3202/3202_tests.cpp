@@ -1,4 +1,4 @@
-#include "3202_find_the_maximum_length_of_valid_subsequence_2.hpp"
+#include "3202.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
