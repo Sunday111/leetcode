@@ -1,4 +1,4 @@
-#include "2106_maximum_fruits_harvested_after_at_most_k_steps.hpp"
+#include "2106.hpp"
 #include "integral_aliases.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -12,9 +12,8 @@ static const auto kCases = parse_test_cases_with_types<
 [[0,10000]] 200000 200000 10000
 )cases");
 
-using t2106_maximum_fruits_harvested_after_at_most_k_steps =
-    SolutionTests<Solution>;
-TEST_P(t2106_maximum_fruits_harvested_after_at_most_k_steps, Test)
+using t2106 = SolutionTests<Solution>;
+TEST_P(t2106, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -25,7 +24,6 @@ TEST_P(t2106_maximum_fruits_harvested_after_at_most_k_steps, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2106_maximum_fruits_harvested_after_at_most_k_steps,
-    t2106_maximum_fruits_harvested_after_at_most_k_steps::parameters(
-        kCases.size()),
-    t2106_maximum_fruits_harvested_after_at_most_k_steps::name);
+    t2106,
+    t2106::parameters(kCases.size()),
+    t2106::name);
