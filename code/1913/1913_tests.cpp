@@ -8,10 +8,9 @@ static const auto kCases =
 [5,6,2,7,4] 34
 )cases");
 
-using t1913_maximum_product_difference_between_two_pairs =
-    SolutionTests<Solution>;
+using t1913 = SolutionTests<Solution>;
 
-TEST_P(t1913_maximum_product_difference_between_two_pairs, Test)
+TEST_P(t1913, Test)
 {
     check(
         kCases,
@@ -21,7 +20,6 @@ TEST_P(t1913_maximum_product_difference_between_two_pairs, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1913_maximum_product_difference_between_two_pairs,
-    t1913_maximum_product_difference_between_two_pairs::parameters(
-        kCases.size()),
-    t1913_maximum_product_difference_between_two_pairs::name);
+    t1913,
+    t1913::parameters(kCases.size()),
+    t1913::name);
