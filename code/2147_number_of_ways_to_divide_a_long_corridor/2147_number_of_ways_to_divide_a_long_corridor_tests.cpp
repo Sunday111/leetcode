@@ -1,22 +1,35 @@
 #include "2147_number_of_ways_to_divide_a_long_corridor.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t2147_number_of_ways_to_divide_a_long_corridor, test_1)
+static constexpr auto kMethodToTest = &Solution::numberOfWays;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+"SSPPSPS" 3
+
+"PPSPSP" 1
+
+"S" 0
+
+"P" 0
+)cases");
+
+class t2147_number_of_ways_to_divide_a_long_corridor
+    : public ::testing::TestWithParam<size_t>
 {
-    ASSERT_EQ(Solution{}.numberOfWays("SSPPSPS"), 3);
+};
+
+TEST_P(t2147_number_of_ways_to_divide_a_long_corridor, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.numberOfWays(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t2147_number_of_ways_to_divide_a_long_corridor, test_2)
-{
-    ASSERT_EQ(Solution{}.numberOfWays("PPSPSP"), 1);
-}
-
-TEST(t2147_number_of_ways_to_divide_a_long_corridor, test_3)
-{
-    ASSERT_EQ(Solution{}.numberOfWays("S"), 0);
-}
-
-TEST(t2147_number_of_ways_to_divide_a_long_corridor, test_4)
-{
-    ASSERT_EQ(Solution{}.numberOfWays("P"), 0);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t2147_number_of_ways_to_divide_a_long_corridor,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
