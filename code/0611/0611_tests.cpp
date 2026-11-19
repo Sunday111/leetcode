@@ -1,4 +1,4 @@
-#include "0611_valid_triangle_number.hpp"
+#include "0611.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -13,9 +13,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [2,3,4,4] 4
 )cases");
 
-using t0611_valid_triangle_number = SolutionTests<Solution>;
+using t0611 = SolutionTests<Solution>;
 
-TEST_P(t0611_valid_triangle_number, Test)
+TEST_P(t0611, Test)
 {
     check(
         kCases,
@@ -25,6 +25,6 @@ TEST_P(t0611_valid_triangle_number, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0611_valid_triangle_number,
-    t0611_valid_triangle_number::parameters(kCases.size()),
-    t0611_valid_triangle_number::name);
+    t0611,
+    t0611::parameters(kCases.size()),
+    t0611::name);
