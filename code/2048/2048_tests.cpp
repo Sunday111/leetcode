@@ -1,5 +1,6 @@
-// #include "2048_next_greater_numerically_balanced_number.hpp"
+// #include "2048.hpp"
 #include <print>
+
 #include "gtest/gtest.h"
 #include "integral_aliases.hpp"
 
@@ -20,7 +21,7 @@ bool is_balanced(u32 v)
     return true;
 }
 
-TEST(t2048_next_greater_numerically_balanced_number, DISABLED_precompute)
+TEST(t2048, DISABLED_precompute)
 {
     std::vector<u32> balanced;
     for (u32 i = 0; i != 2'000'001; ++i)
