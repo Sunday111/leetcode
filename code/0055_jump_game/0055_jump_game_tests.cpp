@@ -1,5 +1,5 @@
 #include "0055_jump_game.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases =
@@ -10,22 +10,18 @@ static const auto kCases =
 [3,2,1,0,4] 0
 )cases");
 
-class t0055_jump_game : public ::testing::TestWithParam<size_t>
-{
-};
+using t0055_jump_game = SolutionTests<Solution>;
 
 TEST_P(t0055_jump_game, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.canJump(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.canJump(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0055_jump_game,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0055_jump_game::parameters(kCases.size()),
+    t0055_jump_game::name);
