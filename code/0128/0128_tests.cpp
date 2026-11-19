@@ -1,4 +1,4 @@
-#include "0128_longest_consecutive_sequence.hpp"
+#include "0128.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [0,-1] 2
 )cases");
 
-using t0128_longest_consecutive_sequence = SolutionTests<Solution>;
+using t0128 = SolutionTests<Solution>;
 
-TEST_P(t0128_longest_consecutive_sequence, Test)
+TEST_P(t0128, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t0128_longest_consecutive_sequence, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0128_longest_consecutive_sequence,
-    t0128_longest_consecutive_sequence::parameters(kCases.size()),
-    t0128_longest_consecutive_sequence::name);
+    t0128,
+    t0128::parameters(kCases.size()),
+    t0128::name);
