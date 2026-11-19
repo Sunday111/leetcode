@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 2427_number_of_common_factors_tests)
 
 add_executable(${target_name}
-    2427_number_of_common_factors.hpp
-    2427_number_of_common_factors_tests.cpp
+    2427.hpp
+    2427_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

@@ -1,4 +1,4 @@
-#include "2427_number_of_common_factors.hpp"
+#include "2427.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
