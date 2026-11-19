@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-#include "1551_minimum_operations_to_make_array_equal.hpp"
+#include "1551.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::minOperations;
 inline static constexpr std::string_view kTestCases = R"(

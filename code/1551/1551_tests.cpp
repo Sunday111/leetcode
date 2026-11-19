@@ -1,4 +1,4 @@
-#include "1551_minimum_operations_to_make_array_equaltest_cases.hpp"
+#include "1551_test_cases.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
