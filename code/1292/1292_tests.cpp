@@ -1,4 +1,4 @@
-#include "1292_maximum_side_length_of_a_square_with_sum_less_than_or_equal_to_threshold.hpp"
+#include "1292.hpp"
 #include "parse_2d_array.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
