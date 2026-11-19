@@ -10,7 +10,9 @@
 #include <unordered_set>
 #include <vector>
 
-class Solution
+#include "solution_name.hpp"
+
+class LC_SOLUTION_NAME(bitset)
 {
 public:
     using Bitset = std::bitset<25>;

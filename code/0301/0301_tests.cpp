@@ -1,35 +1,39 @@
 #include <algorithm>
 
 #include "0301.hpp"
+#include "0301_bitset.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest =
-    &Solution::removeInvalidParentheses;
+    &Solution_bitmask::removeInvalidParentheses;
 inline static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
-"()())()"       ["(())()","()()()"]
-"(a)())()"      ["(a())()","(a)()()"]
-")("            [""]
-"(a()"          ["a()","(a)"]
-"(a(b)"         ["a(b)","(ab)"]
-")a)b(c("       ["abc"]
-"abc"           ["abc"]
+"()())()" ["(())()","()()()"]
+"(a)())()" ["(a())()","(a)()()"]
+")(" [""]
+"(a()" ["a()","(a)"]
+"(a(b)" ["a(b)","(ab)"]
+")a)b(c(" ["abc"]
+"abc" ["abc"]
 "abcdefghijklmnoqrstuvwxyz" ["abcdefghijklmnoqrstuvwxyz"]
 "((((((((((abcde))))))))))" ["((((((((((abcde))))))))))"]
+"))((" [""]
+")()(" ["()"]
+"((((((((((((((((((aaaaa))" ["((aaaaa))"]
+"(((k()((" ["(k)","k()"]
+"()(()m)" ["()(()m)"]
+"())(((()m)(" ["()(()m)"]
 )cases");
 
-using t0301 = SolutionTests<Solution>;
+using t0301 = SolutionTests<Solution_bitmask, Solution_bitset>;
 
 TEST_P(t0301, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
         {
-            auto f = [&](auto&... args)
-            {
-                return solution.removeInvalidParentheses(args...);
-            };
-            auto actual = std::apply(f, inputs);
+            auto actual =
+                solution.removeInvalidParentheses(std::get<0>(inputs));
             std::ranges::sort(expected);
             std::ranges::sort(actual);
             ASSERT_EQ(expected, actual);
@@ -38,7 +42,7 @@ TEST_P(t0301, Test)
 
 TEST(t0301Reuse, MultipleCalls)
 {
-    Solution instance{};
+    Solution_bitmask instance{};
     for (auto [inputs, expected] : kCases)
     {
         auto actual =
@@ -52,7 +56,7 @@ TEST(t0301Reuse, MultipleCalls)
 TEST(t0301Input, Unchanged)
 {
     std::string input = ")a)b(c(";
-    auto actual = Solution{}.removeInvalidParentheses(input);
+    auto actual = Solution_bitmask{}.removeInvalidParentheses(input);
     EXPECT_EQ(input, ")a)b(c(");
     EXPECT_EQ(actual, (std::vector<std::string>{"abc"}));
 }

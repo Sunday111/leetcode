@@ -1,3 +1,5 @@
+#pragma once
+
 #include <bit>
 #include <cassert>
 #include <string>
@@ -6,8 +8,9 @@
 #include <vector>
 
 #include "integral_aliases.hpp"
+#include "solution_name.hpp"
 
-class Solution
+class LC_SOLUTION_NAME(bitmask)
 {
 public:
     std::vector<std::string> results;
