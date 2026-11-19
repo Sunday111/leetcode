@@ -11,9 +11,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 100 [[3,97],[11,89],[17,83],[29,71],[41,59],[47,53]]
 )cases");
 
-using t2761_prime_pairs_with_target_sum = SolutionTests<Solution>;
+using t2761 = SolutionTests<Solution>;
 
-TEST_P(t2761_prime_pairs_with_target_sum, Test)
+TEST_P(t2761, Test)
 {
     check(
         kCases,
@@ -23,6 +23,6 @@ TEST_P(t2761_prime_pairs_with_target_sum, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2761_prime_pairs_with_target_sum,
-    t2761_prime_pairs_with_target_sum::parameters(kCases.size()),
-    t2761_prime_pairs_with_target_sum::name);
+    t2761,
+    t2761::parameters(kCases.size()),
+    t2761::name);
