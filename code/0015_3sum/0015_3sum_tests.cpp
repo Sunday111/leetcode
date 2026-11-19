@@ -1,32 +1,33 @@
 #include "0015_3sum.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 #include "test_utility.hpp"
 
-TEST(t0015_3sum, test_1)
+static constexpr auto kMethodToTest = &Solution::threeSum;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+[-1,0,1,2,-1,-4] [[-1,-1,2],[-1,0,1]]
+
+[0,1,1] []
+
+[0,0,0] [[0,0,0]]
+)");
+
+class t0015_3sum : public ::testing::TestWithParam<size_t>
 {
-    std::vector input{-1, 0, 1, 2, -1, -4};
-    std::vector<std::vector<int>> expected{
-        {-1, -1, 2},
-        {-1, 0, 1},
-    };
-    auto actual = Solution{}.threeSum(input);
-    ASSERT_EQ(sorted(actual), sorted(expected));
+};
+
+TEST_P(t0015_3sum, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.threeSum(args...); },
+        inputs);
+    ASSERT_EQ(sorted(expected), sorted(actual));
 }
 
-TEST(t0015_3sum, test_2)
-{
-    std::vector input{0, 1, 1};
-    std::vector<std::vector<int>> expected{};
-    auto actual = Solution{}.threeSum(input);
-    ASSERT_EQ(sorted(actual), sorted(expected));
-}
-
-TEST(t0015_3sum, test_3)
-{
-    std::vector input{0, 0, 0};
-    std::vector<std::vector<int>> expected{
-        {0, 0, 0},
-    };
-    auto actual = Solution{}.threeSum(input);
-    ASSERT_EQ(sorted(actual), sorted(expected));
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0015_3sum,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
