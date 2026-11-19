@@ -1,4 +1,4 @@
-#include "2411_smallest_subarrays_with_maximum_bitwise_or.hpp"
+#include "2411.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,10 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [1,0,2,1,3] [3,3,2,2,1]
 )cases");
 
-using t2411_smallest_subarrays_with_maximum_bitwise_or =
-    SolutionTests<Solution>;
+using t2411 = SolutionTests<Solution>;
 
-TEST_P(t2411_smallest_subarrays_with_maximum_bitwise_or, Test)
+TEST_P(t2411, Test)
 {
     check(
         kCases,
@@ -22,6 +21,6 @@ TEST_P(t2411_smallest_subarrays_with_maximum_bitwise_or, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2411_smallest_subarrays_with_maximum_bitwise_or,
-    t2411_smallest_subarrays_with_maximum_bitwise_or::parameters(kCases.size()),
-    t2411_smallest_subarrays_with_maximum_bitwise_or::name);
+    t2411,
+    t2411::parameters(kCases.size()),
+    t2411::name);
