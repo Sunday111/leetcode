@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0043_multiply_strings_tests)
 
 add_executable(${target_name}
-    0043_multiply_strings.hpp
-    0043_multiply_strings_tests.cpp
+    0043.hpp
+    0043_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

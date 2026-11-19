@@ -1,4 +1,4 @@
-#include "0043_multiply_strings.hpp"
+#include "0043.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
