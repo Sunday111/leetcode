@@ -1,4 +1,4 @@
-#include "1079_letter_tile_possibilities.hpp"
+#include "1079.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -11,9 +11,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "V" 1
 )cases");
 
-using t1079_letter_tile_possibilities = SolutionTests<Solution>;
+using t1079 = SolutionTests<Solution>;
 
-TEST_P(t1079_letter_tile_possibilities, Test)
+TEST_P(t1079, Test)
 {
     check(
         kCases,
@@ -23,6 +23,6 @@ TEST_P(t1079_letter_tile_possibilities, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1079_letter_tile_possibilities,
-    t1079_letter_tile_possibilities::parameters(kCases.size()),
-    t1079_letter_tile_possibilities::name);
+    t1079,
+    t1079::parameters(kCases.size()),
+    t1079::name);
