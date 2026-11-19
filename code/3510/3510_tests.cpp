@@ -1,4 +1,4 @@
-#include "3510_minimum_pair_removal_to_sort_array_ii.hpp"
+#include "3510.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -15,9 +15,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [3,6,-9,6,3,-4] 4
 )cases");
 
-using t3510_minimum_pair_removal_to_sort_array_ii = SolutionTests<Solution>;
+using t3510 = SolutionTests<Solution>;
 
-TEST_P(t3510_minimum_pair_removal_to_sort_array_ii, Test)
+TEST_P(t3510, Test)
 {
     check(
         kCases,
@@ -27,6 +27,6 @@ TEST_P(t3510_minimum_pair_removal_to_sort_array_ii, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3510_minimum_pair_removal_to_sort_array_ii,
-    t3510_minimum_pair_removal_to_sort_array_ii::parameters(kCases.size()),
-    t3510_minimum_pair_removal_to_sort_array_ii::name);
+    t3510,
+    t3510::parameters(kCases.size()),
+    t3510::name);
