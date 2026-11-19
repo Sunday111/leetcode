@@ -1,5 +1,5 @@
 #include "2029.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::stoneGameIX;
@@ -10,23 +10,18 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [20,3,20,17,2,12,15,17,4] true
 )");
 
-class t2029 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t2029 = SolutionTests<Solution>;
 
 TEST_P(t2029, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.stoneGameIX(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2029,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2029::parameters(kCases.size()),
+    t2029::name);
