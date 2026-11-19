@@ -1,5 +1,5 @@
 #include "2147_number_of_ways_to_divide_a_long_corridor.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::numberOfWays;
@@ -13,23 +13,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "P" 0
 )cases");
 
-class t2147_number_of_ways_to_divide_a_long_corridor
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t2147_number_of_ways_to_divide_a_long_corridor = SolutionTests<Solution>;
 
 TEST_P(t2147_number_of_ways_to_divide_a_long_corridor, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.numberOfWays(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.numberOfWays(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2147_number_of_ways_to_divide_a_long_corridor,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2147_number_of_ways_to_divide_a_long_corridor::parameters(kCases.size()),
+    t2147_number_of_ways_to_divide_a_long_corridor::name);
