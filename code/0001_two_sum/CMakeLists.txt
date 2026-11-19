@@ -7,7 +7,7 @@ add_executable(0001_two_sum_tests
     0001_two_sum_tests.cpp
 )
 
-target_link_libraries(0001_two_sum_tests PUBLIC gtest_main)
+target_link_libraries(0001_two_sum_tests PUBLIC gtest_main test_utility)
 set_generic_compiler_options(0001_two_sum_tests PUBLIC)
 
 enable_testing()
