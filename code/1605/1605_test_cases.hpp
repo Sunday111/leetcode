@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-#include "1605_find_valid_matrix_given_row_and_column_sums.hpp"
+#include "1605.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::restoreMatrix;
 inline static constexpr std::string_view kTestCases = R"(

@@ -1,4 +1,4 @@
-#include "1605_find_valid_matrix_given_row_and_column_sumstest_cases.hpp"
+#include "1605_test_cases.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
