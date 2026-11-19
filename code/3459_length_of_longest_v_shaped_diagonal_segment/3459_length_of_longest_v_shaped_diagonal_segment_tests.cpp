@@ -1,5 +1,5 @@
 #include "3459_length_of_longest_v_shaped_diagonal_segment.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::lenOfVDiagonal;
@@ -17,23 +17,20 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [[1,2,0,0],[0,0,1,2]] 2
 )cases");
 
-class t3459_length_of_longest_v_shaped_diagonal_segment
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t3459_length_of_longest_v_shaped_diagonal_segment =
+    SolutionTests<Solution>;
 
 TEST_P(t3459_length_of_longest_v_shaped_diagonal_segment, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.lenOfVDiagonal(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.lenOfVDiagonal(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t3459_length_of_longest_v_shaped_diagonal_segment,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t3459_length_of_longest_v_shaped_diagonal_segment::parameters(
+        kCases.size()),
+    t3459_length_of_longest_v_shaped_diagonal_segment::name);
