@@ -1,5 +1,5 @@
 #include "0680_valid_palindrome.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases =
@@ -8,17 +8,17 @@ static const auto kCases =
 "deeee" true
 )cases");
 
-class t0680_valid_palindrome : public ::testing::TestWithParam<size_t>
-{
-};
+using t0680_valid_palindrome = SolutionTests<Solution>;
 TEST_P(t0680_valid_palindrome, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    ASSERT_EQ(expected, Solution{}.validPalindrome(std::get<0>(inputs)));
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            ASSERT_EQ(expected, solution.validPalindrome(std::get<0>(inputs)));
+        });
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0680_valid_palindrome,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0680_valid_palindrome::parameters(kCases.size()),
+    t0680_valid_palindrome::name);
