@@ -1,4 +1,4 @@
-#include "3459_length_of_longest_v_shaped_diagonal_segment.hpp"
+#include "3459.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -17,10 +17,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [[1,2,0,0],[0,0,1,2]] 2
 )cases");
 
-using t3459_length_of_longest_v_shaped_diagonal_segment =
-    SolutionTests<Solution>;
+using t3459 = SolutionTests<Solution>;
 
-TEST_P(t3459_length_of_longest_v_shaped_diagonal_segment, Test)
+TEST_P(t3459, Test)
 {
     check(
         kCases,
@@ -30,7 +29,6 @@ TEST_P(t3459_length_of_longest_v_shaped_diagonal_segment, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3459_length_of_longest_v_shaped_diagonal_segment,
-    t3459_length_of_longest_v_shaped_diagonal_segment::parameters(
-        kCases.size()),
-    t3459_length_of_longest_v_shaped_diagonal_segment::name);
+    t3459,
+    t3459::parameters(kCases.size()),
+    t3459::name);
