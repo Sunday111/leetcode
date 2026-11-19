@@ -9,10 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 5 1 5 [1,1]
 )cases");
 
-using t1900_the_earliest_and_latest_rounds_where_players_compete =
-    SolutionTests<Solution>;
+using t1900 = SolutionTests<Solution>;
 
-TEST_P(t1900_the_earliest_and_latest_rounds_where_players_compete, Test)
+TEST_P(t1900, Test)
 {
     check(
         kCases,
@@ -22,7 +21,6 @@ TEST_P(t1900_the_earliest_and_latest_rounds_where_players_compete, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1900_the_earliest_and_latest_rounds_where_players_compete,
-    t1900_the_earliest_and_latest_rounds_where_players_compete::parameters(
-        kCases.size()),
-    t1900_the_earliest_and_latest_rounds_where_players_compete::name);
+    t1900,
+    t1900::parameters(kCases.size()),
+    t1900::name);
