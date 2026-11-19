@@ -10,6 +10,8 @@ add_executable(0953_verifying_an_alien_dictionary_tests
 target_link_libraries(0953_verifying_an_alien_dictionary_tests PUBLIC gtest_main)
 set_generic_compiler_options(0953_verifying_an_alien_dictionary_tests PUBLIC)
 
+target_link_libraries(0953_verifying_an_alien_dictionary_tests PRIVATE test_utility)
+
 enable_testing()
 include(GoogleTest)
 gtest_discover_tests(0953_verifying_an_alien_dictionary_tests)
