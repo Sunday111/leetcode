@@ -11,10 +11,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [1,2,3,4] 0
 )cases");
 
-using t3818_minimum_prefix_removal_to_make_array_strictly_increasing =
-    SolutionTests<Solution>;
+using t3818 = SolutionTests<Solution>;
 
-TEST_P(t3818_minimum_prefix_removal_to_make_array_strictly_increasing, Test)
+TEST_P(t3818, Test)
 {
     check(
         kCases,
@@ -24,7 +23,6 @@ TEST_P(t3818_minimum_prefix_removal_to_make_array_strictly_increasing, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3818_minimum_prefix_removal_to_make_array_strictly_increasing,
-    t3818_minimum_prefix_removal_to_make_array_strictly_increasing::parameters(
-        kCases.size()),
-    t3818_minimum_prefix_removal_to_make_array_strictly_increasing::name);
+    t3818,
+    t3818::parameters(kCases.size()),
+    t3818::name);
