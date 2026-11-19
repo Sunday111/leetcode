@@ -9,7 +9,7 @@ add_library(${target_name} INTERFACE)
 set_generic_compiler_options(${target_name} INTERFACE)
 target_link_libraries(${target_name} INTERFACE lc_templates)
 
-add_executable(${tests_target_name} ${target_name}_tests.cpp)
+add_executable(${tests_target_name} 1768_tests.cpp)
 
 target_link_libraries(${tests_target_name} PUBLIC ${target_name} test_utility)
 

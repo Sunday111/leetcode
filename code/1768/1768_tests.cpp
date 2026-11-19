@@ -1,5 +1,5 @@
-#include "1768_merge_strings_alternately_simple.hpp"
-#include "1768_merge_strings_alternately_sse2.hpp"
+#include "1768_simple.hpp"
+#include "1768_sse2.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
