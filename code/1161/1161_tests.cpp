@@ -1,7 +1,7 @@
 #include "1161.hpp"
 #include "gtest/gtest.h"
 
-TEST(t1161_maximum_level_sum_of_a_binary_tree, test_1)
+TEST(t1161, test_1)
 {
     // Solution s{};
 }
