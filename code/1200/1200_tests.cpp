@@ -1,4 +1,4 @@
-#include "1200_minimum_absolute_difference.hpp"
+#include "1200.hpp"
 #include "gtest/gtest.h"
 
 TEST(t1200_minimum_absolute_difference, test_1)
