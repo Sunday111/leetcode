@@ -1,4 +1,4 @@
-#include "0023_merge_k_sorted_lists.hpp"
+#include "0023.hpp"
 #include "leet_code_list.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"

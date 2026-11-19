@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0023_merge_k_sorted_lists_tests)
 
 add_executable(${target_name}
-    0023_merge_k_sorted_lists.hpp
-    0023_merge_k_sorted_lists_tests.cpp
+    0023.hpp
+    0023_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)
