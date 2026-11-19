@@ -7,9 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [1,2,3,4] [24,12,8,6]
 )cases");
 
-using t0238_product_of_array_except_self = SolutionTests<Solution>;
+using t0238 = SolutionTests<Solution>;
 
-TEST_P(t0238_product_of_array_except_self, Test)
+TEST_P(t0238, Test)
 {
     check(
         kCases,
@@ -19,6 +19,6 @@ TEST_P(t0238_product_of_array_except_self, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0238_product_of_array_except_self,
-    t0238_product_of_array_except_self::parameters(kCases.size()),
-    t0238_product_of_array_except_self::name);
+    t0238,
+    t0238::parameters(kCases.size()),
+    t0238::name);
