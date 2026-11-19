@@ -1,5 +1,5 @@
 #include "0438_find_all_anagrams_in_a_string.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::findAnagrams;
@@ -9,23 +9,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "abab" "ab" [0,1,2]
 )cases");
 
-class t0438_find_all_anagrams_in_a_string
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t0438_find_all_anagrams_in_a_string = SolutionTests<Solution>;
 
 TEST_P(t0438_find_all_anagrams_in_a_string, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.findAnagrams(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.findAnagrams(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0438_find_all_anagrams_in_a_string,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0438_find_all_anagrams_in_a_string::parameters(kCases.size()),
+    t0438_find_all_anagrams_in_a_string::name);
