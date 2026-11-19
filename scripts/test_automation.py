@@ -89,6 +89,10 @@ class CreateSolutionTests(unittest.TestCase):
             self.assertIn("&Solution::next", tests)
             self.assertIn("1\n2\n\n2\n3", tests)
             self.assertIn("TEST_P(t0042, Test)", tests)
+            self.assertIn("using t0042 = SolutionTests<Solution>;", tests)
+            self.assertIn("return solution.next(args...);", tests)
+            self.assertIn("t0042::parameters(kCases.size())", tests)
+            self.assertIn("t0042::name", tests)
             self.assertNotIn("____", tests)
             metadata = json.loads((project / "0042.json").read_text())
             self.assertEqual(metadata["path_to_solution_header"], "0042.hpp")
@@ -100,6 +104,10 @@ class CreateSolutionTests(unittest.TestCase):
                     "example", False, automation.SCRIPTS_DIR / "solution_template")
             self.assertEqual([p.name for p in project.glob("*tests.cpp")], ["example_tests.cpp"])
             self.assertEqual(list(project.glob("*_test_cases.hpp")), [])
+            tests = (project / "example_tests.cpp").read_text()
+            self.assertIn("using texample = SolutionTests<Solution>;", tests)
+            self.assertIn("texample::parameters(kCases.size())", tests)
+            self.assertIn("texample::name", tests)
 
 
 if __name__ == "__main__":

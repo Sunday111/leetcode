@@ -1,13 +1,17 @@
+#pragma once
+
 #include <algorithm>
 #include <cstring>
+#include <iostream>
 #include <vector>
 
 #include "cast.hpp"
 #include "integral_aliases.hpp"
 #include "radix_sorter.hpp"
+#include "solution_name.hpp"
 #include "sync_stdio.hpp"
 
-class Solution
+class LC_SOLUTION_NAME(adaptive)
 {
     static constexpr u32 kWords = (1'000'001 + 63) / 64;
     inline static u64 present[kWords];
