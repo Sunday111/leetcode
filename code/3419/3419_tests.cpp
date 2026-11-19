@@ -1,4 +1,4 @@
-#include "3419_minimize_the_maximum_edge_weight_of_graph.hpp"
+#include "3419.hpp"
 #include "parse_2d_array.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -8,9 +8,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 5 [[1,0,1],[2,0,2],[3,0,1],[4,3,1],[2,1,1]] 2 1
 )cases");
 
-using t3419_minimize_the_maximum_edge_weight_of_graph = SolutionTests<Solution>;
+using t3419 = SolutionTests<Solution>;
 
-TEST_P(t3419_minimize_the_maximum_edge_weight_of_graph, Test)
+TEST_P(t3419, Test)
 {
     check(
         kCases,
@@ -20,6 +20,6 @@ TEST_P(t3419_minimize_the_maximum_edge_weight_of_graph, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3419_minimize_the_maximum_edge_weight_of_graph,
-    t3419_minimize_the_maximum_edge_weight_of_graph::parameters(kCases.size()),
-    t3419_minimize_the_maximum_edge_weight_of_graph::name);
+    t3419,
+    t3419::parameters(kCases.size()),
+    t3419::name);
