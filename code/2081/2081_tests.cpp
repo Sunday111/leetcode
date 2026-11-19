@@ -10,13 +10,12 @@ static const auto kCases =
 )cases");
 
 #ifndef NDEBUG
-using t2081_sum_of_k_mirror_numbers =
-    SolutionTests<Solution, Cheat, Solution2, Solution3, Solution4>;
+using t2081 = SolutionTests<Solution, Cheat, Solution2, Solution3, Solution4>;
 #else
-using t2081_sum_of_k_mirror_numbers = SolutionTests<Solution, Cheat>;
+using t2081 = SolutionTests<Solution, Cheat>;
 #endif
 
-TEST_P(t2081_sum_of_k_mirror_numbers, Test)
+TEST_P(t2081, Test)
 {
     check(
         kCases,
@@ -26,6 +25,6 @@ TEST_P(t2081_sum_of_k_mirror_numbers, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2081_sum_of_k_mirror_numbers,
-    t2081_sum_of_k_mirror_numbers::parameters(kCases.size()),
-    t2081_sum_of_k_mirror_numbers::name);
+    t2081,
+    t2081::parameters(kCases.size()),
+    t2081::name);
