@@ -1,6 +1,6 @@
 #pragma once
 
-#include "1557_minimum_number_of_vertices_to_reach_all_nodes.hpp"
+#include "1557.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest =

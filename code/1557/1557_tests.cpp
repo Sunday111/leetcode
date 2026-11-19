@@ -1,4 +1,4 @@
-#include "1557_minimum_number_of_vertices_to_reach_all_nodestest_cases.hpp"
+#include "1557_test_cases.hpp"
 #include "solution_tests.hpp"
 
 using t1557_minimum_number_of_vertices_to_reach_all_nodes =
