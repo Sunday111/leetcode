@@ -1,66 +1,35 @@
 #include "3355_zero_array_transformations_1.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t3355_zero_array_transformations_1, test_1)
+static constexpr auto kMethodToTest = &Solution::isZeroArray;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+[1,0,1] [[0,2]] true
+
+[4,6] [[0,0],[0,0],[0,0],[0,0],[0,0],[0,1],[0,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1],[1,1]] true
+
+[0,3,9] [[0,2],[0,2],[1,1],[1,2],[1,2],[2,2]] false
+
+[1,1,3] [[0,0],[0,0],[0,0],[0,1],[0,2],[0,2],[1,1],[1,1],[1,1],[1,1],[2,2],[2,2]] true
+)cases");
+
+class t3355_zero_array_transformations_1
+    : public ::testing::TestWithParam<size_t>
 {
-    std::vector nums{1, 0, 1};
-    std::vector<std::vector<int>> queries{{0, 2}};
-    ASSERT_TRUE(Solution{}.isZeroArray(nums, queries));
+};
+
+TEST_P(t3355_zero_array_transformations_1, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.isZeroArray(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t3355_zero_array_transformations_1, test_2)
-{
-    std::vector nums{4, 6};
-    std::vector<std::vector<int>> queries{
-        {0, 0},
-        {0, 0},
-        {0, 0},
-        {0, 0},
-        {0, 0},
-        {0, 1},
-        {0, 1},
-        {1, 1},
-        {1, 1},
-        {1, 1},
-        {1, 1},
-        {1, 1},
-        {1, 1},
-        {1, 1},
-        {1, 1},
-    };
-    ASSERT_TRUE(Solution{}.isZeroArray(nums, queries));
-}
-
-TEST(t3355_zero_array_transformations_1, test_3)
-{
-    std::vector nums{0, 3, 9};
-    std::vector<std::vector<int>> queries{
-        {0, 2},
-        {0, 2},
-        {1, 1},
-        {1, 2},
-        {1, 2},
-        {2, 2},
-    };
-    ASSERT_FALSE(Solution{}.isZeroArray(nums, queries));
-}
-
-TEST(t3355_zero_array_transformations_1, test_4)
-{
-    std::vector nums{1, 1, 3};
-    std::vector<std::vector<int>> queries{
-        {0, 0},
-        {0, 0},
-        {0, 0},
-        {0, 1},
-        {0, 2},
-        {0, 2},
-        {1, 1},
-        {1, 1},
-        {1, 1},
-        {1, 1},
-        {2, 2},
-        {2, 2},
-    };
-    ASSERT_TRUE(Solution{}.isZeroArray(nums, queries));
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t3355_zero_array_transformations_1,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
