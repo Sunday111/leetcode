@@ -9,9 +9,9 @@ static const auto kCases =
 "b okzojaporykbmq tybq zrztwlolvcyumcsq jjuowpp" 210324488
 )cases");
 
-using t2514_count_anagrams = SolutionTests<Solution, CachingFactorialsSolution>;
+using t2514 = SolutionTests<Solution, CachingFactorialsSolution>;
 
-TEST_P(t2514_count_anagrams, Test)
+TEST_P(t2514, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t2514_count_anagrams, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2514_count_anagrams,
-    t2514_count_anagrams::parameters(kCases.size()),
-    t2514_count_anagrams::name);
+    t2514,
+    t2514::parameters(kCases.size()),
+    t2514::name);
