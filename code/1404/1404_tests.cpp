@@ -1,4 +1,4 @@
-#include "1404_number_of_steps_to_reduce_a_number_to_one.hpp"
+#include "1404.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
