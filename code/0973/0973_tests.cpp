@@ -1,4 +1,4 @@
-#include "0973_k_closest_points_to_origin.hpp"
+#include "0973.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
