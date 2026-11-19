@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.25)
 include(set_compiler_options)
 
 add_executable(0415_add_strings_tests
-    0415_add_strings.hpp
-    0415_add_strings_tests.cpp
+    0415.hpp
+    0415_tests.cpp
 )
 
 target_link_libraries(0415_add_strings_tests PUBLIC gtest_main)
