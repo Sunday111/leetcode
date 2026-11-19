@@ -1,5 +1,5 @@
 #include "2094_finding_3_digit_even_numbers.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::findEvenNumbers;
@@ -13,23 +13,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [3,7,5] []
 )cases");
 
-class t2094_finding_3_digit_even_numbers
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t2094_finding_3_digit_even_numbers = SolutionTests<Solution>;
 
 TEST_P(t2094_finding_3_digit_even_numbers, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.findEvenNumbers(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.findEvenNumbers(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2094_finding_3_digit_even_numbers,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2094_finding_3_digit_even_numbers::parameters(kCases.size()),
+    t2094_finding_3_digit_even_numbers::name);
