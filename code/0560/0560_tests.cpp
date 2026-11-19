@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [1,2,3] 3 2
 )cases");
 
-using t0560_subarray_sum_equals_k = SolutionTests<Solution>;
+using t0560 = SolutionTests<Solution>;
 
-TEST_P(t0560_subarray_sum_equals_k, Test)
+TEST_P(t0560, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t0560_subarray_sum_equals_k, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0560_subarray_sum_equals_k,
-    t0560_subarray_sum_equals_k::parameters(kCases.size()),
-    t0560_subarray_sum_equals_k::name);
+    t0560,
+    t0560::parameters(kCases.size()),
+    t0560::name);
