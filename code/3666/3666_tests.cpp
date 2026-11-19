@@ -1,8 +1,8 @@
 #include <tuple>
 
-#include "3666_minimum_operations_to_equalize_binary_string.hpp"
+#include "3666.hpp"
 #include "solution_tests.hpp"
-#include "test_cases.hpp"
+#include "3666_test_cases.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static const auto kCases =
