@@ -1,10 +1,34 @@
 #include "0263_ugly_number.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t0263_ugly_number, test_1)
+static constexpr auto kMethodToTest = &Solution::isUgly;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+0 false
+
+1 true
+
+6 true
+
+14 false
+)cases");
+
+class t0263_ugly_number : public ::testing::TestWithParam<size_t>
 {
-    EXPECT_EQ(Solution{}.isUgly(0), false);
-    EXPECT_EQ(Solution{}.isUgly(1), true);
-    EXPECT_EQ(Solution{}.isUgly(6), true);
-    EXPECT_EQ(Solution{}.isUgly(14), false);
+};
+
+TEST_P(t0263_ugly_number, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.isUgly(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
+
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0263_ugly_number,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
