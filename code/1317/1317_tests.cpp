@@ -1,4 +1,4 @@
-#include "1317_convert_integer_to_the_sum_of_two_no_zero_integers.hpp"
+#include "1317.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,8 @@ static const auto kCases =
 10000 10000
 )cases");
 
-using t1317_convert_integer_to_the_sum_of_two_no_zero_integers =
-    SolutionTests<Solution>;
-TEST_P(t1317_convert_integer_to_the_sum_of_two_no_zero_integers, Test)
+using t1317 = SolutionTests<Solution>;
+TEST_P(t1317, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -28,7 +27,6 @@ TEST_P(t1317_convert_integer_to_the_sum_of_two_no_zero_integers, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1317_convert_integer_to_the_sum_of_two_no_zero_integers,
-    t1317_convert_integer_to_the_sum_of_two_no_zero_integers::parameters(
-        kCases.size()),
-    t1317_convert_integer_to_the_sum_of_two_no_zero_integers::name);
+    t1317,
+    t1317::parameters(kCases.size()),
+    t1317::name);
