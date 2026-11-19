@@ -1,4 +1,4 @@
-#include "3562_maximum_profit_from_trading_stocks_with_discounts.hpp"
+#include "3562.hpp"
 #include "parse_2d_array.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -20,10 +20,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 1 [28] [6] [] 2 0
 )cases");
 
-using t3562_maximum_profit_from_trading_stocks_with_discounts =
-    SolutionTests<Solution>;
+using t3562 = SolutionTests<Solution>;
 
-TEST_P(t3562_maximum_profit_from_trading_stocks_with_discounts, Test)
+TEST_P(t3562, Test)
 {
     check(
         kCases,
@@ -33,7 +32,6 @@ TEST_P(t3562_maximum_profit_from_trading_stocks_with_discounts, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3562_maximum_profit_from_trading_stocks_with_discounts,
-    t3562_maximum_profit_from_trading_stocks_with_discounts::parameters(
-        kCases.size()),
-    t3562_maximum_profit_from_trading_stocks_with_discounts::name);
+    t3562,
+    t3562::parameters(kCases.size()),
+    t3562::name);
