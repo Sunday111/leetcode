@@ -1,5 +1,5 @@
 #include "2943_maximize_area_of_square_hole_in_grid.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::maximizeSquareHoleArea;
@@ -13,24 +13,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 4 40 [5,3,2,4] [36,41,6,34,33] 9
 )cases");
 
-class t2943_maximize_area_of_square_hole_in_grid
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t2943_maximize_area_of_square_hole_in_grid = SolutionTests<Solution>;
 
 TEST_P(t2943_maximize_area_of_square_hole_in_grid, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args)
-        { return Solution{}.maximizeSquareHoleArea(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.maximizeSquareHoleArea(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2943_maximize_area_of_square_hole_in_grid,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2943_maximize_area_of_square_hole_in_grid::parameters(kCases.size()),
+    t2943_maximize_area_of_square_hole_in_grid::name);
