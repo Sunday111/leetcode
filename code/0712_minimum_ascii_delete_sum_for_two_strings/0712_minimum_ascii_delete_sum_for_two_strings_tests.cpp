@@ -1,5 +1,5 @@
 #include "0712_minimum_ascii_delete_sum_for_two_strings.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::minimumDeleteSum;
@@ -9,23 +9,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "delete" "leet" 403
 )cases");
 
-class t0712_minimum_ascii_delete_sum_for_two_strings
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t0712_minimum_ascii_delete_sum_for_two_strings = SolutionTests<Solution>;
 
 TEST_P(t0712_minimum_ascii_delete_sum_for_two_strings, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.minimumDeleteSum(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.minimumDeleteSum(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0712_minimum_ascii_delete_sum_for_two_strings,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0712_minimum_ascii_delete_sum_for_two_strings::parameters(kCases.size()),
+    t0712_minimum_ascii_delete_sum_for_two_strings::name);
