@@ -1,6 +1,6 @@
 #include <unordered_set>
 
-#include "1488_avoid_flood_in_the_city.hpp"
+#include "1488.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -11,8 +11,8 @@ static const auto kCases =
 [1,2,0,1,2] false
 )cases");
 
-using t1488_avoid_flood_in_the_city = SolutionTests<Solution>;
-TEST_P(t1488_avoid_flood_in_the_city, Test)
+using t1488 = SolutionTests<Solution>;
+TEST_P(t1488, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -41,6 +41,6 @@ TEST_P(t1488_avoid_flood_in_the_city, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1488_avoid_flood_in_the_city,
-    t1488_avoid_flood_in_the_city::parameters(kCases.size()),
-    t1488_avoid_flood_in_the_city::name);
+    t1488,
+    t1488::parameters(kCases.size()),
+    t1488::name);
