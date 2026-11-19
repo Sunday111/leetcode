@@ -1,5 +1,5 @@
 #include "1860_incremental_memory_leak.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::memLeak;
@@ -11,22 +11,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 2147483647 2147483647 [92681,88047,41707]
 )cases");
 
-class t1860_incremental_memory_leak : public ::testing::TestWithParam<size_t>
-{
-};
+using t1860_incremental_memory_leak = SolutionTests<Solution>;
 
 TEST_P(t1860_incremental_memory_leak, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.memLeak(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.memLeak(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1860_incremental_memory_leak,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1860_incremental_memory_leak::parameters(kCases.size()),
+    t1860_incremental_memory_leak::name);
