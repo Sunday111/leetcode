@@ -1,4 +1,4 @@
-#include "1668_maximum_repeating_substring.hpp"
+#include "1668.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -13,9 +13,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "aaabaaaabaaabaaaabaaaabaaaabaaaaba" "aaaba" 5
 )cases");
 
-using t1668_maximum_repeating_substring = SolutionTests<Solution>;
+using t1668 = SolutionTests<Solution>;
 
-TEST_P(t1668_maximum_repeating_substring, Test)
+TEST_P(t1668, Test)
 {
     check(
         kCases,
@@ -25,6 +25,6 @@ TEST_P(t1668_maximum_repeating_substring, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1668_maximum_repeating_substring,
-    t1668_maximum_repeating_substring::parameters(kCases.size()),
-    t1668_maximum_repeating_substring::name);
+    t1668,
+    t1668::parameters(kCases.size()),
+    t1668::name);
