@@ -1,6 +1,6 @@
 #include "1768_merge_strings_alternately_simple.hpp"
 #include "1768_merge_strings_alternately_sse2.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases = parse_test_cases_with_types<
@@ -11,25 +11,33 @@ static const auto kCases = parse_test_cases_with_types<
 "abcd" "pq" "apbqcd"
 )cases");
 
-class t1768_merge_strings_alternately : public ::testing::TestWithParam<size_t>
-{
-};
+using t1768_merge_strings_alternately = SolutionTests<simple::Solution>;
+
 TEST_P(t1768_merge_strings_alternately, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto& [a, b] = inputs;
-    ASSERT_EQ(expected, simple::Solution{}.mergeAlternately(a, b));
-}
-TEST_P(t1768_merge_strings_alternately, DISABLED_Sse2)
-{
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto& [a, b] = inputs;
-    ASSERT_EQ(expected, solution_sse2::Solution{}.mergeAlternately(a, b));
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.mergeAlternately(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1768_merge_strings_alternately,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1768_merge_strings_alternately::parameters(kCases.size()),
+    t1768_merge_strings_alternately::name);
+
+using t1768_merge_strings_alternatelySse2 =
+    SolutionTests<solution_sse2::Solution>;
+TEST_P(t1768_merge_strings_alternatelySse2, DISABLED_Sse2)
+{
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.mergeAlternately(args...); });
+}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t1768_merge_strings_alternatelySse2,
+    t1768_merge_strings_alternatelySse2::parameters(kCases.size()),
+    t1768_merge_strings_alternatelySse2::name);
