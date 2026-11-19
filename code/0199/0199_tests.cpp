@@ -8,9 +8,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [1,2,3,4,null,null,null,5] [1,3,4,5]
 )cases");
 
-using t0199_binary_tree_right_side_view = SolutionTests<Solution>;
+using t0199 = SolutionTests<Solution>;
 
-TEST_P(t0199_binary_tree_right_side_view, Test)
+TEST_P(t0199, Test)
 {
     check(
         kCases,
@@ -20,6 +20,6 @@ TEST_P(t0199_binary_tree_right_side_view, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0199_binary_tree_right_side_view,
-    t0199_binary_tree_right_side_view::parameters(kCases.size()),
-    t0199_binary_tree_right_side_view::name);
+    t0199,
+    t0199::parameters(kCases.size()),
+    t0199::name);
