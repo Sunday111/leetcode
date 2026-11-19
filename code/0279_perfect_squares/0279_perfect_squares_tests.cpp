@@ -1,54 +1,36 @@
 #include "0279_perfect_squares.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t0279_perfect_squares, test_1)
+static constexpr auto kMethodToTest = &Solution::numSquares;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+12 3
+
+13 2
+
+1 1
+
+7168 4
+
+7217 3
+)cases");
+
+class t0279_perfect_squares : public ::testing::TestWithParam<size_t>
 {
-    Solution s{};
-    ASSERT_EQ(s.numSquares(12), 3);
+};
+
+TEST_P(t0279_perfect_squares, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.numSquares(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t0279_perfect_squares, test_2)
-{
-    Solution s{};
-    ASSERT_EQ(s.numSquares(13), 2);
-}
-
-TEST(t0279_perfect_squares, test_3)
-{
-    Solution s{};
-    ASSERT_EQ(s.numSquares(1), 1);
-}
-
-TEST(t0279_perfect_squares, test_4)
-{
-    Solution s{};
-    ASSERT_EQ(s.numSquares(7168), 4);
-}
-
-TEST(t0279_perfect_squares, test_5)
-{
-    Solution s{};
-    ASSERT_EQ(s.numSquares(7217), 3);
-}
-
-template <typename To, typename From, size_t extent = std::dynamic_extent>
-    requires(
-        ((sizeof(From) % sizeof(To)) == 0) ||
-        ((sizeof(To) % sizeof(From)) == 0))
-inline constexpr auto spanCast(std::span<From, extent> from)
-{
-    if constexpr (extent == std::dynamic_extent)
-    {
-        assert(((sizeof(From) * from.size()) % sizeof(To) == 0));
-        const size_t n = (sizeof(From) * from.size()) / sizeof(To);
-        return std::span{reinterpret_cast<To*>(from.data()), n};  // NOLINT
-    }
-    else
-    {
-        static_assert(((sizeof(From) * extent) % sizeof(To) == 0));
-        constexpr size_t n = (sizeof(From) * extent) / sizeof(To);
-        return std::span<To, n>{
-            reinterpret_cast<To*>(from.data()),  // NOLINT
-            n};
-    }
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0279_perfect_squares,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
