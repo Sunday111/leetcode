@@ -1,6 +1,6 @@
 #include <algorithm>
 
-#include "0078_subsetstest_cases.hpp"
+#include "0078_test_cases.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 

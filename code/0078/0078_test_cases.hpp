@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-#include "0078_subsets.hpp"
+#include "0078.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::subsets;
 inline static constexpr std::string_view kTestCases = R"(
