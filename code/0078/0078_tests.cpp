@@ -1,14 +1,19 @@
 #include <algorithm>
 
-#include "0078_test_cases.hpp"
+#include "0078.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
-inline static const auto kCases = parse_test_cases<kMethodToTest>(kTestCases);
+inline static constexpr auto kMethodToTest = &Solution::subsets;
 
-using t0078_subsets = SolutionTests<Solution>;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+[1,2,3]
+[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+)");
 
-TEST_P(t0078_subsets, MinOperations)
+using t0078 = SolutionTests<Solution>;
+
+TEST_P(t0078, MinOperations)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -24,6 +29,6 @@ TEST_P(t0078_subsets, MinOperations)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0078_subsets,
-    t0078_subsets::parameters(kCases.size()),
-    t0078_subsets::name);
+    t0078,
+    t0078::parameters(kCases.size()),
+    t0078::name);
