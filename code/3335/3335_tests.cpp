@@ -9,10 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "azbk" 5 5
 )cases");
 
-using t3335_total_characters_in_string_after_transformations_1 =
-    SolutionTests<Solution>;
+using t3335 = SolutionTests<Solution>;
 
-TEST_P(t3335_total_characters_in_string_after_transformations_1, Test)
+TEST_P(t3335, Test)
 {
     check(
         kCases,
@@ -22,7 +21,6 @@ TEST_P(t3335_total_characters_in_string_after_transformations_1, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3335_total_characters_in_string_after_transformations_1,
-    t3335_total_characters_in_string_after_transformations_1::parameters(
-        kCases.size()),
-    t3335_total_characters_in_string_after_transformations_1::name);
+    t3335,
+    t3335::parameters(kCases.size()),
+    t3335::name);
