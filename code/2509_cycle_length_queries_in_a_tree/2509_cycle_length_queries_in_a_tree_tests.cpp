@@ -1,5 +1,5 @@
 #include "2509_cycle_length_queries_in_a_tree.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::cycleLengthQueries;
@@ -11,23 +11,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 5 [[17,21],[23,5],[15,7],[3,21],[31,9],[5,15],[11,2],[19,7]] [7,3,2,6,8,6,3,7]
 )cases");
 
-class t2509_cycle_length_queries_in_a_tree
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t2509_cycle_length_queries_in_a_tree = SolutionTests<Solution>;
 
 TEST_P(t2509_cycle_length_queries_in_a_tree, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.cycleLengthQueries(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.cycleLengthQueries(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2509_cycle_length_queries_in_a_tree,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2509_cycle_length_queries_in_a_tree::parameters(kCases.size()),
+    t2509_cycle_length_queries_in_a_tree::name);
