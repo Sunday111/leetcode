@@ -11,8 +11,8 @@ static const auto kCases = parse_test_cases_with_types<
 [[]] []
 )cases");
 
-using t0023_merge_k_sorted_lists = SolutionTests<Solution>;
-TEST_P(t0023_merge_k_sorted_lists, Test)
+using t0023 = SolutionTests<Solution>;
+TEST_P(t0023, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -26,6 +26,6 @@ TEST_P(t0023_merge_k_sorted_lists, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0023_merge_k_sorted_lists,
-    t0023_merge_k_sorted_lists::parameters(kCases.size()),
-    t0023_merge_k_sorted_lists::name);
+    t0023,
+    t0023::parameters(kCases.size()),
+    t0023::name);
