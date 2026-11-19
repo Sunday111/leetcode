@@ -1,4 +1,4 @@
-#include "2099_find_subsequence_of_length_k_with_largest_sum.hpp"
+#include "2099.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
