@@ -1,5 +1,5 @@
 #include "2126.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::asteroidsDestroyed;
@@ -12,23 +12,18 @@ true
 false
 )");
 
-class t2126 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t2126 = SolutionTests<Solution>;
 
 TEST_P(t2126, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.asteroidsDestroyed(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2126,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2126::parameters(kCases.size()),
+    t2126::name);
