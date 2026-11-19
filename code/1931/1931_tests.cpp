@@ -11,10 +11,9 @@ static const auto kCases =
 3 3 246
 )cases");
 
-using t1931_painting_a_grid_with_tree_different_colors =
-    SolutionTests<Solution>;
+using t1931 = SolutionTests<Solution>;
 
-TEST_P(t1931_painting_a_grid_with_tree_different_colors, Test)
+TEST_P(t1931, Test)
 {
     check(
         kCases,
@@ -24,6 +23,6 @@ TEST_P(t1931_painting_a_grid_with_tree_different_colors, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1931_painting_a_grid_with_tree_different_colors,
-    t1931_painting_a_grid_with_tree_different_colors::parameters(kCases.size()),
-    t1931_painting_a_grid_with_tree_different_colors::name);
+    t1931,
+    t1931::parameters(kCases.size()),
+    t1931::name);
