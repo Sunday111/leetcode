@@ -1,17 +1,28 @@
 #include "0132_palindrome_partitioning_2.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-// TEST(t0132_palindrome_partitioning_2, test_1)
-// {
-//     ASSERT_EQ(Solution{}.minCut("ab"), 1);
-// }
-//
-// TEST(t0132_palindrome_partitioning_2, test_2)
-// {
-//     ASSERT_EQ(Solution{}.minCut("cdd"), 1);
-// }
+static constexpr auto kMethodToTest = &Solution::minCut;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+"abbab" 1
+)cases");
 
-TEST(t0132_palindrome_partitioning_2, test_3)
+class t0132_palindrome_partitioning_2 : public ::testing::TestWithParam<size_t>
 {
-    ASSERT_EQ(Solution{}.minCut("abbab"), 1);
+};
+
+TEST_P(t0132_palindrome_partitioning_2, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.minCut(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
+
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0132_palindrome_partitioning_2,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
