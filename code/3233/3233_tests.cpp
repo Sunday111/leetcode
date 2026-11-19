@@ -1,4 +1,4 @@
-#include "3233_find_the_count_of_numbers_which_are_not_special.hpp"
+#include "3233.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 

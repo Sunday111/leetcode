@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 3233_find_the_count_of_numbers_which_are_not_special_tests)
 
 add_executable(${target_name}
-    3233_find_the_count_of_numbers_which_are_not_special.hpp
-    3233_find_the_count_of_numbers_which_are_not_special_tests.cpp
+    3233.hpp
+    3233_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)
