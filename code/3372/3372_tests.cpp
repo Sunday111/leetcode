@@ -1,4 +1,4 @@
-#include "3372_maximize_the_number_of_target_nodes_after_connecting_trees_1.hpp"
+#include "3372.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
