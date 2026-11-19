@@ -1,4 +1,5 @@
 #include "2196.hpp"
+#include "2196_pyramid_bitset.hpp"
 #include "leet_code_binary_tree.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -15,21 +16,15 @@ inline static const auto kCases = parse_test_cases_with_types<
 [[1,2,1],[2,3,0],[3,4,1]] [1,2,null,null,3,4]
 )");
 
-using t2196 = SolutionTests<Solution>;
+using t2196 = SolutionTests<Solution_flat_bitset, Solution_pyramid_bitset>;
 
 TEST_P(t2196, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
         {
-            auto f = [&](auto&... args)
-            {
-                return solution.createBinaryTree(args...);
-            };
-            auto actual = std::apply(f, inputs);
-
+            auto* actual = solution.createBinaryTree(std::get<0>(inputs));
             EXPECT_TRUE(CompareBinaryTrees(expected.root, actual));
-            // DeleteBinaryTree(actual);
         });
 }
 

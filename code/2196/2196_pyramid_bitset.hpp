@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 
 #include "binary_tree/lc_tree_node.hpp"
@@ -7,8 +9,9 @@
 #include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
+#include "solution_name.hpp"
 
-class Solution
+class LC_SOLUTION_NAME(pyramid_bitset)
 {
 public:
     [[nodiscard]] TreeNode* createBinaryTree(

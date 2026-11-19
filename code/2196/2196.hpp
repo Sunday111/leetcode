@@ -1,13 +1,16 @@
+#pragma once
+
 #include <bit>
 #include <utility>
 #include <vector>
 
+#include "binary_tree/lc_tree_node.hpp"
 #include "cast.hpp"
 #include "integral_aliases.hpp"
-#include "binary_tree/lc_tree_node.hpp"
 #include "ptr_if.hpp"
+#include "solution_name.hpp"
 
-class Solution
+class LC_SOLUTION_NAME(flat_bitset)
 {
     inline static TreeNode nodes[100001];
 
@@ -26,7 +29,7 @@ public:
         static u64 roots[nw], init[nw];
 
         auto set_bit = [] [[gnu::always_inline]] (
-                           u64 * words,
+                           u64* words,
                            u32 i,
                            bool condition = true) noexcept
         {
@@ -41,7 +44,7 @@ public:
         };
 
         auto clear_bit = [] [[gnu::always_inline]]
-                         (u64 * words, u32 i, bool condition = true) noexcept
+                         (u64* words, u32 i, bool condition = true) noexcept
         {
             words[i >> 6] &= ~(u64{condition} << (i & 63));
         };
