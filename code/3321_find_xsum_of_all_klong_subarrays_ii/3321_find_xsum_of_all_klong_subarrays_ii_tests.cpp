@@ -1,5 +1,5 @@
 #include "3321_find_xsum_of_all_klong_subarrays_ii.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases = parse_test_cases_with_types<
@@ -8,23 +8,18 @@ static const auto kCases = parse_test_cases_with_types<
 [1,1,2,2,3,4,2,3] 6 2 [6,10,12]
 )cases");
 
-class t3321_find_xsum_of_all_klong_subarrays_ii
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t3321_find_xsum_of_all_klong_subarrays_ii = SolutionTests<Solution>;
 
 TEST_P(t3321_find_xsum_of_all_klong_subarrays_ii, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.findXSum(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.findXSum(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t3321_find_xsum_of_all_klong_subarrays_ii,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t3321_find_xsum_of_all_klong_subarrays_ii::parameters(kCases.size()),
+    t3321_find_xsum_of_all_klong_subarrays_ii::name);
