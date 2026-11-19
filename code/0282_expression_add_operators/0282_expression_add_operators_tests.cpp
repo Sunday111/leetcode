@@ -1,7 +1,7 @@
 #include <algorithm>
 
 #include "0282_expression_add_operators.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::addOperators;
@@ -15,24 +15,24 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "105" 5 ["1*0+5","10-5"]
 )cases");
 
-class t0282_expression_add_operators : public ::testing::TestWithParam<size_t>
-{
-};
+using t0282_expression_add_operators = SolutionTests<Solution>;
 
 TEST_P(t0282_expression_add_operators, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.addOperators(args...); },
-        inputs);
-    std::ranges::sort(expected);
-    std::ranges::sort(actual);
-    ASSERT_EQ(expected, actual);
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            auto actual = std::apply(
+                [&](auto&... args) { return solution.addOperators(args...); },
+                inputs);
+            std::ranges::sort(expected);
+            std::ranges::sort(actual);
+            ASSERT_EQ(expected, actual);
+        });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0282_expression_add_operators,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0282_expression_add_operators::parameters(kCases.size()),
+    t0282_expression_add_operators::name);
