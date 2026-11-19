@@ -1,45 +1,22 @@
 #include "2014_longest_subsequence_repeated_k_times.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-// TEST(t2014_longest_subsequence_repeated_k_times, test_1)
-// {
-//     using S = Solution;
-//     std::string s1 = "letsleetcode";
-//     ASSERT_EQ(S{}.longestSubsequenceRepeatedK(s1, 2), "let");
-//     std::string s2 = "bb";
-//     ASSERT_EQ(S{}.longestSubsequenceRepeatedK(s2, 2), "b");
-//     std::string s3 = "ab";
-//     ASSERT_EQ(S{}.longestSubsequenceRepeatedK(s3, 2), "");
-//     std::string s4 = "nhsbbeonhsbbeonhsbbeo";
-//     ASSERT_EQ(S{}.longestSubsequenceRepeatedK(s4, 3), "nhsbbeo");
-//     std::string s5 = "gbjbjigjbji";
-//     ASSERT_EQ(S{}.longestSubsequenceRepeatedK(s5, 2), "gjbji");
-// }
-// TEST(t2014_longest_subsequence_repeated_k_times, test_2)
-// {
-//     using S = Solution2;
-//     std::string s1 = "letsleetcode";
-//     ASSERT_EQ(S{}.longestSubsequenceRepeatedK(s1, 2), "let");
-//     std::string s2 = "bb";
-//     ASSERT_EQ(S{}.longestSubsequenceRepeatedK(s2, 2), "b");
-//     std::string s3 = "ab";
-//     ASSERT_EQ(S{}.longestSubsequenceRepeatedK(s3, 2), "");
-//     std::string s4 = "nhsbbeonhsbbeonhsbbeo";
-//     ASSERT_EQ(S{}.longestSubsequenceRepeatedK(s4, 3), "nhsbbeo");
-//     std::string s5 = "gbjbjigjbji";
-//     ASSERT_EQ(S{}.longestSubsequenceRepeatedK(s5, 2), "gjbji");
-// }
-TEST(t2014_longest_subsequence_repeated_k_times, test_3)
+static const auto kCases = parse_test_cases_with_types<std::tuple<std::string, u16>, std::string>(R"cases(
+"letsleetcode" 2 "let"
+"bb" 2 "b"
+"ab" 2 ""
+"nhsbbeonhsbbeonhsbbeo" 3 "nhsbbeo"
+"gbjbjigjbji" 2 "gjbji"
+)cases");
+
+class t2014_longest_subsequence_repeated_k_times : public ::testing::TestWithParam<size_t>
 {
-    using S = Solution3;
-    std::string s1 = "letsleetcode";
-    ASSERT_EQ(S{}.longestSubsequenceRepeatedK(s1, 2), "let");
-    std::string s2 = "bb";
-    ASSERT_EQ(S{}.longestSubsequenceRepeatedK(s2, 2), "b");
-    std::string s3 = "ab";
-    ASSERT_EQ(S{}.longestSubsequenceRepeatedK(s3, 2), "");
-    std::string s4 = "nhsbbeonhsbbeonhsbbeo";
-    ASSERT_EQ(S{}.longestSubsequenceRepeatedK(s4, 3), "nhsbbeo");
-    std::string s5 = "gbjbjigjbji";
-    ASSERT_EQ(S{}.longestSubsequenceRepeatedK(s5, 2), "gjbji");
+};
+TEST_P(t2014_longest_subsequence_repeated_k_times, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto& [s, k] = inputs;
+    ASSERT_EQ(expected, Solution3{}.longestSubsequenceRepeatedK(s, k));
 }
+INSTANTIATE_TEST_SUITE_P(Gen, t2014_longest_subsequence_repeated_k_times, ::testing::Range(size_t{0}, kCases.size()), [](const testing::TestParamInfo<size_t>& info) { return "C" + std::to_string(info.index); });
