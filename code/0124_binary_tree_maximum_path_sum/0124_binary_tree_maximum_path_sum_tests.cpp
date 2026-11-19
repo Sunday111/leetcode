@@ -1,8 +1,8 @@
 #include <cassert>
 
 #include "0124_binary_tree_maximum_path_sum.hpp"
-#include "gtest/gtest.h"
 #include "leet_code_binary_tree.hpp"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::maxPathSum;
@@ -14,23 +14,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [-2,-1] -1
 )cases");
 
-class t0124_binary_tree_maximum_path_sum
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t0124_binary_tree_maximum_path_sum = SolutionTests<Solution>;
 
 TEST_P(t0124_binary_tree_maximum_path_sum, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.maxPathSum(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.maxPathSum(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0124_binary_tree_maximum_path_sum,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0124_binary_tree_maximum_path_sum::parameters(kCases.size()),
+    t0124_binary_tree_maximum_path_sum::name);
