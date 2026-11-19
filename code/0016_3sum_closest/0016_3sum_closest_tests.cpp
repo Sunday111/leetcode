@@ -1,5 +1,5 @@
 #include "0016_3sum_closest.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::threeSumClosest;
@@ -21,22 +21,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [0,3,97,102,200] 300 300
 )");
 
-class t0016_3sum_closest : public ::testing::TestWithParam<size_t>
-{
-};
+using t0016_3sum_closest = SolutionTests<Solution>;
 
 TEST_P(t0016_3sum_closest, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.threeSumClosest(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.threeSumClosest(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0016_3sum_closest,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0016_3sum_closest::parameters(kCases.size()),
+    t0016_3sum_closest::name);
