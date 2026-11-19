@@ -1,5 +1,5 @@
 #include "2948.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest =
@@ -10,23 +10,18 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [1,7,28,19,10] 3 [1,7,28,19,10]
 )");
 
-class t2948 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t2948 = SolutionTests<Solution>;
 
 TEST_P(t2948, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.lexicographicallySmallestArray(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2948,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2948::parameters(kCases.size()),
+    t2948::name);
