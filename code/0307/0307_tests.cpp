@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "0307_range_sum_query_mutable.hpp"
+#include "0307.hpp"
 #include "cast.hpp"
 #include "gtest/gtest.h"
 #include "test_cases_helpers.hpp"
@@ -15,10 +15,10 @@ static const auto kCases = parse_test_cases_with_types<
 [-5] ["sumRange","update","sumRange","update","sumRange"] [[0,0],[0,0],[0,0],[0,8],[0,0]] [-5,null,0,null,8]
 )cases");
 
-class t0307_range_sum_query_mutable : public ::testing::TestWithParam<size_t>
+class t0307 : public ::testing::TestWithParam<size_t>
 {
 };
-TEST_P(t0307_range_sum_query_mutable, Test)
+TEST_P(t0307, Test)
 {
     auto [inputs, expected] = kCases.at(GetParam());
     auto& [source, operations, args] = inputs;
@@ -47,7 +47,7 @@ TEST_P(t0307_range_sum_query_mutable, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0307_range_sum_query_mutable,
+    t0307,
     ::testing::Range(size_t{0}, kCases.size()),
     [](const testing::TestParamInfo<size_t>& info)
     { return "C" + std::to_string(info.index); });
