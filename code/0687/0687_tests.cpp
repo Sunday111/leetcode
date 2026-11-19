@@ -10,9 +10,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [1,null,1,1,1,1,1,1] 4
 )cases");
 
-using t0687_longest_univalue_path = SolutionTests<Solution>;
+using t0687 = SolutionTests<Solution>;
 
-TEST_P(t0687_longest_univalue_path, Test)
+TEST_P(t0687, Test)
 {
     check(
         kCases,
@@ -22,6 +22,6 @@ TEST_P(t0687_longest_univalue_path, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0687_longest_univalue_path,
-    t0687_longest_univalue_path::parameters(kCases.size()),
-    t0687_longest_univalue_path::name);
+    t0687,
+    t0687::parameters(kCases.size()),
+    t0687::name);
