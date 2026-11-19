@@ -13,10 +13,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "bbbbcbcbbc" 2 3
 )cases");
 
-using t3003_maximize_the_number_of_partitions_after_operations =
-    SolutionTests<Solution>;
+using t3003 = SolutionTests<Solution>;
 
-TEST_P(t3003_maximize_the_number_of_partitions_after_operations, Test)
+TEST_P(t3003, Test)
 {
     check(
         kCases,
@@ -26,7 +25,6 @@ TEST_P(t3003_maximize_the_number_of_partitions_after_operations, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3003_maximize_the_number_of_partitions_after_operations,
-    t3003_maximize_the_number_of_partitions_after_operations::parameters(
-        kCases.size()),
-    t3003_maximize_the_number_of_partitions_after_operations::name);
+    t3003,
+    t3003::parameters(kCases.size()),
+    t3003::name);
