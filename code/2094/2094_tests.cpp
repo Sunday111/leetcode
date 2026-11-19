@@ -13,9 +13,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [3,7,5] []
 )cases");
 
-using t2094_finding_3_digit_even_numbers = SolutionTests<Solution>;
+using t2094 = SolutionTests<Solution>;
 
-TEST_P(t2094_finding_3_digit_even_numbers, Test)
+TEST_P(t2094, Test)
 {
     check(
         kCases,
@@ -25,6 +25,6 @@ TEST_P(t2094_finding_3_digit_even_numbers, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2094_finding_3_digit_even_numbers,
-    t2094_finding_3_digit_even_numbers::parameters(kCases.size()),
-    t2094_finding_3_digit_even_numbers::name);
+    t2094,
+    t2094::parameters(kCases.size()),
+    t2094::name);
