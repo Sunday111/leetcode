@@ -1,4 +1,4 @@
-#include "0297_srialize_and_desrialize_binary_tree.hpp"
+#include "0297.hpp"
 #include "leet_code_binary_tree.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -12,8 +12,8 @@ static const auto kCases =
 "1n" "1n"
 )cases");
 
-using t0297_srialize_and_desrialize_binary_tree = SolutionTests<Codec>;
-TEST_P(t0297_srialize_and_desrialize_binary_tree, Test)
+using t0297 = SolutionTests<Codec>;
+TEST_P(t0297, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -26,6 +26,6 @@ TEST_P(t0297_srialize_and_desrialize_binary_tree, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0297_srialize_and_desrialize_binary_tree,
-    t0297_srialize_and_desrialize_binary_tree::parameters(kCases.size()),
-    t0297_srialize_and_desrialize_binary_tree::name);
+    t0297,
+    t0297::parameters(kCases.size()),
+    t0297::name);
