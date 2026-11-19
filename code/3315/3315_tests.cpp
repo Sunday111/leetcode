@@ -1,4 +1,4 @@
-#include "3315_construct_the_minimum_bitwise_array_ii.hpp"
+#include "3315.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [11,13,31] [9,12,15]
 )cases");
 
-using t3315_construct_the_minimum_bitwise_array_ii = SolutionTests<Solution>;
+using t3315 = SolutionTests<Solution>;
 
-TEST_P(t3315_construct_the_minimum_bitwise_array_ii, Test)
+TEST_P(t3315, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t3315_construct_the_minimum_bitwise_array_ii, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3315_construct_the_minimum_bitwise_array_ii,
-    t3315_construct_the_minimum_bitwise_array_ii::parameters(kCases.size()),
-    t3315_construct_the_minimum_bitwise_array_ii::name);
+    t3315,
+    t3315::parameters(kCases.size()),
+    t3315::name);
