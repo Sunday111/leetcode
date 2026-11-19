@@ -1,4 +1,4 @@
-#include "1536_minimum_swaps_to_arrange_a_binary_gridtest_cases.hpp"
+#include "1536_test_cases.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
