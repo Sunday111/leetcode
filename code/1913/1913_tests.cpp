@@ -1,4 +1,4 @@
-#include "1913_maximum_product_difference_between_two_pairs.hpp"
+#include "1913.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
