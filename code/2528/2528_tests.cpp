@@ -1,4 +1,4 @@
-#include "2528_maximize_the_minimum_powered_city.hpp"
+#include "2528.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -7,9 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [4,4,4,4] 0 3 4
 )cases");
 
-using t2528_maximize_the_minimum_powered_city = SolutionTests<Solution>;
+using t2528 = SolutionTests<Solution>;
 
-TEST_P(t2528_maximize_the_minimum_powered_city, Test)
+TEST_P(t2528, Test)
 {
     check(
         kCases,
@@ -19,6 +19,6 @@ TEST_P(t2528_maximize_the_minimum_powered_city, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2528_maximize_the_minimum_powered_city,
-    t2528_maximize_the_minimum_powered_city::parameters(kCases.size()),
-    t2528_maximize_the_minimum_powered_city::name);
+    t2528,
+    t2528::parameters(kCases.size()),
+    t2528::name);
