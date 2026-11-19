@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <ranges>
 
-#include "0894_all_possible_full_binary_trees.hpp"
+#include "0894.hpp"
 #include "leet_code_binary_tree.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -13,8 +13,8 @@ static const auto kCases = parse_test_cases_with_types<
 3 [[0,0,0]]
 )cases");
 
-using t0894_all_possible_full_binary_trees = SolutionTests<Solution>;
-TEST_P(t0894_all_possible_full_binary_trees, Test)
+using t0894 = SolutionTests<Solution>;
+TEST_P(t0894, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -31,6 +31,6 @@ TEST_P(t0894_all_possible_full_binary_trees, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0894_all_possible_full_binary_trees,
-    t0894_all_possible_full_binary_trees::parameters(kCases.size()),
-    t0894_all_possible_full_binary_trees::name);
+    t0894,
+    t0894::parameters(kCases.size()),
+    t0894::name);
