@@ -1,4 +1,4 @@
-#include "1329_sort_the_matrix_diagonally.hpp"
+#include "1329.hpp"
 #include "parse_2d_array.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -12,9 +12,9 @@ static const auto kCases = parse_test_cases_with_types<
 [[5,17,4,1,52,7],[11,11,25,45,8,69],[14,23,25,44,58,15],[22,27,31,36,50,66],[84,28,75,33,55,68]]
 )cases");
 
-using t1329_sort_the_matrix_diagonally = SolutionTests<Solution>;
+using t1329 = SolutionTests<Solution>;
 
-TEST_P(t1329_sort_the_matrix_diagonally, Test)
+TEST_P(t1329, Test)
 {
     check(
         kCases,
@@ -24,6 +24,6 @@ TEST_P(t1329_sort_the_matrix_diagonally, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1329_sort_the_matrix_diagonally,
-    t1329_sort_the_matrix_diagonally::parameters(kCases.size()),
-    t1329_sort_the_matrix_diagonally::name);
+    t1329,
+    t1329::parameters(kCases.size()),
+    t1329::name);
