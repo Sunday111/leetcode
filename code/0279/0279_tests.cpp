@@ -15,9 +15,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 7217 3
 )cases");
 
-using t0279_perfect_squares = SolutionTests<Solution>;
+using t0279 = SolutionTests<Solution>;
 
-TEST_P(t0279_perfect_squares, Test)
+TEST_P(t0279, Test)
 {
     check(
         kCases,
@@ -27,6 +27,6 @@ TEST_P(t0279_perfect_squares, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0279_perfect_squares,
-    t0279_perfect_squares::parameters(kCases.size()),
-    t0279_perfect_squares::name);
+    t0279,
+    t0279::parameters(kCases.size()),
+    t0279::name);
