@@ -1,4 +1,4 @@
-#include "3170_lexicographically_minimum_string_after_removing_stars.hpp"
+#include "3170.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
