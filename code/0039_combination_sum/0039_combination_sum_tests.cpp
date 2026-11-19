@@ -4,39 +4,39 @@
 #include "0039_combination_sum_2.hpp"
 #include "0039_combination_sum_3.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
+#include "test_utility.hpp"
 
-inline static constexpr auto sorted = [](auto& arrays) -> decltype(auto)
+static constexpr auto kMethodToTest = &Solution::combinationSum;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+[2,3,6,7] 7 [[2,2,3],[7]]
+
+[38] 35 []
+)");
+
+class t0039_combination_sum : public ::testing::TestWithParam<size_t>
 {
-    std::ranges::for_each(arrays, std::ranges::sort);
-    std::ranges::sort(arrays);
-    return arrays;
 };
 
-TEST(t0039_combination_sum, test_1)
+TEST_P(t0039_combination_sum, Test)
 {
-    std::vector<int32_t> candidates{2, 3, 6, 7};
-    int32_t target = 7;
-    std::vector<std::vector<int32_t>> expected{{2, 2, 3}, {7}};
-    auto actual = Solution{}.combinationSum(candidates, target);
-    ASSERT_EQ(sorted(expected), sorted(actual));
-}
-
-TEST(t0039_combination_sum, test_2)
-{
-    std::vector<int32_t> candidates{38};
-    int32_t target = 35;
-    std::vector<std::vector<int32_t>> expected{};
-    auto actual = Solution{}.combinationSum(candidates, target);
-    ASSERT_EQ(sorted(expected), sorted(actual));
-}
-
-TEST(t0039_combination_sum, test_solutions)
-{
-    std::vector<int32_t> candidates{1, 2, 3};
-    for (int32_t target = 1; target != 41; ++target)
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto check = [&]<typename Solver>()
     {
-        auto expected = Solution2{}.combinationSum(candidates, target);
-        auto actual = Solution3{}.combinationSum(candidates, target);
-        ASSERT_EQ(sorted(expected), sorted(actual)) << "target: " << target;
-    }
+        auto values = inputs;
+        auto actual = std::apply(
+            [](auto&... args) { return Solver{}.combinationSum(args...); },
+            values);
+        ASSERT_EQ(sorted(expected), sorted(actual));
+    };
+    check.operator()<Solution>();
+    check.operator()<Solution2>();
+    check.operator()<Solution3>();
 }
+
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0039_combination_sum,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
