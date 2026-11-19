@@ -1,5 +1,5 @@
 #include "1823_find_the_winner_of_the_circular_game.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases =
@@ -10,19 +10,18 @@ static const auto kCases =
 1 1 1
 )cases");
 
-class t1823_find_the_winner_of_the_circular_game
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t1823_find_the_winner_of_the_circular_game = SolutionTests<Solution>;
 TEST_P(t1823_find_the_winner_of_the_circular_game, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto [n, k] = inputs;
-    ASSERT_EQ(expected, Solution::findTheWinner(n, k));
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            auto [n, k] = inputs;
+            ASSERT_EQ(expected, solution.findTheWinner(n, k));
+        });
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1823_find_the_winner_of_the_circular_game,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1823_find_the_winner_of_the_circular_game::parameters(kCases.size()),
+    t1823_find_the_winner_of_the_circular_game::name);
