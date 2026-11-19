@@ -1,23 +1,36 @@
 #include "3003_maximize_the_number_of_partitions_after_operations.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t3003_maximize_the_number_of_partitions_after_operations, test_1)
+static constexpr auto kMethodToTest = &Solution::maxPartitionsAfterOperations;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+"accca" 2 3
+
+"aabaab" 3 1
+
+"xxyz" 1 4
+
+"bbbbcbcbbc" 2 3
+)cases");
+
+class t3003_maximize_the_number_of_partitions_after_operations
+    : public ::testing::TestWithParam<size_t>
 {
-    ASSERT_EQ(Solution{}.maxPartitionsAfterOperations("accca", 2), 3);
+};
+
+TEST_P(t3003_maximize_the_number_of_partitions_after_operations, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args)
+        { return Solution{}.maxPartitionsAfterOperations(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t3003_maximize_the_number_of_partitions_after_operations, test_2)
-{
-    ASSERT_EQ(Solution{}.maxPartitionsAfterOperations("aabaab", 3), 1);
-}
-
-TEST(t3003_maximize_the_number_of_partitions_after_operations, test_3)
-{
-    ASSERT_EQ(Solution{}.maxPartitionsAfterOperations("xxyz", 1), 4);
-}
-
-TEST(t3003_maximize_the_number_of_partitions_after_operations, test_4)
-{
-    std::string s = "bbbbcbcbbc";
-    ASSERT_EQ(Solution{}.maxPartitionsAfterOperations(s, 2), 3);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t3003_maximize_the_number_of_partitions_after_operations,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
