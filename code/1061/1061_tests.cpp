@@ -1,4 +1,4 @@
-#include "1061_lexicographically_smallest_equivalent_string.hpp"
+#include "1061.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -7,10 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "parker" "morris" "parser" "makkek"
 )cases");
 
-using t1061_lexicographically_smallest_equivalent_string =
-    SolutionTests<Solution>;
+using t1061 = SolutionTests<Solution>;
 
-TEST_P(t1061_lexicographically_smallest_equivalent_string, Test)
+TEST_P(t1061, Test)
 {
     check(
         kCases,
@@ -20,7 +19,6 @@ TEST_P(t1061_lexicographically_smallest_equivalent_string, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1061_lexicographically_smallest_equivalent_string,
-    t1061_lexicographically_smallest_equivalent_string::parameters(
-        kCases.size()),
-    t1061_lexicographically_smallest_equivalent_string::name);
+    t1061,
+    t1061::parameters(kCases.size()),
+    t1061::name);
