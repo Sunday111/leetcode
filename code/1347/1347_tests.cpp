@@ -1,13 +1,26 @@
-#include "1347_test_cases.hpp"
+#include "1347.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
-inline static const auto kCases = parse_test_cases<kMethodToTest>(kTestCases);
+inline static constexpr auto kMethodToTest = &Solution::minSteps;
 
-using t1347_minimum_number_of_steps_to_make_two_strings_anagram =
-    SolutionTests<Solution>;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+"bab"
+"aba"
+1
 
-TEST_P(t1347_minimum_number_of_steps_to_make_two_strings_anagram, MinOperations)
+"leetcode"
+"practice"
+5
+
+"anagram"
+"mangaar"
+0
+)");
+
+using t1347 = SolutionTests<Solution>;
+
+TEST_P(t1347, MinOperations)
 {
     check(
         kCases,
@@ -17,7 +30,6 @@ TEST_P(t1347_minimum_number_of_steps_to_make_two_strings_anagram, MinOperations)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1347_minimum_number_of_steps_to_make_two_strings_anagram,
-    t1347_minimum_number_of_steps_to_make_two_strings_anagram::parameters(
-        kCases.size()),
-    t1347_minimum_number_of_steps_to_make_two_strings_anagram::name);
+    t1347,
+    t1347::parameters(kCases.size()),
+    t1347::name);
