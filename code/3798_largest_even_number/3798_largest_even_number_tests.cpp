@@ -1,14 +1,30 @@
 #include "3798_largest_even_number.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t3798_largest_even_number, test_1)
+static constexpr auto kMethodToTest = &Solution::largestEven;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+"1112" "1112"
+
+"111" ""
+)cases");
+
+class t3798_largest_even_number : public ::testing::TestWithParam<size_t>
 {
-    std::string s = "1112";
-    ASSERT_EQ(Solution{}.largestEven(s), "1112");
+};
+
+TEST_P(t3798_largest_even_number, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.largestEven(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t3798_largest_even_number, test_2)
-{
-    std::string s = "111";
-    ASSERT_EQ(Solution{}.largestEven(s), "");
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t3798_largest_even_number,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
