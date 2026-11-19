@@ -1,4 +1,4 @@
-#include "2901_longest_unequal_adjacent_groups_subsequence_2.hpp"
+#include "2901.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,10 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 ["bdb","aaa","ada"] [2,1,3] ["aaa","ada"]
 )cases");
 
-using t2901_longest_unequal_adjacent_groups_subsequence_2 =
-    SolutionTests<Solution>;
+using t2901 = SolutionTests<Solution>;
 
-TEST_P(t2901_longest_unequal_adjacent_groups_subsequence_2, Test)
+TEST_P(t2901, Test)
 {
     check(
         kCases,
@@ -22,7 +21,6 @@ TEST_P(t2901_longest_unequal_adjacent_groups_subsequence_2, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2901_longest_unequal_adjacent_groups_subsequence_2,
-    t2901_longest_unequal_adjacent_groups_subsequence_2::parameters(
-        kCases.size()),
-    t2901_longest_unequal_adjacent_groups_subsequence_2::name);
+    t2901,
+    t2901::parameters(kCases.size()),
+    t2901::name);
