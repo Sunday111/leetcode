@@ -1,4 +1,4 @@
-#include "3794_reverse_string_prefix.hpp"
+#include "3794.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -7,9 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "abcd" 2 "bacd"
 )cases");
 
-using t3794_reverse_string_prefix = SolutionTests<Solution>;
+using t3794 = SolutionTests<Solution>;
 
-TEST_P(t3794_reverse_string_prefix, Test)
+TEST_P(t3794, Test)
 {
     check(
         kCases,
@@ -19,6 +19,6 @@ TEST_P(t3794_reverse_string_prefix, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3794_reverse_string_prefix,
-    t3794_reverse_string_prefix::parameters(kCases.size()),
-    t3794_reverse_string_prefix::name);
+    t3794,
+    t3794::parameters(kCases.size()),
+    t3794::name);
