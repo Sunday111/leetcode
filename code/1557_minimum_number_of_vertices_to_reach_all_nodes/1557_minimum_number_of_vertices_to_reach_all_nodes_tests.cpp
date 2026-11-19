@@ -1,23 +1,20 @@
 #include "1557_minimum_number_of_vertices_to_reach_all_nodestest_cases.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 
-class t1557_minimum_number_of_vertices_to_reach_all_nodes : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t1557_minimum_number_of_vertices_to_reach_all_nodes =
+    SolutionTests<Solution>;
 
 TEST_P(t1557_minimum_number_of_vertices_to_reach_all_nodes, MinOperations)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.findSmallestSetOfVertices(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1557_minimum_number_of_vertices_to_reach_all_nodes,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1557_minimum_number_of_vertices_to_reach_all_nodes::parameters(
+        kCases.size()),
+    t1557_minimum_number_of_vertices_to_reach_all_nodes::name);
