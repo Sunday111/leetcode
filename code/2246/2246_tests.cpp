@@ -9,10 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [-1,0,0,0] "aabc" 3
 )cases");
 
-using t2246_longest_path_with_different_adjacent_characters =
-    SolutionTests<Solution>;
+using t2246 = SolutionTests<Solution>;
 
-TEST_P(t2246_longest_path_with_different_adjacent_characters, Test)
+TEST_P(t2246, Test)
 {
     check(
         kCases,
@@ -22,7 +21,6 @@ TEST_P(t2246_longest_path_with_different_adjacent_characters, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2246_longest_path_with_different_adjacent_characters,
-    t2246_longest_path_with_different_adjacent_characters::parameters(
-        kCases.size()),
-    t2246_longest_path_with_different_adjacent_characters::name);
+    t2246,
+    t2246::parameters(kCases.size()),
+    t2246::name);
