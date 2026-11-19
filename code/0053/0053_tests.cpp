@@ -1,4 +1,4 @@
-#include "0053_maximum_subarray.hpp"
+#include "0053.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -11,9 +11,9 @@ static const auto kCases =
 [5,4,-1,7,8] 23
 )cases");
 
-using t0053_maximum_subarray = SolutionTests<Solution>;
+using t0053 = SolutionTests<Solution>;
 
-TEST_P(t0053_maximum_subarray, Test)
+TEST_P(t0053, Test)
 {
     check(
         kCases,
@@ -23,6 +23,6 @@ TEST_P(t0053_maximum_subarray, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0053_maximum_subarray,
-    t0053_maximum_subarray::parameters(kCases.size()),
-    t0053_maximum_subarray::name);
+    t0053,
+    t0053::parameters(kCases.size()),
+    t0053::name);
