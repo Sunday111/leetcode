@@ -1,5 +1,5 @@
 #include "2901_longest_unequal_adjacent_groups_subsequence_2.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::getWordsInLongestSubsequence;
@@ -9,24 +9,20 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 ["bdb","aaa","ada"] [2,1,3] ["aaa","ada"]
 )cases");
 
-class t2901_longest_unequal_adjacent_groups_subsequence_2
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t2901_longest_unequal_adjacent_groups_subsequence_2 =
+    SolutionTests<Solution>;
 
 TEST_P(t2901_longest_unequal_adjacent_groups_subsequence_2, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args)
-        { return Solution{}.getWordsInLongestSubsequence(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.getWordsInLongestSubsequence(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2901_longest_unequal_adjacent_groups_subsequence_2,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2901_longest_unequal_adjacent_groups_subsequence_2::parameters(
+        kCases.size()),
+    t2901_longest_unequal_adjacent_groups_subsequence_2::name);
