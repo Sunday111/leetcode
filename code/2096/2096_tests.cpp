@@ -8,10 +8,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [5,1,2,3,null,6,4] 3 6 "UURL"
 )cases");
 
-using t2096_step_by_step_directions_from_a_binary_tree_node_to_another =
-    SolutionTests<Solution>;
+using t2096 = SolutionTests<Solution>;
 
-TEST_P(t2096_step_by_step_directions_from_a_binary_tree_node_to_another, Test)
+TEST_P(t2096, Test)
 {
     check(
         kCases,
@@ -21,7 +20,6 @@ TEST_P(t2096_step_by_step_directions_from_a_binary_tree_node_to_another, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2096_step_by_step_directions_from_a_binary_tree_node_to_another,
-    t2096_step_by_step_directions_from_a_binary_tree_node_to_another::
-        parameters(kCases.size()),
-    t2096_step_by_step_directions_from_a_binary_tree_node_to_another::name);
+    t2096,
+    t2096::parameters(kCases.size()),
+    t2096::name);
