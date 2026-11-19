@@ -1,20 +1,29 @@
 #include "1039_minimum_score_triangulation_of_polygon.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-// TEST(t1039_minimum_score_triangulation_of_polygon, test_1)
-// {
-//     std::vector<int> values{3, 7, 4, 5};
-//     ASSERT_EQ(Solution{}.minScoreTriangulation(values), 144);
-// }
+static constexpr auto kMethodToTest = &Solution::minScoreTriangulation;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+[1,3,1,4,1,5] 13
+)cases");
 
-TEST(t1039_minimum_score_triangulation_of_polygon, test_2)
+class t1039_minimum_score_triangulation_of_polygon
+    : public ::testing::TestWithParam<size_t>
 {
-    std::vector<int> values{1, 3, 1, 4, 1, 5};
-    ASSERT_EQ(Solution{}.minScoreTriangulation(values), 13);
+};
+
+TEST_P(t1039_minimum_score_triangulation_of_polygon, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.minScoreTriangulation(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-// TEST(t1039_minimum_score_triangulation_of_polygon, test_3)
-// {
-//     std::vector<int> values{1, 5, 1, 2, 5};
-//     ASSERT_EQ(Solution{}.minScoreTriangulation(values), 17);
-// }
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t1039_minimum_score_triangulation_of_polygon,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
