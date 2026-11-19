@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-#include "1347_minimum_number_of_steps_to_make_two_strings_anagram.hpp"
+#include "1347.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::minSteps;
 inline static constexpr std::string_view kTestCases = R"(

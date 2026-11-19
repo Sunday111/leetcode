@@ -1,4 +1,4 @@
-#include "1347_minimum_number_of_steps_to_make_two_strings_anagramtest_cases.hpp"
+#include "1347_test_cases.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
