@@ -1,4 +1,4 @@
-#include "1006_clumsy_factorial.hpp"
+#include "1006.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 10 12
 )cases");
 
-using t1006_clumsy_factorial = SolutionTests<Solution>;
+using t1006 = SolutionTests<Solution>;
 
-TEST_P(t1006_clumsy_factorial, Test)
+TEST_P(t1006, Test)
 {
     check(
         kCases,
@@ -20,6 +20,6 @@ TEST_P(t1006_clumsy_factorial, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1006_clumsy_factorial,
-    t1006_clumsy_factorial::parameters(kCases.size()),
-    t1006_clumsy_factorial::name);
+    t1006,
+    t1006::parameters(kCases.size()),
+    t1006::name);
