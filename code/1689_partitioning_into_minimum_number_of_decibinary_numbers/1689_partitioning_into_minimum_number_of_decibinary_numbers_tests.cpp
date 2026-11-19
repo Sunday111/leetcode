@@ -1,30 +1,25 @@
 #include "1689_partitioning_into_minimum_number_of_decibinary_numberstest_cases.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static const auto kCases = parse_test_cases<kMethodToTest>(kTestCases);
 
-class t1689_partitioning_into_minimum_number_of_decibinary_numbers
-    : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t1689_partitioning_into_minimum_number_of_decibinary_numbers =
+    SolutionTests<Solution>;
 
 TEST_P(
     t1689_partitioning_into_minimum_number_of_decibinary_numbers,
     MinOperations)
 {
-    const auto& [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto actual = std::apply(
-        kMethodToTest,
-        std::tuple_cat(std::make_tuple(&instance), inputs));
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.minPartitions(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1689_partitioning_into_minimum_number_of_decibinary_numbers,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1689_partitioning_into_minimum_number_of_decibinary_numbers::parameters(
+        kCases.size()),
+    t1689_partitioning_into_minimum_number_of_decibinary_numbers::name);
