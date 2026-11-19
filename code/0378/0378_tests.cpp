@@ -1,6 +1,6 @@
 #include <algorithm>
 
-#include "0378_kth_smallest_element_in_a_sorted_matrix.hpp"
+#include "0378.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -12,8 +12,8 @@ static const auto kCases = parse_test_cases_with_types<
 [[-5]] 1 -5
 )cases");
 
-using t0378_kth_smallest_element_in_a_sorted_matrix = SolutionTests<Solution>;
-TEST_P(t0378_kth_smallest_element_in_a_sorted_matrix, Test)
+using t0378 = SolutionTests<Solution>;
+TEST_P(t0378, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -24,6 +24,6 @@ TEST_P(t0378_kth_smallest_element_in_a_sorted_matrix, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0378_kth_smallest_element_in_a_sorted_matrix,
-    t0378_kth_smallest_element_in_a_sorted_matrix::parameters(kCases.size()),
-    t0378_kth_smallest_element_in_a_sorted_matrix::name);
+    t0378,
+    t0378::parameters(kCases.size()),
+    t0378::name);
