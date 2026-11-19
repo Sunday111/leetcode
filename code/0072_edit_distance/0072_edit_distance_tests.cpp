@@ -1,5 +1,5 @@
 #include "0072_edit_distance.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::minDistance;
@@ -23,22 +23,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "sea" "eat" 2
 )cases");
 
-class t0072_edit_distance : public ::testing::TestWithParam<size_t>
-{
-};
+using t0072_edit_distance = SolutionTests<Solution>;
 
 TEST_P(t0072_edit_distance, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.minDistance(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.minDistance(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0072_edit_distance,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0072_edit_distance::parameters(kCases.size()),
+    t0072_edit_distance::name);
