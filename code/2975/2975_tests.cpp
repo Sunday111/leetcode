@@ -1,4 +1,4 @@
-#include "2975_maximum_square_area_by_removing_fences_from_a_field.hpp"
+#include "2975.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
