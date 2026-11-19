@@ -9,8 +9,8 @@ static const auto kCases =
 "" ""
 )cases");
 
-using t0449_serialize_and_desrialize_bst = SolutionTests<Codec>;
-TEST_P(t0449_serialize_and_desrialize_bst, Test)
+using t0449 = SolutionTests<Codec>;
+TEST_P(t0449, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -23,6 +23,6 @@ TEST_P(t0449_serialize_and_desrialize_bst, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0449_serialize_and_desrialize_bst,
-    t0449_serialize_and_desrialize_bst::parameters(kCases.size()),
-    t0449_serialize_and_desrialize_bst::name);
+    t0449,
+    t0449::parameters(kCases.size()),
+    t0449::name);
