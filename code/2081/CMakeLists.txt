@@ -5,10 +5,10 @@ include(set_compiler_options)
 set(target_name 2081_sum_of_k_mirror_numbers)
 set(tests_target_name ${target_name}_tests)
 
-add_library(${target_name} INTERFACE ${target_name}.hpp)
+add_library(${target_name} INTERFACE 2081.hpp)
 set_generic_compiler_options(${target_name} INTERFACE)
 
-add_executable(${tests_target_name} ${target_name}_tests.cpp)
+add_executable(${tests_target_name} 2081_tests.cpp)
 
 target_link_libraries(${tests_target_name} PUBLIC ${target_name} test_utility)
 set_generic_compiler_options(${tests_target_name} PUBLIC)

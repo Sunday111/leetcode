@@ -1,4 +1,4 @@
-#include "2081_sum_of_k_mirror_numbers.hpp"
+#include "2081.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
