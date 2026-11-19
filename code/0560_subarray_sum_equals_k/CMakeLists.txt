@@ -10,6 +10,8 @@ add_executable(0560_subarray_sum_equals_k_tests
 target_link_libraries(0560_subarray_sum_equals_k_tests PUBLIC gtest_main)
 set_generic_compiler_options(0560_subarray_sum_equals_k_tests PUBLIC)
 
+target_link_libraries(0560_subarray_sum_equals_k_tests PRIVATE test_utility)
+
 enable_testing()
 include(GoogleTest)
 gtest_discover_tests(0560_subarray_sum_equals_k_tests)
