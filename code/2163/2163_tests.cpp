@@ -1,4 +1,4 @@
-#include "2163_minimum_difference_in_sums_after_removal_of_elements.hpp"
+#include "2163.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 

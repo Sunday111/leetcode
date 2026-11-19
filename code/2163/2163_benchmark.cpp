@@ -1,6 +1,6 @@
 #include <random>
 
-#include "2163_minimum_difference_in_sums_after_removal_of_elements.hpp"
+#include "2163.hpp"
 #include "benchmark/benchmark.h"
 
 struct Params
