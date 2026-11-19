@@ -2,17 +2,32 @@
 
 #include "0166_fraction_to_recurring_decimal.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t0166_fraction_to_recurring_decimal, test_1)
+static constexpr auto kMethodToTest = &Solution::fractionToDecimal;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+4 333 "0.(012)"
+
+1 2 "0.5"
+)cases");
+
+class t0166_fraction_to_recurring_decimal
+    : public ::testing::TestWithParam<size_t>
 {
-    int a = 4;
-    int b = 333;
-    std::println("{}/{} = {}", a, b, Solution::fractionToDecimal(a, b));
+};
+
+TEST_P(t0166_fraction_to_recurring_decimal, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.fractionToDecimal(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t0166_fraction_to_recurring_decimal, test_2)
-{
-    int a = 1;
-    int b = 2;
-    std::println("{}/{} = {}", a, b, Solution::fractionToDecimal(a, b));
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0166_fraction_to_recurring_decimal,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
