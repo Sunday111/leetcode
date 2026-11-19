@@ -3,7 +3,7 @@
 #include "0039_combination_sum.hpp"
 #include "0039_combination_sum_2.hpp"
 #include "0039_combination_sum_3.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 #include "test_utility.hpp"
 
@@ -14,29 +14,22 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [38] 35 []
 )");
 
-class t0039_combination_sum : public ::testing::TestWithParam<size_t>
-{
-};
+using t0039_combination_sum = SolutionTests<Solution, Solution2, Solution3>;
 
 TEST_P(t0039_combination_sum, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto check = [&]<typename Solver>()
-    {
-        auto values = inputs;
-        auto actual = std::apply(
-            [](auto&... args) { return Solver{}.combinationSum(args...); },
-            values);
-        ASSERT_EQ(sorted(expected), sorted(actual));
-    };
-    check.operator()<Solution>();
-    check.operator()<Solution2>();
-    check.operator()<Solution3>();
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            auto actual = std::apply(
+                [&](auto&... args) { return solution.combinationSum(args...); },
+                inputs);
+            ASSERT_EQ(sorted(expected), sorted(actual));
+        });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0039_combination_sum,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0039_combination_sum::parameters(kCases.size()),
+    t0039_combination_sum::name);
