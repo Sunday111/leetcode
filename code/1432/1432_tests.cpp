@@ -7,10 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 111 888
 )cases");
 
-using t1432_max_difference_you_can_get_from_changing_an_integer =
-    SolutionTests<Solution>;
+using t1432 = SolutionTests<Solution>;
 
-TEST_P(t1432_max_difference_you_can_get_from_changing_an_integer, Test)
+TEST_P(t1432, Test)
 {
     check(
         kCases,
@@ -20,7 +19,6 @@ TEST_P(t1432_max_difference_you_can_get_from_changing_an_integer, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1432_max_difference_you_can_get_from_changing_an_integer,
-    t1432_max_difference_you_can_get_from_changing_an_integer::parameters(
-        kCases.size()),
-    t1432_max_difference_you_can_get_from_changing_an_integer::name);
+    t1432,
+    t1432::parameters(kCases.size()),
+    t1432::name);
