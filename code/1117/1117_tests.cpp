@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <thread>
 
-#include "1117_building_h2o.hpp"
+#include "1117.hpp"
 #include "gtest/gtest.h"
 #include "test_cases_helpers.hpp"
 
@@ -12,10 +12,10 @@ static const auto kCases =
 "HHHOHO" 2
 )cases");
 
-class t1117_building_h2o : public ::testing::TestWithParam<size_t>
+class t1117 : public ::testing::TestWithParam<size_t>
 {
 };
-TEST_P(t1117_building_h2o, Test)
+TEST_P(t1117, Test)
 {
     auto [inputs, expected] = kCases.at(GetParam());
     auto& [input] = inputs;
@@ -50,7 +50,7 @@ TEST_P(t1117_building_h2o, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1117_building_h2o,
+    t1117,
     ::testing::Range(size_t{0}, kCases.size()),
     [](const testing::TestParamInfo<size_t>& info)
     { return "C" + std::to_string(info.index); });
