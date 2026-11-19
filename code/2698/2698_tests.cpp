@@ -1,12 +1,23 @@
-#include "2698_test_cases.hpp"
+#include "2698.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
-inline static const auto kCases = parse_test_cases<kMethodToTest>(kTestCases);
+inline static constexpr auto kMethodToTest = &Solution::punishmentNumber;
 
-using t2698_find_the_punishment_number_of_an_integer = SolutionTests<Solution>;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+10
+182
 
-TEST_P(t2698_find_the_punishment_number_of_an_integer, MinOperations)
+37
+1478
+
+1000
+10804657
+)");
+
+using t2698 = SolutionTests<Solution>;
+
+TEST_P(t2698, MinOperations)
 {
     check(
         kCases,
@@ -16,6 +27,6 @@ TEST_P(t2698_find_the_punishment_number_of_an_integer, MinOperations)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2698_find_the_punishment_number_of_an_integer,
-    t2698_find_the_punishment_number_of_an_integer::parameters(kCases.size()),
-    t2698_find_the_punishment_number_of_an_integer::name);
+    t2698,
+    t2698::parameters(kCases.size()),
+    t2698::name);
