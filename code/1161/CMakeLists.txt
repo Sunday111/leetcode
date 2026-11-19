@@ -5,11 +5,11 @@ include(set_compiler_options)
 set(target_name 1161_maximum_level_sum_of_a_binary_tree)
 set(tests_target_name ${target_name}_tests)
 
-add_library(${target_name} INTERFACE ${target_name}.hpp)
+add_library(${target_name} INTERFACE 1161.hpp)
 set_generic_compiler_options(${target_name} INTERFACE)
 target_link_libraries(${target_name} INTERFACE lc_templates)
 
-add_executable(${tests_target_name} ${target_name}_tests.cpp)
+add_executable(${tests_target_name} 1161_tests.cpp)
 
 target_link_libraries(${tests_target_name} PUBLIC ${target_name} test_utility)
 

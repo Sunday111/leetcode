@@ -1,4 +1,4 @@
-#include "1161_maximum_level_sum_of_a_binary_tree.hpp"
+#include "1161.hpp"
 #include "gtest/gtest.h"
 
 TEST(t1161_maximum_level_sum_of_a_binary_tree, test_1)
