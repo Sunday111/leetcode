@@ -1,4 +1,4 @@
-#include "1249_minimum_remove_to_make_valid_parentheses.hpp"
+#include "1249.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
