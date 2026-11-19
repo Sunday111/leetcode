@@ -1,4 +1,4 @@
-#include "3727_minimum_alternating_sum_of_squares.hpp"
+#include "3727.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [1,-1,2,-2,3,-3] 16
 )cases");
 
-using t3727_minimum_alternating_sum_of_squares = SolutionTests<Solution>;
+using t3727 = SolutionTests<Solution>;
 
-TEST_P(t3727_minimum_alternating_sum_of_squares, Test)
+TEST_P(t3727, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t3727_minimum_alternating_sum_of_squares, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3727_minimum_alternating_sum_of_squares,
-    t3727_minimum_alternating_sum_of_squares::parameters(kCases.size()),
-    t3727_minimum_alternating_sum_of_squares::name);
+    t3727,
+    t3727::parameters(kCases.size()),
+    t3727::name);
