@@ -1,27 +1,33 @@
 #include "3715_sum_of_perfect_ancestors.hpp"
 #include "gtest/gtest.h"
 #include "parse_2d_array.hpp"
+#include "test_cases_helpers.hpp"
 
-TEST(t3715_sum_of_perfect_ancestors, test_1)
+static constexpr auto kMethodToTest = &Solution::sumOfAncestors;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+3 [[0,1],[1,2]] [2,8,2] 3
+
+3 [[0,1],[0,2]] [1,2,4] 1
+
+4 [[0,1],[0,2],[1,3]] [1,2,9,4] 2
+)cases");
+
+class t3715_sum_of_perfect_ancestors : public ::testing::TestWithParam<size_t>
 {
-    int n = 3;
-    auto edges = parse2DArray("[[0,1],[1,2]]");
-    std::vector nums{2, 8, 2};
-    ASSERT_EQ(Solution{}.sumOfAncestors(n, edges, nums), 3);
+};
+
+TEST_P(t3715_sum_of_perfect_ancestors, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.sumOfAncestors(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t3715_sum_of_perfect_ancestors, test_2)
-{
-    int n = 3;
-    auto edges = parse2DArray("[[0,1],[0,2]]");
-    std::vector nums{1, 2, 4};
-    ASSERT_EQ(Solution{}.sumOfAncestors(n, edges, nums), 1);
-}
-
-TEST(t3715_sum_of_perfect_ancestors, test_3)
-{
-    int n = 4;
-    auto edges = parse2DArray("[[0,1],[0,2],[1,3]]");
-    std::vector nums{1, 2, 9, 4};
-    ASSERT_EQ(Solution{}.sumOfAncestors(n, edges, nums), 2);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t3715_sum_of_perfect_ancestors,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
