@@ -1,5 +1,5 @@
 #include "1967.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::numOfStrings;
@@ -9,23 +9,18 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 ["a","a","a"]        "ab"           3
 )");
 
-class t1967 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t1967 = SolutionTests<Solution>;
 
 TEST_P(t1967, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.numOfStrings(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1967,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1967::parameters(kCases.size()),
+    t1967::name);
