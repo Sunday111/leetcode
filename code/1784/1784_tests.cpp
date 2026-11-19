@@ -1,4 +1,4 @@
-#include "1784_check_if_binary_string_has_at_most_one_segment_of_onestest_cases.hpp"
+#include "1784_test_cases.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
