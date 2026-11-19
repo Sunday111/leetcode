@@ -11,8 +11,8 @@ static const auto kCases = parse_test_cases_with_types<
 [null] 0 false
 )cases");
 
-using t0112_path_sum = SolutionTests<Solution>;
-TEST_P(t0112_path_sum, Test)
+using t0112 = SolutionTests<Solution>;
+TEST_P(t0112, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -23,6 +23,6 @@ TEST_P(t0112_path_sum, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0112_path_sum,
-    t0112_path_sum::parameters(kCases.size()),
-    t0112_path_sum::name);
+    t0112,
+    t0112::parameters(kCases.size()),
+    t0112::name);
