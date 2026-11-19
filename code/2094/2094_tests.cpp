@@ -1,4 +1,4 @@
-#include "2094_finding_3_digit_even_numbers.hpp"
+#include "2094.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
