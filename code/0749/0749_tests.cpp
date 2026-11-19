@@ -1,4 +1,4 @@
-#include "0749_contain_virus.hpp"
+#include "0749.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -11,9 +11,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [[1,1,1,0,0,0,0,0,0],[1,0,1,0,1,1,1,1,1],[1,1,1,0,0,0,0,0,0]] 13
 )cases");
 
-using t0749_contain_virus = SolutionTests<Solution>;
+using t0749 = SolutionTests<Solution>;
 
-TEST_P(t0749_contain_virus, Test)
+TEST_P(t0749, Test)
 {
     check(
         kCases,
@@ -23,6 +23,6 @@ TEST_P(t0749_contain_virus, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0749_contain_virus,
-    t0749_contain_virus::parameters(kCases.size()),
-    t0749_contain_virus::name);
+    t0749,
+    t0749::parameters(kCases.size()),
+    t0749::name);
