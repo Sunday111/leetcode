@@ -1,5 +1,5 @@
 #include "2751.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::survivedRobotsHealths;
@@ -60,23 +60,18 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [10,20,30,40,50,60,70,80,90,100,150,140,130,120,110,100,90,80,70,60]
 )");
 
-class t2751 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t2751 = SolutionTests<Solution>;
 
 TEST_P(t2751, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.survivedRobotsHealths(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2751,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2751::parameters(kCases.size()),
+    t2751::name);
