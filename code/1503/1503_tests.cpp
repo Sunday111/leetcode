@@ -7,10 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 4 [4,3] [0,1] 4
 )cases");
 
-using t1503_last_momemnt_before_all_ants_fall_out_of_a_plank =
-    SolutionTests<Solution>;
+using t1503 = SolutionTests<Solution>;
 
-TEST_P(t1503_last_momemnt_before_all_ants_fall_out_of_a_plank, Test)
+TEST_P(t1503, Test)
 {
     check(
         kCases,
@@ -20,7 +19,6 @@ TEST_P(t1503_last_momemnt_before_all_ants_fall_out_of_a_plank, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1503_last_momemnt_before_all_ants_fall_out_of_a_plank,
-    t1503_last_momemnt_before_all_ants_fall_out_of_a_plank::parameters(
-        kCases.size()),
-    t1503_last_momemnt_before_all_ants_fall_out_of_a_plank::name);
+    t1503,
+    t1503::parameters(kCases.size()),
+    t1503::name);
