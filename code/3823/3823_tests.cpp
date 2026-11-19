@@ -9,10 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "!@#$%^&*()" ")(*&^%$#@!"
 )cases");
 
-using t3823_reverse_letters_then_special_characters_in_a_string =
-    SolutionTests<Solution>;
+using t3823 = SolutionTests<Solution>;
 
-TEST_P(t3823_reverse_letters_then_special_characters_in_a_string, Test)
+TEST_P(t3823, Test)
 {
     check(
         kCases,
@@ -22,7 +21,6 @@ TEST_P(t3823_reverse_letters_then_special_characters_in_a_string, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3823_reverse_letters_then_special_characters_in_a_string,
-    t3823_reverse_letters_then_special_characters_in_a_string::parameters(
-        kCases.size()),
-    t3823_reverse_letters_then_special_characters_in_a_string::name);
+    t3823,
+    t3823::parameters(kCases.size()),
+    t3823::name);
