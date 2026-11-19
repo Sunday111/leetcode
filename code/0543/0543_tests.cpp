@@ -10,9 +10,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [1,2] 1
 )cases");
 
-using t0543_diameter_of_binary_tree = SolutionTests<Solution>;
+using t0543 = SolutionTests<Solution>;
 
-TEST_P(t0543_diameter_of_binary_tree, Test)
+TEST_P(t0543, Test)
 {
     check(
         kCases,
@@ -22,6 +22,6 @@ TEST_P(t0543_diameter_of_binary_tree, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0543_diameter_of_binary_tree,
-    t0543_diameter_of_binary_tree::parameters(kCases.size()),
-    t0543_diameter_of_binary_tree::name);
+    t0543,
+    t0543::parameters(kCases.size()),
+    t0543::name);
