@@ -1,4 +1,4 @@
-#include "3454_separate_squares_ii.hpp"
+#include "3454.hpp"
 #include "parse_2d_array.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -12,9 +12,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [[15,21,2],[19,21,3]] 22.3
 )cases");
 
-using t3454_separate_squares_ii = SolutionTests<Solution>;
+using t3454 = SolutionTests<Solution>;
 
-TEST_P(t3454_separate_squares_ii, Test)
+TEST_P(t3454, Test)
 {
     check(
         kCases,
@@ -24,6 +24,6 @@ TEST_P(t3454_separate_squares_ii, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3454_separate_squares_ii,
-    t3454_separate_squares_ii::parameters(kCases.size()),
-    t3454_separate_squares_ii::name);
+    t3454,
+    t3454::parameters(kCases.size()),
+    t3454::name);
