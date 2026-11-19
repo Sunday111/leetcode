@@ -1,4 +1,4 @@
-#include "0257_binary_tree_paths.hpp"
+#include "0257.hpp"
 #include "leet_code_binary_tree.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
