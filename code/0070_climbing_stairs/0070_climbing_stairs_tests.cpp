@@ -1,19 +1,34 @@
 #include "0070_climbing_stairs.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t0070_climbing_stairs, test_1)
+static constexpr auto kMethodToTest = &Solution::climbStairs;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+1 1
+
+2 2
+
+3 3
+
+45 1836311903
+)cases");
+
+class t0070_climbing_stairs : public ::testing::TestWithParam<size_t>
 {
-    ASSERT_EQ(Solution{}.climbStairs(1), 1);
-}
-TEST(t0070_climbing_stairs, test_2)
+};
+
+TEST_P(t0070_climbing_stairs, Test)
 {
-    ASSERT_EQ(Solution{}.climbStairs(2), 2);
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.climbStairs(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
-TEST(t0070_climbing_stairs, test_3)
-{
-    ASSERT_EQ(Solution{}.climbStairs(3), 3);
-}
-TEST(t0070_climbing_stairs, test_4)
-{
-    ASSERT_EQ(Solution{}.climbStairs(45), 1836311903);
-}
+
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0070_climbing_stairs,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
