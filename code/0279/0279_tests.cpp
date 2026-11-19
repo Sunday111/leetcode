@@ -1,4 +1,4 @@
-#include "0279_perfect_squares.hpp"
+#include "0279.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 

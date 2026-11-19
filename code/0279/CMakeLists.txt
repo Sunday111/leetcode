@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0279_perfect_squares_tests)
 
 add_executable(${target_name}
-    0279_perfect_squares.hpp
-    0279_perfect_squares_tests.cpp
+    0279.hpp
+    0279_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)
