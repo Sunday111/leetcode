@@ -13,9 +13,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 1000000000 2 740091218 473796308 2000000000
 )cases");
 
-using t1201_ugly_number_3 = SolutionTests<Solution>;
+using t1201 = SolutionTests<Solution>;
 
-TEST_P(t1201_ugly_number_3, Test)
+TEST_P(t1201, Test)
 {
     check(
         kCases,
@@ -25,6 +25,6 @@ TEST_P(t1201_ugly_number_3, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1201_ugly_number_3,
-    t1201_ugly_number_3::parameters(kCases.size()),
-    t1201_ugly_number_3::name);
+    t1201,
+    t1201::parameters(kCases.size()),
+    t1201::name);
