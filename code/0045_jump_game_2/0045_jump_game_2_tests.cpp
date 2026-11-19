@@ -1,20 +1,33 @@
 #include "0045_jump_game_2.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t0045_jump_game_2, test_1)
+static const auto kCases =
+    parse_test_cases_with_types<std::tuple<std::vector<int>>, unsigned int>(
+        R"cases(
+[2,3,1,1,4] 2
+
+[2,3,0,1,4] 2
+
+[0] 0
+)cases");
+
+class t0045_jump_game_2 : public ::testing::TestWithParam<size_t>
 {
-    std::vector nums{2, 3, 1, 1, 4};
-    ASSERT_EQ(Solution{}.jump(nums), 2);
+};
+
+TEST_P(t0045_jump_game_2, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.jump(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t0045_jump_game_2, test_2)
-{
-    std::vector nums{2, 3, 0, 1, 4};
-    ASSERT_EQ(Solution{}.jump(nums), 2);
-}
-
-TEST(t0045_jump_game_2, test_3)
-{
-    std::vector nums{0};
-    ASSERT_EQ(Solution{}.jump(nums), 0);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0045_jump_game_2,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
