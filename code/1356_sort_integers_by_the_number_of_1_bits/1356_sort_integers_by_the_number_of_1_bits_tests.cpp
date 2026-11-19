@@ -1,5 +1,5 @@
 #include "1356_sort_integers_by_the_number_of_1_bits.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::sortByBits;
@@ -9,23 +9,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [1024,512,256,128,64,32,16,8,4,2,1] [1,2,4,8,16,32,64,128,256,512,1024]
 )cases");
 
-class t1356_sort_integers_by_the_number_of_1_bits
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t1356_sort_integers_by_the_number_of_1_bits = SolutionTests<Solution>;
 
 TEST_P(t1356_sort_integers_by_the_number_of_1_bits, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.sortByBits(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.sortByBits(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1356_sort_integers_by_the_number_of_1_bits,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1356_sort_integers_by_the_number_of_1_bits::parameters(kCases.size()),
+    t1356_sort_integers_by_the_number_of_1_bits::name);
