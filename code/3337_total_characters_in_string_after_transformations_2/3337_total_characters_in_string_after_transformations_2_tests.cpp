@@ -1,30 +1,37 @@
 #include "3337_total_characters_in_string_after_transformations_2.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t3337_total_characters_in_string_after_transformations_2, test_1)
+static constexpr auto kMethodToTest = &Solution::lengthAfterTransformations;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+"abcyy" 2 [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2] 7
+
+"azbk" 1 [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2] 8
+
+"abcyrsmtfyjhnvhvrtmhvvngvmkempcvepbgxxbeebyhy"
+999
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2]
+869688536
+)cases");
+
+class t3337_total_characters_in_string_after_transformations_2
+    : public ::testing::TestWithParam<size_t>
 {
-    constexpr std::string_view s = "abcyy";
-    constexpr uint32_t r = 2;
-    std::vector nums = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2};
-    ASSERT_EQ(Solution{}.lengthAfterTransformations(s, r, nums), 7);
+};
+
+TEST_P(t3337_total_characters_in_string_after_transformations_2, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args)
+        { return Solution{}.lengthAfterTransformations(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t3337_total_characters_in_string_after_transformations_2, test_2)
-{
-    constexpr std::string_view s = "azbk";
-    constexpr uint32_t r = 1;
-    std::vector nums = {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-                        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
-    ASSERT_EQ(Solution{}.lengthAfterTransformations(s, r, nums), 8);
-}
-
-TEST(t3337_total_characters_in_string_after_transformations_2, test_3)
-{
-    constexpr std::string_view s =
-        "abcyrsmtfyjhnvhvrtmhvvngvmkempcvepbgxxbeebyhy";
-    constexpr uint32_t r = 999;
-    std::vector nums = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2};
-    ASSERT_EQ(Solution{}.lengthAfterTransformations(s, r, nums), 869688536);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t3337_total_characters_in_string_after_transformations_2,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
