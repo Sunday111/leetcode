@@ -1,7 +1,7 @@
 #include <algorithm>
 
 #include "1233_remove_sub_folders_from_the_filesystem.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::removeSubfolders;
@@ -16,25 +16,25 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 ["/aa/ab/ac/ae","/aa/ab/af/ag","/aa/ab/af/ah","/aa/ai/aj/ak","/aa/ai/am/ao","/ap"]
 )cases");
 
-class t1233_remove_sub_folders_from_the_filesystem
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t1233_remove_sub_folders_from_the_filesystem = SolutionTests<Solution>;
 
 TEST_P(t1233_remove_sub_folders_from_the_filesystem, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.removeSubfolders(args...); },
-        inputs);
-    std::ranges::sort(expected);
-    std::ranges::sort(actual);
-    ASSERT_EQ(expected, actual);
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            auto actual = std::apply(
+                [&](auto&... args)
+                { return solution.removeSubfolders(args...); },
+                inputs);
+            std::ranges::sort(expected);
+            std::ranges::sort(actual);
+            ASSERT_EQ(expected, actual);
+        });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1233_remove_sub_folders_from_the_filesystem,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1233_remove_sub_folders_from_the_filesystem::parameters(kCases.size()),
+    t1233_remove_sub_folders_from_the_filesystem::name);
