@@ -1,4 +1,4 @@
-#include "3640_trionic_array_ii.hpp"
+#include "3640.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [1,4,2,7] 14
 )cases");
 
-using t3640_trionic_array_ii = SolutionTests<Solution>;
+using t3640 = SolutionTests<Solution>;
 
-TEST_P(t3640_trionic_array_ii, Test)
+TEST_P(t3640, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t3640_trionic_array_ii, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3640_trionic_array_ii,
-    t3640_trionic_array_ii::parameters(kCases.size()),
-    t3640_trionic_array_ii::name);
+    t3640,
+    t3640::parameters(kCases.size()),
+    t3640::name);
