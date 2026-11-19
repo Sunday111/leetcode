@@ -1,4 +1,4 @@
-#include "1945_sum_of_digits_of_string_after_convert.hpp"
+#include "1945.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -7,9 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "iiii" 1 36
 )cases");
 
-using t1945_sum_of_digits_of_string_after_convert = SolutionTests<Solution>;
+using t1945 = SolutionTests<Solution>;
 
-TEST_P(t1945_sum_of_digits_of_string_after_convert, Test)
+TEST_P(t1945, Test)
 {
     check(
         kCases,
@@ -19,6 +19,6 @@ TEST_P(t1945_sum_of_digits_of_string_after_convert, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1945_sum_of_digits_of_string_after_convert,
-    t1945_sum_of_digits_of_string_after_convert::parameters(kCases.size()),
-    t1945_sum_of_digits_of_string_after_convert::name);
+    t1945,
+    t1945::parameters(kCases.size()),
+    t1945::name);
