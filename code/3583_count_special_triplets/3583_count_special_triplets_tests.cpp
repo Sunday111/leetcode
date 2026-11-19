@@ -1,14 +1,30 @@
 #include "3583_count_special_triplets.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t3583_count_special_triplets, test_1)
+static constexpr auto kMethodToTest = &Solution::specialTriplets;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+[6,3,6] 1
+
+[0,1,0,0] 1
+)cases");
+
+class t3583_count_special_triplets : public ::testing::TestWithParam<size_t>
 {
-    std::vector<int> nums{6, 3, 6};
-    ASSERT_EQ(Solution{}.specialTriplets(nums), 1);
+};
+
+TEST_P(t3583_count_special_triplets, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.specialTriplets(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t3583_count_special_triplets, test_2)
-{
-    std::vector<int> nums{0, 1, 0, 0};
-    ASSERT_EQ(Solution{}.specialTriplets(nums), 1);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t3583_count_special_triplets,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
