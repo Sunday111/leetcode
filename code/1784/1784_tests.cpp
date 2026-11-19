@@ -1,15 +1,21 @@
-#include "1784_test_cases.hpp"
+#include "1784.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
-inline static const auto kCases = parse_test_cases<kMethodToTest>(kTestCases);
+inline static constexpr auto kMethodToTest = &Solution::checkOnesSegment;
 
-using t1784_check_if_binary_string_has_at_most_one_segment_of_ones =
-    SolutionTests<Solution>;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+"1001"
+false
 
-TEST_P(
-    t1784_check_if_binary_string_has_at_most_one_segment_of_ones,
-    MinOperations)
+"110"
+true
+
+)");
+
+using t1784 = SolutionTests<Solution>;
+
+TEST_P(t1784, MinOperations)
 {
     check(
         kCases,
@@ -19,7 +25,6 @@ TEST_P(
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1784_check_if_binary_string_has_at_most_one_segment_of_ones,
-    t1784_check_if_binary_string_has_at_most_one_segment_of_ones::parameters(
-        kCases.size()),
-    t1784_check_if_binary_string_has_at_most_one_segment_of_ones::name);
+    t1784,
+    t1784::parameters(kCases.size()),
+    t1784::name);
