@@ -1,4 +1,4 @@
-#include "0096_unique_binary_search_trees.hpp"
+#include "0096.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -23,9 +23,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 19 1767263190
 )cases");
 
-using t0096_unique_binary_search_trees = SolutionTests<Solution>;
+using t0096 = SolutionTests<Solution>;
 
-TEST_P(t0096_unique_binary_search_trees, Test)
+TEST_P(t0096, Test)
 {
     check(
         kCases,
@@ -35,6 +35,6 @@ TEST_P(t0096_unique_binary_search_trees, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0096_unique_binary_search_trees,
-    t0096_unique_binary_search_trees::parameters(kCases.size()),
-    t0096_unique_binary_search_trees::name);
+    t0096,
+    t0096::parameters(kCases.size()),
+    t0096::name);
