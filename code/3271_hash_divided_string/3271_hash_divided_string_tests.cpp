@@ -1,5 +1,5 @@
 #include "3271_hash_divided_string.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::stringHash;
@@ -11,22 +11,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "hcr" 3 "a"
 )cases");
 
-class t3271_hash_divided_string : public ::testing::TestWithParam<size_t>
-{
-};
+using t3271_hash_divided_string = SolutionTests<Solution>;
 
 TEST_P(t3271_hash_divided_string, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.stringHash(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.stringHash(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t3271_hash_divided_string,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t3271_hash_divided_string::parameters(kCases.size()),
+    t3271_hash_divided_string::name);
