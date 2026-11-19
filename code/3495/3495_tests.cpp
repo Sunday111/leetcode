@@ -1,4 +1,4 @@
-#include "3495_minimum_operations_to_make_array_zero.hpp"
+#include "3495.hpp"
 #include "parse_2d_array.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -8,9 +8,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [[1,2],[2,4]] 3
 )cases");
 
-using t3495_minimum_operations_to_make_array_zero = SolutionTests<Solution>;
+using t3495 = SolutionTests<Solution>;
 
-TEST_P(t3495_minimum_operations_to_make_array_zero, Test)
+TEST_P(t3495, Test)
 {
     check(
         kCases,
@@ -20,6 +20,6 @@ TEST_P(t3495_minimum_operations_to_make_array_zero, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3495_minimum_operations_to_make_array_zero,
-    t3495_minimum_operations_to_make_array_zero::parameters(kCases.size()),
-    t3495_minimum_operations_to_make_array_zero::name);
+    t3495,
+    t3495::parameters(kCases.size()),
+    t3495::name);
