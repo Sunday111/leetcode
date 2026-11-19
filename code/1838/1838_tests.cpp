@@ -1,4 +1,4 @@
-#include "1838_frequency_of_the_most_frequent_element.hpp"
+#include "1838.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -7,9 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [1,4,8,13] 5 2
 )cases");
 
-using t1838_frequency_of_the_most_frequent_element = SolutionTests<Solution>;
+using t1838 = SolutionTests<Solution>;
 
-TEST_P(t1838_frequency_of_the_most_frequent_element, Test)
+TEST_P(t1838, Test)
 {
     check(
         kCases,
@@ -19,6 +19,6 @@ TEST_P(t1838_frequency_of_the_most_frequent_element, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1838_frequency_of_the_most_frequent_element,
-    t1838_frequency_of_the_most_frequent_element::parameters(kCases.size()),
-    t1838_frequency_of_the_most_frequent_element::name);
+    t1838,
+    t1838::parameters(kCases.size()),
+    t1838::name);
