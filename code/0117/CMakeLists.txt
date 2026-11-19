@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0117_populating_next_right_pointers_in_each_node_2_tests)
 
 add_executable(${target_name}
-    0117_populating_next_right_pointers_in_each_node_2.hpp
-    0117_populating_next_right_pointers_in_each_node_2_tests.cpp
+    0117.hpp
+    0117_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)
