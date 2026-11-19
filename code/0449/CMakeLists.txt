@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0449_serialize_and_desrialize_bst_tests)
 
 add_executable(${target_name}
-    0449_serialize_and_desrialize_bst.hpp
-    0449_serialize_and_desrialize_bst_tests.cpp
+    0449.hpp
+    0449_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)
