@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <print>
 
-#include "0440_kth_smallest_in_lexicographical_order.hpp"
+#include "0440.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -13,8 +13,8 @@ static const auto kCases =
 100 10 17
 )cases");
 
-using t0440_kth_smallest_in_lexicographical_order = SolutionTests<Solution>;
-TEST_P(t0440_kth_smallest_in_lexicographical_order, Test)
+using t0440 = SolutionTests<Solution>;
+TEST_P(t0440, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -25,6 +25,6 @@ TEST_P(t0440_kth_smallest_in_lexicographical_order, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0440_kth_smallest_in_lexicographical_order,
-    t0440_kth_smallest_in_lexicographical_order::parameters(kCases.size()),
-    t0440_kth_smallest_in_lexicographical_order::name);
+    t0440,
+    t0440::parameters(kCases.size()),
+    t0440::name);
