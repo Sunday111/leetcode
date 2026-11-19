@@ -1,5 +1,5 @@
 #include "0392_is_subsequence.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::isSubsequence;
@@ -11,22 +11,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "axc" "ahbgdc" false
 )cases");
 
-class t0392_is_subsequence : public ::testing::TestWithParam<size_t>
-{
-};
+using t0392_is_subsequence = SolutionTests<Solution>;
 
 TEST_P(t0392_is_subsequence, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.isSubsequence(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.isSubsequence(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0392_is_subsequence,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0392_is_subsequence::parameters(kCases.size()),
+    t0392_is_subsequence::name);
