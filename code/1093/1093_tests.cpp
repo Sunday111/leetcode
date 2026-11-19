@@ -1,5 +1,5 @@
 #include "1093.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::sampleStats;
@@ -13,27 +13,28 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [0.00000,255.00000,128.64187,131.00000,175.00000]
 )");
 
-class t1093 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t1093 = SolutionTests<Solution>;
 
 TEST_P(t1093, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected.size(), actual.size());
-    for (size_t i = 0; i < expected.size(); ++i)
-    {
-        EXPECT_NEAR(expected[i], actual[i], 0.0001) << "Element " << i;
-    }
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            auto f = [&](auto&... args)
+            {
+                return solution.sampleStats(args...);
+            };
+            auto actual = std::apply(f, inputs);
+            ASSERT_EQ(expected.size(), actual.size());
+            for (size_t i = 0; i < expected.size(); ++i)
+            {
+                EXPECT_NEAR(expected[i], actual[i], 0.0001) << "Element " << i;
+            }
+        });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1093,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1093::parameters(kCases.size()),
+    t1093::name);
