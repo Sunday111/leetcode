@@ -1,4 +1,4 @@
-#include "0746_min_cost_climbing_stairs.hpp"
+#include "0746.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [1,100,1,1,1,100,1,1,100,1] 6
 )cases");
 
-using t0746_min_cost_climbing_stairs = SolutionTests<Solution>;
+using t0746 = SolutionTests<Solution>;
 
-TEST_P(t0746_min_cost_climbing_stairs, Test)
+TEST_P(t0746, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t0746_min_cost_climbing_stairs, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0746_min_cost_climbing_stairs,
-    t0746_min_cost_climbing_stairs::parameters(kCases.size()),
-    t0746_min_cost_climbing_stairs::name);
+    t0746,
+    t0746::parameters(kCases.size()),
+    t0746::name);
