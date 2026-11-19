@@ -1,67 +1,30 @@
 #include "2106_maximum_fruits_harvested_after_at_most_k_steps.hpp"
 #include "gtest/gtest.h"
+#include "integral_aliases.hpp"
+#include "test_cases_helpers.hpp"
 
-TEST(t2106_maximum_fruits_harvested_after_at_most_k_steps, test_1)
-{
-    std::vector<std::vector<int>> fruits{
-        {2, 8},
-        {6, 3},
-        {8, 6},
-    };
-    ASSERT_EQ(Solution{}.maxTotalFruits(fruits, 5, 4), 9);
-}
+static const auto kCases = parse_test_cases_with_types<
+    std::tuple<std::vector<std::vector<int>>, u32, u32>,
+    u32>(R"cases(
+[[2,8],[6,3],[8,6]] 5 4 9
+[[0,9],[4,1],[5,7],[6,2],[7,4],[10,9]] 5 4 14
+[[0,3],[6,4],[8,5]] 3 2 0
+[[0,10000]] 200000 200000 10000
+)cases");
 
-TEST(t2106_maximum_fruits_harvested_after_at_most_k_steps, test_2)
+class t2106_maximum_fruits_harvested_after_at_most_k_steps
+    : public ::testing::TestWithParam<size_t>
 {
-    std::vector<std::vector<int>> fruits{
-        {0, 9},
-        {4, 1},
-        {5, 7},
-        {6, 2},
-        {7, 4},
-        {10, 9},
-    };
-    ASSERT_EQ(Solution{}.maxTotalFruits(fruits, 5, 4), 14);
-}
-
-TEST(t2106_maximum_fruits_harvested_after_at_most_k_steps, test_3)
+};
+TEST_P(t2106_maximum_fruits_harvested_after_at_most_k_steps, Test)
 {
-    std::vector<std::vector<int>> fruits{
-        {0, 3},
-        {6, 4},
-        {8, 5},
-    };
-    ASSERT_EQ(Solution{}.maxTotalFruits(fruits, 3, 2), 0);
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto& [fruits, start, k] = inputs;
+    ASSERT_EQ(expected, Solution{}.maxTotalFruits(fruits, start, k));
 }
-
-TEST(t2106_maximum_fruits_harvested_after_at_most_k_steps, test_4)
-{
-    std::vector<std::vector<int>> fruits{
-        {1, 9},
-        {2, 10},
-        {3, 1},
-        {5, 6},
-        {6, 3},
-        {8, 2},
-        {9, 2},
-        {11, 4},
-        {18, 10},
-        {22, 8},
-        {25, 2},
-        {26, 2},
-        {30, 4},
-        {31, 5},
-        {33, 9},
-        {34, 1},
-        {39, 10},
-    };
-    ASSERT_EQ(Solution{}.maxTotalFruits(fruits, 19, 9), 22);
-}
-
-TEST(t2106_maximum_fruits_harvested_after_at_most_k_steps, test_5)
-{
-    std::vector<std::vector<int>> fruits{
-        {0, 10000},
-    };
-    ASSERT_EQ(Solution{}.maxTotalFruits(fruits, 200000, 200000), 10000);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t2106_maximum_fruits_harvested_after_at_most_k_steps,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
