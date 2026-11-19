@@ -2,38 +2,29 @@
 
 #include "0378_kth_smallest_element_in_a_sorted_matrix.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t0378_kth_smallest_element_in_a_sorted_matrix, test_1)
+static const auto kCases = parse_test_cases_with_types<
+    std::tuple<std::vector<std::vector<int>>, int>,
+    int>(R"cases(
+[[1,5,9],[10,11,13],[12,13,15]] 1 1
+[[1,5,9],[10,11,13],[12,13,15]] 8 13
+[[-5]] 1 -5
+)cases");
+
+class t0378_kth_smallest_element_in_a_sorted_matrix
+    : public ::testing::TestWithParam<size_t>
 {
-    std::vector<std::vector<int>> matrix{
-        {1, 5, 9},
-        {10, 11, 13},
-        {12, 13, 15},
-    };
-
-    std::vector<int> sorted;
-    for (auto& row : matrix)
-    {
-        sorted.insert_range(sorted.end(), row);
-    }
-
-    std::ranges::sort(sorted);
-
-    for (int k = 1; k != 10; ++k)
-    {
-        int expected = sorted[static_cast<uint32_t>(k - 1)];
-        int actual = Solution{}.kthSmallest(matrix, k);
-        EXPECT_EQ(expected, actual) << "k = " << k;
-    }
-}
-
-TEST(t0378_kth_smallest_element_in_a_sorted_matrix, test_2)
+};
+TEST_P(t0378_kth_smallest_element_in_a_sorted_matrix, Test)
 {
-    std::vector<std::vector<int>> matrix{
-        {1, 5, 9},
-        {10, 11, 13},
-        {12, 13, 15},
-    };
-
-    ASSERT_EQ(Solution{}.kthSmallest(matrix, 1), 1);
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto& [matrix, k] = inputs;
+    ASSERT_EQ(expected, Solution{}.kthSmallest(matrix, k));
 }
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0378_kth_smallest_element_in_a_sorted_matrix,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
