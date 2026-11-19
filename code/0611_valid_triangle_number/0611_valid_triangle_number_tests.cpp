@@ -1,23 +1,34 @@
 #include "0611_valid_triangle_number.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t0611_valid_triangle_number, test_1)
+static constexpr auto kMethodToTest = &Solution::triangleNumber;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+[2,2,3,4] 3
+
+[1,1,3,4] 0
+
+[0,2,2] 0
+
+[2,3,4,4] 4
+)cases");
+
+class t0611_valid_triangle_number : public ::testing::TestWithParam<size_t>
 {
-    std::vector<int> nums{2, 2, 3, 4};
-    ASSERT_EQ(Solution{}.triangleNumber(nums), 3);
-}
-TEST(t0611_valid_triangle_number, test_2)
+};
+
+TEST_P(t0611_valid_triangle_number, Test)
 {
-    std::vector<int> nums{1, 1, 3, 4};
-    ASSERT_EQ(Solution{}.triangleNumber(nums), 0);
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.triangleNumber(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
-TEST(t0611_valid_triangle_number, test_3)
-{
-    std::vector<int> nums{0, 2, 2};
-    ASSERT_EQ(Solution{}.triangleNumber(nums), 0);
-}
-TEST(t0611_valid_triangle_number, test_4)
-{
-    std::vector<int> nums{2, 3, 4, 4};
-    ASSERT_EQ(Solution{}.triangleNumber(nums), 4);
-}
+
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0611_valid_triangle_number,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
