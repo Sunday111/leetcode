@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0988_smallest_string_starting_from_leaf_tests)
 
 add_executable(${target_name}
-    0988_smallest_string_starting_from_leaf.hpp
-    0988_smallest_string_starting_from_leaf_tests.cpp
+    0988.hpp
+    0988_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)
