@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 3337_total_characters_in_string_after_transformations_2_tests)
 
 add_executable(${target_name}
-    3337_total_characters_in_string_after_transformations_2.hpp
-    3337_total_characters_in_string_after_transformations_2_tests.cpp
+    3337.hpp
+    3337_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

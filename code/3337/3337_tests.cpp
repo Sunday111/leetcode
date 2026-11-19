@@ -1,4 +1,4 @@
-#include "3337_total_characters_in_string_after_transformations_2.hpp"
+#include "3337.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 

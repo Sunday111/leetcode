@@ -1,7 +1,7 @@
 #include <random>
 
-#include "3337_total_characters_in_string_after_transformations_2.hpp"
-#include "3337_total_characters_in_string_after_transformations_2_s2.hpp"
+#include "3337.hpp"
+#include "3337_s2.hpp"
 #include "benchmark/benchmark.h"
 
 struct Params
