@@ -1,5 +1,5 @@
 #include "0032.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::longestValidParentheses;
@@ -10,23 +10,18 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 ")()())()()("   4
 )cases");
 
-class t0032 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t0032 = SolutionTests<Solution>;
 
 TEST_P(t0032, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.longestValidParentheses(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0032,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0032::parameters(kCases.size()),
+    t0032::name);
