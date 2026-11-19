@@ -1,5 +1,5 @@
 #include "2616_minimize_the_maximum_difference_of_pairs.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases = parse_test_cases_with_types<
@@ -14,23 +14,18 @@ static const auto kCases = parse_test_cases_with_types<
 [3,4,2,3,2,1,2] 3 1
 )cases");
 
-class t2616_minimize_the_maximum_difference_of_pairs
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t2616_minimize_the_maximum_difference_of_pairs = SolutionTests<Solution>;
 
 TEST_P(t2616_minimize_the_maximum_difference_of_pairs, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.minimizeMax(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.minimizeMax(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2616_minimize_the_maximum_difference_of_pairs,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2616_minimize_the_maximum_difference_of_pairs::parameters(kCases.size()),
+    t2616_minimize_the_maximum_difference_of_pairs::name);
