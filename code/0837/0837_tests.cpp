@@ -1,4 +1,4 @@
-#include "0837_new_game.hpp"
+#include "0837.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 1 0 1 1
 )cases");
 
-using t0837_new_game = SolutionTests<Solution>;
+using t0837 = SolutionTests<Solution>;
 
-TEST_P(t0837_new_game, Test)
+TEST_P(t0837, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -25,6 +25,6 @@ TEST_P(t0837_new_game, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0837_new_game,
-    t0837_new_game::parameters(kCases.size()),
-    t0837_new_game::name);
+    t0837,
+    t0837::parameters(kCases.size()),
+    t0837::name);
