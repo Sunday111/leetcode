@@ -1,39 +1,41 @@
 #include "2434_using_a_robot_to_print_the_lexicographically_smallest_string.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t2434_using_a_robot_to_print_the_lexicographically_smallest_string, test_1)
+static constexpr auto kMethodToTest = &Solution::robotWithString;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+"zza" "azz"
+
+"bac" "abc"
+
+"bdda" "addb"
+
+"bydizfve" "bdevfziy"
+
+"bzeyxf" "befxyz"
+
+"vzhofnpo" "fnohopzv"
+
+"mmuqezwmomeplrtskz" "eekstrlpmomwzqummz"
+)cases");
+
+class t2434_using_a_robot_to_print_the_lexicographically_smallest_string
+    : public ::testing::TestWithParam<size_t>
 {
-    ASSERT_EQ(Solution::robotWithString("zza"), "azz");
+};
+
+TEST_P(t2434_using_a_robot_to_print_the_lexicographically_smallest_string, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.robotWithString(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t2434_using_a_robot_to_print_the_lexicographically_smallest_string, test_2)
-{
-    ASSERT_EQ(Solution::robotWithString("bac"), "abc");
-}
-
-TEST(t2434_using_a_robot_to_print_the_lexicographically_smallest_string, test_3)
-{
-    ASSERT_EQ(Solution::robotWithString("bdda"), "addb");
-}
-
-TEST(t2434_using_a_robot_to_print_the_lexicographically_smallest_string, test_4)
-{
-    ASSERT_EQ(Solution::robotWithString("bydizfve"), "bdevfziy");
-}
-
-TEST(t2434_using_a_robot_to_print_the_lexicographically_smallest_string, test_5)
-{
-    ASSERT_EQ(Solution::robotWithString("bzeyxf"), "befxyz");
-}
-
-TEST(t2434_using_a_robot_to_print_the_lexicographically_smallest_string, test_6)
-{
-    ASSERT_EQ(Solution::robotWithString("vzhofnpo"), "fnohopzv");
-}
-
-TEST(t2434_using_a_robot_to_print_the_lexicographically_smallest_string, test_7)
-{
-    ASSERT_EQ(
-        Solution::robotWithString("mmuqezwmomeplrtskz"),
-        "eekstrlpmomwzqummz");
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t2434_using_a_robot_to_print_the_lexicographically_smallest_string,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
