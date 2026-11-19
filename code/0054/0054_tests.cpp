@@ -1,4 +1,4 @@
-#include "0054_spiral_matrix.hpp"
+#include "0054.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
