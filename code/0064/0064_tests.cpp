@@ -1,4 +1,4 @@
-#include "0064_minimum_path_sum_2.hpp"
+#include "0064.hpp"
 #include "parse_2d_array.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -10,9 +10,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [[1,2,3],[4,5,6]] 12
 )cases");
 
-using t0064_minimum_path_sum_2 = SolutionTests<Solution>;
+using t0064 = SolutionTests<Solution>;
 
-TEST_P(t0064_minimum_path_sum_2, Test)
+TEST_P(t0064, Test)
 {
     check(
         kCases,
@@ -22,6 +22,6 @@ TEST_P(t0064_minimum_path_sum_2, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0064_minimum_path_sum_2,
-    t0064_minimum_path_sum_2::parameters(kCases.size()),
-    t0064_minimum_path_sum_2::name);
+    t0064,
+    t0064::parameters(kCases.size()),
+    t0064::name);
