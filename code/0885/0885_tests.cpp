@@ -7,9 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 1 4 0 0 [[0,0],[0,1],[0,2],[0,3]]
 )cases");
 
-using t0885_spiral_matrix_3 = SolutionTests<Solution>;
+using t0885 = SolutionTests<Solution>;
 
-TEST_P(t0885_spiral_matrix_3, Test)
+TEST_P(t0885, Test)
 {
     check(
         kCases,
@@ -19,6 +19,6 @@ TEST_P(t0885_spiral_matrix_3, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0885_spiral_matrix_3,
-    t0885_spiral_matrix_3::parameters(kCases.size()),
-    t0885_spiral_matrix_3::name);
+    t0885,
+    t0885::parameters(kCases.size()),
+    t0885::name);
