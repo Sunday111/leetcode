@@ -1,5 +1,5 @@
 #include "0190_reverse_bits.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases =
@@ -7,17 +7,15 @@ static const auto kCases =
 43261596 964176192
 )cases");
 
-class t0190_reverse_bits : public ::testing::TestWithParam<size_t>
-{
-};
+using t0190_reverse_bits = SolutionTests<Solution>;
 TEST_P(t0190_reverse_bits, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    ASSERT_EQ(expected, Solution{}.reverseBits(std::get<0>(inputs)));
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        { ASSERT_EQ(expected, solution.reverseBits(std::get<0>(inputs))); });
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0190_reverse_bits,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0190_reverse_bits::parameters(kCases.size()),
+    t0190_reverse_bits::name);
