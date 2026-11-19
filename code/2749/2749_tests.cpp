@@ -1,4 +1,4 @@
-#include "2749_minimum_operations_to_make_the_integer_zero.hpp"
+#include "2749.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
