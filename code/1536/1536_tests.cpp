@@ -1,12 +1,24 @@
-#include "1536_test_cases.hpp"
+#include "1536.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
-inline static const auto kCases = parse_test_cases<kMethodToTest>(kTestCases);
+inline static constexpr auto kMethodToTest = &Solution::minSwaps;
 
-using t1536_minimum_swaps_to_arrange_a_binary_grid = SolutionTests<Solution>;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+[[0,0,1],[1,1,0],[1,0,0]]
+3
 
-TEST_P(t1536_minimum_swaps_to_arrange_a_binary_grid, MinOperations)
+[[0,1,1,0],[0,1,1,0],[0,1,1,0],[0,1,1,0]]
+-1
+
+[[1,0,0],[1,1,0],[1,1,1]]
+0
+
+)");
+
+using t1536 = SolutionTests<Solution>;
+
+TEST_P(t1536, MinOperations)
 {
     check(
         kCases,
@@ -16,6 +28,6 @@ TEST_P(t1536_minimum_swaps_to_arrange_a_binary_grid, MinOperations)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1536_minimum_swaps_to_arrange_a_binary_grid,
-    t1536_minimum_swaps_to_arrange_a_binary_grid::parameters(kCases.size()),
-    t1536_minimum_swaps_to_arrange_a_binary_grid::name);
+    t1536,
+    t1536::parameters(kCases.size()),
+    t1536::name);
