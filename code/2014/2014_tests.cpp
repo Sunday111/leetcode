@@ -1,4 +1,4 @@
-#include "2014_longest_subsequence_repeated_k_times.hpp"
+#include "2014.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -10,8 +10,8 @@ static const auto kCases = parse_test_cases_with_types<std::tuple<std::string, u
 "gbjbjigjbji" 2 "gjbji"
 )cases");
 
-using t2014_longest_subsequence_repeated_k_times = SolutionTests<Solution3>;
-TEST_P(t2014_longest_subsequence_repeated_k_times, Test)
+using t2014 = SolutionTests<Solution3>;
+TEST_P(t2014, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -20,4 +20,4 @@ TEST_P(t2014_longest_subsequence_repeated_k_times, Test)
             ASSERT_EQ(expected, solution.longestSubsequenceRepeatedK(s, k));
         });
 }
-INSTANTIATE_TEST_SUITE_P(Gen, t2014_longest_subsequence_repeated_k_times, t2014_longest_subsequence_repeated_k_times::parameters(kCases.size()), t2014_longest_subsequence_repeated_k_times::name);
+INSTANTIATE_TEST_SUITE_P(Gen, t2014, t2014::parameters(kCases.size()), t2014::name);
