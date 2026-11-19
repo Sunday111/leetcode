@@ -1,6 +1,6 @@
 #include <print>
 
-#include "0417_pacific_atlantic_water_flow.hpp"
+#include "0417.hpp"
 #include "parse_2d_array.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -12,9 +12,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]
 )cases");
 
-using t0417_pacific_atlantic_water_flow = SolutionTests<Solution>;
+using t0417 = SolutionTests<Solution>;
 
-TEST_P(t0417_pacific_atlantic_water_flow, Test)
+TEST_P(t0417, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -30,6 +30,6 @@ TEST_P(t0417_pacific_atlantic_water_flow, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0417_pacific_atlantic_water_flow,
-    t0417_pacific_atlantic_water_flow::parameters(kCases.size()),
-    t0417_pacific_atlantic_water_flow::name);
+    t0417,
+    t0417::parameters(kCases.size()),
+    t0417::name);
