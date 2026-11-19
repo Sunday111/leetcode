@@ -1,4 +1,4 @@
-#include "0799_champagne_tower.hpp"
+#include "0799.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -11,9 +11,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 100000009 33 17 1
 )cases");
 
-using t0799_champagne_tower = SolutionTests<Solution>;
+using t0799 = SolutionTests<Solution>;
 
-TEST_P(t0799_champagne_tower, Test)
+TEST_P(t0799, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -27,6 +27,6 @@ TEST_P(t0799_champagne_tower, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0799_champagne_tower,
-    t0799_champagne_tower::parameters(kCases.size()),
-    t0799_champagne_tower::name);
+    t0799,
+    t0799::parameters(kCases.size()),
+    t0799::name);
