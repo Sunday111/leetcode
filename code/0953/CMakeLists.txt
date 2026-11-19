@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.25)
 include(set_compiler_options)
 
 add_executable(0953_verifying_an_alien_dictionary_tests
-    0953_verifying_an_alien_dictionary.hpp
-    0953_verifying_an_alien_dictionary_tests.cpp
+    0953.hpp
+    0953_tests.cpp
 )
 
 target_link_libraries(0953_verifying_an_alien_dictionary_tests PUBLIC gtest_main)

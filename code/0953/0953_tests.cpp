@@ -1,4 +1,4 @@
-#include "0953_verifying_an_alien_dictionary.hpp"
+#include "0953.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
