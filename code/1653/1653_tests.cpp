@@ -1,4 +1,4 @@
-#include "1653_Minimum_Deletions_to_Make_String_Balanced.hpp"
+#include "1653.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "bbaaaaabb" 2
 )cases");
 
-using t1653_Minimum_Deletions_to_Make_String_Balanced = SolutionTests<Solution>;
+using t1653 = SolutionTests<Solution>;
 
-TEST_P(t1653_Minimum_Deletions_to_Make_String_Balanced, Test)
+TEST_P(t1653, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t1653_Minimum_Deletions_to_Make_String_Balanced, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1653_Minimum_Deletions_to_Make_String_Balanced,
-    t1653_Minimum_Deletions_to_Make_String_Balanced::parameters(kCases.size()),
-    t1653_Minimum_Deletions_to_Make_String_Balanced::name);
+    t1653,
+    t1653::parameters(kCases.size()),
+    t1653::name);

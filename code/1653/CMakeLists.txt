@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.25)
 
 include(set_compiler_options)
 
-set(target_name 1653_Minimum_Deletions_to_Make_String_Balanced)
+set(target_name 1653)
 set(tests_target_name ${target_name}_tests)
 
 add_library(${target_name} INTERFACE ${target_name}.hpp)
