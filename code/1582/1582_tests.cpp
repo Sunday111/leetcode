@@ -1,4 +1,4 @@
-#include "1582_special_positions_in_a_binary_matrixtest_cases.hpp"
+#include "1582_test_cases.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 

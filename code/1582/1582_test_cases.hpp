@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-#include "1582_special_positions_in_a_binary_matrix.hpp"
+#include "1582.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::numSpecial;
 inline static constexpr std::string_view kTestCases = R"(
