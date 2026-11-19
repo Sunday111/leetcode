@@ -1,7 +1,7 @@
 #include <print>
 
 #include "3548.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::canPartitionGrid;
@@ -52,38 +52,39 @@ true
 true
 )");
 
-class t3548 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t3548 = SolutionTests<Solution>;
 
 TEST_P(t3548, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-
-    EXPECT_EQ(expected, actual);
-
-    if (expected != actual)
-    {
-        std::println("Input matrix:");
-        for (auto& row : std::get<0>(inputs))
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
         {
-            std::print("    ");
-            for (auto v : row)
+            auto f = [&](auto&... args)
             {
-                std::print("{:4} ", v);
+                return solution.canPartitionGrid(args...);
+            };
+            auto actual = std::apply(f, inputs);
+
+            EXPECT_EQ(expected, actual);
+
+            if (expected != actual)
+            {
+                std::println("Input matrix:");
+                for (auto& row : std::get<0>(inputs))
+                {
+                    std::print("    ");
+                    for (auto v : row)
+                    {
+                        std::print("{:4} ", v);
+                    }
+                    std::println("");
+                }
             }
-            std::println("");
-        }
-    }
+        });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t3548,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t3548::parameters(kCases.size()),
+    t3548::name);
