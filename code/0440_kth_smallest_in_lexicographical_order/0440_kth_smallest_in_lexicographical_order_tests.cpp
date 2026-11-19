@@ -2,7 +2,7 @@
 #include <print>
 
 #include "0440_kth_smallest_in_lexicographical_order.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases =
@@ -13,19 +13,18 @@ static const auto kCases =
 100 10 17
 )cases");
 
-class t0440_kth_smallest_in_lexicographical_order
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t0440_kth_smallest_in_lexicographical_order = SolutionTests<Solution>;
 TEST_P(t0440_kth_smallest_in_lexicographical_order, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto [n, k] = inputs;
-    ASSERT_EQ(expected, Solution{}.findKthNumber(n, k));
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            auto [n, k] = inputs;
+            ASSERT_EQ(expected, solution.findKthNumber(n, k));
+        });
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0440_kth_smallest_in_lexicographical_order,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0440_kth_smallest_in_lexicographical_order::parameters(kCases.size()),
+    t0440_kth_smallest_in_lexicographical_order::name);
