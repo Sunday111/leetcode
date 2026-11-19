@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 2509_cycle_length_queries_in_a_tree_tests)
 
 add_executable(${target_name}
-    2509_cycle_length_queries_in_a_tree.hpp
-    2509_cycle_length_queries_in_a_tree_tests.cpp
+    2509.hpp
+    2509_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

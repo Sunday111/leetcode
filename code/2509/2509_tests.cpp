@@ -1,4 +1,4 @@
-#include "2509_cycle_length_queries_in_a_tree.hpp"
+#include "2509.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
