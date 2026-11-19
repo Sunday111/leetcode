@@ -1,4 +1,4 @@
-#include "3573_best_time_to_buy_and_sell_stocks_v.hpp"
+#include "3573.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [12,16,19,19,8,1,19,13,9] 3 36
 )cases");
 
-using t3573_best_time_to_buy_and_sell_stocks_v = SolutionTests<Solution>;
+using t3573 = SolutionTests<Solution>;
 
-TEST_P(t3573_best_time_to_buy_and_sell_stocks_v, Test)
+TEST_P(t3573, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t3573_best_time_to_buy_and_sell_stocks_v, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3573_best_time_to_buy_and_sell_stocks_v,
-    t3573_best_time_to_buy_and_sell_stocks_v::parameters(kCases.size()),
-    t3573_best_time_to_buy_and_sell_stocks_v::name);
+    t3573,
+    t3573::parameters(kCases.size()),
+    t3573::name);
