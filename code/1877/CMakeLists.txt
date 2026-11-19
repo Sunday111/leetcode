@@ -2,14 +2,14 @@ cmake_minimum_required(VERSION 3.25)
 
 include(set_compiler_options)
 
-set(target_name 1877_minimize_maximum_pair_sum_in_array)
+set(target_name 1877)
 set(tests_target_name ${target_name}_tests)
 
-add_library(${target_name} INTERFACE 1877.hpp)
+add_library(${target_name} INTERFACE ${target_name}.hpp)
 set_generic_compiler_options(${target_name} INTERFACE)
 target_link_libraries(${target_name} INTERFACE lc_templates)
 
-add_executable(${tests_target_name} 1877_tests.cpp)
+add_executable(${tests_target_name} ${target_name}_tests.cpp)
 
 target_link_libraries(${tests_target_name} PUBLIC ${target_name} test_utility)
 
