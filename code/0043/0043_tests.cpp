@@ -11,8 +11,8 @@ static const auto kCases = parse_test_cases_with_types<
 "99" "99" "9801"
 )cases");
 
-using t0043_multiply_strings = SolutionTests<Solution>;
-TEST_P(t0043_multiply_strings, Test)
+using t0043 = SolutionTests<Solution>;
+TEST_P(t0043, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -23,6 +23,6 @@ TEST_P(t0043_multiply_strings, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0043_multiply_strings,
-    t0043_multiply_strings::parameters(kCases.size()),
-    t0043_multiply_strings::name);
+    t0043,
+    t0043::parameters(kCases.size()),
+    t0043::name);
