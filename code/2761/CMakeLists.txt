@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 2761_prime_pairs_with_target_sum_tests)
 
 add_executable(${target_name}
-    2761_prime_pairs_with_target_sum.hpp
-    2761_prime_pairs_with_target_sum_tests.cpp
+    2761.hpp
+    2761_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

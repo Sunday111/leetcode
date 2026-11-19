@@ -1,4 +1,4 @@
-#include "2761_prime_pairs_with_target_sum.hpp"
+#include "2761.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
