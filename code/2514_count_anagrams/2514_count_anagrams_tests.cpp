@@ -1,6 +1,6 @@
 #include "2514_count_anagrams.hpp"
-#include "gtest/gtest.h"
 #include "integral_aliases.hpp"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases =
@@ -9,19 +9,18 @@ static const auto kCases =
 "b okzojaporykbmq tybq zrztwlolvcyumcsq jjuowpp" 210324488
 )cases");
 
-class t2514_count_anagrams : public ::testing::TestWithParam<size_t>
-{
-};
+using t2514_count_anagrams = SolutionTests<Solution, CachingFactorialsSolution>;
+
 TEST_P(t2514_count_anagrams, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto& [s] = inputs;
-    ASSERT_EQ(expected, Solution{}.countAnagrams(s));
-    ASSERT_EQ(expected, CachingFactorialsSolution{}.countAnagrams(s));
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.countAnagrams(args...); });
 }
+
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2514_count_anagrams,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2514_count_anagrams::parameters(kCases.size()),
+    t2514_count_anagrams::name);
