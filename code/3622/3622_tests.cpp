@@ -1,5 +1,5 @@
 #include "3622.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::checkDivisibility;
@@ -13,23 +13,18 @@ false
 
 )");
 
-class t3622 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t3622 = SolutionTests<Solution>;
 
 TEST_P(t3622, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.checkDivisibility(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t3622,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t3622::parameters(kCases.size()),
+    t3622::name);
