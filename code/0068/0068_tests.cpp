@@ -1,4 +1,4 @@
-#include "0068_text_justification.hpp"
+#include "0068.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 

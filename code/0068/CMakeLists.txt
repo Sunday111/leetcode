@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0068_text_justification_tests)
 
 add_executable(${target_name}
-    0068_text_justification.hpp
-    0068_text_justification_tests.cpp
+    0068.hpp
+    0068_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)
