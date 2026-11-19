@@ -1,5 +1,5 @@
 #include "0316.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::removeDuplicateLetters;
@@ -8,23 +8,18 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 "cbacdcbc" "acdb"
 )");
 
-class t0316 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t0316 = SolutionTests<Solution>;
 
 TEST_P(t0316, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.removeDuplicateLetters(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0316,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0316::parameters(kCases.size()),
+    t0316::name);
