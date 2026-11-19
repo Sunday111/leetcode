@@ -1,4 +1,4 @@
-#include "3818_minimum_prefix_removal_to_make_array_strictly_increasing.hpp"
+#include "3818.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
