@@ -1,4 +1,4 @@
-#include "3027_find_the_number_of_ways_to_place_people_2.hpp"
+#include "3027.hpp"
 #include "parse_2d_array.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -8,9 +8,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [[2,5],[128653,-2370425]] 1
 )cases");
 
-using t3027_find_the_number_of_ways_to_place_people_2 = SolutionTests<Solution>;
+using t3027 = SolutionTests<Solution>;
 
-TEST_P(t3027_find_the_number_of_ways_to_place_people_2, Test)
+TEST_P(t3027, Test)
 {
     check(
         kCases,
@@ -20,6 +20,6 @@ TEST_P(t3027_find_the_number_of_ways_to_place_people_2, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3027_find_the_number_of_ways_to_place_people_2,
-    t3027_find_the_number_of_ways_to_place_people_2::parameters(kCases.size()),
-    t3027_find_the_number_of_ways_to_place_people_2::name);
+    t3027,
+    t3027::parameters(kCases.size()),
+    t3027::name);
