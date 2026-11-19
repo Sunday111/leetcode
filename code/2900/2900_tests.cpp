@@ -7,10 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 ["d","g"] [0,1] ["d","g"]
 )cases");
 
-using t2900_longest_unequal_adjacent_groups_subsequence =
-    SolutionTests<Solution>;
+using t2900 = SolutionTests<Solution>;
 
-TEST_P(t2900_longest_unequal_adjacent_groups_subsequence, Test)
+TEST_P(t2900, Test)
 {
     check(
         kCases,
@@ -20,7 +19,6 @@ TEST_P(t2900_longest_unequal_adjacent_groups_subsequence, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2900_longest_unequal_adjacent_groups_subsequence,
-    t2900_longest_unequal_adjacent_groups_subsequence::parameters(
-        kCases.size()),
-    t2900_longest_unequal_adjacent_groups_subsequence::name);
+    t2900,
+    t2900::parameters(kCases.size()),
+    t2900::name);
