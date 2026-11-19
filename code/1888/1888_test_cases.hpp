@@ -1,6 +1,6 @@
 #pragma once
 
-#include "1888_minimum_number_of_flips_to_make_the_binary_string_alternating.hpp"
+#include "1888.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::minFlips;

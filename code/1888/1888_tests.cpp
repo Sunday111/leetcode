@@ -1,4 +1,4 @@
-#include "1888_minimum_number_of_flips_to_make_the_binary_string_alternatingtest_cases.hpp"
+#include "1888_test_cases.hpp"
 #include "solution_tests.hpp"
 
 using t1888_minimum_number_of_flips_to_make_the_binary_string_alternating =
