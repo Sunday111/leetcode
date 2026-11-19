@@ -1,4 +1,4 @@
-#include "0680_valid_palindrome.hpp"
+#include "0680.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 

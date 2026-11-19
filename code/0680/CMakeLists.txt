@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.25)
 include(set_compiler_options)
 
 add_executable(0680_valid_palindrome_tests
-    0680_valid_palindrome.hpp
-    0680_valid_palindrome_tests.cpp
+    0680.hpp
+    0680_tests.cpp
 )
 
 target_link_libraries(0680_valid_palindrome_tests PUBLIC gtest_main)
