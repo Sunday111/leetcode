@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [[2,3],[1,3],[5,4],[6,4]] [[1,2,5,6],[]]
 )cases");
 
-using t2225_find_players_with_zero_or_one_losses = SolutionTests<Solution>;
+using t2225 = SolutionTests<Solution>;
 
-TEST_P(t2225_find_players_with_zero_or_one_losses, Test)
+TEST_P(t2225, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t2225_find_players_with_zero_or_one_losses, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2225_find_players_with_zero_or_one_losses,
-    t2225_find_players_with_zero_or_one_losses::parameters(kCases.size()),
-    t2225_find_players_with_zero_or_one_losses::name);
+    t2225,
+    t2225::parameters(kCases.size()),
+    t2225::name);
