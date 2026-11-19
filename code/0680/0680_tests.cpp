@@ -8,8 +8,8 @@ static const auto kCases =
 "deeee" true
 )cases");
 
-using t0680_valid_palindrome = SolutionTests<Solution>;
-TEST_P(t0680_valid_palindrome, Test)
+using t0680 = SolutionTests<Solution>;
+TEST_P(t0680, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -19,6 +19,6 @@ TEST_P(t0680_valid_palindrome, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0680_valid_palindrome,
-    t0680_valid_palindrome::parameters(kCases.size()),
-    t0680_valid_palindrome::name);
+    t0680,
+    t0680::parameters(kCases.size()),
+    t0680::name);
