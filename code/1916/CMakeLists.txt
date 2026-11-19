@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 1916_count_ways_to_build_ant_colony_tests)
 
 add_executable(${target_name}
-    1916_count_ways_to_build_ant_colony.hpp
-    1916_count_ways_to_build_ant_colony_tests.cpp
+    1916.hpp
+    1916_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)
