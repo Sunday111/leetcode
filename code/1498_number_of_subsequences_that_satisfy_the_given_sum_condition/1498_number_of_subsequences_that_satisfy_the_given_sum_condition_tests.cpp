@@ -1,23 +1,26 @@
 #include "1498_number_of_subsequences_that_satisfy_the_given_sum_condition.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t1498_number_of_subsequences_that_satisfy_the_given_sum_condition, test_1)
-{
-    std::vector nums{3, 5, 6, 7};
-    ASSERT_EQ(Solution{}.numSubseq(nums, 9), 4);
-}
+static const auto kCases =
+    parse_test_cases_with_types<std::tuple<std::vector<int>, u32>, u32>(R"cases(
+[3,5,6,7] 9 4
+[5,2,4,1,7,6,8] 16 127
+)cases");
 
-TEST(t1498_number_of_subsequences_that_satisfy_the_given_sum_condition, test_2)
+class t1498_number_of_subsequences_that_satisfy_the_given_sum_condition
+    : public ::testing::TestWithParam<size_t>
 {
-    std::vector nums{5, 2, 4, 1, 7, 6, 8};
-    ASSERT_EQ(Solution{}.numSubseq(nums, 16), 127);
-}
-
-TEST(t1498_number_of_subsequences_that_satisfy_the_given_sum_condition, test_3)
+};
+TEST_P(t1498_number_of_subsequences_that_satisfy_the_given_sum_condition, Test)
 {
-    std::vector nums{28, 17, 24, 3,  3,  28, 14, 9,  10, 4,  30, 30, 28, 10,
-                     20, 27, 19, 19, 12, 25, 23, 5,  19, 2,  15, 12, 1,  22,
-                     12, 21, 19, 2,  15, 21, 8,  21, 15, 26, 8,  11, 5,  4,
-                     11, 20, 16, 10, 16, 6,  21, 19, 12, 1,  26, 19};
-    ASSERT_EQ(Solution{}.numSubseq(nums, 29), 885784560);
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto& [nums, target] = inputs;
+    ASSERT_EQ(expected, Solution{}.numSubseq(nums, target));
 }
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t1498_number_of_subsequences_that_satisfy_the_given_sum_condition,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
