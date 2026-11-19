@@ -1,4 +1,4 @@
-#include "1900_the_earliest_and_latest_rounds_where_players_compete.hpp"
+#include "1900.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
