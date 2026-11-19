@@ -13,9 +13,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 5000000 348513
 )cases");
 
-using t0204_count_primes = SolutionTests<Solution>;
+using t0204 = SolutionTests<Solution>;
 
-TEST_P(t0204_count_primes, Test)
+TEST_P(t0204, Test)
 {
     check(
         kCases,
@@ -25,6 +25,6 @@ TEST_P(t0204_count_primes, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0204_count_primes,
-    t0204_count_primes::parameters(kCases.size()),
-    t0204_count_primes::name);
+    t0204,
+    t0204::parameters(kCases.size()),
+    t0204::name);
