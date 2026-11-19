@@ -1,22 +1,35 @@
 #include "3233_find_the_count_of_numbers_which_are_not_special.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t3233_find_the_count_of_numbers_which_are_not_special, test_1)
+static constexpr auto kMethodToTest = &Solution::nonSpecialCount;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+5 7 3
+
+4 16 11
+
+1 100000 99935
+
+1 4 3
+)cases");
+
+class t3233_find_the_count_of_numbers_which_are_not_special
+    : public ::testing::TestWithParam<size_t>
 {
-    ASSERT_EQ(Solution{}.nonSpecialCount(5, 7), 3);
+};
+
+TEST_P(t3233_find_the_count_of_numbers_which_are_not_special, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.nonSpecialCount(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t3233_find_the_count_of_numbers_which_are_not_special, test_2)
-{
-    ASSERT_EQ(Solution{}.nonSpecialCount(4, 16), 11);
-}
-
-TEST(t3233_find_the_count_of_numbers_which_are_not_special, test_3)
-{
-    ASSERT_EQ(Solution{}.nonSpecialCount(1, 100'000), 99935);
-}
-
-TEST(t3233_find_the_count_of_numbers_which_are_not_special, test_4)
-{
-    ASSERT_EQ(Solution{}.nonSpecialCount(1, 4), 3);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t3233_find_the_count_of_numbers_which_are_not_special,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
