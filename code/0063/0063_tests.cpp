@@ -1,4 +1,4 @@
-#include "0063_unique_paths_2.hpp"
+#include "0063.hpp"
 #include "parse_2d_array.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -12,9 +12,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [[1,0]] 0
 )cases");
 
-using t0063_unique_paths_2 = SolutionTests<Solution>;
+using t0063 = SolutionTests<Solution>;
 
-TEST_P(t0063_unique_paths_2, Test)
+TEST_P(t0063, Test)
 {
     check(
         kCases,
@@ -24,6 +24,6 @@ TEST_P(t0063_unique_paths_2, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0063_unique_paths_2,
-    t0063_unique_paths_2::parameters(kCases.size()),
-    t0063_unique_paths_2::name);
+    t0063,
+    t0063::parameters(kCases.size()),
+    t0063::name);
