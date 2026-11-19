@@ -1,7 +1,7 @@
-// #include "0778_swim_in_rising_water.hpp"
+// #include "0778.hpp"
 // #include "gtest/gtest.h"
 
-// TEST(t0778_swim_in_rising_water, test_1)
+// TEST(t0778, test_1)
 // {
 //     Solution s{};
 // }
