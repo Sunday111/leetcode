@@ -1,4 +1,4 @@
-#include "2787_ways_to_express_an_integer_as_sums_of_powers.hpp"
+#include "2787.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 

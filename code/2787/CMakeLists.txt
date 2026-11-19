@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 2787_ways_to_express_an_integer_as_sums_of_powers_tests)
 
 add_executable(${target_name}
-    2787_ways_to_express_an_integer_as_sums_of_powers.hpp
-    2787_ways_to_express_an_integer_as_sums_of_powers_tests.cpp
+    2787.hpp
+    2787_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)
