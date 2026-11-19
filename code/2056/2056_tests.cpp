@@ -1,4 +1,4 @@
-#include "2056_number_of_valid_move_combinations_on_chessboard.hpp"
+#include "2056.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -15,10 +15,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 ["rook","rook"] [[1,1],[1,7]] 189
 )cases");
 
-using t2056_number_of_valid_move_combinations_on_chessboard =
-    SolutionTests<Solution>;
+using t2056 = SolutionTests<Solution>;
 
-TEST_P(t2056_number_of_valid_move_combinations_on_chessboard, Test)
+TEST_P(t2056, Test)
 {
     check(
         kCases,
@@ -28,7 +27,6 @@ TEST_P(t2056_number_of_valid_move_combinations_on_chessboard, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2056_number_of_valid_move_combinations_on_chessboard,
-    t2056_number_of_valid_move_combinations_on_chessboard::parameters(
-        kCases.size()),
-    t2056_number_of_valid_move_combinations_on_chessboard::name);
+    t2056,
+    t2056::parameters(kCases.size()),
+    t2056::name);
