@@ -13,10 +13,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 1 4 3
 )cases");
 
-using t3233_find_the_count_of_numbers_which_are_not_special =
-    SolutionTests<Solution>;
+using t3233 = SolutionTests<Solution>;
 
-TEST_P(t3233_find_the_count_of_numbers_which_are_not_special, Test)
+TEST_P(t3233, Test)
 {
     check(
         kCases,
@@ -26,7 +25,6 @@ TEST_P(t3233_find_the_count_of_numbers_which_are_not_special, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3233_find_the_count_of_numbers_which_are_not_special,
-    t3233_find_the_count_of_numbers_which_are_not_special::parameters(
-        kCases.size()),
-    t3233_find_the_count_of_numbers_which_are_not_special::name);
+    t3233,
+    t3233::parameters(kCases.size()),
+    t3233::name);
