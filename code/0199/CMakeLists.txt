@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0199_binary_tree_right_side_view_tests)
 
 add_executable(${target_name}
-    0199_binary_tree_right_side_view.hpp
-    0199_binary_tree_right_side_view_tests.cpp
+    0199.hpp
+    0199_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

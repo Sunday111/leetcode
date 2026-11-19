@@ -1,4 +1,4 @@
-#include "0199_binary_tree_right_side_view.hpp"
+#include "0199.hpp"
 #include "leet_code_binary_tree.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
