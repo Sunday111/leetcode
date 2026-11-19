@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0016_3sum_closest_tests)
 
 add_executable(${target_name}
-    0016_3sum_closest.hpp
-    0016_3sum_closest_tests.cpp
+    0016.hpp
+    0016_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

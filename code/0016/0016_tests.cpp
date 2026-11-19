@@ -1,4 +1,4 @@
-#include "0016_3sum_closest.hpp"
+#include "0016.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
