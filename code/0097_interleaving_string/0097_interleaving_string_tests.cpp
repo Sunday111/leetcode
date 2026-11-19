@@ -1,15 +1,32 @@
 #include "0097_interleaving_string.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t0097_interleaving_string, test_1)
+static constexpr auto kMethodToTest = &Solution::isInterleave;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+"aabcc" "dbbca" "aadbbcbcac" true
+
+"aabcc" "dbbca" "aadbbbaccc" false
+
+"ab" "bc" "babc" true
+)cases");
+
+class t0097_interleaving_string : public ::testing::TestWithParam<size_t>
 {
-    ASSERT_EQ(Solution{}.isInterleave("aabcc", "dbbca", "aadbbcbcac"), true);
-}
-TEST(t0097_interleaving_string, test_2)
+};
+
+TEST_P(t0097_interleaving_string, Test)
 {
-    ASSERT_EQ(Solution{}.isInterleave("aabcc", "dbbca", "aadbbbaccc"), false);
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.isInterleave(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
-TEST(t0097_interleaving_string, test_3)
-{
-    ASSERT_EQ(Solution{}.isInterleave("ab", "bc", "babc"), true);
-}
+
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0097_interleaving_string,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
