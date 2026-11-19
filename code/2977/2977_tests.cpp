@@ -1,4 +1,4 @@
-#include "2977_minimum_cost_to_convert_string_ii.hpp"
+#include "2977.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -7,9 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "abcdefgh" "acdeeghh" ["bcd","fgh","thh"] ["cde","thh","ghh"] [1,3,5] 9
 )cases");
 
-using t2977_minimum_cost_to_convert_string_ii = SolutionTests<Solution>;
+using t2977 = SolutionTests<Solution>;
 
-TEST_P(t2977_minimum_cost_to_convert_string_ii, Test)
+TEST_P(t2977, Test)
 {
     check(
         kCases,
@@ -19,6 +19,6 @@ TEST_P(t2977_minimum_cost_to_convert_string_ii, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2977_minimum_cost_to_convert_string_ii,
-    t2977_minimum_cost_to_convert_string_ii::parameters(kCases.size()),
-    t2977_minimum_cost_to_convert_string_ii::name);
+    t2977,
+    t2977::parameters(kCases.size()),
+    t2977::name);
