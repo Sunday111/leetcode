@@ -10,9 +10,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [1,2,3,4,5] 2 [1,2,3,5]
 )");
 
-using t0019_remove_nth_node_from_end_of_list = SolutionTests<Solution>;
+using t0019 = SolutionTests<Solution>;
 
-TEST_P(t0019_remove_nth_node_from_end_of_list, Test)
+TEST_P(t0019, Test)
 {
     check(
         kCases,
@@ -22,6 +22,6 @@ TEST_P(t0019_remove_nth_node_from_end_of_list, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0019_remove_nth_node_from_end_of_list,
-    t0019_remove_nth_node_from_end_of_list::parameters(kCases.size()),
-    t0019_remove_nth_node_from_end_of_list::name);
+    t0019,
+    t0019::parameters(kCases.size()),
+    t0019::name);
