@@ -1,6 +1,10 @@
+#pragma once
+
 #include <string_view>
 
-class Solution
+#include "solution_name.hpp"
+
+class LC_SOLUTION_NAME(branchless)
 {
 public:
     [[nodiscard]] constexpr bool judgeCircle(std::string_view moves) noexcept

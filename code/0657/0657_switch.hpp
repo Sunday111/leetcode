@@ -2,7 +2,9 @@
 
 #include <string_view>
 
-class Solution
+#include "solution_name.hpp"
+
+class LC_SOLUTION_NAME(switch)
 {
 public:
     [[nodiscard]] constexpr bool judgeCircle(std::string_view moves)
