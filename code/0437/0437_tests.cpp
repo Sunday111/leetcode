@@ -1,4 +1,4 @@
-#include "0437_path_sum_3.hpp"
+#include "0437.hpp"
 #include "leet_code_binary_tree.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
