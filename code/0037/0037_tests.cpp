@@ -1,4 +1,4 @@
-#include "0037_sudoku_solver_recursive.hpp"
+#include "0037_recursive.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -12,9 +12,9 @@ static const auto kCases = parse_test_cases_with_types<
 [["9","8","7","6","5","4","3","2","1"],["4","5","1","3","9","2","8","7","6"],["6","3","2","7","8","1","4","9","5"],["3","9","4","5","7","8","1","6","2"],["7","6","5","2","1","3","9","8","4"],["2","1","8","9","4","6","5","3","7"],["1","4","6","8","2","9","7","5","3"],["8","7","3","1","6","5","2","4","9"],["5","2","9","4","3","7","6","1","8"]]
 )");
 
-using t0037_sudoku_solver = SolutionTests<Solution>;
+using t0037 = SolutionTests<Solution>;
 
-TEST_P(t0037_sudoku_solver, Test)
+TEST_P(t0037, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -29,6 +29,6 @@ TEST_P(t0037_sudoku_solver, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0037_sudoku_solver,
-    t0037_sudoku_solver::parameters(kCases.size()),
-    t0037_sudoku_solver::name);
+    t0037,
+    t0037::parameters(kCases.size()),
+    t0037::name);
