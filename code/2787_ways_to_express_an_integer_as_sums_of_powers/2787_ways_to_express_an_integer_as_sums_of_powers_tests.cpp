@@ -1,33 +1,29 @@
 #include "2787_ways_to_express_an_integer_as_sums_of_powers.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t2787_ways_to_express_an_integer_as_sums_of_powers, test_1)
+static constexpr auto kMethodToTest = &Solution::numberOfWays;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+10 2 1
+)cases");
+
+class t2787_ways_to_express_an_integer_as_sums_of_powers
+    : public ::testing::TestWithParam<size_t>
 {
-    ASSERT_EQ(Solution{}.numberOfWays(10, 2), 1);
+};
+
+TEST_P(t2787_ways_to_express_an_integer_as_sums_of_powers, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.numberOfWays(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-// TEST(t2787_ways_to_express_an_integer_as_sums_of_powers, test_2)
-// {
-//     std::vector<int32_t> precomputed;
-//     for (int32_t x = 1; x != 6; ++x)
-//     {
-//         for (int32_t n = 1; n != 301; ++n)
-//         {
-//             auto r = Solution{}.numberOfWays(n, x);
-//             precomputed.push_back(r);
-//         }
-//     }
-
-//     for (int32_t x = 1; x != 6; ++x)
-//     {
-//         for (int32_t n = 1; n != 301; ++n)
-//         {
-//             auto r =
-//                 precomputed[std::bit_cast<uint32_t>((x - 1) * 300 + n - 1)];
-//             ASSERT_EQ(r, Solution{}.numberOfWays(n, x));
-//         }
-//     }
-
-//     std::println("{}", precomputed);
-//     std::println("{}", precomputed.size());
-// }
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t2787_ways_to_express_an_integer_as_sums_of_powers,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
