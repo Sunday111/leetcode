@@ -1,5 +1,5 @@
 #include "0399.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::calcEquation;
@@ -20,23 +20,18 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [0.50000,2.00000,-1.00000,-1.00000]
 )");
 
-class t0399 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t0399 = SolutionTests<Solution>;
 
 TEST_P(t0399, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.calcEquation(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0399,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0399::parameters(kCases.size()),
+    t0399::name);
