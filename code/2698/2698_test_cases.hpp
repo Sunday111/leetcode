@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-#include "2698_find_the_punishment_number_of_an_integer.hpp"
+#include "2698.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::punishmentNumber;
 inline static constexpr std::string_view kTestCases = R"(
