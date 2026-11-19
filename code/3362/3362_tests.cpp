@@ -1,4 +1,4 @@
-#include "3362_zero_array_transformation_3.hpp"
+#include "3362.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -11,9 +11,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [0,3] [[0,0],[0,0],[0,1],[0,1],[0,1]] 2
 )cases");
 
-using t3362_zero_array_transformation_3 = SolutionTests<Solution>;
+using t3362 = SolutionTests<Solution>;
 
-TEST_P(t3362_zero_array_transformation_3, Test)
+TEST_P(t3362, Test)
 {
     check(
         kCases,
@@ -23,6 +23,6 @@ TEST_P(t3362_zero_array_transformation_3, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3362_zero_array_transformation_3,
-    t3362_zero_array_transformation_3::parameters(kCases.size()),
-    t3362_zero_array_transformation_3::name);
+    t3362,
+    t3362::parameters(kCases.size()),
+    t3362::name);
