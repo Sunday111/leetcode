@@ -1,4 +1,4 @@
-#include "0494_target_sum.hpp"
+#include "0494.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
