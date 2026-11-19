@@ -1,4 +1,4 @@
-#include "2434_using_a_robot_to_print_the_lexicographically_smallest_string.hpp"
+#include "2434.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
