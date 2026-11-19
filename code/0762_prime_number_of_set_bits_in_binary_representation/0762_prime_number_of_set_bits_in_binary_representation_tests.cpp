@@ -4,26 +4,34 @@
 
 #include "0762_prime_number_of_set_bits_in_binary_representation.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t0762_prime_number_of_set_bits_in_binary_representation, test_1)
+static constexpr auto kMethodToTest = &Solution::countPrimeSetBits;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+6 10 4
+
+10 15 5
+
+990000 1000000 3754
+)cases");
+
+class t0762_prime_number_of_set_bits_in_binary_representation
+    : public ::testing::TestWithParam<size_t>
 {
-    ASSERT_EQ(Solution{}.countPrimeSetBits(6, 10), 4);
-    ASSERT_EQ(Solution{}.countPrimeSetBits(10, 15), 5);
-    ASSERT_EQ(Solution{}.countPrimeSetBits(990'000, 1'000'000), 3754);
+};
+
+TEST_P(t0762_prime_number_of_set_bits_in_binary_representation, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.countPrimeSetBits(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t0762_prime_number_of_set_bits_in_binary_representation, test_2)
-{
-    u32 p = ~u32{};
-    for (u32 x = 0; x != 1000; ++x)
-    {
-        u32 r = Solution{}.countPrimeSetBits(1, x);
-        if (r != p)
-        {
-            std::println("{}: {}", x, r);
-            p = r;
-        }
-    }
-
-    std::println("Total: {}", Solution{}.countPrimeSetBits(1, 1'000'000));
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0762_prime_number_of_set_bits_in_binary_representation,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
