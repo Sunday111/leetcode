@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 2900_longest_unequal_adjacent_groups_subsequence_tests)
 
 add_executable(${target_name}
-    2900_longest_unequal_adjacent_groups_subsequence.hpp
-    2900_longest_unequal_adjacent_groups_subsequence_tests.cpp
+    2900.hpp
+    2900_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

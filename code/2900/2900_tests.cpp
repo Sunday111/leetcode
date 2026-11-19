@@ -1,4 +1,4 @@
-#include "2900_longest_unequal_adjacent_groups_subsequence.hpp"
+#include "2900.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
