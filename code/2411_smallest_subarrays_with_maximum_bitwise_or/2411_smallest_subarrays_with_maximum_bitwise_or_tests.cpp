@@ -1,16 +1,31 @@
 #include "2411_smallest_subarrays_with_maximum_bitwise_or.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t2411_smallest_subarrays_with_maximum_bitwise_or, test_0)
+static constexpr auto kMethodToTest = &Solution::smallestSubarrays;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+[0] [1]
+
+[1,0,2,1,3] [3,3,2,2,1]
+)cases");
+
+class t2411_smallest_subarrays_with_maximum_bitwise_or
+    : public ::testing::TestWithParam<size_t>
 {
-    std::vector<int> nums{0};
-    std::vector<int> expected{1};
-    ASSERT_EQ(Solution{}.smallestSubarrays(nums), expected);
+};
+
+TEST_P(t2411_smallest_subarrays_with_maximum_bitwise_or, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.smallestSubarrays(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t2411_smallest_subarrays_with_maximum_bitwise_or, test_1)
-{
-    std::vector<int> nums{1, 0, 2, 1, 3};
-    std::vector<int> expected{3, 3, 2, 2, 1};
-    ASSERT_EQ(Solution{}.smallestSubarrays(nums), expected);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t2411_smallest_subarrays_with_maximum_bitwise_or,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
