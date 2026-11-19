@@ -19,10 +19,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "d*yed" "yed"
 )cases");
 
-using t3170_lexicographically_minimum_string_after_removing_stars =
-    SolutionTests<Solution>;
+using t3170 = SolutionTests<Solution>;
 
-TEST_P(t3170_lexicographically_minimum_string_after_removing_stars, Test)
+TEST_P(t3170, Test)
 {
     check(
         kCases,
@@ -32,7 +31,6 @@ TEST_P(t3170_lexicographically_minimum_string_after_removing_stars, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3170_lexicographically_minimum_string_after_removing_stars,
-    t3170_lexicographically_minimum_string_after_removing_stars::parameters(
-        kCases.size()),
-    t3170_lexicographically_minimum_string_after_removing_stars::name);
+    t3170,
+    t3170::parameters(kCases.size()),
+    t3170::name);
