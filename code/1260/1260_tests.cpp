@@ -1,5 +1,5 @@
 #include "1260.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::shiftGrid;
@@ -17,23 +17,18 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [[1,2,3],[4,5,6],[7,8,9]]
 )");
 
-class t1260 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t1260 = SolutionTests<Solution>;
 
 TEST_P(t1260, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.shiftGrid(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1260,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1260::parameters(kCases.size()),
+    t1260::name);
