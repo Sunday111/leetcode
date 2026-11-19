@@ -1,5 +1,5 @@
 #include "0279_perfect_squares.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::numSquares;
@@ -15,22 +15,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 7217 3
 )cases");
 
-class t0279_perfect_squares : public ::testing::TestWithParam<size_t>
-{
-};
+using t0279_perfect_squares = SolutionTests<Solution>;
 
 TEST_P(t0279_perfect_squares, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.numSquares(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.numSquares(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0279_perfect_squares,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0279_perfect_squares::parameters(kCases.size()),
+    t0279_perfect_squares::name);
