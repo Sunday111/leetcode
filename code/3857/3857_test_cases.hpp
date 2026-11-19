@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-#include "3857_minimum_cost_to_split_into_ones.hpp"
+#include "3857.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::minCost;
 inline static constexpr std::string_view kTestCases = R"(

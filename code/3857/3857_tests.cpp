@@ -1,4 +1,4 @@
-#include "3857_minimum_cost_to_split_into_onestest_cases.hpp"
+#include "3857_test_cases.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
