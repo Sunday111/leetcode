@@ -1,4 +1,4 @@
-#include "0693_binary_number_with_alternating_bits.hpp"
+#include "0693.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -11,9 +11,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 11 false
 )cases");
 
-using t0693_binary_number_with_alternating_bits = SolutionTests<Solution>;
+using t0693 = SolutionTests<Solution>;
 
-TEST_P(t0693_binary_number_with_alternating_bits, Test)
+TEST_P(t0693, Test)
 {
     check(
         kCases,
@@ -23,6 +23,6 @@ TEST_P(t0693_binary_number_with_alternating_bits, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0693_binary_number_with_alternating_bits,
-    t0693_binary_number_with_alternating_bits::parameters(kCases.size()),
-    t0693_binary_number_with_alternating_bits::name);
+    t0693,
+    t0693::parameters(kCases.size()),
+    t0693::name);
