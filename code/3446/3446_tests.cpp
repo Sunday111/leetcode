@@ -1,6 +1,6 @@
 #include <print>
 
-#include "3446_sort_matrix_by_diagonals.hpp"
+#include "3446.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [[1,7,3],[9,8,2],[4,5,6]] [[8,2,3],[9,6,7],[4,5,1]]
 )cases");
 
-using t3446_sort_matrix_by_diagonals = SolutionTests<Solution>;
+using t3446 = SolutionTests<Solution>;
 
-TEST_P(t3446_sort_matrix_by_diagonals, Test)
+TEST_P(t3446, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t3446_sort_matrix_by_diagonals, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3446_sort_matrix_by_diagonals,
-    t3446_sort_matrix_by_diagonals::parameters(kCases.size()),
-    t3446_sort_matrix_by_diagonals::name);
+    t3446,
+    t3446::parameters(kCases.size()),
+    t3446::name);
