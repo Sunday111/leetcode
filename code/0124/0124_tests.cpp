@@ -14,9 +14,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [-2,-1] -1
 )cases");
 
-using t0124_binary_tree_maximum_path_sum = SolutionTests<Solution>;
+using t0124 = SolutionTests<Solution>;
 
-TEST_P(t0124_binary_tree_maximum_path_sum, Test)
+TEST_P(t0124, Test)
 {
     check(
         kCases,
@@ -26,6 +26,6 @@ TEST_P(t0124_binary_tree_maximum_path_sum, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0124_binary_tree_maximum_path_sum,
-    t0124_binary_tree_maximum_path_sum::parameters(kCases.size()),
-    t0124_binary_tree_maximum_path_sum::name);
+    t0124,
+    t0124::parameters(kCases.size()),
+    t0124::name);
