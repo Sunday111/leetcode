@@ -1,22 +1,28 @@
 #include "0043_multiply_strings.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t0043_multiply_strings, test_1)
+static const auto kCases = parse_test_cases_with_types<
+    std::tuple<std::string, std::string>,
+    std::string>(R"cases(
+"0" "1009" "0"
+"2" "3" "6"
+"123" "456" "56088"
+"99" "99" "9801"
+)cases");
+
+class t0043_multiply_strings : public ::testing::TestWithParam<size_t>
 {
-    std::string sa, sb;
-    for (uint64_t a = 0; a != 99; ++a)
-    {
-        sa.clear();
-        std::format_to(std::back_inserter(sa), "{}", a);
-
-        for (uint64_t b = 0; b < 10'000'000; b += 1009)
-        {
-            sb.clear();
-            std::format_to(std::back_inserter(sb), "{}", b);
-
-            auto r = Solution{}.multiply(sa, sb);
-            // std::println("{:3} x {:3} = {}", a, b, r);
-            ASSERT_EQ(std::stoi(r), a * b);
-        }
-    }
+};
+TEST_P(t0043_multiply_strings, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto& [a, b] = inputs;
+    ASSERT_EQ(expected, Solution{}.multiply(a, b));
 }
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0043_multiply_strings,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
