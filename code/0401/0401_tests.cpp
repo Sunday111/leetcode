@@ -1,4 +1,4 @@
-#include "0401_binary_watch.hpp"
+#include "0401.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -7,9 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 1 ["0:01","0:02","0:04","0:08","0:16","0:32","1:00","2:00","4:00","8:00"]
 )cases");
 
-using t0401_binary_watch = SolutionTests<Solution>;
+using t0401 = SolutionTests<Solution>;
 
-TEST_P(t0401_binary_watch, Test)
+TEST_P(t0401, Test)
 {
     check(
         kCases,
@@ -19,6 +19,6 @@ TEST_P(t0401_binary_watch, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0401_binary_watch,
-    t0401_binary_watch::parameters(kCases.size()),
-    t0401_binary_watch::name);
+    t0401,
+    t0401::parameters(kCases.size()),
+    t0401::name);
