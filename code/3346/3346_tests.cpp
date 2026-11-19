@@ -9,12 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [88,53] 27 2 2
 )cases");
 
-using t3346_maximum_frequency_of_an_element_after_performing_operations_i =
-    SolutionTests<Solution>;
+using t3346 = SolutionTests<Solution>;
 
-TEST_P(
-    t3346_maximum_frequency_of_an_element_after_performing_operations_i,
-    Test)
+TEST_P(t3346, Test)
 {
     check(
         kCases,
@@ -24,7 +21,6 @@ TEST_P(
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3346_maximum_frequency_of_an_element_after_performing_operations_i,
-    t3346_maximum_frequency_of_an_element_after_performing_operations_i::
-        parameters(kCases.size()),
-    t3346_maximum_frequency_of_an_element_after_performing_operations_i::name);
+    t3346,
+    t3346::parameters(kCases.size()),
+    t3346::name);
