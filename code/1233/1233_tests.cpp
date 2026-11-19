@@ -1,6 +1,6 @@
 #include <algorithm>
 
-#include "1233_remove_sub_folders_from_the_filesystem.hpp"
+#include "1233.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -16,9 +16,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 ["/aa/ab/ac/ae","/aa/ab/af/ag","/aa/ab/af/ah","/aa/ai/aj/ak","/aa/ai/am/ao","/ap"]
 )cases");
 
-using t1233_remove_sub_folders_from_the_filesystem = SolutionTests<Solution>;
+using t1233 = SolutionTests<Solution>;
 
-TEST_P(t1233_remove_sub_folders_from_the_filesystem, Test)
+TEST_P(t1233, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -35,6 +35,6 @@ TEST_P(t1233_remove_sub_folders_from_the_filesystem, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1233_remove_sub_folders_from_the_filesystem,
-    t1233_remove_sub_folders_from_the_filesystem::parameters(kCases.size()),
-    t1233_remove_sub_folders_from_the_filesystem::name);
+    t1233,
+    t1233::parameters(kCases.size()),
+    t1233::name);
