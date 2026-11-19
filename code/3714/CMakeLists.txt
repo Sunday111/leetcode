@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.25)
 
 include(set_compiler_options)
 
-set(target_name 3714_longest_balanced_substring_ii)
+set(target_name 3714)
 set(tests_target_name ${target_name}_tests)
 
 add_library(${target_name} INTERFACE ${target_name}.hpp)
@@ -10,7 +10,6 @@ set_generic_compiler_options(${target_name} INTERFACE)
 target_link_libraries(${target_name} INTERFACE lc_templates)
 
 add_executable(${tests_target_name} ${target_name}_tests.cpp)
-target_compile_definitions(${tests_target_name} PUBLIC "LC_TARGET_SRC_PATH=\"${CMAKE_CURRENT_SOURCE_DIR}\"")
 
 target_link_libraries(${tests_target_name} PUBLIC ${target_name} test_utility)
 

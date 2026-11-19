@@ -1,7 +1,7 @@
 #include <string>
 #include <string_view>
 
-#include "3714_longest_balanced_substring_ii.hpp"
+#include "3714.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -16,9 +16,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "bacbbc" 4
 )cases");
 
-using t3714_longest_balanced_substring_ii = SolutionTests<Solution>;
+using t3714 = SolutionTests<Solution>;
 
-TEST_P(t3714_longest_balanced_substring_ii, Test)
+TEST_P(t3714, Test)
 {
     check(
         kCases,
@@ -28,6 +28,6 @@ TEST_P(t3714_longest_balanced_substring_ii, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3714_longest_balanced_substring_ii,
-    t3714_longest_balanced_substring_ii::parameters(kCases.size()),
-    t3714_longest_balanced_substring_ii::name);
+    t3714,
+    t3714::parameters(kCases.size()),
+    t3714::name);
