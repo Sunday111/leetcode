@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 1690 2123366400
 )cases");
 
-using t0264_nth_ugly_number = SolutionTests<Solution>;
+using t0264 = SolutionTests<Solution>;
 
-TEST_P(t0264_nth_ugly_number, Test)
+TEST_P(t0264, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t0264_nth_ugly_number, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0264_nth_ugly_number,
-    t0264_nth_ugly_number::parameters(kCases.size()),
-    t0264_nth_ugly_number::name);
+    t0264,
+    t0264::parameters(kCases.size()),
+    t0264::name);
