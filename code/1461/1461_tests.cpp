@@ -1,4 +1,4 @@
-#include "1461_check_if_a_string_contains_all_binary_codes_of_size_k.hpp"
+#include "1461.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
