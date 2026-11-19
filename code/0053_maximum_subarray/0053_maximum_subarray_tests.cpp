@@ -1,5 +1,5 @@
 #include "0053_maximum_subarray.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases =
@@ -11,22 +11,18 @@ static const auto kCases =
 [5,4,-1,7,8] 23
 )cases");
 
-class t0053_maximum_subarray : public ::testing::TestWithParam<size_t>
-{
-};
+using t0053_maximum_subarray = SolutionTests<Solution>;
 
 TEST_P(t0053_maximum_subarray, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.maxSubArray(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.maxSubArray(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0053_maximum_subarray,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0053_maximum_subarray::parameters(kCases.size()),
+    t0053_maximum_subarray::name);
