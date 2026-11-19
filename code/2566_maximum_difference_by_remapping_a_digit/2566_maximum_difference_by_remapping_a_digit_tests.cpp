@@ -1,5 +1,5 @@
 #include "2566_maximum_difference_by_remapping_a_digit.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::minMaxDifference;
@@ -7,23 +7,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 1001 9009
 )cases");
 
-class t2566_maximum_difference_by_remapping_a_digit
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t2566_maximum_difference_by_remapping_a_digit = SolutionTests<Solution>;
 
 TEST_P(t2566_maximum_difference_by_remapping_a_digit, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.minMaxDifference(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.minMaxDifference(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2566_maximum_difference_by_remapping_a_digit,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2566_maximum_difference_by_remapping_a_digit::parameters(kCases.size()),
+    t2566_maximum_difference_by_remapping_a_digit::name);
