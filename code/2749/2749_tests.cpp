@@ -7,10 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 3 -2 3
 )cases");
 
-using t2749_minimum_operations_to_make_the_integer_zero =
-    SolutionTests<Solution>;
+using t2749 = SolutionTests<Solution>;
 
-TEST_P(t2749_minimum_operations_to_make_the_integer_zero, Test)
+TEST_P(t2749, Test)
 {
     check(
         kCases,
@@ -20,7 +19,6 @@ TEST_P(t2749_minimum_operations_to_make_the_integer_zero, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2749_minimum_operations_to_make_the_integer_zero,
-    t2749_minimum_operations_to_make_the_integer_zero::parameters(
-        kCases.size()),
-    t2749_minimum_operations_to_make_the_integer_zero::name);
+    t2749,
+    t2749::parameters(kCases.size()),
+    t2749::name);
