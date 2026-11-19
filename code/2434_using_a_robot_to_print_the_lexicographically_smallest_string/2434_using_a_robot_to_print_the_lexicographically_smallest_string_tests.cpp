@@ -1,5 +1,5 @@
 #include "2434_using_a_robot_to_print_the_lexicographically_smallest_string.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::robotWithString;
@@ -19,23 +19,20 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "mmuqezwmomeplrtskz" "eekstrlpmomwzqummz"
 )cases");
 
-class t2434_using_a_robot_to_print_the_lexicographically_smallest_string
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t2434_using_a_robot_to_print_the_lexicographically_smallest_string =
+    SolutionTests<Solution>;
 
 TEST_P(t2434_using_a_robot_to_print_the_lexicographically_smallest_string, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.robotWithString(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.robotWithString(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2434_using_a_robot_to_print_the_lexicographically_smallest_string,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2434_using_a_robot_to_print_the_lexicographically_smallest_string::
+        parameters(kCases.size()),
+    t2434_using_a_robot_to_print_the_lexicographically_smallest_string::name);
