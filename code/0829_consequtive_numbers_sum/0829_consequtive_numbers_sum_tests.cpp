@@ -1,27 +1,36 @@
 #include "0829_consequtive_numbers_sum.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t0829_consequtive_numbers_sum, test_1)
+static constexpr auto kMethodToTest = &Solution::consecutiveNumbersSum;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+5 2
+
+9 3
+
+15 4
+
+999999 64
+
+99999999 48
+)cases");
+
+class t0829_consequtive_numbers_sum : public ::testing::TestWithParam<size_t>
 {
-    ASSERT_EQ(Solution{}.consecutiveNumbersSum(5), 2);
+};
+
+TEST_P(t0829_consequtive_numbers_sum, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.consecutiveNumbersSum(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t0829_consequtive_numbers_sum, test_2)
-{
-    ASSERT_EQ(Solution{}.consecutiveNumbersSum(9), 3);
-}
-
-TEST(t0829_consequtive_numbers_sum, test_3)
-{
-    ASSERT_EQ(Solution{}.consecutiveNumbersSum(15), 4);
-}
-
-TEST(t0829_consequtive_numbers_sum, test_4)
-{
-    ASSERT_EQ(Solution{}.consecutiveNumbersSum(999999), 64);
-}
-
-TEST(t0829_consequtive_numbers_sum, test_5)
-{
-    ASSERT_EQ(Solution{}.consecutiveNumbersSum(99999999), 48);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0829_consequtive_numbers_sum,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
