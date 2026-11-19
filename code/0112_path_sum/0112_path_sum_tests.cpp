@@ -1,6 +1,6 @@
 #include "0112_path_sum.hpp"
-#include "gtest/gtest.h"
 #include "leet_code_binary_tree.hpp"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases = parse_test_cases_with_types<
@@ -11,18 +11,18 @@ static const auto kCases = parse_test_cases_with_types<
 [null] 0 false
 )cases");
 
-class t0112_path_sum : public ::testing::TestWithParam<size_t>
-{
-};
+using t0112_path_sum = SolutionTests<Solution>;
 TEST_P(t0112_path_sum, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto& [tree, sum] = inputs;
-    ASSERT_EQ(expected, Solution{}.hasPathSum(tree.root, sum));
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            auto& [tree, sum] = inputs;
+            ASSERT_EQ(expected, solution.hasPathSum(tree.root, sum));
+        });
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0112_path_sum,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0112_path_sum::parameters(kCases.size()),
+    t0112_path_sum::name);
