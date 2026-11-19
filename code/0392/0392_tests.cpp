@@ -1,4 +1,4 @@
-#include "0392_is_subsequence.hpp"
+#include "0392.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -11,9 +11,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "axc" "ahbgdc" false
 )cases");
 
-using t0392_is_subsequence = SolutionTests<Solution>;
+using t0392 = SolutionTests<Solution>;
 
-TEST_P(t0392_is_subsequence, Test)
+TEST_P(t0392, Test)
 {
     check(
         kCases,
@@ -23,6 +23,6 @@ TEST_P(t0392_is_subsequence, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0392_is_subsequence,
-    t0392_is_subsequence::parameters(kCases.size()),
-    t0392_is_subsequence::name);
+    t0392,
+    t0392::parameters(kCases.size()),
+    t0392::name);
