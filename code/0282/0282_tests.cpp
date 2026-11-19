@@ -15,9 +15,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "105" 5 ["1*0+5","10-5"]
 )cases");
 
-using t0282_expression_add_operators = SolutionTests<Solution>;
+using t0282 = SolutionTests<Solution>;
 
-TEST_P(t0282_expression_add_operators, Test)
+TEST_P(t0282, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -33,6 +33,6 @@ TEST_P(t0282_expression_add_operators, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0282_expression_add_operators,
-    t0282_expression_add_operators::parameters(kCases.size()),
-    t0282_expression_add_operators::name);
+    t0282,
+    t0282::parameters(kCases.size()),
+    t0282::name);
