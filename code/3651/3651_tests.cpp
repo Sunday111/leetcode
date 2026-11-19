@@ -1,7 +1,7 @@
 #include "3651.hpp"
 #include "gtest/gtest.h"
 
-TEST(t3651_minimum_cost_path_with_teleportations, test_1)
+TEST(t3651, test_1)
 {
     // Solution s{};
 }
