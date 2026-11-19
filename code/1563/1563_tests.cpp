@@ -1,5 +1,5 @@
 #include "1563.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::stoneGameV;
@@ -9,23 +9,18 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [4]                         0
 )");
 
-class t1563 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t1563 = SolutionTests<Solution>;
 
 TEST_P(t1563, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.stoneGameV(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1563,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1563::parameters(kCases.size()),
+    t1563::name);
