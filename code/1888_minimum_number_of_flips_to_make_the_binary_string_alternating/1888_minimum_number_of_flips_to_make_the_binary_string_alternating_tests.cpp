@@ -1,23 +1,22 @@
 #include "1888_minimum_number_of_flips_to_make_the_binary_string_alternatingtest_cases.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 
-class t1888_minimum_number_of_flips_to_make_the_binary_string_alternating : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t1888_minimum_number_of_flips_to_make_the_binary_string_alternating =
+    SolutionTests<Solution>;
 
-TEST_P(t1888_minimum_number_of_flips_to_make_the_binary_string_alternating, MinOperations)
+TEST_P(
+    t1888_minimum_number_of_flips_to_make_the_binary_string_alternating,
+    MinOperations)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.minFlips(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1888_minimum_number_of_flips_to_make_the_binary_string_alternating,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1888_minimum_number_of_flips_to_make_the_binary_string_alternating::
+        parameters(kCases.size()),
+    t1888_minimum_number_of_flips_to_make_the_binary_string_alternating::name);
