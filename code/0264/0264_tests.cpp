@@ -1,4 +1,4 @@
-#include "0264_nth_ugly_number.hpp"
+#include "0264.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 

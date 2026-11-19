@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0264_nth_ugly_number_tests)
 
 add_executable(${target_name}
-    0264_nth_ugly_number.hpp
-    0264_nth_ugly_number_tests.cpp
+    0264.hpp
+    0264_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)
