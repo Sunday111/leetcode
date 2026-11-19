@@ -1,4 +1,4 @@
-#include "0756_pyramid_transition_matrix.hpp"
+#include "0756.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -11,9 +11,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "ABCD" ["ABC","BCA","CDA","ABD","BCE","CDF","DEA","EFF","AFF"] true
 )cases");
 
-using t0756_pyramid_transition_matrix = SolutionTests<Solution>;
+using t0756 = SolutionTests<Solution>;
 
-TEST_P(t0756_pyramid_transition_matrix, Test)
+TEST_P(t0756, Test)
 {
     check(
         kCases,
@@ -23,6 +23,6 @@ TEST_P(t0756_pyramid_transition_matrix, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0756_pyramid_transition_matrix,
-    t0756_pyramid_transition_matrix::parameters(kCases.size()),
-    t0756_pyramid_transition_matrix::name);
+    t0756,
+    t0756::parameters(kCases.size()),
+    t0756::name);
