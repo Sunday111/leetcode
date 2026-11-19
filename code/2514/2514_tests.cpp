@@ -1,4 +1,4 @@
-#include "2514_count_anagrams.hpp"
+#include "2514.hpp"
 #include "integral_aliases.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
