@@ -8,9 +8,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 ["eat","tea","tan","ate","nat","bat"] [["ate","eat","tea"],["bat"],["nat","tan"]]
 )cases");
 
-using t0049_group_anagrams = SolutionTests<Solution>;
+using t0049 = SolutionTests<Solution>;
 
-TEST_P(t0049_group_anagrams, Test)
+TEST_P(t0049, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -24,6 +24,6 @@ TEST_P(t0049_group_anagrams, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0049_group_anagrams,
-    t0049_group_anagrams::parameters(kCases.size()),
-    t0049_group_anagrams::name);
+    t0049,
+    t0049::parameters(kCases.size()),
+    t0049::name);
