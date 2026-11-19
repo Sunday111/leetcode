@@ -10,9 +10,9 @@ static const auto kCases = parse_test_cases_with_types<
 [3,3] 6 [0,1]
 )");
 
-using t0001_two_sum = SolutionTests<Solution>;
+using t0001 = SolutionTests<Solution>;
 
-TEST_P(t0001_two_sum, Test)
+TEST_P(t0001, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -25,6 +25,6 @@ TEST_P(t0001_two_sum, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0001_two_sum,
-    t0001_two_sum::parameters(kCases.size()),
-    t0001_two_sum::name);
+    t0001,
+    t0001::parameters(kCases.size()),
+    t0001::name);
