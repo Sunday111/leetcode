@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 25 30 2
 )cases");
 
-using t2427_number_of_common_factors = SolutionTests<Solution>;
+using t2427 = SolutionTests<Solution>;
 
-TEST_P(t2427_number_of_common_factors, Test)
+TEST_P(t2427, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t2427_number_of_common_factors, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2427_number_of_common_factors,
-    t2427_number_of_common_factors::parameters(kCases.size()),
-    t2427_number_of_common_factors::name);
+    t2427,
+    t2427::parameters(kCases.size()),
+    t2427::name);
