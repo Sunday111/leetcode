@@ -1,50 +1,35 @@
-#include <span>
-
 #include "1768_merge_strings_alternately_simple.hpp"
 #include "1768_merge_strings_alternately_sse2.hpp"
 #include "gtest/gtest.h"
-#include "strings_for_testing.hpp"
+#include "test_cases_helpers.hpp"
 
-TEST(t1768_merge_strings_alternately, test_simple)
+static const auto kCases = parse_test_cases_with_types<
+    std::tuple<std::string, std::string>,
+    std::string>(R"cases(
+"abc" "pqr" "apbqcr"
+"ab" "pqrs" "apbqrs"
+"abcd" "pq" "apbqcd"
+)cases");
+
+class t1768_merge_strings_alternately : public ::testing::TestWithParam<size_t>
 {
-    auto strings = std::span{StringsForTesting::Get().strings}.first(350);
-    for (u32 i = 0; i != strings.size(); ++i)
-    {
-        auto& a = strings[i];
-        for (u32 j = i + 1; j != strings.size(); ++j)
-        {
-            auto& b = strings[j];
-            auto r = simple::Solution{}.mergeAlternately(a, b);
-
-            ASSERT_EQ(r.size(), a.size() + b.size());
-            size_t l1 = std::min(a.size(), b.size());
-            for (u32 k = 0; k != l1; ++k)
-            {
-                ASSERT_EQ(a[k], r[k * 2]);
-                ASSERT_EQ(b[k], r[k * 2 + 1]);
-            }
-        }
-    }
+};
+TEST_P(t1768_merge_strings_alternately, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto& [a, b] = inputs;
+    ASSERT_EQ(expected, simple::Solution{}.mergeAlternately(a, b));
+}
+TEST_P(t1768_merge_strings_alternately, DISABLED_Sse2)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto& [a, b] = inputs;
+    ASSERT_EQ(expected, solution_sse2::Solution{}.mergeAlternately(a, b));
 }
 
-TEST(t1768_merge_strings_alternately, DISABLED_test_sse2)
-{
-    auto& strings = StringsForTesting::Get().strings;
-    for (u32 i = 0; i != strings.size(); ++i)
-    {
-        auto& a = strings[i];
-        for (u32 j = i + 1; j != strings.size(); ++j)
-        {
-            auto& b = strings[j];
-            auto r = solution_sse2::Solution{}.mergeAlternately(a, b);
-
-            ASSERT_EQ(r.size(), a.size() + b.size());
-            size_t l1 = std::min(a.size(), b.size());
-            for (u32 k = 0; k != l1; ++k)
-            {
-                ASSERT_EQ(a[k], r[k * 2]);
-                ASSERT_EQ(b[k], r[k * 2 + 1]);
-            }
-        }
-    }
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t1768_merge_strings_alternately,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
