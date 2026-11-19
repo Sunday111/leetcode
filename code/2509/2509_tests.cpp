@@ -11,9 +11,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 5 [[17,21],[23,5],[15,7],[3,21],[31,9],[5,15],[11,2],[19,7]] [7,3,2,6,8,6,3,7]
 )cases");
 
-using t2509_cycle_length_queries_in_a_tree = SolutionTests<Solution>;
+using t2509 = SolutionTests<Solution>;
 
-TEST_P(t2509_cycle_length_queries_in_a_tree, Test)
+TEST_P(t2509, Test)
 {
     check(
         kCases,
@@ -23,6 +23,6 @@ TEST_P(t2509_cycle_length_queries_in_a_tree, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2509_cycle_length_queries_in_a_tree,
-    t2509_cycle_length_queries_in_a_tree::parameters(kCases.size()),
-    t2509_cycle_length_queries_in_a_tree::name);
+    t2509,
+    t2509::parameters(kCases.size()),
+    t2509::name);
