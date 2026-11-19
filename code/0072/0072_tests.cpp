@@ -1,4 +1,4 @@
-#include "0072_edit_distance.hpp"
+#include "0072.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -23,9 +23,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "sea" "eat" 2
 )cases");
 
-using t0072_edit_distance = SolutionTests<Solution>;
+using t0072 = SolutionTests<Solution>;
 
-TEST_P(t0072_edit_distance, Test)
+TEST_P(t0072, Test)
 {
     check(
         kCases,
@@ -35,6 +35,6 @@ TEST_P(t0072_edit_distance, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0072_edit_distance,
-    t0072_edit_distance::parameters(kCases.size()),
-    t0072_edit_distance::name);
+    t0072,
+    t0072::parameters(kCases.size()),
+    t0072::name);
