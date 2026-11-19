@@ -1,35 +1,32 @@
 #include "2901_longest_unequal_adjacent_groups_subsequence_2.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-// TEST(t2901_longest_unequal_adjacent_groups_subsequence_2, test_1)
-// {
-//     std::vector<std::string> words{"bab", "dab", "cab"};
+static constexpr auto kMethodToTest = &Solution::getWordsInLongestSubsequence;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+["a","b","c","d"] [1,2,3,4] ["a","b","c","d"]
 
-//     std::vector groups{1, 2, 2};
-//     std::vector<std::string> expected{"bab", "cab"};
+["bdb","aaa","ada"] [2,1,3] ["aaa","ada"]
+)cases");
 
-//     auto actual = Solution{}.getWordsInLongestSubsequence(words, groups);
-//     ASSERT_EQ(actual, expected);
-// }
-
-TEST(t2901_longest_unequal_adjacent_groups_subsequence_2, test_2)
+class t2901_longest_unequal_adjacent_groups_subsequence_2
+    : public ::testing::TestWithParam<size_t>
 {
-    std::vector<std::string> words{"a", "b", "c", "d"};
+};
 
-    std::vector groups{1, 2, 3, 4};
-    std::vector<std::string> expected{"a", "b", "c", "d"};
-
-    auto actual = Solution{}.getWordsInLongestSubsequence(words, groups);
-    ASSERT_EQ(actual, expected);
+TEST_P(t2901_longest_unequal_adjacent_groups_subsequence_2, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args)
+        { return Solution{}.getWordsInLongestSubsequence(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t2901_longest_unequal_adjacent_groups_subsequence_2, test_3)
-{
-    std::vector<std::string> words{"bdb", "aaa", "ada"};
-
-    std::vector groups{2, 1, 3};
-    std::vector<std::string> expected{"aaa", "ada"};
-
-    auto actual = Solution{}.getWordsInLongestSubsequence(words, groups);
-    ASSERT_EQ(actual, expected);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t2901_longest_unequal_adjacent_groups_subsequence_2,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
