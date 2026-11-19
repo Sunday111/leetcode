@@ -1,4 +1,4 @@
-#include "0865_smallest_subtree_with_all_the_deepest_nodes.hpp"
+#include "0865.hpp"
 #include "leet_code_binary_tree.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -14,10 +14,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [0,2,1,null,null,3] [3]
 )cases");
 
-using t0865_smallest_subtree_with_all_the_deepest_nodes =
-    SolutionTests<Solution>;
+using t0865 = SolutionTests<Solution>;
 
-TEST_P(t0865_smallest_subtree_with_all_the_deepest_nodes, Test)
+TEST_P(t0865, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -32,7 +31,6 @@ TEST_P(t0865_smallest_subtree_with_all_the_deepest_nodes, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0865_smallest_subtree_with_all_the_deepest_nodes,
-    t0865_smallest_subtree_with_all_the_deepest_nodes::parameters(
-        kCases.size()),
-    t0865_smallest_subtree_with_all_the_deepest_nodes::name);
+    t0865,
+    t0865::parameters(kCases.size()),
+    t0865::name);
