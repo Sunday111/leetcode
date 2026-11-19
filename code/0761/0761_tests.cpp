@@ -1,4 +1,4 @@
-#include "0761_special_binary_string.hpp"
+#include "0761.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -13,9 +13,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "11001011101000101100" "11101000110011001010"
 )cases");
 
-using t0761_special_binary_string = SolutionTests<Solution>;
+using t0761 = SolutionTests<Solution>;
 
-TEST_P(t0761_special_binary_string, Test)
+TEST_P(t0761, Test)
 {
     check(
         kCases,
@@ -25,6 +25,6 @@ TEST_P(t0761_special_binary_string, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0761_special_binary_string,
-    t0761_special_binary_string::parameters(kCases.size()),
-    t0761_special_binary_string::name);
+    t0761,
+    t0761::parameters(kCases.size()),
+    t0761::name);
