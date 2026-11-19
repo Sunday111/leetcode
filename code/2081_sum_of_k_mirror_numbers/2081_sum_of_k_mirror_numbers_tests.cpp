@@ -1,5 +1,5 @@
 #include "2081_sum_of_k_mirror_numbers.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases =
@@ -9,24 +9,23 @@ static const auto kCases =
 7 17 20379000
 )cases");
 
-class t2081_sum_of_k_mirror_numbers : public ::testing::TestWithParam<size_t>
-{
-};
+#ifndef NDEBUG
+using t2081_sum_of_k_mirror_numbers =
+    SolutionTests<Solution, Cheat, Solution2, Solution3, Solution4>;
+#else
+using t2081_sum_of_k_mirror_numbers = SolutionTests<Solution, Cheat>;
+#endif
+
 TEST_P(t2081_sum_of_k_mirror_numbers, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto [k, n] = inputs;
-    ASSERT_EQ(expected, Solution{}.kMirror(k, n));
-    ASSERT_EQ(expected, Cheat::kMirror(k, n));
-#ifndef NDEBUG
-    ASSERT_EQ(expected, Solution2{}.kMirror(k, n));
-    ASSERT_EQ(expected, Solution3{}.kMirror(k, n));
-    ASSERT_EQ(expected, Solution4{}.kMirror(k, n));
-#endif
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.kMirror(args...); });
 }
+
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2081_sum_of_k_mirror_numbers,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2081_sum_of_k_mirror_numbers::parameters(kCases.size()),
+    t2081_sum_of_k_mirror_numbers::name);
