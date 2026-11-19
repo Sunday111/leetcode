@@ -1,4 +1,4 @@
-#include "3271_hash_divided_string.hpp"
+#include "3271.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -11,9 +11,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "hcr" 3 "a"
 )cases");
 
-using t3271_hash_divided_string = SolutionTests<Solution>;
+using t3271 = SolutionTests<Solution>;
 
-TEST_P(t3271_hash_divided_string, Test)
+TEST_P(t3271, Test)
 {
     check(
         kCases,
@@ -23,6 +23,6 @@ TEST_P(t3271_hash_divided_string, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3271_hash_divided_string,
-    t3271_hash_divided_string::parameters(kCases.size()),
-    t3271_hash_divided_string::name);
+    t3271,
+    t3271::parameters(kCases.size()),
+    t3271::name);
