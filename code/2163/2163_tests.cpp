@@ -7,9 +7,8 @@ static const auto kCases =
 [3,1,2] -1
 )cases");
 
-using t2163_minimum_difference_in_sums_after_removal_of_elements =
-    SolutionTests<all_branches::Solution>;
-TEST_P(t2163_minimum_difference_in_sums_after_removal_of_elements, Test)
+using t2163 = SolutionTests<all_branches::Solution>;
+TEST_P(t2163, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -21,7 +20,6 @@ TEST_P(t2163_minimum_difference_in_sums_after_removal_of_elements, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2163_minimum_difference_in_sums_after_removal_of_elements,
-    t2163_minimum_difference_in_sums_after_removal_of_elements::parameters(
-        kCases.size()),
-    t2163_minimum_difference_in_sums_after_removal_of_elements::name);
+    t2163,
+    t2163::parameters(kCases.size()),
+    t2163::name);
