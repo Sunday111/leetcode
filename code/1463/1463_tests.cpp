@@ -1,5 +1,5 @@
 #include "1463.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::cherryPickup;
@@ -12,23 +12,18 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [[0,8,7,10,9,10,0,9,6],[8,7,10,8,7,4,9,6,10],[8,1,1,5,1,5,5,1,2],[9,4,10,8,8,1,9,5,0],[4,3,6,10,9,2,4,8,10],[7,3,2,8,3,3,5,9,8],[1,2,6,5,6,2,0,10,0]]   96
 )");
 
-class t1463 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t1463 = SolutionTests<Solution>;
 
 TEST_P(t1463, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.cherryPickup(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1463,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1463::parameters(kCases.size()),
+    t1463::name);
