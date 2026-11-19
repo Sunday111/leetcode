@@ -1,4 +1,4 @@
-#include "1689_partitioning_into_minimum_number_of_decibinary_numberstest_cases.hpp"
+#include "1689_test_cases.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 

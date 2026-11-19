@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-#include "1689_partitioning_into_minimum_number_of_decibinary_numbers.hpp"
+#include "1689.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::minPartitions;
 inline static constexpr std::string_view kTestCases = R"(
