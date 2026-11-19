@@ -1,4 +1,4 @@
-#include "3721_longest_balanced_subarray_ii.hpp"
+#include "3721.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -10,8 +10,8 @@ static const auto kCases =
 [19,5,41,39,39,23,20] 2
 )cases");
 
-using t3721_longest_balanced_subarray_ii = SolutionTests<Solution>;
-TEST_P(t3721_longest_balanced_subarray_ii, Test)
+using t3721 = SolutionTests<Solution>;
+TEST_P(t3721, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -21,6 +21,6 @@ TEST_P(t3721_longest_balanced_subarray_ii, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3721_longest_balanced_subarray_ii,
-    t3721_longest_balanced_subarray_ii::parameters(kCases.size()),
-    t3721_longest_balanced_subarray_ii::name);
+    t3721,
+    t3721::parameters(kCases.size()),
+    t3721::name);
