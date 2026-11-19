@@ -12,9 +12,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [0,0,0] [[0,0,0]]
 )");
 
-using t0015_3sum = SolutionTests<Solution>;
+using t0015 = SolutionTests<Solution>;
 
-TEST_P(t0015_3sum, Test)
+TEST_P(t0015, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -28,6 +28,6 @@ TEST_P(t0015_3sum, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0015_3sum,
-    t0015_3sum::parameters(kCases.size()),
-    t0015_3sum::name);
+    t0015,
+    t0015::parameters(kCases.size()),
+    t0015::name);
