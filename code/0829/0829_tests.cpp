@@ -1,4 +1,4 @@
-#include "0829_consequtive_numbers_sum.hpp"
+#include "0829.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -15,9 +15,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 99999999 48
 )cases");
 
-using t0829_consequtive_numbers_sum = SolutionTests<Solution>;
+using t0829 = SolutionTests<Solution>;
 
-TEST_P(t0829_consequtive_numbers_sum, Test)
+TEST_P(t0829, Test)
 {
     check(
         kCases,
@@ -27,6 +27,6 @@ TEST_P(t0829_consequtive_numbers_sum, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0829_consequtive_numbers_sum,
-    t0829_consequtive_numbers_sum::parameters(kCases.size()),
-    t0829_consequtive_numbers_sum::name);
+    t0829,
+    t0829::parameters(kCases.size()),
+    t0829::name);
