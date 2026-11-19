@@ -1,5 +1,5 @@
 #include "1622.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases = parse_test_cases_with_types<
@@ -10,39 +10,39 @@ static const auto kCases = parse_test_cases_with_types<
 [null,2,null,5,null,5,7,null,10,14,null,null,null,26,34,20]
 )cases");
 
-class t1622 : public ::testing::TestWithParam<size_t>
-{
-};
+using t1622 = SolutionTests<Fancy>;
 TEST_P(t1622, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto& [operations, args] = inputs;
-    Fancy fancy;
-    ASSERT_EQ(operations.size(), args.size());
-    ASSERT_EQ(operations.size(), expected.size());
-    for (size_t i = 0; i < operations.size(); ++i)
-    {
-        SCOPED_TRACE(i);
-        if (operations[i] == "getIndex")
-            ASSERT_EQ(fancy.getIndex(args[i]), expected[i]);
-        else
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
         {
-            ASSERT_FALSE(expected[i].has_value());
-            if (operations[i] == "append")
-                fancy.append(args[i]);
-            else if (operations[i] == "addAll")
-                fancy.addAll(args[i]);
-            else
+            auto& [operations, args] = inputs;
+
+            ASSERT_EQ(operations.size(), args.size());
+            ASSERT_EQ(operations.size(), expected.size());
+            for (size_t i = 0; i < operations.size(); ++i)
             {
-                ASSERT_EQ(operations[i], "multAll");
-                fancy.multAll(args[i]);
+                SCOPED_TRACE(i);
+                if (operations[i] == "getIndex")
+                    ASSERT_EQ(solution.getIndex(args[i]), expected[i]);
+                else
+                {
+                    ASSERT_FALSE(expected[i].has_value());
+                    if (operations[i] == "append")
+                        solution.append(args[i]);
+                    else if (operations[i] == "addAll")
+                        solution.addAll(args[i]);
+                    else
+                    {
+                        ASSERT_EQ(operations[i], "multAll");
+                        solution.multAll(args[i]);
+                    }
+                }
             }
-        }
-    }
+        });
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1622,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1622::parameters(kCases.size()),
+    t1622::name);
