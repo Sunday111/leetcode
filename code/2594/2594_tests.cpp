@@ -1,4 +1,4 @@
-#include "2594_minimum_time_to_repair_cars.hpp"
+#include "2594.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -7,9 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [1,2,3,4] 10 16
 )cases");
 
-using t2594_minimum_time_to_repair_cars = SolutionTests<Solution>;
+using t2594 = SolutionTests<Solution>;
 
-TEST_P(t2594_minimum_time_to_repair_cars, Test)
+TEST_P(t2594, Test)
 {
     check(
         kCases,
@@ -19,6 +19,6 @@ TEST_P(t2594_minimum_time_to_repair_cars, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2594_minimum_time_to_repair_cars,
-    t2594_minimum_time_to_repair_cars::parameters(kCases.size()),
-    t2594_minimum_time_to_repair_cars::name);
+    t2594,
+    t2594::parameters(kCases.size()),
+    t2594::name);
