@@ -1,4 +1,4 @@
-#include "1498_number_of_subsequences_that_satisfy_the_given_sum_condition.hpp"
+#include "1498.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 

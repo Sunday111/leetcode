@@ -5,10 +5,10 @@ include(set_compiler_options)
 set(target_name 1498_number_of_subsequences_that_satisfy_the_given_sum_condition)
 set(tests_target_name ${target_name}_tests)
 
-add_library(${target_name} INTERFACE ${target_name}.hpp)
+add_library(${target_name} INTERFACE 1498.hpp)
 set_generic_compiler_options(${target_name} INTERFACE)
 
-add_executable(${tests_target_name} ${target_name}_tests.cpp)
+add_executable(${tests_target_name} 1498_tests.cpp)
 
 target_link_libraries(${tests_target_name} PUBLIC ${target_name} test_utility)
 set_generic_compiler_options(${tests_target_name} PUBLIC)
