@@ -1,4 +1,4 @@
-#include "0472_concatenated_words.hpp"
+#include "0472.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 ["catsdogcats","dogcatsdog","ratcatdogcat"]
 )cases");
 
-using t0472_concatenated_words = SolutionTests<Solution>;
+using t0472 = SolutionTests<Solution>;
 
-TEST_P(t0472_concatenated_words, Test)
+TEST_P(t0472, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -28,6 +28,6 @@ TEST_P(t0472_concatenated_words, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0472_concatenated_words,
-    t0472_concatenated_words::parameters(kCases.size()),
-    t0472_concatenated_words::name);
+    t0472,
+    t0472::parameters(kCases.size()),
+    t0472::name);
