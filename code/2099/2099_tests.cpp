@@ -7,10 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [50,-75] 2 [50,-75]
 )cases");
 
-using t2099_find_subsequence_of_length_k_with_largest_sum =
-    SolutionTests<Solution>;
+using t2099 = SolutionTests<Solution>;
 
-TEST_P(t2099_find_subsequence_of_length_k_with_largest_sum, Test)
+TEST_P(t2099, Test)
 {
     check(
         kCases,
@@ -20,7 +19,6 @@ TEST_P(t2099_find_subsequence_of_length_k_with_largest_sum, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2099_find_subsequence_of_length_k_with_largest_sum,
-    t2099_find_subsequence_of_length_k_with_largest_sum::parameters(
-        kCases.size()),
-    t2099_find_subsequence_of_length_k_with_largest_sum::name);
+    t2099,
+    t2099::parameters(kCases.size()),
+    t2099::name);
