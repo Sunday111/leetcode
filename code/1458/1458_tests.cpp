@@ -1,4 +1,4 @@
-#include "1458_max_dot_product_of_two_sequences.hpp"
+#include "1458.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -17,9 +17,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [-3,-8,-10] [7,-9,-8] 152
 )cases");
 
-using t1458_max_dot_product_of_two_sequences = SolutionTests<Solution>;
+using t1458 = SolutionTests<Solution>;
 
-TEST_P(t1458_max_dot_product_of_two_sequences, Test)
+TEST_P(t1458, Test)
 {
     check(
         kCases,
@@ -29,6 +29,6 @@ TEST_P(t1458_max_dot_product_of_two_sequences, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1458_max_dot_product_of_two_sequences,
-    t1458_max_dot_product_of_two_sequences::parameters(kCases.size()),
-    t1458_max_dot_product_of_two_sequences::name);
+    t1458,
+    t1458::parameters(kCases.size()),
+    t1458::name);
