@@ -1,4 +1,4 @@
-#include "2563_count_the_number_of_fair_pairs.hpp"
+#include "2563.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -7,9 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [0,1,7,4,4,5] 3 6 6
 )cases");
 
-using t2563_count_the_number_of_fair_pairs = SolutionTests<Solution>;
+using t2563 = SolutionTests<Solution>;
 
-TEST_P(t2563_count_the_number_of_fair_pairs, Test)
+TEST_P(t2563, Test)
 {
     check(
         kCases,
@@ -19,6 +19,6 @@ TEST_P(t2563_count_the_number_of_fair_pairs, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2563_count_the_number_of_fair_pairs,
-    t2563_count_the_number_of_fair_pairs::parameters(kCases.size()),
-    t2563_count_the_number_of_fair_pairs::name);
+    t2563,
+    t2563::parameters(kCases.size()),
+    t2563::name);
