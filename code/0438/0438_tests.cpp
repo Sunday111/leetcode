@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "abab" "ab" [0,1,2]
 )cases");
 
-using t0438_find_all_anagrams_in_a_string = SolutionTests<Solution>;
+using t0438 = SolutionTests<Solution>;
 
-TEST_P(t0438_find_all_anagrams_in_a_string, Test)
+TEST_P(t0438, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t0438_find_all_anagrams_in_a_string, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0438_find_all_anagrams_in_a_string,
-    t0438_find_all_anagrams_in_a_string::parameters(kCases.size()),
-    t0438_find_all_anagrams_in_a_string::name);
+    t0438,
+    t0438::parameters(kCases.size()),
+    t0438::name);
