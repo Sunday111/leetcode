@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0039_combination_sum_tests)
 
 add_executable(${target_name}
-    0039_combination_sum.hpp
-    0039_combination_sum_tests.cpp
+    0039.hpp
+    0039_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

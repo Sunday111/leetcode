@@ -1,6 +1,6 @@
-#include "0039_combination_sum.hpp"
-#include "0039_combination_sum_2.hpp"
-#include "0039_combination_sum_3.hpp"
+#include "0039.hpp"
+#include "0039_2.hpp"
+#include "0039_3.hpp"
 #include "benchmark/benchmark.h"
 
 static void BM_DirectSolution(benchmark::State& state)

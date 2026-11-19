@@ -1,8 +1,8 @@
 #include <algorithm>
 
-#include "0039_combination_sum.hpp"
-#include "0039_combination_sum_2.hpp"
-#include "0039_combination_sum_3.hpp"
+#include "0039.hpp"
+#include "0039_2.hpp"
+#include "0039_3.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 #include "test_utility.hpp"
