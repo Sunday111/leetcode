@@ -7,10 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "1001010" 5 5
 )cases");
 
-using t2311_longest_binary_subsequence_less_than_or_equal_to_k =
-    SolutionTests<Solution>;
+using t2311 = SolutionTests<Solution>;
 
-TEST_P(t2311_longest_binary_subsequence_less_than_or_equal_to_k, Test)
+TEST_P(t2311, Test)
 {
     check(
         kCases,
@@ -20,7 +19,6 @@ TEST_P(t2311_longest_binary_subsequence_less_than_or_equal_to_k, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2311_longest_binary_subsequence_less_than_or_equal_to_k,
-    t2311_longest_binary_subsequence_less_than_or_equal_to_k::parameters(
-        kCases.size()),
-    t2311_longest_binary_subsequence_less_than_or_equal_to_k::name);
+    t2311,
+    t2311::parameters(kCases.size()),
+    t2311::name);
