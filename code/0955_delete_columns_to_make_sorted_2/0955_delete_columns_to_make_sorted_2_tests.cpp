@@ -1,61 +1,42 @@
 #include "0955_delete_columns_to_make_sorted_2.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t0955_delete_columns_to_make_sorted_2, test_1)
+static const auto kCases = parse_test_cases_with_types<
+    std::tuple<std::vector<std::string>>,
+    unsigned char>(R"cases(
+["ca","bb","ac"] 1
+
+["vdy","vei","zvc","zld"] 2
+
+["bbjwefkpb","axmksfchw"] 1
+
+["koccmoezl","hbccayhbd"] 3
+
+["jsebodtwc","cnneoytml","eeneuyzlu","ewpnmtivg"] 2
+
+["abx","agz","bgc","bfc"] 1
+
+["aa","ac","ab"] 1
+)cases");
+
+class t0955_delete_columns_to_make_sorted_2
+    : public ::testing::TestWithParam<size_t>
 {
-    std::vector<std::string> strs{"ca", "bb", "ac"};
-    ASSERT_EQ(Solution{}.minDeletionSize(strs), 1);
-}
-TEST(t0955_delete_columns_to_make_sorted_2, test_2)
+};
+
+TEST_P(t0955_delete_columns_to_make_sorted_2, Test)
 {
-    std::vector<std::string> strs{
-        "vdy",
-        "vei",
-        "zvc",
-        "zld",
-    };
-    ASSERT_EQ(Solution{}.minDeletionSize(strs), 2);
-}
-TEST(t0955_delete_columns_to_make_sorted_2, test_3)
-{
-    std::vector<std::string> strs{
-        "bbjwefkpb",
-        "axmksfchw",
-    };
-    ASSERT_EQ(Solution{}.minDeletionSize(strs), 1);
-}
-TEST(t0955_delete_columns_to_make_sorted_2, test_4)
-{
-    std::vector<std::string> strs{
-        "koccmoezl",
-        "hbccayhbd",
-    };
-    ASSERT_EQ(Solution{}.minDeletionSize(strs), 3);
-}
-TEST(t0955_delete_columns_to_make_sorted_2, test_5)
-{
-    std::vector<std::string> strs{
-        "jsebodtwc",
-        "cnneoytml",
-        "eeneuyzlu",
-        "ewpnmtivg",
-    };
-    ASSERT_EQ(Solution{}.minDeletionSize(strs), 2);
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.minDeletionSize(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t0955_delete_columns_to_make_sorted_2, test_6)
-{
-    std::vector<std::string> strs{
-        "abx",
-        "agz",
-        "bgc",
-        "bfc",
-    };
-    ASSERT_EQ(Solution{}.minDeletionSize(strs), 1);
-}
-
-TEST(t0955_delete_columns_to_make_sorted_2, test_7)
-{
-    std::vector<std::string> strs{"aa", "ac", "ab"};
-    ASSERT_EQ(Solution{}.minDeletionSize(strs), 1);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0955_delete_columns_to_make_sorted_2,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
