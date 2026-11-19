@@ -1,12 +1,23 @@
-#include "3857_test_cases.hpp"
+#include "3857.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
-inline static const auto kCases = parse_test_cases<kMethodToTest>(kTestCases);
+inline static constexpr auto kMethodToTest = &Solution::minCost;
 
-using t3857_minimum_cost_to_split_into_ones = SolutionTests<Solution>;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+3
+3
 
-TEST_P(t3857_minimum_cost_to_split_into_ones, MinOperations)
+4
+6
+
+500
+124750
+)");
+
+using t3857 = SolutionTests<Solution>;
+
+TEST_P(t3857, MinOperations)
 {
     check(
         kCases,
@@ -16,6 +27,6 @@ TEST_P(t3857_minimum_cost_to_split_into_ones, MinOperations)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3857_minimum_cost_to_split_into_ones,
-    t3857_minimum_cost_to_split_into_ones::parameters(kCases.size()),
-    t3857_minimum_cost_to_split_into_ones::name);
+    t3857,
+    t3857::parameters(kCases.size()),
+    t3857::name);
