@@ -7,9 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [[1,3],[-2,2]] 1 [[-2,2]]
 )cases");
 
-using t0973_k_closest_points_to_origin = SolutionTests<Solution>;
+using t0973 = SolutionTests<Solution>;
 
-TEST_P(t0973_k_closest_points_to_origin, Test)
+TEST_P(t0973, Test)
 {
     check(
         kCases,
@@ -19,6 +19,6 @@ TEST_P(t0973_k_closest_points_to_origin, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0973_k_closest_points_to_origin,
-    t0973_k_closest_points_to_origin::parameters(kCases.size()),
-    t0973_k_closest_points_to_origin::name);
+    t0973,
+    t0973::parameters(kCases.size()),
+    t0973::name);
