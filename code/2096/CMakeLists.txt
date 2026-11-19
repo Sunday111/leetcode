@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 2096_step_by_step_directions_from_a_binary_tree_node_to_another_tests)
 
 add_executable(${target_name}
-    2096_step_by_step_directions_from_a_binary_tree_node_to_another.hpp
-    2096_step_by_step_directions_from_a_binary_tree_node_to_another_tests.cpp
+    2096.hpp
+    2096_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

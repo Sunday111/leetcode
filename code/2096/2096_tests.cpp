@@ -1,4 +1,4 @@
-#include "2096_step_by_step_directions_from_a_binary_tree_node_to_another.hpp"
+#include "2096.hpp"
 #include "leet_code_binary_tree.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
