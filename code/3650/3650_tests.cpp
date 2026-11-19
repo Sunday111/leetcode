@@ -1,4 +1,4 @@
-#include "3650_minimum_cost_path_with_edge_reversals.hpp"
+#include "3650.hpp"
 #include "parse_2d_array.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -12,9 +12,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 4 [[2,3,25],[2,1,18],[3,1,2]] -1
 )cases");
 
-using t3650_minimum_cost_path_with_edge_reversals = SolutionTests<Solution>;
+using t3650 = SolutionTests<Solution>;
 
-TEST_P(t3650_minimum_cost_path_with_edge_reversals, Test)
+TEST_P(t3650, Test)
 {
     check(
         kCases,
@@ -24,6 +24,6 @@ TEST_P(t3650_minimum_cost_path_with_edge_reversals, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3650_minimum_cost_path_with_edge_reversals,
-    t3650_minimum_cost_path_with_edge_reversals::parameters(kCases.size()),
-    t3650_minimum_cost_path_with_edge_reversals::name);
+    t3650,
+    t3650::parameters(kCases.size()),
+    t3650::name);
