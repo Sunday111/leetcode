@@ -1,69 +1,30 @@
+#include <algorithm>
+
 #include "1948_delete_duplicate_folders_in_system.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t1948_delete_duplicate_folders_in_system, test_1)
-{
-    std::vector<std::vector<std::string>> paths{
-        {"a"},
-        {"c"},
-        {"d"},
-        {"a", "b"},
-        {"c", "b"},
-        {"d", "a"},
-    };
-    auto r = Solution{}.deleteDuplicateFolder(paths);
-}
+static const auto kCases = parse_test_cases_with_types<
+    std::tuple<std::vector<std::vector<std::string>>>,
+    std::vector<std::vector<std::string>>>(R"cases(
+[["a"],["c"],["d"],["a","b"],["c","b"],["d","a"]] [["d"],["d","a"]]
+[["a"],["c"],["a","b"],["c","b"],["a","b","x"],["a","b","x","y"],["w"],["w","y"]] [["a"],["a","b"],["c"],["c","b"]]
+)cases");
 
-TEST(t1948_delete_duplicate_folders_in_system, test_2)
+class t1948_delete_duplicate_folders_in_system
+    : public ::testing::TestWithParam<size_t>
 {
-    std::vector<std::vector<std::string>> paths{
-        {{"a"},
-         {"c"},
-         {"a", "b"},
-         {"c", "b"},
-         {"a", "b", "x"},
-         {"a", "b", "x", "y"},
-         {"w"},
-         {"w", "y"}},
-    };
-    auto r = Solution{}.deleteDuplicateFolder(paths);
-}
-
-TEST(t1948_delete_duplicate_folders_in_system, test_3)
+};
+TEST_P(t1948_delete_duplicate_folders_in_system, Test)
 {
-    std::vector<std::vector<std::string>> paths{
-        {"b"},
-        {"f"},
-        {"f", "r"},
-        {"f", "r", "g"},
-        {"f", "r", "g", "c"},
-        {"f", "r", "g", "c", "r"},
-        {"f", "o"},
-        {"f", "o", "x"},
-        {"f", "o", "x", "t"},
-        {"f", "o", "x", "d"},
-        {"f", "o", "l"},
-        {"l"},
-        {"l", "q"},
-        {"c"},
-        {"h"},
-        {"h", "t"},
-        {"h", "o"},
-        {"h", "o", "d"},
-        {"h", "o", "t"},
-    };
-    auto r = Solution{}.deleteDuplicateFolder(paths);
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = Solution{}.deleteDuplicateFolder(std::get<0>(inputs));
+    std::ranges::sort(actual);
+    ASSERT_EQ(expected, actual);
 }
-
-TEST(t1948_delete_duplicate_folders_in_system, test_4)
-{
-    std::vector<std::vector<std::string>> paths{
-        {{"a"},
-         {"a", "c"},
-         {"a", "c", "x"},
-         {"b"},
-         {"b", "d"},
-         {"b", "d", "x"}},
-    };
-    auto r = Solution{}.deleteDuplicateFolder(paths);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t1948_delete_duplicate_folders_in_system,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
