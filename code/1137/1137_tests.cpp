@@ -1,4 +1,4 @@
-#include "1137_nth_tribonacci_number.hpp"
+#include "1137.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 25 1389537
 )cases");
 
-using t1137_nth_tribonacci_number = SolutionTests<Solution>;
+using t1137 = SolutionTests<Solution>;
 
-TEST_P(t1137_nth_tribonacci_number, Test)
+TEST_P(t1137, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t1137_nth_tribonacci_number, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1137_nth_tribonacci_number,
-    t1137_nth_tribonacci_number::parameters(kCases.size()),
-    t1137_nth_tribonacci_number::name);
+    t1137,
+    t1137::parameters(kCases.size()),
+    t1137::name);
