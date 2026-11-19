@@ -1,4 +1,4 @@
-#include "1432_max_difference_you_can_get_from_changing_an_integer.hpp"
+#include "1432.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
