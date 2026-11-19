@@ -1,5 +1,5 @@
 #include "0049_group_anagrams.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 #include "test_utility.hpp"
 
@@ -8,22 +8,22 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 ["eat","tea","tan","ate","nat","bat"] [["ate","eat","tea"],["bat"],["nat","tan"]]
 )cases");
 
-class t0049_group_anagrams : public ::testing::TestWithParam<size_t>
-{
-};
+using t0049_group_anagrams = SolutionTests<Solution>;
 
 TEST_P(t0049_group_anagrams, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.groupAnagrams(args...); },
-        inputs);
-    ASSERT_EQ(sorted(expected), sorted(actual));
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            auto actual = std::apply(
+                [&](auto&... args) { return solution.groupAnagrams(args...); },
+                inputs);
+            ASSERT_EQ(sorted(expected), sorted(actual));
+        });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0049_group_anagrams,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0049_group_anagrams::parameters(kCases.size()),
+    t0049_group_anagrams::name);
