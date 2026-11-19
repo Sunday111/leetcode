@@ -8,10 +8,9 @@ static const auto kCases = parse_test_cases_with_types<
 4 3 [2,3] [2] 4
 )cases");
 
-using t2975_maximum_square_area_by_removing_fences_from_a_field =
-    SolutionTests<Solution>;
+using t2975 = SolutionTests<Solution>;
 
-TEST_P(t2975_maximum_square_area_by_removing_fences_from_a_field, Test)
+TEST_P(t2975, Test)
 {
     check(
         kCases,
@@ -21,7 +20,6 @@ TEST_P(t2975_maximum_square_area_by_removing_fences_from_a_field, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2975_maximum_square_area_by_removing_fences_from_a_field,
-    t2975_maximum_square_area_by_removing_fences_from_a_field::parameters(
-        kCases.size()),
-    t2975_maximum_square_area_by_removing_fences_from_a_field::name);
+    t2975,
+    t2975::parameters(kCases.size()),
+    t2975::name);
