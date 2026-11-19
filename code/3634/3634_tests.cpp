@@ -1,4 +1,4 @@
-#include "3634_minimum_removals_to_balance_array.hpp"
+#include "3634.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -14,9 +14,9 @@ static const auto kCases = parse_test_cases_with_types<
 [1,34,23] 2 1
 )cases");
 
-using t3634_minimum_removals_to_balance_array = SolutionTests<Solution>;
+using t3634 = SolutionTests<Solution>;
 
-TEST_P(t3634_minimum_removals_to_balance_array, Test)
+TEST_P(t3634, Test)
 {
     check(
         kCases,
@@ -26,6 +26,6 @@ TEST_P(t3634_minimum_removals_to_balance_array, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3634_minimum_removals_to_balance_array,
-    t3634_minimum_removals_to_balance_array::parameters(kCases.size()),
-    t3634_minimum_removals_to_balance_array::name);
+    t3634,
+    t3634::parameters(kCases.size()),
+    t3634::name);
