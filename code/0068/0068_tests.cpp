@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 ["This    is    an","example  of text","justification.  "]
 )cases");
 
-using t0068_text_justification = SolutionTests<Solution>;
+using t0068 = SolutionTests<Solution>;
 
-TEST_P(t0068_text_justification, Test)
+TEST_P(t0068, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t0068_text_justification, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0068_text_justification,
-    t0068_text_justification::parameters(kCases.size()),
-    t0068_text_justification::name);
+    t0068,
+    t0068::parameters(kCases.size()),
+    t0068::name);
