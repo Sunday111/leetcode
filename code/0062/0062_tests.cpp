@@ -1,4 +1,4 @@
-#include "0062_unique_paths.hpp"
+#include "0062.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 3 2 3
 )cases");
 
-using t0062_unique_paths = SolutionTests<Solution>;
+using t0062 = SolutionTests<Solution>;
 
-TEST_P(t0062_unique_paths, Test)
+TEST_P(t0062, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t0062_unique_paths, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0062_unique_paths,
-    t0062_unique_paths::parameters(kCases.size()),
-    t0062_unique_paths::name);
+    t0062,
+    t0062::parameters(kCases.size()),
+    t0062::name);
