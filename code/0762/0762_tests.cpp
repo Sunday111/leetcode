@@ -2,7 +2,7 @@
 
 #include <print>
 
-#include "0762_prime_number_of_set_bits_in_binary_representation.hpp"
+#include "0762.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -15,10 +15,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 990000 1000000 3754
 )cases");
 
-using t0762_prime_number_of_set_bits_in_binary_representation =
-    SolutionTests<Solution>;
+using t0762 = SolutionTests<Solution>;
 
-TEST_P(t0762_prime_number_of_set_bits_in_binary_representation, Test)
+TEST_P(t0762, Test)
 {
     check(
         kCases,
@@ -28,7 +27,6 @@ TEST_P(t0762_prime_number_of_set_bits_in_binary_representation, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0762_prime_number_of_set_bits_in_binary_representation,
-    t0762_prime_number_of_set_bits_in_binary_representation::parameters(
-        kCases.size()),
-    t0762_prime_number_of_set_bits_in_binary_representation::name);
+    t0762,
+    t0762::parameters(kCases.size()),
+    t0762::name);
