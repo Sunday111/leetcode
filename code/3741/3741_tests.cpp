@@ -1,5 +1,5 @@
 #include "3741.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::minimumDistance;
@@ -16,23 +16,18 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 
 )");
 
-class t3741 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t3741 = SolutionTests<Solution>;
 
 TEST_P(t3741, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.minimumDistance(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t3741,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t3741::parameters(kCases.size()),
+    t3741::name);
