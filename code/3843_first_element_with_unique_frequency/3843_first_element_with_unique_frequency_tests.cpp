@@ -1,5 +1,5 @@
 #include "3843_first_element_with_unique_frequency.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases =
@@ -11,23 +11,18 @@ static const auto kCases =
 [10,10,20,20] -1
 )cases");
 
-class t3843_first_element_with_unique_frequency
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t3843_first_element_with_unique_frequency = SolutionTests<Solution>;
 
 TEST_P(t3843_first_element_with_unique_frequency, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.firstUniqueFreq(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.firstUniqueFreq(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t3843_first_element_with_unique_frequency,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t3843_first_element_with_unique_frequency::parameters(kCases.size()),
+    t3843_first_element_with_unique_frequency::name);
