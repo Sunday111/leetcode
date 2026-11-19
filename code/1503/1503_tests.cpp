@@ -1,4 +1,4 @@
-#include "1503_last_momemnt_before_all_ants_fall_out_of_a_plank.hpp"
+#include "1503.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
