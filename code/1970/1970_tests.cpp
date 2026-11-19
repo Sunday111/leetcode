@@ -1,4 +1,4 @@
-#include "1970_last_day_where_you_can_still_cross.hpp"
+#include "1970.hpp"
 #include "parse_2d_array.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -8,9 +8,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 2 2 [[1,1],[2,1],[1,2],[2,2]] 2
 )cases");
 
-using t1970_last_day_where_you_can_still_cross = SolutionTests<Solution>;
+using t1970 = SolutionTests<Solution>;
 
-TEST_P(t1970_last_day_where_you_can_still_cross, Test)
+TEST_P(t1970, Test)
 {
     check(
         kCases,
@@ -20,6 +20,6 @@ TEST_P(t1970_last_day_where_you_can_still_cross, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1970_last_day_where_you_can_still_cross,
-    t1970_last_day_where_you_can_still_cross::parameters(kCases.size()),
-    t1970_last_day_where_you_can_still_cross::name);
+    t1970,
+    t1970::parameters(kCases.size()),
+    t1970::name);
