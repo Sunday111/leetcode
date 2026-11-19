@@ -1,5 +1,5 @@
 #include "2163_minimum_difference_in_sums_after_removal_of_elements.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases =
@@ -7,20 +7,21 @@ static const auto kCases =
 [3,1,2] -1
 )cases");
 
-class t2163_minimum_difference_in_sums_after_removal_of_elements
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t2163_minimum_difference_in_sums_after_removal_of_elements =
+    SolutionTests<all_branches::Solution>;
 TEST_P(t2163_minimum_difference_in_sums_after_removal_of_elements, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    ASSERT_EQ(
-        expected,
-        all_branches::Solution{}.minimumDifference(std::get<0>(inputs)));
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            ASSERT_EQ(
+                expected,
+                solution.minimumDifference(std::get<0>(inputs)));
+        });
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2163_minimum_difference_in_sums_after_removal_of_elements,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2163_minimum_difference_in_sums_after_removal_of_elements::parameters(
+        kCases.size()),
+    t2163_minimum_difference_in_sums_after_removal_of_elements::name);
