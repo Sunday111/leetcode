@@ -2,14 +2,14 @@ cmake_minimum_required(VERSION 3.25)
 
 include(set_compiler_options)
 
-set(target_name 2654_minimum_number_of_operations_to_make_all_array_elements_equal_to_1)
+set(target_name 2654)
 set(tests_target_name ${target_name}_tests)
 
-add_library(${target_name} INTERFACE 2654.hpp)
+add_library(${target_name} INTERFACE ${target_name}.hpp)
 set_generic_compiler_options(${target_name} INTERFACE)
 target_link_libraries(${target_name} INTERFACE lc_templates)
 
-add_executable(${tests_target_name} 2654_tests.cpp)
+add_executable(${tests_target_name} ${target_name}_tests.cpp)
 
 target_link_libraries(${tests_target_name} PUBLIC ${target_name} test_utility)
 

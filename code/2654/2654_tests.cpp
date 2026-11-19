@@ -9,12 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [2,6,3,4] 4
 )cases");
 
-using t2654_minimum_number_of_operations_to_make_all_array_elements_equal_to_1 =
-    SolutionTests<Solution>;
+using t2654 = SolutionTests<Solution>;
 
-TEST_P(
-    t2654_minimum_number_of_operations_to_make_all_array_elements_equal_to_1,
-    Test)
+TEST_P(t2654, Test)
 {
     check(
         kCases,
@@ -24,8 +21,6 @@ TEST_P(
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2654_minimum_number_of_operations_to_make_all_array_elements_equal_to_1,
-    t2654_minimum_number_of_operations_to_make_all_array_elements_equal_to_1::
-        parameters(kCases.size()),
-    t2654_minimum_number_of_operations_to_make_all_array_elements_equal_to_1::
-        name);
+    t2654,
+    t2654::parameters(kCases.size()),
+    t2654::name);
