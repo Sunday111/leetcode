@@ -1,7 +1,7 @@
 #include <random>
 
 #include "2913.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto k_method_to_test = &Solution::sumCounts;
@@ -19,26 +19,21 @@ inline static const auto k_cases = parse_test_cases<k_method_to_test>(R"(
 [1,2,3,4,5,1] 185
 )");
 
-class t2913 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t2913 = SolutionTests<Solution>;
 
 TEST_P(t2913, Test)
 {
-    auto [inputs, expected] = k_cases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(k_method_to_test, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        k_cases,
+        [](auto& solution, auto&... args)
+        { return solution.sumCounts(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2913,
-    ::testing::Range(size_t{0}, k_cases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2913::parameters(k_cases.size()),
+    t2913::name);
 
 TEST(Solution2913, MaximumInputs)
 {
