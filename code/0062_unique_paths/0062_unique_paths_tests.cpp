@@ -1,5 +1,5 @@
 #include "0062_unique_paths.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::uniquePaths;
@@ -9,22 +9,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 3 2 3
 )cases");
 
-class t0062_unique_paths : public ::testing::TestWithParam<size_t>
-{
-};
+using t0062_unique_paths = SolutionTests<Solution>;
 
 TEST_P(t0062_unique_paths, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.uniquePaths(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.uniquePaths(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0062_unique_paths,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0062_unique_paths::parameters(kCases.size()),
+    t0062_unique_paths::name);
