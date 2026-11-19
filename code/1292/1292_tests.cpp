@@ -8,12 +8,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [[1,1,3,2,4,3,2],[1,1,3,2,4,3,2],[1,1,3,2,4,3,2]] 4 2
 )cases");
 
-using t1292_maximum_side_length_of_a_square_with_sum_less_than_or_equal_to_threshold =
-    SolutionTests<Solution>;
+using t1292 = SolutionTests<Solution>;
 
-TEST_P(
-    t1292_maximum_side_length_of_a_square_with_sum_less_than_or_equal_to_threshold,
-    Test)
+TEST_P(t1292, Test)
 {
     check(
         kCases,
@@ -23,8 +20,6 @@ TEST_P(
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1292_maximum_side_length_of_a_square_with_sum_less_than_or_equal_to_threshold,
-    t1292_maximum_side_length_of_a_square_with_sum_less_than_or_equal_to_threshold::
-        parameters(kCases.size()),
-    t1292_maximum_side_length_of_a_square_with_sum_less_than_or_equal_to_threshold::
-        name);
+    t1292,
+    t1292::parameters(kCases.size()),
+    t1292::name);
