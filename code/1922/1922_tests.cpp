@@ -1,4 +1,4 @@
-#include "1922_count_good_numbers.hpp"
+#include "1922.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -13,9 +13,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 806166225460393 643535977
 )cases");
 
-using t1922_count_good_numbers = SolutionTests<Solution>;
+using t1922 = SolutionTests<Solution>;
 
-TEST_P(t1922_count_good_numbers, Test)
+TEST_P(t1922, Test)
 {
     check(
         kCases,
@@ -25,6 +25,6 @@ TEST_P(t1922_count_good_numbers, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1922_count_good_numbers,
-    t1922_count_good_numbers::parameters(kCases.size()),
-    t1922_count_good_numbers::name);
+    t1922,
+    t1922::parameters(kCases.size()),
+    t1922::name);
