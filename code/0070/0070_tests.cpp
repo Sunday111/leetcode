@@ -1,4 +1,4 @@
-#include "0070_climbing_stairs.hpp"
+#include "0070.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -13,9 +13,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 45 1836311903
 )cases");
 
-using t0070_climbing_stairs = SolutionTests<Solution>;
+using t0070 = SolutionTests<Solution>;
 
-TEST_P(t0070_climbing_stairs, Test)
+TEST_P(t0070, Test)
 {
     check(
         kCases,
@@ -25,6 +25,6 @@ TEST_P(t0070_climbing_stairs, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0070_climbing_stairs,
-    t0070_climbing_stairs::parameters(kCases.size()),
-    t0070_climbing_stairs::name);
+    t0070,
+    t0070::parameters(kCases.size()),
+    t0070::name);
