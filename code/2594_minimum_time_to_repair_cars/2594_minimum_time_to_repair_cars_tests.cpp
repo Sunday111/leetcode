@@ -1,5 +1,5 @@
 #include "2594_minimum_time_to_repair_cars.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::repairCars;
@@ -7,23 +7,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [1,2,3,4] 10 16
 )cases");
 
-class t2594_minimum_time_to_repair_cars
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t2594_minimum_time_to_repair_cars = SolutionTests<Solution>;
 
 TEST_P(t2594_minimum_time_to_repair_cars, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.repairCars(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.repairCars(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2594_minimum_time_to_repair_cars,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2594_minimum_time_to_repair_cars::parameters(kCases.size()),
+    t2594_minimum_time_to_repair_cars::name);
