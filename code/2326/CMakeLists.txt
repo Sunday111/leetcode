@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 2326_spiral_matrix_4_tests)
 
 add_executable(${target_name}
-    2326_spiral_matrix_4.hpp
-    2326_spiral_matrix_4_tests.cpp
+    2326.hpp
+    2326_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)
