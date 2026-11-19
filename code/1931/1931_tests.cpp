@@ -1,4 +1,4 @@
-#include "1931_painting_a_grid_with_tree_different_colors.hpp"
+#include "1931.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
