@@ -1,4 +1,4 @@
-#include "2240_kth_smallest_product_of_two_sorted_arrays.hpp"
+#include "2040.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,8 +9,8 @@ static const auto kCases = parse_test_cases_with_types<
 [-4,-2,0,3] [2,4] 6 0
 )cases");
 
-using t2240_kth_smallest_product_of_two_sorted_arrays = SolutionTests<Solution>;
-TEST_P(t2240_kth_smallest_product_of_two_sorted_arrays, Test)
+using t2040 = SolutionTests<Solution>;
+TEST_P(t2040, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -21,6 +21,6 @@ TEST_P(t2240_kth_smallest_product_of_two_sorted_arrays, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2240_kth_smallest_product_of_two_sorted_arrays,
-    t2240_kth_smallest_product_of_two_sorted_arrays::parameters(kCases.size()),
-    t2240_kth_smallest_product_of_two_sorted_arrays::name);
+    t2040,
+    t2040::parameters(kCases.size()),
+    t2040::name);
