@@ -1,4 +1,4 @@
-#include "1411_num_of_ways.hpp"
+#include "1411.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 5000 30228214
 )cases");
 
-using t1411_num_of_ways = SolutionTests<Solution>;
+using t1411 = SolutionTests<Solution>;
 
-TEST_P(t1411_num_of_ways, Test)
+TEST_P(t1411, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t1411_num_of_ways, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1411_num_of_ways,
-    t1411_num_of_ways::parameters(kCases.size()),
-    t1411_num_of_ways::name);
+    t1411,
+    t1411::parameters(kCases.size()),
+    t1411::name);
