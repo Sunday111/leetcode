@@ -1,95 +1,39 @@
 #include "0018_4sum.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 #include "test_utility.hpp"
 
-TEST(t0018_4sum, test_1)
-{
-    Solution s{};
-    std::vector nums{1, 0, -1, 0, -2, 2};
-    constexpr int target = 0;
-    std::vector<std::vector<int>> expected{
-        {-2, -1, 1, 2},
-        {-2, 0, 0, 2},
-        {-1, 0, 0, 1}};
+static constexpr auto kMethodToTest = &Solution::fourSum;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+[1,0,-1,0,-2,2] 0 [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
 
-    auto actual = s.fourSum(nums, target);
+[2,2,2,2,2] 8 [[2,2,2,2]]
+
+[0,0,0,0] 0 [[0,0,0,0]]
+
+[-3,-1,0,2,4,5] 0 [[-3,-1,0,4]]
+
+[1000000000,1000000000,1000000000,1000000000] 0 []
+
+[0,4,-5,2,-2,4,2,-1,4] 12 [[0,4,4,4],[2,2,4,4]]
+)");
+
+class t0018_4sum : public ::testing::TestWithParam<size_t>
+{
+};
+
+TEST_P(t0018_4sum, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.fourSum(args...); },
+        inputs);
     ASSERT_EQ(sorted(expected), sorted(actual));
 }
 
-TEST(t0018_4sum, test_2)
-{
-    Solution s{};
-    std::vector nums{1, 0, -1, 0, -2, 2};
-    constexpr int target = 0;
-    std::vector<std::vector<int>> expected{
-        {-2, -1, 1, 2},
-        {-2, 0, 0, 2},
-        {-1, 0, 0, 1}};
-
-    auto actual = s.fourSum(nums, target);
-    ASSERT_EQ(sorted(expected), sorted(actual));
-}
-
-TEST(t0018_4sum, test_3)
-{
-    Solution s{};
-    std::vector nums{2, 2, 2, 2, 2};
-    constexpr int target = 8;
-    std::vector<std::vector<int>> expected{
-        {2, 2, 2, 2},
-    };
-
-    auto actual = s.fourSum(nums, target);
-    ASSERT_EQ(sorted(expected), sorted(actual));
-}
-
-TEST(t0018_4sum, test_4)
-{
-    Solution s{};
-    std::vector nums{0, 0, 0, 0};
-    constexpr int target = 0;
-    std::vector<std::vector<int>> expected{
-        {0, 0, 0, 0},
-    };
-
-    auto actual = s.fourSum(nums, target);
-    ASSERT_EQ(sorted(expected), sorted(actual));
-}
-
-TEST(t0018_4sum, test_5)
-{
-    Solution s{};
-    std::vector nums{-3, -1, 0, 2, 4, 5};
-    constexpr int target = 0;
-    std::vector<std::vector<int>> expected{
-        {-3, -1, 0, 4},
-    };
-
-    auto actual = s.fourSum(nums, target);
-    ASSERT_EQ(sorted(expected), sorted(actual));
-}
-
-TEST(t0018_4sum, test_6)
-{
-    Solution s{};
-    std::vector nums{1000000000, 1000000000, 1000000000, 1000000000};
-    constexpr int target = 0;
-    std::vector<std::vector<int>> expected{};
-
-    auto actual = s.fourSum(nums, target);
-    ASSERT_EQ(sorted(expected), sorted(actual));
-}
-
-TEST(t0018_4sum, test_7)
-{
-    Solution s{};
-    std::vector nums{0, 4, -5, 2, -2, 4, 2, -1, 4};
-    constexpr int target = 12;
-    std::vector<std::vector<int>> expected{
-        {0, 4, 4, 4},
-        {2, 2, 4, 4},
-    };
-
-    auto actual = s.fourSum(nums, target);
-    ASSERT_EQ(sorted(expected), sorted(actual));
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0018_4sum,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
