@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0687_longest_univalue_path_tests)
 
 add_executable(${target_name}
-    0687_longest_univalue_path.hpp
-    0687_longest_univalue_path_tests.cpp
+    0687.hpp
+    0687_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

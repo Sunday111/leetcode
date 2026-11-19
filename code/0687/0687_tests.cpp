@@ -1,4 +1,4 @@
-#include "0687_longest_univalue_path.hpp"
+#include "0687.hpp"
 #include "leet_code_binary_tree.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
