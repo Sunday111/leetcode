@@ -1,4 +1,4 @@
-#include "2561_rearranging_fruits.hpp"
+#include "2561.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -8,9 +8,9 @@ static const auto kCases = parse_test_cases_with_types<
 [4,2,2,2] [1,4,1,2] 1
 )cases");
 
-using t2561_rearranging_fruits = SolutionTests<Solution>;
+using t2561 = SolutionTests<Solution>;
 
-TEST_P(t2561_rearranging_fruits, Test)
+TEST_P(t2561, Test)
 {
     check(
         kCases,
@@ -20,6 +20,6 @@ TEST_P(t2561_rearranging_fruits, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2561_rearranging_fruits,
-    t2561_rearranging_fruits::parameters(kCases.size()),
-    t2561_rearranging_fruits::name);
+    t2561,
+    t2561::parameters(kCases.size()),
+    t2561::name);
