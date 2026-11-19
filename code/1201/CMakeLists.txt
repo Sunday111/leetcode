@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 1201_ugly_number_3_tests)
 
 add_executable(${target_name}
-    1201_ugly_number_3.hpp
-    1201_ugly_number_3_tests.cpp
+    1201.hpp
+    1201_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

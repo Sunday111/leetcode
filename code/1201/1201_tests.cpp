@@ -1,4 +1,4 @@
-#include "1201_ugly_number_3.hpp"
+#include "1201.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
