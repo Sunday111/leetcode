@@ -1,4 +1,4 @@
-#include "0313_super_ugly_number.hpp"
+#include "0313.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
