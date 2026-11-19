@@ -1,4 +1,4 @@
-#include "0273_integer_to_english_words.hpp"
+#include "0273.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
