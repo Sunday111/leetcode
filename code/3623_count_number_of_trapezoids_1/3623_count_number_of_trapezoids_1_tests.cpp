@@ -1,9 +1,30 @@
 #include "3623_count_number_of_trapezoids_1.hpp"
 #include "gtest/gtest.h"
 #include "parse_2d_array.hpp"
+#include "test_cases_helpers.hpp"
 
-TEST(t3623_count_number_of_trapezoids_1, test_1)
+static constexpr auto kMethodToTest = &Solution::countTrapezoids;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+[[1,0],[2,0],[3,0],[2,2],[3,2]] 3
+)cases");
+
+class t3623_count_number_of_trapezoids_1
+    : public ::testing::TestWithParam<size_t>
 {
-    auto pts = parse2DArray("[[1,0],[2,0],[3,0],[2,2],[3,2]]");
-    ASSERT_EQ(Solution{}.countTrapezoids(pts), 3);
+};
+
+TEST_P(t3623_count_number_of_trapezoids_1, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.countTrapezoids(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
+
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t3623_count_number_of_trapezoids_1,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
