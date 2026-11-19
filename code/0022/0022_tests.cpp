@@ -1,7 +1,7 @@
 #include <unordered_set>
 
 #include "0022.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::generateParenthesis;
@@ -15,26 +15,21 @@ static_assert(Solution::data[0].empty());
 static_assert(Solution::data[8].size() == 16 * kCatalan64[8]);
 static_assert(Solution::data[1][0] == '(' && Solution::data[1][1] == ')');
 
-class t0022 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t0022 = SolutionTests<Solution>;
 
 TEST_P(t0022, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.generateParenthesis(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0022,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0022::parameters(kCases.size()),
+    t0022::name);
 
 TEST(ParenthesisStorageTest, AllLevels)
 {
