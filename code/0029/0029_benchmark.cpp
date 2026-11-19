@@ -1,5 +1,5 @@
-#include "0029_divide_two_integers.hpp"
-#include "0029_divide_two_integers_msb.hpp"
+#include "0029.hpp"
+#include "0029_msb.hpp"
 #include "benchmark/benchmark.h"
 #include "random_data.hpp"
 

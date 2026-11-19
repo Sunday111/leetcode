@@ -1,5 +1,5 @@
-#include "0029_divide_two_integers.hpp"
-#include "0029_divide_two_integers_msb.hpp"
+#include "0029.hpp"
+#include "0029_msb.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -13,9 +13,9 @@ static const auto kCases =
 -2147483648 -2147483648 1
 )cases");
 
-using t0029_divide_two_integers = SolutionTests<Solution, SolutionMSB>;
+using t0029 = SolutionTests<Solution, SolutionMSB>;
 
-TEST_P(t0029_divide_two_integers, Test)
+TEST_P(t0029, Test)
 {
     check(
         kCases,
@@ -24,6 +24,6 @@ TEST_P(t0029_divide_two_integers, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0029_divide_two_integers,
-    t0029_divide_two_integers::parameters(kCases.size()),
-    t0029_divide_two_integers::name);
+    t0029,
+    t0029::parameters(kCases.size()),
+    t0029::name);
