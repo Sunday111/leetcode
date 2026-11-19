@@ -1,4 +1,4 @@
-#include "2322_minimum_score_after_removals_on_a_tree.hpp"
+#include "2322.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [1,5,5,4,11] [[0,1],[1,2],[1,3],[3,4]] 9
 )cases");
 
-using t2322_minimum_score_after_removals_on_a_tree = SolutionTests<Solution>;
+using t2322 = SolutionTests<Solution>;
 
-TEST_P(t2322_minimum_score_after_removals_on_a_tree, Test)
+TEST_P(t2322, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t2322_minimum_score_after_removals_on_a_tree, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2322_minimum_score_after_removals_on_a_tree,
-    t2322_minimum_score_after_removals_on_a_tree::parameters(kCases.size()),
-    t2322_minimum_score_after_removals_on_a_tree::name);
+    t2322,
+    t2322::parameters(kCases.size()),
+    t2322::name);
