@@ -1,5 +1,5 @@
 #include "1498_number_of_subsequences_that_satisfy_the_given_sum_condition.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases =
@@ -8,19 +8,20 @@ static const auto kCases =
 [5,2,4,1,7,6,8] 16 127
 )cases");
 
-class t1498_number_of_subsequences_that_satisfy_the_given_sum_condition
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t1498_number_of_subsequences_that_satisfy_the_given_sum_condition =
+    SolutionTests<Solution>;
 TEST_P(t1498_number_of_subsequences_that_satisfy_the_given_sum_condition, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto& [nums, target] = inputs;
-    ASSERT_EQ(expected, Solution{}.numSubseq(nums, target));
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            auto& [nums, target] = inputs;
+            ASSERT_EQ(expected, solution.numSubseq(nums, target));
+        });
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1498_number_of_subsequences_that_satisfy_the_given_sum_condition,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1498_number_of_subsequences_that_satisfy_the_given_sum_condition::
+        parameters(kCases.size()),
+    t1498_number_of_subsequences_that_satisfy_the_given_sum_condition::name);
