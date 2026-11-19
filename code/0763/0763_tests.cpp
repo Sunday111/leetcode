@@ -1,4 +1,4 @@
-#include "0763_partition_labelstest_cases.hpp"
+#include "0763_test_cases.hpp"
 #include "solution_tests.hpp"
 
 using t0763_partition_labels = SolutionTests<Solution>;

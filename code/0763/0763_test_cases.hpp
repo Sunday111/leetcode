@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-#include "0763_partition_labels.hpp"
+#include "0763.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::partitionLabels;
