@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 2273_find_resultant_array_after_removing_anagrams_tests)
 
 add_executable(${target_name}
-    2273_find_resultant_array_after_removing_anagrams.hpp
-    2273_find_resultant_array_after_removing_anagrams_tests.cpp
+    2273.hpp
+    2273_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

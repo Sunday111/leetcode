@@ -1,4 +1,4 @@
-#include "2273_find_resultant_array_after_removing_anagrams.hpp"
+#include "2273.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
