@@ -1,4 +1,4 @@
-#include "1860_incremental_memory_leak.hpp"
+#include "1860.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -11,9 +11,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 2147483647 2147483647 [92681,88047,41707]
 )cases");
 
-using t1860_incremental_memory_leak = SolutionTests<Solution>;
+using t1860 = SolutionTests<Solution>;
 
-TEST_P(t1860_incremental_memory_leak, Test)
+TEST_P(t1860, Test)
 {
     check(
         kCases,
@@ -23,6 +23,6 @@ TEST_P(t1860_incremental_memory_leak, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1860_incremental_memory_leak,
-    t1860_incremental_memory_leak::parameters(kCases.size()),
-    t1860_incremental_memory_leak::name);
+    t1860,
+    t1860::parameters(kCases.size()),
+    t1860::name);
