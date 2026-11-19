@@ -1,33 +1,29 @@
 #include "3275_kth_nearest_obstacle.hpp"
 #include "gtest/gtest.h"
 #include "parse_2d_array.hpp"
+#include "test_cases_helpers.hpp"
 
-TEST(t3275_kth_nearest_obstacle, test_scan_vector)
-{
-    std::vector expected{1, 2, 3};
-    ASSERT_EQ(expected, parse_from_string<std::vector<int>>(" [ 1 , 2 , 3 ] "));
-}
+static constexpr auto kMethodToTest = &Solution::resultsArray;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+[[1,2],[3,4],[2,3],[-3,0]] 2 [-1,7,5,3]
+)cases");
 
-TEST(t3275_kth_nearest_obstacle, test_scan_vector_vector)
+class t3275_kth_nearest_obstacle : public ::testing::TestWithParam<size_t>
 {
-    std::vector<std::vector<int>> expected{{1, 2, 3}, {4, 5, 6}};
-    ASSERT_EQ(
-        expected,
-        parse_from_string<std::vector<std::vector<int>>>(
-            " [ [ 1 , 2 , 3 ] , [ 4 , 5 , 6 ] ] "));
-}
+};
 
-TEST(t3275_kth_nearest_obstacle, test_scan_tuple)
+TEST_P(t3275_kth_nearest_obstacle, Test)
 {
-    auto expected = std::make_tuple(10, std::vector{1, 2, 3});
-    auto actual = parse_from_string<std::tuple<int, std::vector<int>>>(
-        " 10 [ 1 , 2 , 3 ] ");
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.resultsArray(args...); },
+        inputs);
     ASSERT_EQ(expected, actual);
 }
 
-TEST(t3275_kth_nearest_obstacle, test_1)
-{
-    auto q = parse2DArray("[[1,2],[3,4],[2,3],[-3,0]]");
-    const std::vector expected{-1, 7, 5, 3};
-    ASSERT_EQ(Solution{}.resultsArray(q, 2), expected);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t3275_kth_nearest_obstacle,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });

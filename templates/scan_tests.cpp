@@ -1,4 +1,5 @@
 #include "gtest/gtest.h"
+#include "parse_2d_array.hpp"
 #include "test_cases_helpers.hpp"
 
 TEST(ScannerTest, WhitespaceAtEnd)
@@ -23,4 +24,27 @@ TEST(ScannerTest, EmptyAndTrailingWhitespaceCases)
         EXPECT_EQ(std::get<0>(std::get<0>(cases.front())), 1);
         EXPECT_EQ(std::get<1>(cases.front()), 2);
     }
+}
+
+TEST(ScannerTest, Vector)
+{
+    std::vector expected{1, 2, 3};
+    ASSERT_EQ(expected, parse_from_string<std::vector<int>>(" [ 1 , 2 , 3 ] "));
+}
+
+TEST(ScannerTest, NestedVector)
+{
+    std::vector<std::vector<int>> expected{{1, 2, 3}, {4, 5, 6}};
+    ASSERT_EQ(
+        expected,
+        parse_from_string<std::vector<std::vector<int>>>(
+            " [ [ 1 , 2 , 3 ] , [ 4 , 5 , 6 ] ] "));
+}
+
+TEST(ScannerTest, Tuple)
+{
+    auto expected = std::make_tuple(10, std::vector{1, 2, 3});
+    auto actual = parse_from_string<std::tuple<int, std::vector<int>>>(
+        " 10 [ 1 , 2 , 3 ] ");
+    ASSERT_EQ(expected, actual);
 }
