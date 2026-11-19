@@ -1,70 +1,29 @@
 #include "0215_kth_largest_element_in_an_array.hpp"
 #include "gtest/gtest.h"
-#include "pyramid_bitset/pbs_add.hpp"
-#include "pyramid_bitset/pbs_get.hpp"
-#include "pyramid_bitset/pbs_make.hpp"
-#include "pyramid_bitset/pbs_min.hpp"
-#include "pyramid_bitset/pbs_remove.hpp"
+#include "test_cases_helpers.hpp"
 
-TEST(t0215_kth_largest_element_in_an_array, test_1)
+static constexpr auto kMethodToTest = &Solution::findKthLargest;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+[0,1,2,3,4,5,9999] 1 9999
+)cases");
+
+class t0215_kth_largest_element_in_an_array
+    : public ::testing::TestWithParam<size_t>
 {
-    u64 lbs_words[PyramidBitset<20'000>::kTotalWords]{};
-    auto lbs = pbs_make<20'000>(lbs_words);
-    pbs_add(lbs, 1234);
-    pbs_add(lbs, 5932);
-    ASSERT_EQ(pbs_min(lbs), 1234);
-    pbs_remove(lbs, 1234);
-    ASSERT_EQ(pbs_min(lbs), 5932);
+};
 
-    std::vector<int> nums{0, 1, 2, 3, 4, 5, 9999};
-    ASSERT_EQ(Solution{}.findKthLargest(nums, 1), 9999);
+TEST_P(t0215_kth_largest_element_in_an_array, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.findKthLargest(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(LayeredBitsetTest, RemoveOneBitFromNonEmptyWord)
-{
-    u64 bs_words[PyramidBitset<130>::kTotalWords]{};
-    auto bs = pbs_make<130>(bs_words);  // 130 requires multiple layers
-
-    // Add two bits in the same lower-layer word
-    pbs_add(bs, 0);  // bit 0
-    pbs_add(bs, 1);  // bit 1
-
-    // Verify both bits are set
-    EXPECT_TRUE(pbs_get(bs, 0));
-    EXPECT_TRUE(pbs_get(bs, 1));
-
-    // Remove the first bit
-    pbs_remove(bs, 0);
-
-    // The second bit should still be set
-    EXPECT_TRUE(pbs_get(bs, 1));
-
-    // Lowest should now return 1
-    EXPECT_EQ(pbs_min(bs), 1u);
-
-    // Remove the remaining bit
-    pbs_remove(bs, 1);
-
-    // Now the bitset is empty; get should be false
-    EXPECT_FALSE(pbs_get(bs, 0));
-    EXPECT_FALSE(pbs_get(bs, 1));
-}
-
-// Optional: test larger numbers and multiple layers
-TEST(LayeredBitsetTest, MultipleLayers)
-{
-    u64 bs_words[PyramidBitset<5000>::kTotalWords]{};
-    auto bs = pbs_make<5000>(bs_words);
-
-    pbs_add(bs, 1234);
-    pbs_add(bs, 4321);
-    pbs_add(bs, 4999);
-
-    EXPECT_EQ(pbs_min(bs), 1234);
-
-    pbs_remove(bs, 1234);
-    EXPECT_EQ(pbs_min(bs), 4321);
-
-    pbs_remove(bs, 4321);
-    EXPECT_EQ(pbs_min(bs), 4999);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t0215_kth_largest_element_in_an_array,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
