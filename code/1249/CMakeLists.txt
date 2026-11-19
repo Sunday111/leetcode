@@ -2,16 +2,30 @@ cmake_minimum_required(VERSION 3.25)
 
 include(set_compiler_options)
 
-add_executable(1249_minimum_remove_to_make_valid_parentheses_tests
-    1249.hpp
-    1249_tests.cpp
-)
+set(target_name 1249)
+set(tests_target_name ${target_name}_tests)
 
-target_link_libraries(1249_minimum_remove_to_make_valid_parentheses_tests PUBLIC gtest_main)
-set_generic_compiler_options(1249_minimum_remove_to_make_valid_parentheses_tests PUBLIC)
+add_library(${target_name} INTERFACE ${target_name}.hpp)
+set_generic_compiler_options(${target_name} INTERFACE)
+target_link_libraries(${target_name} INTERFACE lc_templates)
 
-target_link_libraries(1249_minimum_remove_to_make_valid_parentheses_tests PRIVATE test_utility)
+add_executable(${tests_target_name} ${target_name}_tests.cpp)
+
+target_link_libraries(${tests_target_name} PUBLIC ${target_name} test_utility)
 
 enable_testing()
 include(GoogleTest)
-gtest_discover_tests(1249_minimum_remove_to_make_valid_parentheses_tests)
+gtest_discover_tests(${tests_target_name})
+
+# add benchmark target if there any files with "_benchmark" suffix
+file(GLOB_RECURSE benchmark_sources CONFIGURE_DEPENDS *_benchmark.cpp)
+if (benchmark_sources)
+    set(bench_target_name ${target_name}_bench)
+    add_executable(${bench_target_name} ${benchmark_sources})
+    target_link_libraries(${bench_target_name}
+        PUBLIC
+            ${target_name}
+            benchmark::benchmark
+            test_utility
+    )
+endif()

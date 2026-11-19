@@ -13,9 +13,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "(a(b(c)d)" "a(b(c)d)"
 )cases");
 
-using t1249_minimum_remove_to_make_valid_parentheses = SolutionTests<Solution>;
+using t1249 = SolutionTests<Solution>;
 
-TEST_P(t1249_minimum_remove_to_make_valid_parentheses, Test)
+TEST_P(t1249, Test)
 {
     check(
         kCases,
@@ -25,6 +25,6 @@ TEST_P(t1249_minimum_remove_to_make_valid_parentheses, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1249_minimum_remove_to_make_valid_parentheses,
-    t1249_minimum_remove_to_make_valid_parentheses::parameters(kCases.size()),
-    t1249_minimum_remove_to_make_valid_parentheses::name);
+    t1249,
+    t1249::parameters(kCases.size()),
+    t1249::name);
