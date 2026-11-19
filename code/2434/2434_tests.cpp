@@ -19,10 +19,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "mmuqezwmomeplrtskz" "eekstrlpmomwzqummz"
 )cases");
 
-using t2434_using_a_robot_to_print_the_lexicographically_smallest_string =
-    SolutionTests<Solution>;
+using t2434 = SolutionTests<Solution>;
 
-TEST_P(t2434_using_a_robot_to_print_the_lexicographically_smallest_string, Test)
+TEST_P(t2434, Test)
 {
     check(
         kCases,
@@ -32,7 +31,6 @@ TEST_P(t2434_using_a_robot_to_print_the_lexicographically_smallest_string, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2434_using_a_robot_to_print_the_lexicographically_smallest_string,
-    t2434_using_a_robot_to_print_the_lexicographically_smallest_string::
-        parameters(kCases.size()),
-    t2434_using_a_robot_to_print_the_lexicographically_smallest_string::name);
+    t2434,
+    t2434::parameters(kCases.size()),
+    t2434::name);
