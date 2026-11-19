@@ -1,4 +1,4 @@
-#include "0015_3sum.hpp"
+#include "0015.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 #include "test_utility.hpp"
