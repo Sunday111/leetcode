@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.25)
 
 include(set_compiler_options)
 
-set(target_name 1018_binary_prefix_divisible_by_5)
+set(target_name 1018)
 set(tests_target_name ${target_name}_tests)
 
 add_library(${target_name} INTERFACE ${target_name}.hpp)
