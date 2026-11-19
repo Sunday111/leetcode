@@ -1,4 +1,4 @@
-#include "2616_minimize_the_maximum_difference_of_pairs.hpp"
+#include "2616.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -14,9 +14,9 @@ static const auto kCases = parse_test_cases_with_types<
 [3,4,2,3,2,1,2] 3 1
 )cases");
 
-using t2616_minimize_the_maximum_difference_of_pairs = SolutionTests<Solution>;
+using t2616 = SolutionTests<Solution>;
 
-TEST_P(t2616_minimize_the_maximum_difference_of_pairs, Test)
+TEST_P(t2616, Test)
 {
     check(
         kCases,
@@ -26,6 +26,6 @@ TEST_P(t2616_minimize_the_maximum_difference_of_pairs, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2616_minimize_the_maximum_difference_of_pairs,
-    t2616_minimize_the_maximum_difference_of_pairs::parameters(kCases.size()),
-    t2616_minimize_the_maximum_difference_of_pairs::name);
+    t2616,
+    t2616::parameters(kCases.size()),
+    t2616::name);
