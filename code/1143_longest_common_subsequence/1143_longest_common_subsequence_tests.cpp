@@ -1,159 +1,41 @@
 #include "1143_longest_common_subsequence.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t1143_longest_common_subsequence, test_1)
+static constexpr auto kMethodToTest = &Solution::longestCommonSubsequence;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+"abcde" "ace" 3
+
+"abc" "abc" 3
+
+"abc" "def" 0
+
+"a" "ttta" 1
+
+"wggi" "g" 1
+
+"iitt" "tttttttttt" 2
+
+"jijiijjpji" "jjji" 4
+)cases");
+
+class t1143_longest_common_subsequence : public ::testing::TestWithParam<size_t>
 {
-    ASSERT_EQ(Solution{}.longestCommonSubsequence("abcde", "ace"), 3);
-    ASSERT_EQ(Solution{}.longestCommonSubsequence("abc", "abc"), 3);
-    ASSERT_EQ(Solution{}.longestCommonSubsequence("abc", "def"), 0);
+};
+
+TEST_P(t1143_longest_common_subsequence, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args)
+        { return Solution{}.longestCommonSubsequence(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t1143_longest_common_subsequence, test_2)
-{
-    ASSERT_EQ(Solution{}.longestCommonSubsequence("a", "ttta"), 1);
-}
-
-TEST(t1143_longest_common_subsequence, test_3)
-{
-    ASSERT_EQ(Solution{}.longestCommonSubsequence("wggi", "g"), 1);
-}
-
-TEST(t1143_longest_common_subsequence, test_4)
-{
-    ASSERT_EQ(Solution{}.longestCommonSubsequence("iitt", "tttttttttt"), 2);
-}
-
-TEST(t1143_longest_common_subsequence, test_5)
-{
-    ASSERT_EQ(Solution{}.longestCommonSubsequence("jijiijjpji", "jjji"), 4);
-}
-
-#define WITH_BIG_TESTS
-#ifdef WITH_BIG_TESTS
-
-TEST(t1143_longest_common_subsequence, test_6)
-{
-    ASSERT_EQ(
-        Solution{}.longestCommonSubsequence(
-            "fnbeaucuyhgariizanpxffiiicvjcynwcvlqyvobxvmqpqelcqrdvggecbwrhrwyqb"
-            "gafyrnmwqrbtugykagycteuusvkpthokeiqddumbgwzechfyxrqxwfzmcpkewebbha"
-            "owqjalzqpkwzfyymttnatmczxbnmydnzfongvdokxjwibilpitdxfwavtkftdenrzs"
-            "ktqlsptsccttizehxvellkmqnomfynnptzcwseragirexubilbnxddsmmwufhcijrs"
-            "dmecixjbahrhhkrekuqqcdghnljlazvvvtziqaimkfqignlmmfzujeboaqqeswjseo"
-            "zaspgpbedwwheshjettreroubajeaqfbrzlpehcnurcdeimkofesjgcmtqrdjwvsua"
-            "gtszyxaqmctdusuyjdlwedsjrdpnsdizoflilgvkjdbdxhqtnguqjzkjknpbvawoyw"
-            "klsfvnlkhlfmvbanxtypouejervclgkinohleenbsrvddvhjeelokbtuikrfilyyer"
-            "qamcanglbdihfffociwoloifuipddpnccwzlpqblpohjstiygligyibclnewnhgdjj"
-            "atspmtphgddgyfdpizyengteffdwrkswjwuznebeougvojdzzztaallammgskuzrjh"
-            "wxonzogekpderhzdehbzgcxgveaxiyrptakpblbsmmuwwmtmiezgghvesvqtgdiazz"
-            "kboitidoeeookdfvgcujpvixvzzzakbwkynicutzowvzfspxfkndfvodvpwadlrvsw"
-            "almpdhllilhmofyoyaxhncjmhqghadfajienejnihwniubbajajyzpxvuraorjnkgo"
-            "njvnmdboujfyoimsqdfebutbjcqgvdkkgczzwruinxsltspempsvclpzgqwybsquxu"
-            "bmvzygkpabvkchieqtvqdocjpufcmojehiwdnmvzgrsfgiwqmiahmozjzqzzfzrtxn"
-            "qistceggdm",
-            "vfkfjkpuyo"),
-        10);
-}
-
-TEST(t1143_longest_common_subsequence, test_7)
-{
-    ASSERT_EQ(
-        Solution{}.longestCommonSubsequence(
-            "fffkvfffkkkkkffffffkvfvvvfffvvvkffkfkfkvvvkkvfkvvvkvvffvvkvfvvfkff"
-            "vfffkkffkfvkkkffffvfkvfvvvffvvkkvvkvvvfvfvvkfkfvfvvfvvffkvkfkkkkvv"
-            "ffkkfvvvkvkvvfvvvkkfkvffkfkffkfffvkvkfvkvfkvffkkvkfkffkfvkffvvkkfk"
-            "kvvvkfffkfkvfkffvfvkfvkkvkvffvvfkvvffkvkkfkffkvfkffkkffkkkfkvfvfkf"
-            "vvfkvfvkfvkkfkvvkkfkfvvfvkkffffkkkvffkfvvkkfkkvvvffffvvvvkffkffkvk"
-            "vkvvkvfffvfkkfffkvvvkfvvfvvvfkfkfkfvfffkvkvfkvfkffkvkkvvkkfkkvkfkv"
-            "vfvffkkkkkfffvkfvkfkkkkvkkvvkkfvvvfkvvfkvffvvfkkfkfkfvvkfkkvvkkfvv"
-            "kvvkfffkvvvkffvfkkfkfvvkkkkfkvvfvkfkfkvvfvkkvfvfkfvvkvfkkkkvvffvfv"
-            "ffvvvvvfkkkfkvvfkvvffkkkvkfkkfkfkkkffffvvkvvvfkvkfkffffvfvvvfvkvvk"
-            "kkkvkkkkvvfvfkvvkkkfkkvfkkfffvfkvkvffvkfvvkkfkfvvkfvkffkfvvkkvfkvf"
-            "ffffvkkfkfkkkkkfkvvvfkvvvffffkfffvfvkvvfvkkfkkvfkkkkfkfkvvkffkkvkk"
-            "fvffvkvfvfffffvvfvvvvvvkfvvfvfkfvvvvkffffvkkfkkfvvkfffkkvvkkvfkvkk"
-            "fvkkvffkfkvkffvfkkkfkkvvvvkkvvfvfkkkfvkvfkkkfkkfkvkvvvkvfffkvkfkvf"
-            "kkvvvkkffkvfvfkkvkffffvfkkfvfkfvffvvvkkfvfvvvfkkkkkkvfvkvkkkfvfkkf"
-            "fvkvkkvfvkkkvfkkfvfffkvvvfkfffvvvfkffvvfkfvkfkfffkkkvffvvvkfkkkvvk"
-            "kkkkfvvkvf",
-            "vkkkkkffvk"),
-        10);
-}
-
-TEST(t1143_longest_common_subsequence, test_8)
-{
-    ASSERT_EQ(
-        Solution{}.longestCommonSubsequence(
-            "jduirerawykaiwuavukhrzhrkmrrsgvhkvorntvritqrikfrsowwvqqqmhlhotjhej"
-            "vsqgcdooqxddogyuknrlircvibjrvpnagltihrkporzbpcopxshjpnotcrdtwomegq"
-            "vlbbwhnaxgiiyojgzcdjzapcxsdjryotvpybpyrpomtbxtjmeionxqmypkhtwklicx"
-            "oahrggebhisypyjepbehretsucyjbycemhochgexmjryiehrkvjpaflpkdeqzvmlxz"
-            "fddgqfzpugqxufqgsdomwtwlulyzoghcadlkizvxxkjuucycgkaaiyxbtchgkrlmgo"
-            "yiybooskaimdmbgdunnaetobnvdmafxflddipayovckxclvrhvcvwkxkzcchecswec"
-            "dpjhbmgyqpvhbuvjefuqjryfiemmolboenvqebszzphxxircsreeyyybvkndakdtgb"
-            "zfhprcxzzpvhwsqfjxxphgxirciruvlpzirfkengtlihkftqwbxxbizgdosnkorwdc"
-            "tuadclrdxpbtasewryelndvpbqeovpjxfkpsieauewhvourullpeeergppcajiglrp"
-            "ubywcngksnltjucbaapjpphcrbhdnldhobvtpgmzulzcfcrrwmqorxobnugdrspdxl"
-            "crahlsiadousabbneeasaxpwvkwkajiliqqjjbuautnmorrmhkpbagztvhotxlwrxx"
-            "wfpwbamhjogguaubvyhtthjcgybyszjsazqtodwsshxargcydrbpdqgeehzpzjeckq"
-            "jvuhdnkjffhmgbywhkcvzinqvhjqqtgvzildpjlnummlxmbqsrxtpwcpgezhxmphwo"
-            "xzeruogaxytsyvrafqnowsskzhpfjruykkxftbxedznpmhcabdvwutnoyvwvzdheza"
-            "gvlbbzihzpvrvvwnftgleyzyjldnfdwezzjsiinzqobgwevgifliyngizlkjyoawjl"
-            "cmnkalyqfc",
-            "bcrvkxirhlayhntityxpewodsaxukgleifcyfxzroxhekjqwhiltrahuwjjtqprhsa"
-            "ajtojzaabgykkylnebewxjkwcchejchefbikcltdrrvfqfjdzeyqkinufmebjankix"
-            "hdsvtynzheihvhceyuuwrqhoagyeihaimxuodjnkryflzqirsgoiithsrdecijeuyl"
-            "fudpotgvhcmixjvlwnwdmpaukzmiatzvvbilydajfvhofewpxdzynchdcimywmunjh"
-            "lndfaqecawmneinwazlvuafwghxqtbmunjbppgdpoklsqetuktjglkqelxknepxmpu"
-            "pteauyimcrwqzdofthulkoqhmjsnstdsvbsvtunoiytycfvzaazxflusdbbylrhbvb"
-            "dzayjjhuzptbfgpzhhozotgbmnhstopclzamvxstoukmqaeqryxjylubkojpyhrofc"
-            "ngydxcurvncwbypfbqmhtflrfwdtckfowkjyareehfvkzjyhblenbimgjdtkgewmrz"
-            "euiojkuaqwfibfsbbbqinxxfuezzhgrndzcrjqdfxjwnqsrhukncrmapdvgyjeibmm"
-            "ewtwysuxddrtegebwpudmukgphrlwwopsyipooljpteojxyrkigtmhhntlhggdvguj"
-            "pctycbebsszpwxzzxxmlwosoeerstgjwxdhctolxrfyeatdociyymxvqajikjxqxhf"
-            "aegmudedtuiqmoouifvtxwhiyvkvpaljxhnfdgeraezjjthvktdibqtteaveqeikyl"
-            "kdoudjxwlgmuyapghfjodmsttvlgnjgfvtcrjunqckgicztpxhpsoracexdafcwkqp"
-            "eyjwxmhyjctbmngzqjfvnveruvlbpbldhgofofdkmvwgsnnzutlpjbmsoszsycvuhg"
-            "oobxwiqnvwmqgcvcvyexvoxciqgwrvpdjmogqbmmoeymcbxbynljfwpjbklxszouox"
-            "uuqrgmjwmq"),
-        321);
-}
-
-TEST(t1143_longest_common_subsequence, test_9)
-{
-    ASSERT_EQ(
-        Solution{}.longestCommonSubsequence(
-            "qqqzqzqzqzqqqqzqqqqqqzqqqqqqzqqzqqqqqzzqzzqqqqzqqzqqqqzzqqzzzqqqzz"
-            "qzzzzqzqqqqzzqzqqqqqqqqzzqzzzzqzqzqqqqqzqzqzzqqqzqqzzqqqzqqzqqzqzq"
-            "zqqqqqzqzzzzqqqqqqzzzqqzqzqqzqqqqzqqzqzzzqqzqzzzzqqqqzzqqqqqqqqqqz"
-            "qqqzqzqzqqzqqqzqqqzzqzqqqqqzqzqqqqzqqqqqqqzzqzqzqqqzqqzzqzqqqzqqqz"
-            "zqqqqqzqzqzqqqqqqqqqqzqqzqzqqqqqqqzqzzqqqqqqzqqzqqqqzqqqzqqqqqzqqq"
-            "qqzqqqzqzqzqqqzzqqqqzqqzzqqqzzqqqqzzzqqqqqqzqqzqqzqqqzzqqqqzzqqzzq"
-            "zqzzqqqzqqqqzzqzqzzzzqqqzqzqzzqqzzqqqqqqzqqqqqqqqqzzqzqqqzqzqqqqqq"
-            "qqqzqzqqzqqqzzqqzzqqqqqqqqqqqqzzqqqzqzqzqqqqqzqqqqzzqqzqqqzqzqzqqq"
-            "zzqqqqqqqqqzqzqzqqqzzzqqqzzqqqzqzzqzzzqqzqqqqzqzqqzqzqqqqqqqqzzqqq"
-            "zqzzqqqqzzqzzqzqqqqqqqzqqqzqqqqqqqqzqqqqzqqqzqzqqzqqzzzzqqzzqqzqqz"
-            "qqqzqqqqqqqqqqqzzqzzqqqzqqqzqzzqqzqqqzzzqzqqqqqqqqqqqzzqqzqqqqzzqq"
-            "qzqqzqqqqqqzqqqqqzqqqqqzzqqqzqqqqzzzqqqqqqzzzzqqqzqzqzqqqqzqqzzzzq"
-            "qqqzqqqzzzqqzqzqzqzzqzzzqqzqqqzqqqzqzqqqzqqqqqzqqqzzqqqqzqqqzqzzqz"
-            "zqqzqzzqqqqzqqqqqzqqqqqqqqqqzqqzzqqzzqqqqqzqqzzzzqqqqqqqqzqzzqqzzq"
-            "zqqqqqqqzqqzqqqqqzqqqzqqzqzqzzqqzqzqqqzqzzqqzqqqqqqzqqqzzzqzqqqqqq"
-            "qzqqqzzzqq",
-            "qzqqqqqzzqqqqzqqzqzqqqqqqqzqqqzqqzzqqqqzzzzqqqqzqqqqzzqqzqqqqqzqzq"
-            "zqzqzqqqzqzqqqqqqzzqqqqqqzqzzqqqqzqqqzqzzqqzqzqqzqzqqqqzqqzzzzqqzz"
-            "qzqqzqzqqqqqzqzqzzqqzqzqqqqzqzzqqqqzzqzqqqzqqzqqqzqzqzqqqzzqqqqzqq"
-            "qzqqqzqqzqqzqqzqqqqzqqqzzqzzqzzzqqqqqzqzqqqqqqzqqqqzqqqqqzzqqqqqzq"
-            "zzqqqzqqqqqqqzzzzqqzzqqqzzqzqzqqqqqqzzzqzqqqzzzzzqzqqqqzqqqzqqqqqq"
-            "qqzzqqqqzqqqqqqqzqqzzzqqqqzqqqqzzqzzqqzqqzqqzqzqzqzqqqqqqqqzzzqqqq"
-            "zqzqqqzzqqqqzzqqqzqqqqqqzzzqqzqzqzqqqzqqqzqqqqqzqqzzqzqqqqqzqqqqqq"
-            "qzqqqzqqqqqzqzqqqqqqzqqqqqzqqqzqqqzzqzzqqqqqqqzqqzqqzzzqqqzqqqqqqq"
-            "qqzzzqzqqqqqqzqzqzqqqqqzqqqqqqqqzzqqqzqzqzzqqqqqqzqqqzqqqzqzqqqqzq"
-            "qzqqqzqzzqqzzqzqqzqqqqzqqzqqqqzqqzzqqqqqqqzzqqqqzqzzzqzzzzqzqqqqqq"
-            "zqzqqzqzqqzzzqzqqzqqzqqzzqzqqqzqqqqzqqqqqqqzqzqzqzqzzqqzqqqqzqqzqq"
-            "qqqzqzqqqqzqzzqqzqzzqzqqqqzzqqqqqzqqzqqqqqqqqqqqqzqqzqqqzqqqqqqqqz"
-            "qqzzqqqqqzzqqzqqqqzqzqzqzqqqqqqqqzzqqqzqqqzzqqqzzqzqqqzqqqzqqqqqqq"
-            "zqqzqzqqqzzqzqqqqzqzqqzzzzqqqqzqzqqzqqqqzqzzqqzzzqzqzzzzqqzqzqqqqq"
-            "zzqqqzzqqzqzzqqzzqqqqqqqzzzzqqqqqqqqqqqzqqqqqzzqqzzqzqqzzqqqzzqqqz"
-            "qqzzqqqqzq"),
-        831);
-}
-#endif
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t1143_longest_common_subsequence,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
