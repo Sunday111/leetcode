@@ -1,4 +1,4 @@
-#include "3477_fruits_into_baskets_2.hpp"
+#include "3477.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -7,9 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [3,6,1] [6,4,7] 0
 )cases");
 
-using t3477_fruits_into_baskets_2 = SolutionTests<Solution>;
+using t3477 = SolutionTests<Solution>;
 
-TEST_P(t3477_fruits_into_baskets_2, Test)
+TEST_P(t3477, Test)
 {
     check(
         kCases,
@@ -19,6 +19,6 @@ TEST_P(t3477_fruits_into_baskets_2, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3477_fruits_into_baskets_2,
-    t3477_fruits_into_baskets_2::parameters(kCases.size()),
-    t3477_fruits_into_baskets_2::name);
+    t3477,
+    t3477::parameters(kCases.size()),
+    t3477::name);
