@@ -1,4 +1,4 @@
-#include "0237_delete_node_in_a_linked_list.hpp"
+#include "0237.hpp"
 #include "leet_code_list.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -10,8 +10,8 @@ static const auto kCases = parse_test_cases_with_types<
 [4,5,1,9] 1 [4,5,9]
 )cases");
 
-using t0237_delete_node_in_a_linked_list = SolutionTests<Solution>;
-TEST_P(t0237_delete_node_in_a_linked_list, Test)
+using t0237 = SolutionTests<Solution>;
+TEST_P(t0237, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -26,6 +26,6 @@ TEST_P(t0237_delete_node_in_a_linked_list, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0237_delete_node_in_a_linked_list,
-    t0237_delete_node_in_a_linked_list::parameters(kCases.size()),
-    t0237_delete_node_in_a_linked_list::name);
+    t0237,
+    t0237::parameters(kCases.size()),
+    t0237::name);
