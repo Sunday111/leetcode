@@ -2,7 +2,7 @@
 #include <array>
 
 #include "1569.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::numOfWays;
@@ -21,26 +21,21 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [16,8,4,2,1,3,6,5,7,12,10,9,11,14,13,15,24,20,18,17,19,22,21,23,28,26,25,27,30,29,31] 203434153
 )");
 
-class t1569 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t1569 = SolutionTests<Solution>;
 
 TEST_P(t1569, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.numOfWays(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1569,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1569::parameters(kCases.size()),
+    t1569::name);
 
 TEST(t1569Boundary, MaximumSkewedTrees)
 {
