@@ -1,4 +1,4 @@
-#include "1545_find_kth_bit_in_nth_binary_string.hpp"
+#include "1545.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -27,9 +27,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 20 32944 "0"
 )cases");
 
-using t1545_find_kth_bit_in_nth_binary_string = SolutionTests<Solution>;
+using t1545 = SolutionTests<Solution>;
 
-TEST_P(t1545_find_kth_bit_in_nth_binary_string, Test)
+TEST_P(t1545, Test)
 {
     check(
         kCases,
@@ -39,6 +39,6 @@ TEST_P(t1545_find_kth_bit_in_nth_binary_string, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1545_find_kth_bit_in_nth_binary_string,
-    t1545_find_kth_bit_in_nth_binary_string::parameters(kCases.size()),
-    t1545_find_kth_bit_in_nth_binary_string::name);
+    t1545,
+    t1545::parameters(kCases.size()),
+    t1545::name);
