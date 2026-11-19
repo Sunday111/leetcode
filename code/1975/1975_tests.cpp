@@ -1,4 +1,4 @@
-#include "1975_maximum_matrix_sum.hpp"
+#include "1975.hpp"
 #include "parse_2d_array.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -14,9 +14,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [[-10000,-10000,-10000],[-10000,-10000,-10000],[-10000,-10000,-10000]] 70000
 )cases");
 
-using t1975_maximum_matrix_sum = SolutionTests<Solution>;
+using t1975 = SolutionTests<Solution>;
 
-TEST_P(t1975_maximum_matrix_sum, Test)
+TEST_P(t1975, Test)
 {
     check(
         kCases,
@@ -26,6 +26,6 @@ TEST_P(t1975_maximum_matrix_sum, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1975_maximum_matrix_sum,
-    t1975_maximum_matrix_sum::parameters(kCases.size()),
-    t1975_maximum_matrix_sum::name);
+    t1975,
+    t1975::parameters(kCases.size()),
+    t1975::name);
