@@ -10,6 +10,8 @@ add_executable(0415_add_strings_tests
 target_link_libraries(0415_add_strings_tests PUBLIC gtest_main)
 set_generic_compiler_options(0415_add_strings_tests PUBLIC)
 
+target_link_libraries(0415_add_strings_tests PRIVATE test_utility)
+
 enable_testing()
 include(GoogleTest)
 gtest_discover_tests(0415_add_strings_tests)
