@@ -14,9 +14,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "One Billion Two Hundred Thirty Four Million Five Hundred Sixty Seven Thousand Eight Hundred Ninety One"
 )cases");
 
-using t0273_integer_to_english_words = SolutionTests<Solution>;
+using t0273 = SolutionTests<Solution>;
 
-TEST_P(t0273_integer_to_english_words, Test)
+TEST_P(t0273, Test)
 {
     check(
         kCases,
@@ -26,6 +26,6 @@ TEST_P(t0273_integer_to_english_words, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0273_integer_to_english_words,
-    t0273_integer_to_english_words::parameters(kCases.size()),
-    t0273_integer_to_english_words::name);
+    t0273,
+    t0273::parameters(kCases.size()),
+    t0273::name);
