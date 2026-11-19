@@ -1,4 +1,4 @@
-#include "1751_maximum_number_of_events_that_can_be_attended_2.hpp"
+#include "1751.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -11,10 +11,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [[1,1,1],[2,2,2],[3,3,3],[4,4,4]] 3 9
 )cases");
 
-using t1751_maximum_number_of_events_that_can_be_attended_2 =
-    SolutionTests<Solution>;
+using t1751 = SolutionTests<Solution>;
 
-TEST_P(t1751_maximum_number_of_events_that_can_be_attended_2, Test)
+TEST_P(t1751, Test)
 {
     check(
         kCases,
@@ -24,7 +23,6 @@ TEST_P(t1751_maximum_number_of_events_that_can_be_attended_2, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1751_maximum_number_of_events_that_can_be_attended_2,
-    t1751_maximum_number_of_events_that_can_be_attended_2::parameters(
-        kCases.size()),
-    t1751_maximum_number_of_events_that_can_be_attended_2::name);
+    t1751,
+    t1751::parameters(kCases.size()),
+    t1751::name);
