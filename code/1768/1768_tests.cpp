@@ -11,9 +11,9 @@ static const auto kCases = parse_test_cases_with_types<
 "abcd" "pq" "apbqcd"
 )cases");
 
-using t1768_merge_strings_alternately = SolutionTests<simple::Solution>;
+using t1768 = SolutionTests<simple::Solution>;
 
-TEST_P(t1768_merge_strings_alternately, Test)
+TEST_P(t1768, Test)
 {
     check(
         kCases,
@@ -23,13 +23,12 @@ TEST_P(t1768_merge_strings_alternately, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1768_merge_strings_alternately,
-    t1768_merge_strings_alternately::parameters(kCases.size()),
-    t1768_merge_strings_alternately::name);
+    t1768,
+    t1768::parameters(kCases.size()),
+    t1768::name);
 
-using t1768_merge_strings_alternatelySse2 =
-    SolutionTests<solution_sse2::Solution>;
-TEST_P(t1768_merge_strings_alternatelySse2, DISABLED_Sse2)
+using t1768Sse2 = SolutionTests<solution_sse2::Solution>;
+TEST_P(t1768Sse2, DISABLED_Sse2)
 {
     check(
         kCases,
@@ -38,6 +37,6 @@ TEST_P(t1768_merge_strings_alternatelySse2, DISABLED_Sse2)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1768_merge_strings_alternatelySse2,
-    t1768_merge_strings_alternatelySse2::parameters(kCases.size()),
-    t1768_merge_strings_alternatelySse2::name);
+    t1768Sse2,
+    t1768Sse2::parameters(kCases.size()),
+    t1768Sse2::name);
