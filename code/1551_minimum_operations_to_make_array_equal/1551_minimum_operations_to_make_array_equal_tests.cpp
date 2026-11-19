@@ -1,27 +1,21 @@
 #include "1551_minimum_operations_to_make_array_equaltest_cases.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static const auto kCases = parse_test_cases<kMethodToTest>(kTestCases);
 
-class t1551_minimum_operations_to_make_array_equal
-    : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t1551_minimum_operations_to_make_array_equal = SolutionTests<Solution>;
 
 TEST_P(t1551_minimum_operations_to_make_array_equal, MinOperations)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.minOperations(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1551_minimum_operations_to_make_array_equal,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1551_minimum_operations_to_make_array_equal::parameters(kCases.size()),
+    t1551_minimum_operations_to_make_array_equal::name);
