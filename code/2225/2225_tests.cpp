@@ -1,4 +1,4 @@
-#include "2225_find_players_with_zero_or_one_losses.hpp"
+#include "2225.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 

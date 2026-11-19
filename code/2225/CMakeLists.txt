@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 2225_find_players_with_zero_or_one_losses_tests)
 
 add_executable(${target_name}
-    2225_find_players_with_zero_or_one_losses.hpp
-    2225_find_players_with_zero_or_one_losses_tests.cpp
+    2225.hpp
+    2225_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)
