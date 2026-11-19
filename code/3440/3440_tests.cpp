@@ -1,4 +1,4 @@
-#include "3440_reschedule_meetings_for_maximum_free_time_2.hpp"
+#include "3440.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -11,10 +11,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 20 [2,4,6,9,18] [4,6,9,16,20] 4
 )cases");
 
-using t3440_reschedule_meetings_for_maximum_free_time_2 =
-    SolutionTests<Solution>;
+using t3440 = SolutionTests<Solution>;
 
-TEST_P(t3440_reschedule_meetings_for_maximum_free_time_2, Test)
+TEST_P(t3440, Test)
 {
     check(
         kCases,
@@ -24,7 +23,6 @@ TEST_P(t3440_reschedule_meetings_for_maximum_free_time_2, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3440_reschedule_meetings_for_maximum_free_time_2,
-    t3440_reschedule_meetings_for_maximum_free_time_2::parameters(
-        kCases.size()),
-    t3440_reschedule_meetings_for_maximum_free_time_2::name);
+    t3440,
+    t3440::parameters(kCases.size()),
+    t3440::name);
