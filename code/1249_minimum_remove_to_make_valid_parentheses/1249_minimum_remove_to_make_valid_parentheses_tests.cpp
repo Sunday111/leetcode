@@ -1,5 +1,5 @@
 #include "1249_minimum_remove_to_make_valid_parentheses.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::minRemoveToMakeValid;
@@ -13,23 +13,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "(a(b(c)d)" "a(b(c)d)"
 )cases");
 
-class t1249_minimum_remove_to_make_valid_parentheses
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t1249_minimum_remove_to_make_valid_parentheses = SolutionTests<Solution>;
 
 TEST_P(t1249_minimum_remove_to_make_valid_parentheses, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.minRemoveToMakeValid(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.minRemoveToMakeValid(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1249_minimum_remove_to_make_valid_parentheses,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1249_minimum_remove_to_make_valid_parentheses::parameters(kCases.size()),
+    t1249_minimum_remove_to_make_valid_parentheses::name);
