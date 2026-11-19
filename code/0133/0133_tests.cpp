@@ -1,7 +1,7 @@
 #include <memory>
 #include <unordered_set>
 
-#include "0133_clone_graph.hpp"
+#include "0133.hpp"
 #include "integral_aliases.hpp"
 #include "leet_code_unidirected_graph.hpp"
 #include "solution_tests.hpp"
@@ -15,8 +15,8 @@ static const auto kCases = parse_test_cases_with_types<
 [] []
 )cases");
 
-using t0133_clone_graph = SolutionTests<Solution>;
-TEST_P(t0133_clone_graph, Test)
+using t0133 = SolutionTests<Solution>;
+TEST_P(t0133, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -54,6 +54,6 @@ TEST_P(t0133_clone_graph, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0133_clone_graph,
-    t0133_clone_graph::parameters(kCases.size()),
-    t0133_clone_graph::name);
+    t0133,
+    t0133::parameters(kCases.size()),
+    t0133::name);
