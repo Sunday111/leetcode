@@ -1,4 +1,4 @@
-#include "0955_delete_columns_to_make_sorted_2.hpp"
+#include "0955.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -20,9 +20,9 @@ static const auto kCases = parse_test_cases_with_types<
 ["aa","ac","ab"] 1
 )cases");
 
-using t0955_delete_columns_to_make_sorted_2 = SolutionTests<Solution>;
+using t0955 = SolutionTests<Solution>;
 
-TEST_P(t0955_delete_columns_to_make_sorted_2, Test)
+TEST_P(t0955, Test)
 {
     check(
         kCases,
@@ -32,6 +32,6 @@ TEST_P(t0955_delete_columns_to_make_sorted_2, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0955_delete_columns_to_make_sorted_2,
-    t0955_delete_columns_to_make_sorted_2::parameters(kCases.size()),
-    t0955_delete_columns_to_make_sorted_2::name);
+    t0955,
+    t0955::parameters(kCases.size()),
+    t0955::name);
