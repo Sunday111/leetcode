@@ -10,6 +10,8 @@ add_executable(0238_product_of_array_except_self_tests
 target_link_libraries(0238_product_of_array_except_self_tests PUBLIC gtest_main)
 set_generic_compiler_options(0238_product_of_array_except_self_tests PUBLIC)
 
+target_link_libraries(0238_product_of_array_except_self_tests PRIVATE test_utility)
+
 enable_testing()
 include(GoogleTest)
 gtest_discover_tests(0238_product_of_array_except_self_tests)
