@@ -14,10 +14,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 869688536
 )cases");
 
-using t3337_total_characters_in_string_after_transformations_2 =
-    SolutionTests<Solution>;
+using t3337 = SolutionTests<Solution>;
 
-TEST_P(t3337_total_characters_in_string_after_transformations_2, Test)
+TEST_P(t3337, Test)
 {
     check(
         kCases,
@@ -27,7 +26,6 @@ TEST_P(t3337_total_characters_in_string_after_transformations_2, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3337_total_characters_in_string_after_transformations_2,
-    t3337_total_characters_in_string_after_transformations_2::parameters(
-        kCases.size()),
-    t3337_total_characters_in_string_after_transformations_2::name);
+    t3337,
+    t3337::parameters(kCases.size()),
+    t3337::name);
