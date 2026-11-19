@@ -2,14 +2,14 @@ cmake_minimum_required(VERSION 3.25)
 
 include(set_compiler_options)
 
-set(target_name 3217_delete_nodes_from_linked_list_present_in_array)
+set(target_name 3217)
 set(tests_target_name ${target_name}_tests)
 
-add_library(${target_name} INTERFACE 3217.hpp)
+add_library(${target_name} INTERFACE ${target_name}.hpp)
 set_generic_compiler_options(${target_name} INTERFACE)
 target_link_libraries(${target_name} INTERFACE lc_templates)
 
-add_executable(${tests_target_name} 3217_tests.cpp)
+add_executable(${tests_target_name} ${target_name}_tests.cpp)
 
 target_link_libraries(${tests_target_name} PUBLIC ${target_name} test_utility)
 
