@@ -7,10 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 10 2 1
 )cases");
 
-using t2787_ways_to_express_an_integer_as_sums_of_powers =
-    SolutionTests<Solution>;
+using t2787 = SolutionTests<Solution>;
 
-TEST_P(t2787_ways_to_express_an_integer_as_sums_of_powers, Test)
+TEST_P(t2787, Test)
 {
     check(
         kCases,
@@ -20,7 +19,6 @@ TEST_P(t2787_ways_to_express_an_integer_as_sums_of_powers, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2787_ways_to_express_an_integer_as_sums_of_powers,
-    t2787_ways_to_express_an_integer_as_sums_of_powers::parameters(
-        kCases.size()),
-    t2787_ways_to_express_an_integer_as_sums_of_powers::name);
+    t2787,
+    t2787::parameters(kCases.size()),
+    t2787::name);
