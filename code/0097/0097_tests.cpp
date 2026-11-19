@@ -1,4 +1,4 @@
-#include "0097_interleaving_string.hpp"
+#include "0097.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -11,9 +11,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "ab" "bc" "babc" true
 )cases");
 
-using t0097_interleaving_string = SolutionTests<Solution>;
+using t0097 = SolutionTests<Solution>;
 
-TEST_P(t0097_interleaving_string, Test)
+TEST_P(t0097, Test)
 {
     check(
         kCases,
@@ -23,6 +23,6 @@ TEST_P(t0097_interleaving_string, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0097_interleaving_string,
-    t0097_interleaving_string::parameters(kCases.size()),
-    t0097_interleaving_string::name);
+    t0097,
+    t0097::parameters(kCases.size()),
+    t0097::name);
