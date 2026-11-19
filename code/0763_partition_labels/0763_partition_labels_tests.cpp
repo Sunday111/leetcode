@@ -1,23 +1,18 @@
 #include "0763_partition_labelstest_cases.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 
-class t0763_partition_labels : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t0763_partition_labels = SolutionTests<Solution>;
 
 TEST_P(t0763_partition_labels, MinOperations)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.partitionLabels(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0763_partition_labels,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0763_partition_labels::parameters(kCases.size()),
+    t0763_partition_labels::name);
