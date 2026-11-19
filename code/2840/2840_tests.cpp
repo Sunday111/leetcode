@@ -1,5 +1,5 @@
 #include "2840.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::checkStrings;
@@ -13,23 +13,18 @@ true
 false
 )");
 
-class t2840 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t2840 = SolutionTests<Solution>;
 
 TEST_P(t2840, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.checkStrings(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2840,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2840::parameters(kCases.size()),
+    t2840::name);
