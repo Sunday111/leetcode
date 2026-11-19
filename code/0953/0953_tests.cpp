@@ -7,9 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 ["hello","leetcode"] "hlabcdefgijkmnopqrstuvwxyz" true
 )cases");
 
-using t0953_verifying_an_alien_dictionary = SolutionTests<Solution>;
+using t0953 = SolutionTests<Solution>;
 
-TEST_P(t0953_verifying_an_alien_dictionary, Test)
+TEST_P(t0953, Test)
 {
     check(
         kCases,
@@ -19,6 +19,6 @@ TEST_P(t0953_verifying_an_alien_dictionary, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0953_verifying_an_alien_dictionary,
-    t0953_verifying_an_alien_dictionary::parameters(kCases.size()),
-    t0953_verifying_an_alien_dictionary::name);
+    t0953,
+    t0953::parameters(kCases.size()),
+    t0953::name);
