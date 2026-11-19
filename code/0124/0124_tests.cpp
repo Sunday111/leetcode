@@ -1,6 +1,6 @@
 #include <cassert>
 
-#include "0124_binary_tree_maximum_path_sum.hpp"
+#include "0124.hpp"
 #include "leet_code_binary_tree.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"

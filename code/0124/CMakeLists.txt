@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.25)
 include(set_compiler_options)
 
 add_executable(0124_binary_tree_maximum_path_sum_tests
-    0124_binary_tree_maximum_path_sum.hpp
-    0124_binary_tree_maximum_path_sum_tests.cpp
+    0124.hpp
+    0124_tests.cpp
 )
 
 target_link_libraries(0124_binary_tree_maximum_path_sum_tests PUBLIC test_utility)
