@@ -1,4 +1,4 @@
-#include "0966_vowel_spellcheck.hpp"
+#include "0966.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 ["kite","KiTe","KiTe","Hare","hare","","","KiTe","","KiTe"]
 )cases");
 
-using t0966_vowel_spellcheck = SolutionTests<Solution>;
+using t0966 = SolutionTests<Solution>;
 
-TEST_P(t0966_vowel_spellcheck, Test)
+TEST_P(t0966, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t0966_vowel_spellcheck, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0966_vowel_spellcheck,
-    t0966_vowel_spellcheck::parameters(kCases.size()),
-    t0966_vowel_spellcheck::name);
+    t0966,
+    t0966::parameters(kCases.size()),
+    t0966::name);
