@@ -1,38 +1,33 @@
 #include "2509_cycle_length_queries_in_a_tree.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t2509_cycle_length_queries_in_a_tree, test_1)
+static constexpr auto kMethodToTest = &Solution::cycleLengthQueries;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+2 [[1,2]] [2]
+
+3 [[5,3],[4,7],[2,3]] [4,5,3]
+
+5 [[17,21],[23,5],[15,7],[3,21],[31,9],[5,15],[11,2],[19,7]] [7,3,2,6,8,6,3,7]
+)cases");
+
+class t2509_cycle_length_queries_in_a_tree
+    : public ::testing::TestWithParam<size_t>
 {
-    Solution s{};
-    int n = 2;
-    std::vector<std::vector<int>> queries{{1, 2}};
-    std::vector expected{2};
-    ASSERT_EQ(s.cycleLengthQueries(n, queries), expected);
+};
+
+TEST_P(t2509_cycle_length_queries_in_a_tree, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.cycleLengthQueries(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t2509_cycle_length_queries_in_a_tree, test_2)
-{
-    Solution s{};
-    int n = 3;
-    std::vector<std::vector<int>> queries{{5, 3}, {4, 7}, {2, 3}};
-    std::vector expected{4, 5, 3};
-    ASSERT_EQ(s.cycleLengthQueries(n, queries), expected);
-}
-
-TEST(t2509_cycle_length_queries_in_a_tree, test_3)
-{
-    Solution s{};
-    int n = 5;
-    std::vector<std::vector<int>> queries{
-        {17, 21},
-        {23, 5},
-        {15, 7},
-        {3, 21},
-        {31, 9},
-        {5, 15},
-        {11, 2},
-        {19, 7},
-    };
-    std::vector expected{7, 3, 2, 6, 8, 6, 3, 7};
-    ASSERT_EQ(s.cycleLengthQueries(n, queries), expected);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t2509_cycle_length_queries_in_a_tree,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
