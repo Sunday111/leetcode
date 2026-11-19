@@ -1,4 +1,4 @@
-#include "2069_walking_the_robot.hpp"
+#include "2069.hpp"
 #include "gtest/gtest.h"
 #include "test_cases_helpers.hpp"
 
@@ -9,10 +9,10 @@ static const auto kCases = parse_test_cases_with_types<
 2 2 [0,4,1] [[0,0] "East", [0,0] "South", [1,0] "East"]
 )cases");
 
-class t2069_walking_the_robot : public ::testing::TestWithParam<size_t>
+class t2069 : public ::testing::TestWithParam<size_t>
 {
 };
-TEST_P(t2069_walking_the_robot, Test)
+TEST_P(t2069, Test)
 {
     auto [inputs, expected] = kCases.at(GetParam());
     auto& [width, height, steps] = inputs;
@@ -28,7 +28,7 @@ TEST_P(t2069_walking_the_robot, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2069_walking_the_robot,
+    t2069,
     ::testing::Range(size_t{0}, kCases.size()),
     [](const testing::TestParamInfo<size_t>& info)
     { return "C" + std::to_string(info.index); });
