@@ -1,4 +1,4 @@
-#include "0560_subarray_sum_equals_k.hpp"
+#include "0560.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 

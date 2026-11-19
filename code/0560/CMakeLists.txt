@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.25)
 include(set_compiler_options)
 
 add_executable(0560_subarray_sum_equals_k_tests
-    0560_subarray_sum_equals_k.hpp
-    0560_subarray_sum_equals_k_tests.cpp
+    0560.hpp
+    0560_tests.cpp
 )
 
 target_link_libraries(0560_subarray_sum_equals_k_tests PUBLIC gtest_main)
