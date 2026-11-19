@@ -1,6 +1,6 @@
 #include "3562_maximum_profit_from_trading_stocks_with_discounts.hpp"
-#include "gtest/gtest.h"
 #include "parse_2d_array.hpp"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::maxProfit;
@@ -20,23 +20,20 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 1 [28] [6] [] 2 0
 )cases");
 
-class t3562_maximum_profit_from_trading_stocks_with_discounts
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t3562_maximum_profit_from_trading_stocks_with_discounts =
+    SolutionTests<Solution>;
 
 TEST_P(t3562_maximum_profit_from_trading_stocks_with_discounts, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.maxProfit(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.maxProfit(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t3562_maximum_profit_from_trading_stocks_with_discounts,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t3562_maximum_profit_from_trading_stocks_with_discounts::parameters(
+        kCases.size()),
+    t3562_maximum_profit_from_trading_stocks_with_discounts::name);
