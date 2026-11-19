@@ -1,4 +1,4 @@
-#include "3823_reverse_letters_then_special_characters_in_a_string.hpp"
+#include "3823.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
