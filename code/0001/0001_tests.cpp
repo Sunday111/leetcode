@@ -1,4 +1,4 @@
-#include "0001_two_sum.hpp"
+#include "0001.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
