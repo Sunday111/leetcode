@@ -1,4 +1,4 @@
-#include "3623_count_number_of_trapezoids_1.hpp"
+#include "3623.hpp"
 #include "parse_2d_array.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -8,9 +8,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [[1,0],[2,0],[3,0],[2,2],[3,2]] 3
 )cases");
 
-using t3623_count_number_of_trapezoids_1 = SolutionTests<Solution>;
+using t3623 = SolutionTests<Solution>;
 
-TEST_P(t3623_count_number_of_trapezoids_1, Test)
+TEST_P(t3623, Test)
 {
     check(
         kCases,
@@ -20,6 +20,6 @@ TEST_P(t3623_count_number_of_trapezoids_1, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3623_count_number_of_trapezoids_1,
-    t3623_count_number_of_trapezoids_1::parameters(kCases.size()),
-    t3623_count_number_of_trapezoids_1::name);
+    t3623,
+    t3623::parameters(kCases.size()),
+    t3623::name);
