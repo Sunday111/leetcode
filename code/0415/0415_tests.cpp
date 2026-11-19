@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "1" "9" "10"
 )cases");
 
-using t0415_add_strings = SolutionTests<Solution>;
+using t0415 = SolutionTests<Solution>;
 
-TEST_P(t0415_add_strings, Test)
+TEST_P(t0415, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t0415_add_strings, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0415_add_strings,
-    t0415_add_strings::parameters(kCases.size()),
-    t0415_add_strings::name);
+    t0415,
+    t0415::parameters(kCases.size()),
+    t0415::name);
