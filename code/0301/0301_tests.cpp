@@ -1,7 +1,7 @@
 #include <algorithm>
 
 #include "0301.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest =
@@ -18,20 +18,22 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "((((((((((abcde))))))))))" ["((((((((((abcde))))))))))"]
 )cases");
 
-class t0301 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t0301 = SolutionTests<Solution>;
 
 TEST_P(t0301, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    std::ranges::sort(expected);
-    std::ranges::sort(actual);
-    ASSERT_EQ(expected, actual);
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            auto f = [&](auto&... args)
+            {
+                return solution.removeInvalidParentheses(args...);
+            };
+            auto actual = std::apply(f, inputs);
+            std::ranges::sort(expected);
+            std::ranges::sort(actual);
+            ASSERT_EQ(expected, actual);
+        });
 }
 
 TEST(t0301Reuse, MultipleCalls)
@@ -58,6 +60,5 @@ TEST(t0301Input, Unchanged)
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0301,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0301::parameters(kCases.size()),
+    t0301::name);
