@@ -1,16 +1,30 @@
 #include "2096_step_by_step_directions_from_a_binary_tree_node_to_another.hpp"
 #include "gtest/gtest.h"
 #include "leet_code_binary_tree.hpp"
+#include "test_cases_helpers.hpp"
 
-using Tree = LeetCodeBinaryTree<TreeNode>;
+static constexpr auto kMethodToTest = &Solution::getDirections;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+[5,1,2,3,null,6,4] 3 6 "UURL"
+)cases");
 
-TEST(t2096_step_by_step_directions_from_a_binary_tree_node_to_another, test_1)
+class t2096_step_by_step_directions_from_a_binary_tree_node_to_another
+    : public ::testing::TestWithParam<size_t>
 {
-    auto tree = Tree::FromString("5,1,2,3,null,6,4");
-    constexpr int start_value = 3;
-    constexpr int dest_value = 6;
-    constexpr std::string_view expected = "UURL";
+};
 
-    Solution s{};
-    ASSERT_EQ(s.getDirections(tree.root, start_value, dest_value), expected);
+TEST_P(t2096_step_by_step_directions_from_a_binary_tree_node_to_another, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.getDirections(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
+
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t2096_step_by_step_directions_from_a_binary_tree_node_to_another,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
