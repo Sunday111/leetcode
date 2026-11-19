@@ -1,4 +1,4 @@
-#include "1758_minimum_changes_to_make_alternating_binary_stringtest_cases.hpp"
+#include "1758_test_cases.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
