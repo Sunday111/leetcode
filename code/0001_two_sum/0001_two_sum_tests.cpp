@@ -1,5 +1,5 @@
 #include "0001_two_sum.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases = parse_test_cases_with_types<
@@ -10,21 +10,21 @@ static const auto kCases = parse_test_cases_with_types<
 [3,3] 6 [0,1]
 )");
 
-class t0001_two_sum : public ::testing::TestWithParam<size_t>
-{
-};
+using t0001_two_sum = SolutionTests<Solution>;
 
 TEST_P(t0001_two_sum, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto& [nums, target] = inputs;
-    auto actual = Solution{}.twoSum(nums, target);
-    ASSERT_EQ(expected, actual);
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            auto& [nums, target] = inputs;
+            auto actual = solution.twoSum(nums, target);
+            ASSERT_EQ(expected, actual);
+        });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0001_two_sum,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0001_two_sum::parameters(kCases.size()),
+    t0001_two_sum::name);
