@@ -1,4 +1,4 @@
-#include "0868_binary_gap.hpp"
+#include "0868.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -11,9 +11,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 5 2
 )cases");
 
-using t0868_binary_gap = SolutionTests<Solution>;
+using t0868 = SolutionTests<Solution>;
 
-TEST_P(t0868_binary_gap, Test)
+TEST_P(t0868, Test)
 {
     check(
         kCases,
@@ -23,6 +23,6 @@ TEST_P(t0868_binary_gap, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0868_binary_gap,
-    t0868_binary_gap::parameters(kCases.size()),
-    t0868_binary_gap::name);
+    t0868,
+    t0868::parameters(kCases.size()),
+    t0868::name);
