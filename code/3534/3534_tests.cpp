@@ -1,5 +1,5 @@
 #include "3534.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 /*
@@ -39,23 +39,18 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [3]
 )");
 
-class t3534 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t3534 = SolutionTests<Solution>;
 
 TEST_P(t3534, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.pathExistenceQueries(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t3534,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t3534::parameters(kCases.size()),
+    t3534::name);
