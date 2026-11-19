@@ -1,5 +1,5 @@
 #include "0018_4sum.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 #include "test_utility.hpp"
 
@@ -18,22 +18,22 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [0,4,-5,2,-2,4,2,-1,4] 12 [[0,4,4,4],[2,2,4,4]]
 )");
 
-class t0018_4sum : public ::testing::TestWithParam<size_t>
-{
-};
+using t0018_4sum = SolutionTests<Solution>;
 
 TEST_P(t0018_4sum, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.fourSum(args...); },
-        inputs);
-    ASSERT_EQ(sorted(expected), sorted(actual));
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            auto actual = std::apply(
+                [&](auto&... args) { return solution.fourSum(args...); },
+                inputs);
+            ASSERT_EQ(sorted(expected), sorted(actual));
+        });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0018_4sum,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0018_4sum::parameters(kCases.size()),
+    t0018_4sum::name);
