@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0242_valid_anagram_tests)
 
 add_executable(${target_name}
-    0242_valid_anagram.hpp
-    0242_valid_anagram_tests.cpp
+    0242.hpp
+    0242_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

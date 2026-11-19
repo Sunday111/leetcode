@@ -1,4 +1,4 @@
-#include "0242_valid_anagram.hpp"
+#include "0242.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
