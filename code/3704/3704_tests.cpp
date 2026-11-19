@@ -1,4 +1,4 @@
-#include "3704_count_no_zero_pairs_that_sum_to_n.hpp"
+#include "3704.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -7,9 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 1000000000000000 50891681057058
 )cases");
 
-using t3704_count_no_zero_pairs_that_sum_to_n = SolutionTests<Solution>;
+using t3704 = SolutionTests<Solution>;
 
-TEST_P(t3704_count_no_zero_pairs_that_sum_to_n, Test)
+TEST_P(t3704, Test)
 {
     check(
         kCases,
@@ -19,6 +19,6 @@ TEST_P(t3704_count_no_zero_pairs_that_sum_to_n, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3704_count_no_zero_pairs_that_sum_to_n,
-    t3704_count_no_zero_pairs_that_sum_to_n::parameters(kCases.size()),
-    t3704_count_no_zero_pairs_that_sum_to_n::name);
+    t3704,
+    t3704::parameters(kCases.size()),
+    t3704::name);
