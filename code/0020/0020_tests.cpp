@@ -1,5 +1,5 @@
 #include "0020.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::isValid;
@@ -22,23 +22,18 @@ false
 
 )cases");
 
-class t0020 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t0020 = SolutionTests<Solution>;
 
 TEST_P(t0020, Test)
 {
-    auto [inputs, expected] = kCases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(kMethodToTest, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.isValid(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t0020,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t0020::parameters(kCases.size()),
+    t0020::name);
