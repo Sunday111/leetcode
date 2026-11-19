@@ -1,86 +1,56 @@
 #include <algorithm>
-#include <latch>
-#include <print>
-#include <random>
 #include <thread>
 
 #include "1117_building_h2o.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t1117_building_h2o, test_1)
+static const auto kCases =
+    parse_test_cases_with_types<std::tuple<std::string>, size_t>(R"cases(
+"HOH" 1
+"OOHHHH" 2
+"HHHOHO" 2
+)cases");
+
+class t1117_building_h2o : public ::testing::TestWithParam<size_t>
 {
-    constexpr size_t m = 1'000;
-
-    const auto input = []
+};
+TEST_P(t1117_building_h2o, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto& [input] = inputs;
+    std::string output(input.size(), '?');
+    std::atomic<size_t> position{0};
+    H2O water;
     {
-        const unsigned seed = std::random_device{}();
-        std::println("Generating input with seed: {}", seed);
-        std::mt19937_64 rnd{seed};
-        std::string input;
-        input.reserve(3 * m);
-        input.resize(2 * m, 'H');
-        input.resize(3 * m, 'O');
-        std::ranges::shuffle(input, rnd);
-        return input;
-    }();
-
-    std::array<uint8_t, m * 3> results{};
-    std::atomic<uint32_t> num_results = 0;
-
-    std::function release_h = [&]()
-    {
-        num_results.fetch_add(1);
-    };
-
-    std::function release_o = [&]()
-    {
-        results[num_results.fetch_add(1)] = 1;
-    };
-
-    {
-        std::println("Creating {} threads...", input.size());
-        std::latch start{static_cast<std::ptrdiff_t>(input.size()) + 1};
-        H2O s;
         std::vector<std::jthread> threads;
-
         for (char c : input)
         {
-            if (c == 'H')
-            {
-                threads.emplace_back(
-                    [&]()
+            threads.emplace_back(
+                [&, c]
+                {
+                    auto release = [&]
                     {
-                        start.arrive_and_wait();
-                        s.hydrogen(release_h);
-                    });
-            }
-            else
-            {
-                threads.emplace_back(
-                    [&]()
-                    {
-                        start.arrive_and_wait();
-                        s.oxygen(release_o);
-                    });
-            }
+                        output[position.fetch_add(1)] = c;
+                    };
+                    if (c == 'H')
+                        water.hydrogen(release);
+                    else
+                        water.oxygen(release);
+                });
         }
-
-        std::println("GO!");
-        start.arrive_and_wait();
     }
-
-    std::println("Checking results");
-    ASSERT_EQ(num_results, m * 3);
-
-    uint32_t sum = results.front();
-    for (size_t i = 1; i != results.size(); ++i)
+    ASSERT_EQ(position.load(), expected * 3);
+    for (size_t i = 0; i < output.size(); i += 3)
     {
-        if (i % 3 == 0)
-        {
-            ASSERT_EQ(sum, 1);
-            sum = 0;
-        }
-
-        sum += results[i];
+        auto molecule = output.substr(i, 3);
+        std::ranges::sort(molecule);
+        ASSERT_EQ(molecule, "HHO");
     }
 }
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t1117_building_h2o,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
