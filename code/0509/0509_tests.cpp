@@ -1,4 +1,4 @@
-#include "0509_fibonacci_number.hpp"
+#include "0509.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -15,9 +15,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 4 3
 )cases");
 
-using t0509_fibonacci_number = SolutionTests<Solution>;
+using t0509 = SolutionTests<Solution>;
 
-TEST_P(t0509_fibonacci_number, Test)
+TEST_P(t0509, Test)
 {
     check(
         kCases,
@@ -26,6 +26,6 @@ TEST_P(t0509_fibonacci_number, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0509_fibonacci_number,
-    t0509_fibonacci_number::parameters(kCases.size()),
-    t0509_fibonacci_number::name);
+    t0509,
+    t0509::parameters(kCases.size()),
+    t0509::name);
