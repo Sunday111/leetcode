@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 2246_longest_path_with_different_adjacent_characters_tests)
 
 add_executable(${target_name}
-    2246_longest_path_with_different_adjacent_characters.hpp
-    2246_longest_path_with_different_adjacent_characters_tests.cpp
+    2246.hpp
+    2246_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

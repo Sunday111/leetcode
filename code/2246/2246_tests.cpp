@@ -1,4 +1,4 @@
-#include "2246_longest_path_with_different_adjacent_characters.hpp"
+#include "2246.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
