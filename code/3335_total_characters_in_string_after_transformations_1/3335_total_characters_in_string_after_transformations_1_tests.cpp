@@ -1,29 +1,32 @@
 #include "3335_total_characters_in_string_after_transformations_1.hpp"
 #include "gtest/gtest.h"
+#include "test_cases_helpers.hpp"
 
-TEST(t3335_total_characters_in_string_after_transformations_1, test_1)
+static constexpr auto kMethodToTest = &Solution::lengthAfterTransformations;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+"abcyy" 2 7
+
+"azbk" 5 5
+)cases");
+
+class t3335_total_characters_in_string_after_transformations_1
+    : public ::testing::TestWithParam<size_t>
 {
-    std::string_view input = "abcyy";
-    constexpr unsigned t = 2;
-    constexpr int expected = 7;
-    ASSERT_EQ(Solution{}.lengthAfterTransformations(input, t), expected);
+};
+
+TEST_P(t3335_total_characters_in_string_after_transformations_1, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args)
+        { return Solution{}.lengthAfterTransformations(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t3335_total_characters_in_string_after_transformations_1, test_2)
-{
-    std::string_view input = "azbk";
-    constexpr unsigned t = 5;
-    constexpr int expected = 5;
-    ASSERT_EQ(Solution{}.lengthAfterTransformations(input, t), expected);
-}
-
-// TEST(t3335_total_characters_in_string_after_transformations_1, test_2)
-// {
-//     std::string_view input = "a";
-//     for (unsigned i = 0; i <= 1'000; i += 26)
-//     {
-//         auto a = Solution{}.lengthAfterTransformations(input, i);
-//         auto b = Solution{}.lengthAfterTransformations(input, i + 1);
-//         std::println("{:4}: {:10} -> {:10} (delta: {:10})", i, a, b, b - a);
-//     }
-// }
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t3335_total_characters_in_string_after_transformations_1,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
