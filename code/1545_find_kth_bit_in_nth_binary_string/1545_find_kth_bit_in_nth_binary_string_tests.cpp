@@ -1,5 +1,5 @@
 #include "1545_find_kth_bit_in_nth_binary_string.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::findKthBit;
@@ -27,23 +27,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 20 32944 "0"
 )cases");
 
-class t1545_find_kth_bit_in_nth_binary_string
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t1545_find_kth_bit_in_nth_binary_string = SolutionTests<Solution>;
 
 TEST_P(t1545_find_kth_bit_in_nth_binary_string, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.findKthBit(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.findKthBit(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t1545_find_kth_bit_in_nth_binary_string,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t1545_find_kth_bit_in_nth_binary_string::parameters(kCases.size()),
+    t1545_find_kth_bit_in_nth_binary_string::name);
