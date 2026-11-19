@@ -9,10 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [[2,0],[4,1],[2,3],[2,4]] [[0,1],[0,2],[0,3]] [6,5,5,6,6]
 )cases");
 
-using t3373_maximize_the_number_of_target_nodes_after_connecting_trees_2 =
-    SolutionTests<Solution>;
+using t3373 = SolutionTests<Solution>;
 
-TEST_P(t3373_maximize_the_number_of_target_nodes_after_connecting_trees_2, Test)
+TEST_P(t3373, Test)
 {
     check(
         kCases,
@@ -22,7 +21,6 @@ TEST_P(t3373_maximize_the_number_of_target_nodes_after_connecting_trees_2, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3373_maximize_the_number_of_target_nodes_after_connecting_trees_2,
-    t3373_maximize_the_number_of_target_nodes_after_connecting_trees_2::
-        parameters(kCases.size()),
-    t3373_maximize_the_number_of_target_nodes_after_connecting_trees_2::name);
+    t3373,
+    t3373::parameters(kCases.size()),
+    t3373::name);
