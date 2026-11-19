@@ -1,4 +1,4 @@
-#include "0696_count_binary_substrings.hpp"
+#include "0696.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -7,9 +7,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "00110011" 6
 )cases");
 
-using t0696_count_binary_substrings = SolutionTests<Solution>;
+using t0696 = SolutionTests<Solution>;
 
-TEST_P(t0696_count_binary_substrings, Test)
+TEST_P(t0696, Test)
 {
     check(
         kCases,
@@ -19,6 +19,6 @@ TEST_P(t0696_count_binary_substrings, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0696_count_binary_substrings,
-    t0696_count_binary_substrings::parameters(kCases.size()),
-    t0696_count_binary_substrings::name);
+    t0696,
+    t0696::parameters(kCases.size()),
+    t0696::name);
