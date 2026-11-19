@@ -21,9 +21,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [0,3,97,102,200] 300 300
 )");
 
-using t0016_3sum_closest = SolutionTests<Solution>;
+using t0016 = SolutionTests<Solution>;
 
-TEST_P(t0016_3sum_closest, Test)
+TEST_P(t0016, Test)
 {
     check(
         kCases,
@@ -33,6 +33,6 @@ TEST_P(t0016_3sum_closest, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0016_3sum_closest,
-    t0016_3sum_closest::parameters(kCases.size()),
-    t0016_3sum_closest::name);
+    t0016,
+    t0016::parameters(kCases.size()),
+    t0016::name);
