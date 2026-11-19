@@ -1,4 +1,4 @@
-#include "2071_maximum_number_of_tasks_you_can_assign.hpp"
+#include "2071.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -10,8 +10,8 @@ static const auto kCases = parse_test_cases_with_types<
 [1,2,3] [0,3,3] 1 1 3
 )cases");
 
-using t2071_maximum_number_of_tasks_you_can_assign = SolutionTests<Solution>;
-TEST_P(t2071_maximum_number_of_tasks_you_can_assign, Test)
+using t2071 = SolutionTests<Solution>;
+TEST_P(t2071, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -24,6 +24,6 @@ TEST_P(t2071_maximum_number_of_tasks_you_can_assign, Test)
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2071_maximum_number_of_tasks_you_can_assign,
-    t2071_maximum_number_of_tasks_you_can_assign::parameters(kCases.size()),
-    t2071_maximum_number_of_tasks_you_can_assign::name);
+    t2071,
+    t2071::parameters(kCases.size()),
+    t2071::name);
