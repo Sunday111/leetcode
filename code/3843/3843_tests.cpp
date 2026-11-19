@@ -1,4 +1,4 @@
-#include "3843_first_element_with_unique_frequency.hpp"
+#include "3843.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -11,9 +11,9 @@ static const auto kCases =
 [10,10,20,20] -1
 )cases");
 
-using t3843_first_element_with_unique_frequency = SolutionTests<Solution>;
+using t3843 = SolutionTests<Solution>;
 
-TEST_P(t3843_first_element_with_unique_frequency, Test)
+TEST_P(t3843, Test)
 {
     check(
         kCases,
@@ -23,6 +23,6 @@ TEST_P(t3843_first_element_with_unique_frequency, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3843_first_element_with_unique_frequency,
-    t3843_first_element_with_unique_frequency::parameters(kCases.size()),
-    t3843_first_element_with_unique_frequency::name);
+    t3843,
+    t3843::parameters(kCases.size()),
+    t3843::name);
