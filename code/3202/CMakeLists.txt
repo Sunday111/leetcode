@@ -2,14 +2,14 @@ cmake_minimum_required(VERSION 3.25)
 
 include(set_compiler_options)
 
-set(target_name 3202_find_the_maximum_length_of_valid_subsequence_2)
+set(target_name 3202)
 set(tests_target_name ${target_name}_tests)
 
-add_library(${target_name} INTERFACE 3202.hpp)
+add_library(${target_name} INTERFACE ${target_name}.hpp)
 set_generic_compiler_options(${target_name} INTERFACE)
 target_link_libraries(${target_name} INTERFACE lc_templates)
 
-add_executable(${tests_target_name} 3202_tests.cpp)
+add_executable(${tests_target_name} ${target_name}_tests.cpp)
 
 target_link_libraries(${tests_target_name} PUBLIC ${target_name} test_utility)
 
