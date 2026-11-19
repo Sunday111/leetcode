@@ -1,6 +1,6 @@
 #include "2106_maximum_fruits_harvested_after_at_most_k_steps.hpp"
-#include "gtest/gtest.h"
 #include "integral_aliases.hpp"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static const auto kCases = parse_test_cases_with_types<
@@ -12,19 +12,20 @@ static const auto kCases = parse_test_cases_with_types<
 [[0,10000]] 200000 200000 10000
 )cases");
 
-class t2106_maximum_fruits_harvested_after_at_most_k_steps
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t2106_maximum_fruits_harvested_after_at_most_k_steps =
+    SolutionTests<Solution>;
 TEST_P(t2106_maximum_fruits_harvested_after_at_most_k_steps, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto& [fruits, start, k] = inputs;
-    ASSERT_EQ(expected, Solution{}.maxTotalFruits(fruits, start, k));
+    run(kCases,
+        [](auto& solution, auto& inputs, auto& expected)
+        {
+            auto& [fruits, start, k] = inputs;
+            ASSERT_EQ(expected, solution.maxTotalFruits(fruits, start, k));
+        });
 }
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2106_maximum_fruits_harvested_after_at_most_k_steps,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2106_maximum_fruits_harvested_after_at_most_k_steps::parameters(
+        kCases.size()),
+    t2106_maximum_fruits_harvested_after_at_most_k_steps::name);
