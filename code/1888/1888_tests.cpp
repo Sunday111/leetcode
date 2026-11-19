@@ -1,12 +1,23 @@
-#include "1888_test_cases.hpp"
+#include "1888.hpp"
 #include "solution_tests.hpp"
+#include "test_cases_helpers.hpp"
 
-using t1888_minimum_number_of_flips_to_make_the_binary_string_alternating =
-    SolutionTests<Solution>;
+inline static constexpr auto kMethodToTest = &Solution::minFlips;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+"111000"
+2
 
-TEST_P(
-    t1888_minimum_number_of_flips_to_make_the_binary_string_alternating,
-    MinOperations)
+"010"
+0
+
+"1110"
+1
+
+)");
+
+using t1888 = SolutionTests<Solution>;
+
+TEST_P(t1888, MinOperations)
 {
     check(
         kCases,
@@ -16,7 +27,6 @@ TEST_P(
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1888_minimum_number_of_flips_to_make_the_binary_string_alternating,
-    t1888_minimum_number_of_flips_to_make_the_binary_string_alternating::
-        parameters(kCases.size()),
-    t1888_minimum_number_of_flips_to_make_the_binary_string_alternating::name);
+    t1888,
+    t1888::parameters(kCases.size()),
+    t1888::name);
