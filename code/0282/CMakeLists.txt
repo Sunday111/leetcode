@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0282_expression_add_operators_tests)
 
 add_executable(${target_name}
-    0282_expression_add_operators.hpp
-    0282_expression_add_operators_tests.cpp
+    0282.hpp
+    0282_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

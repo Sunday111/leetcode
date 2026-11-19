@@ -1,6 +1,6 @@
 #include <algorithm>
 
-#include "0282_expression_add_operators.hpp"
+#include "0282.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
