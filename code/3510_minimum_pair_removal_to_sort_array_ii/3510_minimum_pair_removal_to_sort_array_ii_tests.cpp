@@ -1,5 +1,5 @@
 #include "3510_minimum_pair_removal_to_sort_array_ii.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 static constexpr auto kMethodToTest = &Solution::minimumPairRemoval;
@@ -15,23 +15,18 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [3,6,-9,6,3,-4] 4
 )cases");
 
-class t3510_minimum_pair_removal_to_sort_array_ii
-    : public ::testing::TestWithParam<size_t>
-{
-};
+using t3510_minimum_pair_removal_to_sort_array_ii = SolutionTests<Solution>;
 
 TEST_P(t3510_minimum_pair_removal_to_sort_array_ii, Test)
 {
-    auto [inputs, expected] = kCases.at(GetParam());
-    auto actual = std::apply(
-        [](auto&... args) { return Solution{}.minimumPairRemoval(args...); },
-        inputs);
-    ASSERT_EQ(expected, actual);
+    check(
+        kCases,
+        [](auto& solution, auto&... args)
+        { return solution.minimumPairRemoval(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t3510_minimum_pair_removal_to_sort_array_ii,
-    ::testing::Range(size_t{0}, kCases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t3510_minimum_pair_removal_to_sort_array_ii::parameters(kCases.size()),
+    t3510_minimum_pair_removal_to_sort_array_ii::name);
