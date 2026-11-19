@@ -1,4 +1,4 @@
-#include "3798_largest_even_number.hpp"
+#include "3798.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "111" ""
 )cases");
 
-using t3798_largest_even_number = SolutionTests<Solution>;
+using t3798 = SolutionTests<Solution>;
 
-TEST_P(t3798_largest_even_number, Test)
+TEST_P(t3798, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t3798_largest_even_number, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3798_largest_even_number,
-    t3798_largest_even_number::parameters(kCases.size()),
-    t3798_largest_even_number::name);
+    t3798,
+    t3798::parameters(kCases.size()),
+    t3798::name);
