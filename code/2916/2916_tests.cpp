@@ -1,6 +1,6 @@
 #include "2916.hpp"
 #include "2916_segment_tree.hpp"
-#include "gtest/gtest.h"
+#include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto k_method_to_test = &Solution::sumCounts;
@@ -161,28 +161,18 @@ TEST(SegmentTree2916, RangeAssignment)
     EXPECT_EQ(tree.root().sum, 9u);
 }
 
-class t2916 : public ::testing::TestWithParam<size_t>
-{
-public:
-};
+using t2916 = SolutionTests<Solution, SegmentTreeSolution>;
 
 TEST_P(t2916, Test)
 {
-    auto [inputs, expected] = k_cases[GetParam()];
-    Solution instance{};
-    auto f = std::bind_front(k_method_to_test, &instance);
-    auto actual = std::apply(f, inputs);
-    ASSERT_EQ(expected, actual);
-
-    SegmentTreeSolution reference;
-    auto reference_f =
-        std::bind_front(&SegmentTreeSolution::sumCounts, &reference);
-    EXPECT_EQ(expected, std::apply(reference_f, inputs));
+    check(
+        k_cases,
+        [](auto& solution, auto&... args)
+        { return solution.sumCounts(args...); });
 }
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
     t2916,
-    ::testing::Range(size_t{0}, k_cases.size()),
-    [](const testing::TestParamInfo<size_t>& info)
-    { return "C" + std::to_string(info.index); });
+    t2916::parameters(k_cases.size()),
+    t2916::name);
