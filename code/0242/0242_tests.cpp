@@ -9,9 +9,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "rat" "car" false
 )cases");
 
-using t0242_valid_anagram = SolutionTests<Solution>;
+using t0242 = SolutionTests<Solution>;
 
-TEST_P(t0242_valid_anagram, Test)
+TEST_P(t0242, Test)
 {
     check(
         kCases,
@@ -21,6 +21,6 @@ TEST_P(t0242_valid_anagram, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0242_valid_anagram,
-    t0242_valid_anagram::parameters(kCases.size()),
-    t0242_valid_anagram::name);
+    t0242,
+    t0242::parameters(kCases.size()),
+    t0242::name);
