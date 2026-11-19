@@ -13,10 +13,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "00110" 2 true
 )cases");
 
-using t1461_check_if_a_string_contains_all_binary_codes_of_size_k =
-    SolutionTests<Solution>;
+using t1461 = SolutionTests<Solution>;
 
-TEST_P(t1461_check_if_a_string_contains_all_binary_codes_of_size_k, Test)
+TEST_P(t1461, Test)
 {
     check(
         kCases,
@@ -26,7 +25,6 @@ TEST_P(t1461_check_if_a_string_contains_all_binary_codes_of_size_k, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1461_check_if_a_string_contains_all_binary_codes_of_size_k,
-    t1461_check_if_a_string_contains_all_binary_codes_of_size_k::parameters(
-        kCases.size()),
-    t1461_check_if_a_string_contains_all_binary_codes_of_size_k::name);
+    t1461,
+    t1461::parameters(kCases.size()),
+    t1461::name);
