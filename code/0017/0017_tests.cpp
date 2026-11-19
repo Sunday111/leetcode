@@ -8,9 +8,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 "23" ["ad","ae","af","bd","be","bf","cd","ce","cf"]
 )");
 
-using t0017_letter_combinations_of_a_phone_number = SolutionTests<Solution>;
+using t0017 = SolutionTests<Solution>;
 
-TEST_P(t0017_letter_combinations_of_a_phone_number, Test)
+TEST_P(t0017, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -25,6 +25,6 @@ TEST_P(t0017_letter_combinations_of_a_phone_number, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0017_letter_combinations_of_a_phone_number,
-    t0017_letter_combinations_of_a_phone_number::parameters(kCases.size()),
-    t0017_letter_combinations_of_a_phone_number::name);
+    t0017,
+    t0017::parameters(kCases.size()),
+    t0017::name);
