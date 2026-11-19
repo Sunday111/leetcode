@@ -1,4 +1,4 @@
-#include "3715_sum_of_perfect_ancestors.hpp"
+#include "3715.hpp"
 #include "parse_2d_array.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
@@ -12,9 +12,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 4 [[0,1],[0,2],[1,3]] [1,2,9,4] 2
 )cases");
 
-using t3715_sum_of_perfect_ancestors = SolutionTests<Solution>;
+using t3715 = SolutionTests<Solution>;
 
-TEST_P(t3715_sum_of_perfect_ancestors, Test)
+TEST_P(t3715, Test)
 {
     check(
         kCases,
@@ -24,6 +24,6 @@ TEST_P(t3715_sum_of_perfect_ancestors, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3715_sum_of_perfect_ancestors,
-    t3715_sum_of_perfect_ancestors::parameters(kCases.size()),
-    t3715_sum_of_perfect_ancestors::name);
+    t3715,
+    t3715::parameters(kCases.size()),
+    t3715::name);
