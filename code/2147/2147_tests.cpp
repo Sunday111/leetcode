@@ -1,4 +1,4 @@
-#include "2147_number_of_ways_to_divide_a_long_corridor.hpp"
+#include "2147.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -13,9 +13,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "P" 0
 )cases");
 
-using t2147_number_of_ways_to_divide_a_long_corridor = SolutionTests<Solution>;
+using t2147 = SolutionTests<Solution>;
 
-TEST_P(t2147_number_of_ways_to_divide_a_long_corridor, Test)
+TEST_P(t2147, Test)
 {
     check(
         kCases,
@@ -25,6 +25,6 @@ TEST_P(t2147_number_of_ways_to_divide_a_long_corridor, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t2147_number_of_ways_to_divide_a_long_corridor,
-    t2147_number_of_ways_to_divide_a_long_corridor::parameters(kCases.size()),
-    t2147_number_of_ways_to_divide_a_long_corridor::name);
+    t2147,
+    t2147::parameters(kCases.size()),
+    t2147::name);
