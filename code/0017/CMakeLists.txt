@@ -5,8 +5,8 @@ include(set_compiler_options)
 set(target_name 0017_letter_combinations_of_a_phone_number_tests)
 
 add_executable(${target_name}
-    0017_letter_combinations_of_a_phone_number.hpp
-    0017_letter_combinations_of_a_phone_number_tests.cpp
+    0017.hpp
+    0017_tests.cpp
 )
 
 target_link_libraries(${target_name} PUBLIC test_utility)

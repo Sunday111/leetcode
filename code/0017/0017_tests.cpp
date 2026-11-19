@@ -1,4 +1,4 @@
-#include "0017_letter_combinations_of_a_phone_number.hpp"
+#include "0017.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 #include "test_utility.hpp"
