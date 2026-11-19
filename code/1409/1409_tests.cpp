@@ -3,7 +3,7 @@
 #include <numeric>
 #include <vector>
 
-#include "1409_queries_on_a_permutation_with_key.hpp"
+#include "1409.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -14,9 +14,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 [4,4,4,4] 4 [3,0,0,0]
 )cases");
 
-using t1409_queries_on_a_permutation_with_key = SolutionTests<Solution>;
+using t1409 = SolutionTests<Solution>;
 
-TEST_P(t1409_queries_on_a_permutation_with_key, Test)
+TEST_P(t1409, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -32,6 +32,6 @@ TEST_P(t1409_queries_on_a_permutation_with_key, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1409_queries_on_a_permutation_with_key,
-    t1409_queries_on_a_permutation_with_key::parameters(kCases.size()),
-    t1409_queries_on_a_permutation_with_key::name);
+    t1409,
+    t1409::parameters(kCases.size()),
+    t1409::name);
