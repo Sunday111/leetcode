@@ -1,51 +1,30 @@
 #include "3495_minimum_operations_to_make_array_zero.hpp"
 #include "gtest/gtest.h"
 #include "parse_2d_array.hpp"
+#include "test_cases_helpers.hpp"
 
-[[nodiscard]] constexpr u8 count_divisions_simple(u32 x) noexcept
+static constexpr auto kMethodToTest = &Solution::minOperations;
+static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
+[[1,2],[2,4]] 3
+)cases");
+
+class t3495_minimum_operations_to_make_array_zero
+    : public ::testing::TestWithParam<size_t>
 {
-    u8 r = 0;
-    while (x) ++r, x /= 4;
-    return r;
+};
+
+TEST_P(t3495_minimum_operations_to_make_array_zero, Test)
+{
+    auto [inputs, expected] = kCases.at(GetParam());
+    auto actual = std::apply(
+        [](auto&... args) { return Solution{}.minOperations(args...); },
+        inputs);
+    ASSERT_EQ(expected, actual);
 }
 
-TEST(t3495_minimum_operations_to_make_array_zero, test_sandbox)
-{
-    // u32 begin = 0;
-    u8 prev_r = 0;
-    constexpr u32 max_x = 1'000'000;
-
-    auto print_line = [&]([[maybe_unused]] u32 x)
-    {
-        // std::println(
-        //     "[{:10}, {:10}): {:3} | [{:32b}, {:32b}) | [{:2}:{:2})",
-        //     begin,
-        //     x,
-        //     prev_r,
-        //     begin,
-        //     x,
-        //     16 - std::countl_zero(begin) / 2,
-        //     16 - std::countl_zero(x) / 2);
-    };
-
-    for (u32 x = 1; x != max_x; ++x)
-    {
-        auto expected = count_divisions_simple(x);
-        if (expected != prev_r)
-        {
-            print_line(x);
-            // begin = x;
-            prev_r = expected;
-        }
-        u8 actual = num_divs(x);
-        ASSERT_EQ(+expected, +actual) << "x = " << x;
-    }
-
-    // print_line(max_x);
-}
-
-TEST(t3495_minimum_operations_to_make_array_zero, test_1)
-{
-    std::vector<std::vector<int>> queries = parse2DArray("[[1,2],[2,4]]");
-    ASSERT_EQ(Solution{}.minOperations(queries), 3);
-}
+INSTANTIATE_TEST_SUITE_P(
+    Gen,
+    t3495_minimum_operations_to_make_array_zero,
+    ::testing::Range(size_t{0}, kCases.size()),
+    [](const testing::TestParamInfo<size_t>& info)
+    { return "C" + std::to_string(info.index); });
