@@ -1,12 +1,21 @@
-#include "1582_test_cases.hpp"
+#include "1582.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
-inline static const auto kCases = parse_test_cases<kMethodToTest>(kTestCases);
+inline static constexpr auto kMethodToTest = &Solution::numSpecial;
 
-using t1582_special_positions_in_a_binary_matrix = SolutionTests<Solution>;
+inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
+[[1,0,0],[0,0,1],[1,0,0]]
+1
 
-TEST_P(t1582_special_positions_in_a_binary_matrix, MinOperations)
+[[1,0,0],[0,1,0],[0,0,1]]
+3
+
+)");
+
+using t1582 = SolutionTests<Solution>;
+
+TEST_P(t1582, MinOperations)
 {
     check(
         kCases,
@@ -16,6 +25,6 @@ TEST_P(t1582_special_positions_in_a_binary_matrix, MinOperations)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t1582_special_positions_in_a_binary_matrix,
-    t1582_special_positions_in_a_binary_matrix::parameters(kCases.size()),
-    t1582_special_positions_in_a_binary_matrix::name);
+    t1582,
+    t1582::parameters(kCases.size()),
+    t1582::name);
