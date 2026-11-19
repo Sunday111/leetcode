@@ -1,4 +1,4 @@
-#include "0324_wiggle_sort_2.hpp"
+#include "0324.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -10,9 +10,9 @@ static const auto kCases =
 [1,3,2,2,3,1] [2,3,1,3,1,2]
 )cases");
 
-using t0324_wiggle_sort_2 = SolutionTests<Solution>;
+using t0324 = SolutionTests<Solution>;
 
-TEST_P(t0324_wiggle_sort_2, Test)
+TEST_P(t0324, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -27,6 +27,6 @@ TEST_P(t0324_wiggle_sort_2, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0324_wiggle_sort_2,
-    t0324_wiggle_sort_2::parameters(kCases.size()),
-    t0324_wiggle_sort_2::name);
+    t0324,
+    t0324::parameters(kCases.size()),
+    t0324::name);
