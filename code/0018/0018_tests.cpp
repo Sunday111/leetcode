@@ -18,9 +18,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 [0,4,-5,2,-2,4,2,-1,4] 12 [[0,4,4,4],[2,2,4,4]]
 )");
 
-using t0018_4sum = SolutionTests<Solution>;
+using t0018 = SolutionTests<Solution>;
 
-TEST_P(t0018_4sum, Test)
+TEST_P(t0018, Test)
 {
     run(kCases,
         [](auto& solution, auto& inputs, auto& expected)
@@ -34,6 +34,6 @@ TEST_P(t0018_4sum, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t0018_4sum,
-    t0018_4sum::parameters(kCases.size()),
-    t0018_4sum::name);
+    t0018,
+    t0018::parameters(kCases.size()),
+    t0018::name);
