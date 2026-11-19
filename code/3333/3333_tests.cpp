@@ -1,4 +1,4 @@
-#include "3333_find_the_original_typed_string_2.hpp"
+#include "3333.hpp"
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
@@ -11,9 +11,9 @@ static const auto kCases = parse_test_cases<kMethodToTest>(R"cases(
 "d" 1 1
 )cases");
 
-using t3333_find_the_original_typed_string_2 = SolutionTests<Solution>;
+using t3333 = SolutionTests<Solution>;
 
-TEST_P(t3333_find_the_original_typed_string_2, Test)
+TEST_P(t3333, Test)
 {
     check(
         kCases,
@@ -23,6 +23,6 @@ TEST_P(t3333_find_the_original_typed_string_2, Test)
 
 INSTANTIATE_TEST_SUITE_P(
     Gen,
-    t3333_find_the_original_typed_string_2,
-    t3333_find_the_original_typed_string_2::parameters(kCases.size()),
-    t3333_find_the_original_typed_string_2::name);
+    t3333,
+    t3333::parameters(kCases.size()),
+    t3333::name);
