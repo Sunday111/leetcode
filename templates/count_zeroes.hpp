@@ -2,7 +2,7 @@
 
 #include "integral_aliases.hpp"
 
-u64 count_numbers_with_zeroes(u64 n)
+inline u64 count_numbers_with_zeroes(u64 n)
 {
     if (n <= 0) return 0;
 

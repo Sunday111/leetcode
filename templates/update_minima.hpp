@@ -4,7 +4,7 @@
 
 #include "swap_if_greater.hpp"
 
-template <std::integral Int, size_t n>
+template <std::integral Int, std::size_t n>
 [[gnu::always_inline]] inline static constexpr void update_minima(
     Int x,
     std::array<Int, n>& vals) noexcept

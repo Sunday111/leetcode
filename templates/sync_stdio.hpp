@@ -1,5 +1,10 @@
+#pragma once
+
 #ifndef LC_LOCAL_BUILD
-auto init = []()
+
+#include <iostream>
+
+inline auto init = []()
 {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);

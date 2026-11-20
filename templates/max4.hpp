@@ -1,3 +1,5 @@
+#pragma once
+
 #include "max2.hpp"
 
 inline static constexpr auto max4 =

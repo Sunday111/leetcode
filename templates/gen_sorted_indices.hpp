@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <concepts>
+#include <functional>
 #include <ranges>
 
 template <

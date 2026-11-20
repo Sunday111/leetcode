@@ -1,3 +1,5 @@
+#pragma once
+
 #include "min2.hpp"
 
 inline static constexpr auto min4 =

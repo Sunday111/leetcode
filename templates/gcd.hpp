@@ -4,6 +4,7 @@
 #include <cstdlib>
 
 #include "integral_aliases.hpp"
+#include "signed_integral_aliases.hpp"
 
 [[nodiscard, gnu::always_inline]] inline static constexpr u32 gcd(
     u32 u,
