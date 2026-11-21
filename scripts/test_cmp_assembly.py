@@ -18,14 +18,15 @@ class AssemblyComparisonTests(unittest.TestCase):
         self.addCleanup(self.directory.cleanup)
         self.root = Path(self.directory.name)
 
-    def compare(self, left, right, *, suffix=".s", function="first", options=()):
+    def compare(self, left, right, *, suffix=".s", function="first",
+                right_function=None, options=()):
         paths = [self.root / f"{name} source{suffix}" for name in ("left", "right")]
         for path, source in zip(paths, (left, right)):
             path.write_text(source, encoding="utf-8")
         stdout, stderr = io.StringIO(), io.StringIO()
         with redirect_stdout(stdout), redirect_stderr(stderr):
             status = cmp_assembly.main([
-                *([function] if function else []), *map(str, paths), *options])
+                f"{paths[0]}:{function}", f"{paths[1]}:{right_function or function}", *options])
         return status, stdout.getvalue(), stderr.getvalue()
 
     def test_identical_raw_function_ignores_neighbouring_functions(self):
@@ -34,6 +35,38 @@ class AssemblyComparisonTests(unittest.TestCase):
             options=["--no-filter-metadata", "--no-demangle"])
         self.assertEqual(status, 0, error)
         self.assertEqual(output, symbol_body(ASSEMBLY, "first"))
+
+    def test_target_parser_preserves_scopes_templates_and_spaces(self):
+        self.assertEqual(cmp_assembly.parse_target("dir with spaces/file.hpp:ns::Solution<int>::solve"),
+                         (Path("dir with spaces/file.hpp"), "ns::Solution<int>::solve"))
+        self.assertEqual(cmp_assembly.parse_target("file.s:_Z4picki"),
+                         (Path("file.s"), "_Z4picki"))
+
+    def test_invalid_target_arguments_report_usage_errors(self):
+        for bad in ("file.hpp", ":Solution::solve", "file.hpp:", "file.hpp: "):
+            with self.subTest(bad=bad), redirect_stderr(io.StringIO()) as error:
+                with self.assertRaises(SystemExit) as stopped:
+                    cmp_assembly.main([bad, "other.hpp:Solution::solve"])
+                self.assertEqual(stopped.exception.code, 2)
+                self.assertIn("expected SOURCE:FUNCTION", error.getvalue())
+
+    def test_selects_separate_symbols_from_assembly_inputs(self):
+        status, output, error = self.compare(
+            ASSEMBLY, ASSEMBLY, right_function="second",
+            options=["--no-filter-metadata", "--no-demangle"])
+        self.assertEqual(status, 1, error)
+        self.assertIn("left source.s:first", output)
+        self.assertIn("right source.s:second", output)
+        self.assertIn("-first:", output)
+        self.assertIn("+second:", output)
+
+    def test_address_override_is_rejected_for_assembly_input(self):
+        for option in ("--left-address", "--right-address"):
+            with self.subTest(option=option), redirect_stderr(io.StringIO()) as error:
+                with self.assertRaises(SystemExit) as stopped:
+                    cmp_assembly.main(["left.s:first", "right.s:second", option, "&f"])
+                self.assertEqual(stopped.exception.code, 2)
+                self.assertIn("not an address expression", error.getvalue())
 
     def test_raw_difference_has_source_names_and_changed_instruction(self):
         status, output, error = self.compare(
@@ -157,12 +190,28 @@ class AssemblyComparisonTests(unittest.TestCase):
     @unittest.skipUnless(all(shutil.which(tool) for tool in
                             ("clang++", "llvm-objdump", "llvm-cxxfilt")),
                          "Clang and LLVM tools are required")
+    def test_separate_class_and_method_names_select_member_and_static_functions(self):
+        status, output, error = self.compare(
+            "struct First { int solve(int x) const { return x+1; } };",
+            "struct Second { static int calculate(int x) { return x+7; } };",
+            suffix=".hpp", function="First::solve", right_function="Second::calculate",
+            options=["--no-asan"])
+        self.assertEqual(status, 1, error)
+        self.assertIn("left source.hpp:First::solve", output)
+        self.assertIn("right source.hpp:Second::calculate", output)
+        self.assertIn("First::solve(int) const", output)
+        self.assertIn("Second::calculate(int)", output)
+
+    @unittest.skipUnless(all(shutil.which(tool) for tool in
+                            ("clang++", "llvm-objdump", "llvm-cxxfilt")),
+                         "Clang and LLVM tools are required")
     def test_explicit_overload_address_and_shared_compiler_options(self):
         source = ("inline int pick(int x) {return x+1;} "
                   "inline double pick(double x) {return x+2;}")
         status, output, error = self.compare(
-            source, source, suffix=".hpp", function=None,
-            options=["--address", "static_cast<int (*)(int)>(&pick)",
+            source, source, suffix=".hpp", function="pick",
+            options=["--left-address", "static_cast<int (*)(int)>(&pick)",
+                     "--right-address", "static_cast<int (*)(int)>(&pick)",
                      "--no-asan", "--no-demangle", "--opt=O3",
                      "--flag=-mtune=native"])
         self.assertEqual(status, 0, error + output)

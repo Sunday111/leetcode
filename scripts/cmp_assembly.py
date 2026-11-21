@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare one function's assembly from two sources using matching build settings."""
+"""Compare two SOURCE:FUNCTION targets using matching build settings."""
 
 import argparse
 import difflib
@@ -12,6 +12,13 @@ from print_assembly import (
     add_assembly_options, color_enabled, read_function, render_function, write_output,
 )
 from assembly_types import shorten_common_types
+
+
+def parse_target(value: str) -> tuple[Path, str]:
+    source, separator, function = value.partition(":")
+    if not separator or not source or not function.strip():
+        raise argparse.ArgumentTypeError("expected SOURCE:FUNCTION, e.g. solution.hpp:Solution::solve")
+    return Path(source), function.strip()
 
 
 def write_difference(difference: str, *, color="auto", side_by_side=True) -> None:
@@ -30,23 +37,26 @@ def main(argv=None) -> int:
         epilog="Exit status: 0 = identical displayed bodies, 1 = differences, "
                "2 = error. Compares the selected function, not its callees or "
                "referenced constant pools.")
-    parser.add_argument("function", nargs="?", help="qualified C++ name; "
-                        "for .s inputs, an exact mangled symbol")
-    parser.add_argument("left", type=Path, help="first C++ source/header or .s file")
-    parser.add_argument("right", type=Path, help="second C++ source/header or .s file")
+    parser.add_argument("left", type=parse_target, metavar="SOURCE:FUNCTION",
+                        help="first source/header and qualified function; .s files use mangled symbols")
+    parser.add_argument("right", type=parse_target, metavar="SOURCE:FUNCTION",
+                        help="second source/header and qualified function; .s files use mangled symbols")
+    parser.add_argument("--left-address", help="function-pointer expression resolving the left overload")
+    parser.add_argument("--right-address", help="function-pointer expression resolving the right overload")
     parser.add_argument("--side-by-side", action=argparse.BooleanOptionalAction, default=True,
                         help="show terminal diffs with delta --side-by-side when installed "
                              "(enabled by default)")
-    add_assembly_options(parser)
+    add_assembly_options(parser, include_address=False)
     args = parser.parse_args(argv)
-    if bool(args.function) == bool(args.address):
-        parser.error("provide either FUNCTION or --address")
-    if args.address and any(p.suffix == ".s" for p in (args.left, args.right)):
-        parser.error(".s input requires a mangled FUNCTION symbol")
+    targets = ((args.left, args.left_address), (args.right, args.right_address))
+    for (source, _), address in targets:
+        if source.suffix == ".s" and address:
+            parser.error(".s input requires a mangled FUNCTION symbol, not an address expression")
     try:
         bodies = []
-        for source in (args.left, args.right):
-            assembly, symbol = read_function(source, args)
+        for (source, function), address in targets:
+            selection = argparse.Namespace(**vars(args), function=function, address=address)
+            assembly, symbol = read_function(source, selection)
             bodies.append(render_function(assembly, symbol, args))
         displayed = ([shorten_common_types(body) for body in bodies]
                      if args.demangle and args.filter_types else bodies)
@@ -66,7 +76,8 @@ def main(argv=None) -> int:
         difference = "".join(difflib.unified_diff(
             displayed[0].splitlines(keepends=True),
             displayed[1].splitlines(keepends=True),
-            fromfile=str(args.left), tofile=str(args.right)))
+            fromfile=f"{args.left[0]}:{args.left[1]}",
+            tofile=f"{args.right[0]}:{args.right[1]}"))
         write_difference(difference, color=args.color, side_by_side=args.side_by_side)
         return 1
     except (OSError, ValueError) as error:

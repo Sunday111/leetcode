@@ -135,10 +135,11 @@ def disassemble_assembly(assembly: str, symbol: str, *, compiler="clang++",
         return result.stdout
 
 
-def add_assembly_options(parser: argparse.ArgumentParser) -> None:
+def add_assembly_options(parser: argparse.ArgumentParser, *, include_address=True) -> None:
     """Shared compilation and display options for printing and comparing."""
-    parser.add_argument("--address", help="complete C++ function-pointer expression "
-                        "instead of FUNCTION, e.g. a static_cast resolving an overload")
+    if include_address:
+        parser.add_argument("--address", help="complete C++ function-pointer expression "
+                            "instead of FUNCTION, e.g. a static_cast resolving an overload")
     parser.add_argument("--compiler", default="clang++")
     parser.add_argument("--ccache", action=argparse.BooleanOptionalAction, default=True,
                         help="use ccache when installed (enabled by default)")
