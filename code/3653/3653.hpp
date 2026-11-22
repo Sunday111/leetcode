@@ -123,9 +123,9 @@ public:
         return std::ranges::fold_left(nums, 0, std::bit_xor{});
     }
 
-    [[nodiscard]] int xorAfterQueries(
+    [[nodiscard]] static int xorAfterQueries(
         std::vector<int>& nums,
-        std::vector<std::vector<int>>& queries) const noexcept
+        std::vector<std::vector<int>>& queries) noexcept
     {
         return static_cast<int>(xorAfterQueriesImpl(
             reinterpret_cast<std::vector<u32>&>(nums),

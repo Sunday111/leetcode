@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] int minSwaps(std::vector<std::vector<int>>& grid) noexcept
+    [[nodiscard]] static int minSwaps(std::vector<std::vector<int>>& grid) noexcept
     {
         u8 n = grid.size() & 0xFF;
         u16 ans = 0;

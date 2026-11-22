@@ -99,8 +99,8 @@ public:
         return i + 1;
     }
 
-    std::vector<std::string> braceExpansionII(
-        const std::string& e) const noexcept
+    static std::vector<std::string> braceExpansionII(
+        const std::string& e) noexcept
     {
         Set words(&pool);
         [[maybe_unused]] auto t = expand_inner(e, '\0', words);

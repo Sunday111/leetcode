@@ -4,7 +4,7 @@
 class Solution
 {
 public:
-    int getCommon(const std::vector<int>& a0, const std::vector<int>& a1)
+    static int getCommon(const std::vector<int>& a0, const std::vector<int>& a1)
     {
         using It = decltype(begin(a0));
         It b[2]{begin(a0), begin(a1)};

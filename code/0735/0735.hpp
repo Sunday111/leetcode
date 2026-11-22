@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    std::vector<int> asteroidCollision(std::vector<int>& asteroids)
+    static std::vector<int> asteroidCollision(std::vector<int>& asteroids)
     {
         int last_r = -1;
 

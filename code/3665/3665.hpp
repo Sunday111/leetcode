@@ -10,7 +10,7 @@ public:
     inline static constexpr u32 kMod = 1'000'000'007;
 
     [[nodiscard, gnu::no_sanitize_address, gnu::flatten]]
-    u32 uniquePaths(const std::vector<std::vector<int>>& g) const noexcept
+    static u32 uniquePaths(const std::vector<std::vector<int>>& g) noexcept
     {
         const u32 w1 = 1u + g[0].size() & ~u32{};
 

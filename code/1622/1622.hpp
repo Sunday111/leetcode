@@ -27,9 +27,9 @@ public:
         nums[n++] = (ModInt{static_cast<u32>(v)} - add) * inv_mul;
     }
 
-    void addAll(int v) noexcept { add += {static_cast<u32>(v)}; }
+    static void addAll(int v) noexcept { add += {static_cast<u32>(v)}; }
 
-    void multAll(int v) noexcept
+    static void multAll(int v) noexcept
     {
         ModInt x{static_cast<u32>(v)};
         mul *= x, add *= x;

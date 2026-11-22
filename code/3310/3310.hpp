@@ -108,7 +108,7 @@ public:
         return r;
     }
 
-    std::vector<int> remainingMethods(
+    static std::vector<int> remainingMethods(
         u32 n,
         u32 k,
         const std::vector<std::vector<int>>& invocations)

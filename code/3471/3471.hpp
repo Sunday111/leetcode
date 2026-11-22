@@ -5,7 +5,7 @@ class Solution
 {
 public:
     using u32 = uint32_t;
-    int largestInteger(const std::vector<int>& a, u32 k) noexcept
+    static int largestInteger(const std::vector<int>& a, u32 k) noexcept
     {
         const u32 n = static_cast<u32>(a.size());
         [[assume(n <= 50)]];

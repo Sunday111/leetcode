@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    int maxSum(std::vector<int>& nums)
+    static int maxSum(std::vector<int>& nums)
     {
         std::bitset<101> s{};
         int m = -100, r = 0;

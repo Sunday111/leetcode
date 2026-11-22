@@ -25,9 +25,9 @@ inline static constexpr auto max_arith_seq_len =
 class Solution
 {
 public:
-    [[nodiscard]] u64 minNumberOfSeconds(
+    [[nodiscard]] static u64 minNumberOfSeconds(
         const u32 target_height,
-        std::vector<int>& times_) const noexcept
+        std::vector<int>& times_) noexcept
     {
         auto times = reinterpret_cast<std::vector<u32>&>(times_);
         stdr::sort(times);

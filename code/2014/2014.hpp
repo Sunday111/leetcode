@@ -323,7 +323,7 @@ public:
     std::string_view s;
     u16 k;
 
-    [[nodiscard]] constexpr u16 progSum(u16 num) noexcept { return ((1 + num) * num) / 2; }
+    [[nodiscard]] static constexpr u16 progSum(u16 num) noexcept { return ((1 + num) * num) / 2; }
 
     template <u8 depth>
     [[nodiscard, gnu::always_inline]] inline constexpr bool pushUpdate(IC<depth>, char push_char) noexcept

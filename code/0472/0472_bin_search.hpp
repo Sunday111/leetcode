@@ -42,7 +42,7 @@ public:
         return dp[n];
     }
 
-    std::vector<std::string> findAllConcatenatedWordsInADict(
+    static std::vector<std::string> findAllConcatenatedWordsInADict(
         std::vector<std::string>& words)
     {
         std::ranges::sort(words, std::less{}, std::ranges::size);

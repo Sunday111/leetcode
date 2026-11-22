@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    std::vector<int> productExceptSelf(std::vector<int>& nums)
+    static std::vector<int> productExceptSelf(std::vector<int>& nums)
     {
         std::vector<int> result = nums;
 

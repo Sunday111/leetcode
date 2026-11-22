@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    [[nodiscard, gnu::target("avx2,bmi2")]] constexpr int maximumAmount(
+    [[nodiscard, gnu::target("avx2,bmi2")]] static constexpr int maximumAmount(
         const std::vector<std::vector<int>>& g) noexcept
     {
         int dp[500][3];

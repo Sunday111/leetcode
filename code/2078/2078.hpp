@@ -3,7 +3,7 @@
 class Solution
 {
 public:
-    auto maxDistance(std::vector<int>& c) noexcept
+    static auto maxDistance(std::vector<int>& c) noexcept
     {
         size_t n = c.size();
         size_t i = 0, j = n - 1;

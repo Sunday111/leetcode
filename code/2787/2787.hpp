@@ -174,7 +174,7 @@ inline constexpr auto kSolPow5 = []()
 class Solution
 {
 public:
-    int32_t numberOfWays(int32_t in_n, int32_t in_x)
+    static int32_t numberOfWays(int32_t in_n, int32_t in_x)
     {
         return std::bit_cast<int32_t>(
             [&]

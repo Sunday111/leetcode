@@ -6,7 +6,7 @@ using u32 = uint32_t;
 class Solution
 {
 public:
-    bool hasIncreasingSubarrays(std::vector<int>& nums, u32 k) noexcept
+    static bool hasIncreasingSubarrays(std::vector<int>& nums, u32 k) noexcept
     {
         const u32 n = static_cast<u32>(nums.size());
 

@@ -24,7 +24,7 @@ class Solution
         pbs_make<kNumBlocks>(occupied_blocks_words);
 
 public:
-    u64 minSumSquareDiff(
+    static u64 minSumSquareDiff(
         const std::vector<int>& nums1,
         const std::vector<int>& nums2,
         u32 k1,

@@ -50,7 +50,7 @@ inline constexpr auto kPerfectSquares =
 class Solution
 {
 public:
-    int32_t numSquares(int32_t in_n)
+    static int32_t numSquares(int32_t in_n)
     {
         const auto n = static_cast<uint16_t>(in_n);
         std::array<uint32_t, 10'001> dp{};

@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    std::vector<int> sortByBits(std::vector<int>& arr)
+    static std::vector<int> sortByBits(std::vector<int>& arr)
     {
         auto au = reinterpret_range<u32>(arr);
 

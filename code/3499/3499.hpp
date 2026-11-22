@@ -8,7 +8,7 @@ class Solution
 {
 public:
     [[nodiscard, gnu::target("bmi2,avx2")]]
-    constexpr u32 maxActiveSectionsAfterTrade(const std::string& s) noexcept
+    static constexpr u32 maxActiveSectionsAfterTrade(const std::string& s) noexcept
     {
         u32 t = 0, r = 0, pz = 0;
         auto i = s.data(), e = i + s.size();

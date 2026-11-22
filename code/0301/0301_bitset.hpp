@@ -12,7 +12,7 @@
 
 #include "solution_name.hpp"
 
-class LC_SOLUTION_NAME(bitset)
+class LC_SOLUTION_NAME(_bitset)
 {
 public:
     using Bitset = std::bitset<25>;

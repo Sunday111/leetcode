@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    bool hasValidPath(const std::vector<std::vector<char>>& g) const noexcept
+    static bool hasValidPath(const std::vector<std::vector<char>>& g) noexcept
     {
         const size_t w = g[0].size();
         // impossible paths

@@ -34,7 +34,7 @@ bool match(const std::string& s, const char* p, u32 m, const u32* lps)
 class Solution
 {
 public:
-    u32 numOfStrings(std::vector<std::string>& patterns, std::string& word)
+    static u32 numOfStrings(std::vector<std::string>& patterns, std::string& word)
     {
         u32 lps[100], r = 0;
         for (auto& p : patterns)

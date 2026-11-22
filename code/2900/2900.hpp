@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] constexpr std::vector<std::string> getLongestSubsequence(
+    [[nodiscard]] static constexpr std::vector<std::string> getLongestSubsequence(
         std::vector<std::string>& words,
         std::vector<int>& groups)
     {

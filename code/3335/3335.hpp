@@ -14,7 +14,7 @@ constexpr int modAdd(int a, int b)
 class Solution
 {
 public:
-    int lengthAfterTransformations(std::string_view s, unsigned t)
+    static int lengthAfterTransformations(std::string_view s, unsigned t)
     {
         std::array<int, 26> cnt{};
         for (char c : s) ++cnt[std::bit_cast<unsigned>(c - 'a')];

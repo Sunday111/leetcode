@@ -4,10 +4,10 @@
 
 #include "solution_name.hpp"
 
-class LC_SOLUTION_NAME(branchless)
+class LC_SOLUTION_NAME(_branchless)
 {
 public:
-    [[nodiscard]] constexpr bool judgeCircle(std::string_view moves) noexcept
+    [[nodiscard]] static constexpr bool judgeCircle(std::string_view moves) noexcept
     {
         int x = 0, y = 0;
         for (char c : moves)

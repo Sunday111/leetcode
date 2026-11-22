@@ -9,7 +9,7 @@ class Solution
 {
 public:
     template <typename T>
-    [[nodiscard, gnu::always_inline]] constexpr bool check(
+    [[nodiscard, gnu::always_inline]] static constexpr bool check(
         const std::vector<std::vector<u32>>& g,
         const u32 w,
         const u32 h,
@@ -44,7 +44,7 @@ public:
         return s == target;
     }
 
-    [[nodiscard]] bool canPartitionGrid(
+    [[nodiscard]] static bool canPartitionGrid(
         const std::vector<std::vector<int>>& orig) noexcept
     {
         u32 h = static_cast<u32>(orig.size());

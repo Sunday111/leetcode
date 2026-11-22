@@ -24,5 +24,5 @@ public:
         return a;
     }();
 
-    constexpr int rotatedDigits(u16 n) noexcept { return kAns[n]; }
+    static constexpr int rotatedDigits(u16 n) noexcept { return kAns[n]; }
 };

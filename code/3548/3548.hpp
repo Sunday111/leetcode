@@ -172,7 +172,7 @@ public:
         return r;
     }
 
-    [[nodiscard]] bool canPartitionGrid(
+    [[nodiscard]] static bool canPartitionGrid(
         const std::vector<std::vector<int>>& orig) noexcept
     {
         u32 h = static_cast<u32>(orig.size());

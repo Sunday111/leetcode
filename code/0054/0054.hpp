@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    std::vector<int> spiralOrder(const std::vector<std::vector<int>>& matrix)
+    static std::vector<int> spiralOrder(const std::vector<std::vector<int>>& matrix)
     {
         uint8_t width = static_cast<uint8_t>(matrix.front().size()),
                 height = static_cast<uint8_t>(matrix.size());

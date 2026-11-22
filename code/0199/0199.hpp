@@ -8,7 +8,7 @@ class Solution
 public:
     inline static constexpr size_t kMaxNodes = 100;
 
-    std::vector<int> rightSideView(TreeNode* root)
+    static std::vector<int> rightSideView(TreeNode* root)
     {
         std::vector<int> r;
         r.reserve(kMaxNodes);

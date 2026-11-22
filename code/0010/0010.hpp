@@ -44,7 +44,7 @@ inline static constexpr auto mlog_leave_scope = []()
 class Solution
 {
 public:
-    bool isMatch(std::string_view s, std::string_view p)
+    static bool isMatch(std::string_view s, std::string_view p)
     {
         return impl(s, p, 0);
     }

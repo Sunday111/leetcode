@@ -12,7 +12,7 @@ public:
         x ^= m, y ^= m;
     }
 
-    int minimizeSum(const std::vector<int>& a) const noexcept
+    static int minimizeSum(const std::vector<int>& a) noexcept
     {
         int l[] = {INT_MAX, INT_MAX, INT_MAX}, h[]{0, 0, 0};
 

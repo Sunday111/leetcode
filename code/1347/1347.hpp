@@ -3,9 +3,9 @@
 class Solution
 {
 public:
-    [[nodiscard]] constexpr int minSteps(
+    [[nodiscard]] static constexpr int minSteps(
         const std::string& s,
-        const std::string& t) const noexcept
+        const std::string& t) noexcept
     {
         int f[26]{};
         for (char c : s) ++f[c - 'a'];

@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    int numberOfSubstrings(const std::string& s)
+    static int numberOfSubstrings(const std::string& s)
     {
         static uint16_t c1[40'001];
         uint16_t t0{}, t1{};

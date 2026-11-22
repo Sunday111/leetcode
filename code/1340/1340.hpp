@@ -9,7 +9,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] u16 maxJumps(std::vector<int>& a, u16 d) noexcept
+    [[nodiscard]] static u16 maxJumps(std::vector<int>& a, u16 d) noexcept
     {
         constexpr u16 max_n = 1000;
         const u16 n = a.size() & 0xFFFF;

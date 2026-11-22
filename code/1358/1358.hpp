@@ -5,7 +5,7 @@ class Solution
 {
 public:
     using u32 = uint32_t;
-    u32 numberOfSubstrings(const std::string& s) noexcept
+    static u32 numberOfSubstrings(const std::string& s) noexcept
     {
         const u32 n = static_cast<u32>(s.size());
         u32 a = 0, z = 3, f[3] = {0};

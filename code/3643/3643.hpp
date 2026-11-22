@@ -7,7 +7,7 @@ class Solution
 {
 public:
     using u8 = uint8_t;
-    [[nodiscard, gnu::always_inline]] auto reverseSubmatrix(
+    [[nodiscard, gnu::always_inline]] static auto reverseSubmatrix(
         std::vector<std::vector<int>>& g,
         u8 y0,
         u8 x0,

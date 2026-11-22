@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    u32 maxDistance(std::vector<int>& nums1, std::vector<int>& nums2)
+    static u32 maxDistance(std::vector<int>& nums1, std::vector<int>& nums2)
     {
         u32 n1 = cast<u32>(nums1.size()), n2 = cast<u32>(nums2.size()), r = 0;
         for (u32 i = 0, j = 0; i != n1 && j != n2;)

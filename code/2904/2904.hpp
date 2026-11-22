@@ -6,7 +6,7 @@ class Solution
 {
 public:
     using u32 = uint32_t;
-    std::string shortestBeautifulSubstring(std::string& s, u32 k) noexcept
+    static std::string shortestBeautifulSubstring(std::string& s, u32 k) noexcept
     {
         u32 i = 0, j = 0;
         const u32 n = static_cast<u32>(s.size());

@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    void complete(char* s, const size_t* f)
+    static void complete(char* s, const size_t* f)
     {
         for (size_t i = 0; i != 26; ++i)
         {
@@ -17,7 +17,7 @@ public:
         }
     }
 
-    std::string lexGreaterPermutation(std::string& s, std::string& target)
+    static std::string lexGreaterPermutation(std::string& s, std::string& target)
     {
         size_t fs[26]{};
         for (char c : s) fs[c - 'a']++;

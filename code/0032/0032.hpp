@@ -4,7 +4,7 @@
 struct Solution
 {
     using u32 = uint32_t;
-    auto longestValidParentheses(std::string_view s) const noexcept
+    static auto longestValidParentheses(std::string_view s) noexcept
     {
         const u32 n = static_cast<u32>(s.size());
         u32 a = 0, o = 0, l = 0;

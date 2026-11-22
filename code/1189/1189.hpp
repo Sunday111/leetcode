@@ -13,7 +13,7 @@ public:
         for (char c : s) ++r[(c - 'a') & 31];
         return r;
     }
-    auto maxNumberOfBalloons(std::string_view text) noexcept
+    static auto maxNumberOfBalloons(std::string_view text) noexcept
     {
         constexpr std::string_view word = "balloon";
         auto has = freqArray(text), need = freqArray(word);

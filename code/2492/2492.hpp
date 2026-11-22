@@ -26,8 +26,8 @@ public:
         return x;
     }
 
-    u32 minScore(const u32 n, const std::vector<std::vector<int>>& roads)
-        const noexcept
+    static u32 minScore(const u32 n, const std::vector<std::vector<int>>& roads)
+        noexcept
     {
         std::fill_n(min_road, n + 1, 0xFFFF);
         std::fill_n(size, n + 1, 1u);

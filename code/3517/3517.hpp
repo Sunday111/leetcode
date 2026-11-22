@@ -12,7 +12,7 @@ public:
     using u32 = uint32_t;
 
     [[gnu::target("bmi2,avx2")]]
-    std::string smallestPalindrome(std::string& s) noexcept
+    static std::string smallestPalindrome(std::string& s) noexcept
     {
         u32 f[26]{}, odd = 0;
         for (char c : s) f[c - 'a'] += 1;

@@ -37,10 +37,10 @@ class Solution
 public:
     inline static u32 buf[100 * 128];
     inline static constexpr u32 inf = (~u32{}) / 2;
-    u32 findTheCity(
+    static u32 findTheCity(
         const u32 n,
         std::vector<std::vector<int>>& edges,
-        u32 distanceThreshold) const noexcept
+        u32 distanceThreshold) noexcept
     {
         GridAdapter dist(buf, n);
         for (u32 i = 0; i != n; ++i)

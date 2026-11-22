@@ -30,7 +30,7 @@ class Solution
 {
 public:
     [[gnu::target("avx2,bmi2")]]
-    u32 maxSum(const std::vector<int>& nums, u32 k) const noexcept
+    static u32 maxSum(const std::vector<int>& nums, u32 k) noexcept
     {
         u32 f[32]{};
         for (u32 v : reinterpret_cast<const std::vector<u32>&>(nums))

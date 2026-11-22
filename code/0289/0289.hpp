@@ -11,7 +11,7 @@ public:
     static constexpr auto kDied = 2;
     static constexpr auto kBorn = 3;
 
-    void gameOfLife(std::vector<std::vector<int>>& board)
+    static void gameOfLife(std::vector<std::vector<int>>& board)
     {
         const size_t h = board.size();
         const size_t w = board.front().size();

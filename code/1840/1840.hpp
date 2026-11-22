@@ -10,7 +10,7 @@ class Solution
 public:
     inline static std::pair<u32, u32> rstr[100'000]{};
 
-    u32 maxBuilding(
+    static u32 maxBuilding(
         const u32 n,
         std::vector<std::vector<int>>& restrictions) noexcept
     {

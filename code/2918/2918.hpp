@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    int64_t minSum(
+    static int64_t minSum(
         const std::vector<int32_t>& nums1,
         const std::vector<int32_t>& nums2)
     {

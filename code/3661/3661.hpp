@@ -26,7 +26,7 @@ public:
         return {std::bit_cast<int>(a), std::bit_cast<int>(b)};
     }
 
-    u32 maxWalls(
+    static u32 maxWalls(
         std::vector<int>& positions,
         std::vector<int>& distances,
         std::vector<int>& walls) noexcept

@@ -27,7 +27,7 @@ public:
 class Solution
 {
 public:
-    Node* connect(Node* root)
+    static Node* connect(Node* root)
     {
         std::queue<Node*> q;
         if (root) q.push(root);

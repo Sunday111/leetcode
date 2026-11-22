@@ -9,7 +9,7 @@
 class Solution
 {
 public:
-    std::vector<std::vector<int32_t>> combinationSum(
+    static std::vector<std::vector<int32_t>> combinationSum(
         std::vector<int32_t>& candidates_,
         int32_t target)
     {

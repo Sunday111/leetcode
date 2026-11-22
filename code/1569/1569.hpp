@@ -70,7 +70,7 @@ public:
     }
 
     [[gnu::no_sanitize_address, gnu::flatten]]
-    u32 numOfWays(const std::vector<int>& nums) noexcept
+    static u32 numOfWays(const std::vector<int>& nums) noexcept
     {
         construct_tree(nums);
 

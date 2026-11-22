@@ -4,7 +4,7 @@
 class Solution
 {
 public:
-    std::string findDifferentBinaryString(std::vector<std::string>& nums)
+    static std::string findDifferentBinaryString(std::vector<std::string>& nums)
     {
         std::string& r = nums[0];
         for (size_t i = 0; auto& s : nums)

@@ -22,9 +22,9 @@ public:
         return {p >> 8, p & 0xff};
     }
 
-    constexpr bool findSafeWalk(
+    static constexpr bool findSafeWalk(
         const std::vector<std::vector<int>>& grid,
-        u32 health) const noexcept
+        u32 health) noexcept
     {
         u8 qs = 0;
         u16 c[64][64], q[256];

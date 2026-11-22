@@ -10,7 +10,7 @@
 #include "integral_aliases.hpp"
 #include "solution_name.hpp"
 
-class LC_SOLUTION_NAME(bitmask)
+class LC_SOLUTION_NAME(_bitmask)
 {
 public:
     std::vector<std::string> results;

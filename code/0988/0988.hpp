@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    void dfs(TreeNode* root, std::string& out)
+    static void dfs(TreeNode* root, std::string& out)
     {
         if (!root) return;
 
@@ -66,7 +66,7 @@ public:
         }
     }
 
-    std::string smallestFromLeaf(TreeNode* root)
+    static std::string smallestFromLeaf(TreeNode* root)
     {
         std::string r;
         r.reserve(24);

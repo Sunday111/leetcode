@@ -11,8 +11,8 @@
 class Solution
 {
 public:
-    [[nodiscard]] constexpr i32 maxProductPath(
-        const std::vector<std::vector<i32>>& grid) const noexcept
+    [[nodiscard]] static constexpr i32 maxProductPath(
+        const std::vector<std::vector<i32>>& grid) noexcept
     {
         const u8 h = grid.size() & 0xFF, w = grid[0].size() & 0xFF;
         i64 dp_lo[16], dp_hi[16];

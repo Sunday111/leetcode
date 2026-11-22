@@ -148,7 +148,7 @@ public:
             });
     }
 
-    std::vector<int> findSubstring(
+    static std::vector<int> findSubstring(
         std::string_view s,
         std::vector<std::string>& words)
     {

@@ -8,7 +8,7 @@
 class Solution
 {
 public:
-    std::string makeLargestSpecial(std::string& full)
+    static std::string makeLargestSpecial(std::string& full)
     {
         struct Group
         {

@@ -79,7 +79,7 @@ class CreateSolutionTests(unittest.TestCase):
                                     get_sample_inputs=lambda *_: ["1", "2"],
                                     get_sample_outputs=lambda *_: ["2", "3"],
                                     get_method_name=lambda *_: "next",
-                                    get_cpp_template=lambda *_: "class Solution { public: int next(int x) { return x + 1; } };"):
+                                    get_cpp_template=lambda *_: "class SolutionHelper {}; class Solution { public: int next(int x) { return x + 1; } };"):
                     project = automation.create_leetcode_project(
                         {}, 42, False, automation.SCRIPTS_DIR / "leetcode_solution_template")
             self.assertEqual([p.name for p in project.glob("*tests.cpp")], ["0042_tests.cpp"])
@@ -94,8 +94,31 @@ class CreateSolutionTests(unittest.TestCase):
             self.assertIn("t0042::parameters(kCases.size())", tests)
             self.assertIn("t0042::name", tests)
             self.assertNotIn("____", tests)
+            header = (project / "0042.hpp").read_text()
+            self.assertIn('#include "solution_name.hpp"', header)
+            self.assertIn("class LC_SOLUTION_NAME()", header)
+            self.assertIn("class SolutionHelper", header)
+            self.assertIn("int next(int x) { return x + 1; }", header)
+            self.assertNotIn("class Solution {", header)
             metadata = json.loads((project / "0042.json").read_text())
             self.assertEqual(metadata["path_to_solution_header"], "0042.hpp")
+
+    def test_leetcode_project_preserves_named_design_class(self):
+        starter = "class ParkingSystem { public: explicit ParkingSystem(int) {} };"
+        with tempfile.TemporaryDirectory(prefix="leetcode-create-") as directory:
+            with patch.object(automation, "CODE_DIR", Path(directory)):
+                with patch.multiple(automation.leetcode_fetch,
+                                    get_slug_by_number=lambda *_: "design-parking-system",
+                                    problem_details_by_slug=lambda *_: {"title": "Design Parking System"},
+                                    get_sample_inputs=lambda *_: [],
+                                    get_sample_outputs=lambda *_: [],
+                                    get_method_name=lambda *_: "addCar",
+                                    get_cpp_template=lambda *_: starter):
+                    project = automation.create_leetcode_project(
+                        {}, 1603, False, automation.SCRIPTS_DIR / "leetcode_solution_template")
+            header = (project / "1603.hpp").read_text()
+            self.assertIn(starter, header)
+            self.assertNotIn("LC_SOLUTION_NAME", header)
 
     def test_generic_project_still_has_one_test_file(self):
         with tempfile.TemporaryDirectory(prefix="leetcode-create-") as directory:
@@ -108,6 +131,9 @@ class CreateSolutionTests(unittest.TestCase):
             self.assertIn("using texample = SolutionTests<Solution>;", tests)
             self.assertIn("texample::parameters(kCases.size())", tests)
             self.assertIn("texample::name", tests)
+            header = (project / "example.hpp").read_text()
+            self.assertIn('#include "solution_name.hpp"', header)
+            self.assertIn("class LC_SOLUTION_NAME()", header)
 
 
 if __name__ == "__main__":

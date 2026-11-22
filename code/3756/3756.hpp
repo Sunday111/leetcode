@@ -23,7 +23,7 @@ public:
         return powers;
     }();
 
-    std::vector<int> sumAndMultiply(
+    static std::vector<int> sumAndMultiply(
         std::string_view s,
         const std::vector<std::vector<int>>& queries) noexcept
     {

@@ -8,8 +8,8 @@ class Solution
 public:
     using u32 = uint32_t;
     [[nodiscard, gnu::no_sanitize_address, gnu::flatten]]
-    constexpr u32 climbStairs(u32 n, const std::vector<int>& costs)
-        const noexcept
+    static constexpr u32 climbStairs(u32 n, const std::vector<int>& costs)
+        noexcept
     {
         auto min = [](u32 a, u32 b)
         {

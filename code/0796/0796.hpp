@@ -3,9 +3,9 @@
 class Solution
 {
 public:
-    [[nodiscard]] constexpr bool rotateString(
+    [[nodiscard]] static constexpr bool rotateString(
         std::string_view s,
-        std::string_view t) const noexcept
+        std::string_view t) noexcept
     {
         if (s.size() == t.size())
         {

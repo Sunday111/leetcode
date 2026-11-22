@@ -89,7 +89,7 @@ public:
 
     inline static u32 prefix[501];
     inline static u32 memo[500][501];
-    u32 stoneGameV(std::vector<int>& stoneValue) noexcept
+    static u32 stoneGameV(std::vector<int>& stoneValue) noexcept
     {
         const u32 n = static_cast<u32>(stoneValue.size());
         [[assume(n != 0)]];

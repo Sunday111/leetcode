@@ -3,7 +3,7 @@
 class Solution
 {
 public:
-    bool isGood(const std::vector<int>& a)
+    static bool isGood(const std::vector<int>& a)
     {
         int f[201]{};
         int nt = 0, t = 0;

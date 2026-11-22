@@ -42,7 +42,7 @@ public:
         return min_a < min_b;
     };
 
-    int maxRemoval(
+    static int maxRemoval(
         std::vector<int>& nums,
         std::vector<std::vector<int>>& queries)
     {

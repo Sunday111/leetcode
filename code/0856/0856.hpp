@@ -3,7 +3,7 @@
 class Solution
 {
 public:
-    int scoreOfParentheses(std::string_view s) const noexcept
+    static int scoreOfParentheses(std::string_view s) noexcept
     {
         int d = 0, st[27];
         st[d] = 0;

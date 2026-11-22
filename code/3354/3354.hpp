@@ -3,7 +3,7 @@
 class Solution
 {
 public:
-    int countValidSelections(std::vector<int>& nums)
+    static int countValidSelections(std::vector<int>& nums)
     {
         int t = 0;
         for (int v : nums) t += v;

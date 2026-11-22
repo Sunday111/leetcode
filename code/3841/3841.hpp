@@ -28,11 +28,11 @@ public:
       gnu::noinline,
       gnu::no_sanitize_address,
       gnu::target("popcnt,bmi,bmi2")]]
-    std::vector<bool> palindromePath(
+    static std::vector<bool> palindromePath(
         const u32 n,
         const std::vector<std::vector<int>>& edges,
         std::string_view s,
-        const std::vector<std::string>& queries) const noexcept
+        const std::vector<std::string>& queries) noexcept
     {
         u16 query_begin = 0, query_end = static_cast<u16>(queries.size());
         while (query_end != 0 && queries.data()[query_end - 1].front() == 'u')

@@ -4,7 +4,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] constexpr std::vector<int> replaceNonCoprimes(
+    [[nodiscard]] static constexpr std::vector<int> replaceNonCoprimes(
         std::vector<int>& nums) noexcept
     {
         uint32_t n = 0;

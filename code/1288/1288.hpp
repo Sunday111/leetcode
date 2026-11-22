@@ -4,7 +4,7 @@
 class Solution
 {
 public:
-    int removeCoveredIntervals(std::vector<std::vector<int>>& a) noexcept
+    static int removeCoveredIntervals(std::vector<std::vector<int>>& a) noexcept
     {
         std::ranges::sort(
             a,

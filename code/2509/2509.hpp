@@ -40,7 +40,7 @@ public:
                std::countl_zero(a) - std::countl_zero(b);
     }
 
-    std::vector<int> cycleLengthQueries(
+    static std::vector<int> cycleLengthQueries(
         [[maybe_unused]] int n,
         const std::vector<std::vector<int>>& queries)
     {

@@ -3,7 +3,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] constexpr int countBinarySubstrings(
+    [[nodiscard]] static constexpr int countBinarySubstrings(
         const std::string& s) noexcept
     {
         int np = 0, nc = 0, ans = 0;

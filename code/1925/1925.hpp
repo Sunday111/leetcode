@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    int countTriples(int n)
+    static int countTriples(int n)
     {
         int count = 0, n2 = n * n;
 

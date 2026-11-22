@@ -3,7 +3,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] u32 getMaximumConsecutive(std::vector<int>& coins_) noexcept
+    [[nodiscard]] static u32 getMaximumConsecutive(std::vector<int>& coins_) noexcept
     {
         auto coins = reinterpret_range<u32>(coins_);
         radix_sort<8, 2>(coins);

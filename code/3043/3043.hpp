@@ -12,8 +12,8 @@
 class Solution
 {
 public:
-    u8 longestCommonPrefix(const std::vector<int>& a, const std::vector<int>& b)
-        const noexcept
+    static u8 longestCommonPrefix(const std::vector<int>& a, const std::vector<int>& b)
+        noexcept
     {
         auto pa = &a, pb = &b;
         if (a.size() > b.size()) std::swap(pa, pb);

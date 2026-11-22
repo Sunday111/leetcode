@@ -149,11 +149,11 @@ public:
         return (differences >> 16) == 0;
     }
 
-    [[gnu::no_sanitize_address]] int shortestPath(
+    [[gnu::no_sanitize_address]] static int shortestPath(
         const u16 n,
         const std::vector<std::vector<int>>& edges,
         const std::string_view labels,
-        const u16 k) const noexcept
+        const u16 k) noexcept
     {
         [[assume(n <= kMaxN)]];
         [[assume(n > 0)]];

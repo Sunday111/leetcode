@@ -4,7 +4,7 @@
 class Solution
 {
 public:
-    auto missingMultiple(std::vector<int>& nums, unsigned k)
+    static auto missingMultiple(std::vector<int>& nums, unsigned k)
     {
         std::bitset<128> b;
         for (int x : nums) b[x & 127] = 1;

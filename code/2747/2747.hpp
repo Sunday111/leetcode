@@ -18,7 +18,7 @@ public:
     inline static u32 sorted_q[kCapacity];
 
     [[nodiscard, gnu::no_sanitize_address, gnu::flatten]]
-    std::vector<int> countServers(
+    static std::vector<int> countServers(
         u32 n,
         std::vector<std::vector<int>>& logs,
         u32 x,

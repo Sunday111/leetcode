@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    int64_t distributeCandies(int64_t n, int64_t limit)
+    static int64_t distributeCandies(int64_t n, int64_t limit)
     {
         if (limit * 3 < n) return 0;
         if (limit * 3 == n) return 1;

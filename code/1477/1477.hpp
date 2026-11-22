@@ -7,7 +7,7 @@ class Solution
 {
 public:
     using u32 = uint32_t;
-    int minSumOfLengths(std::vector<int>& arr, const u32 t) noexcept
+    static int minSumOfLengths(std::vector<int>& arr, const u32 t) noexcept
     {
         auto& a = reinterpret_cast<std::vector<u32>&>(arr);
         u32 s = 0, ps = 0;

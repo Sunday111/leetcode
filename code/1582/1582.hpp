@@ -5,7 +5,7 @@ class Solution
 {
 public:
     using u8 = uint8_t;
-    int numSpecial(const std::vector<std::vector<int>>& m)
+    static int numSpecial(const std::vector<std::vector<int>>& m)
     {
         u8 h = m.size() & 0xFF, w = m[0].size() & 0xFF;
         std::vector<u8> sr(h, 0), sc(w, 0);

@@ -4,7 +4,7 @@
 class Solution
 {
 public:
-    int maxRotateFunction(const std::vector<int>& nums)
+    static int maxRotateFunction(const std::vector<int>& nums)
     {
         auto d = nums.data();
         int s = 0, x = 0, n = static_cast<int>(nums.size());

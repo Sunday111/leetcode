@@ -6,19 +6,19 @@
 class Solution
 {
 public:
-    [[nodiscard, gnu::always_inline]] bool bitset_contains(
+    [[nodiscard, gnu::always_inline]] static bool bitset_contains(
         const u64* bitset,
         u16 i) noexcept
     {
         return bitset[i >> 6] & (1ul << (i & 63));
     }
 
-    [[gnu::always_inline]] void bitset_add(u64* bitset, u16 i) noexcept
+    [[gnu::always_inline]] static void bitset_add(u64* bitset, u16 i) noexcept
     {
         bitset[i >> 6] |= (1ul << (i & 63));
     }
 
-    size_t
+    static size_t
     latestDayToCross(u16 row, u16 col, std::vector<std::vector<int>>& cells)
     {
         if (row == 1) return cells.size();

@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    int acc(TreeNode* root) noexcept
+    static int acc(TreeNode* root) noexcept
     {
         if (!root) return 0;
         return root->val += acc(root->left) + acc(root->right);

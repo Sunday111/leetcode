@@ -29,7 +29,7 @@ public:
         return r;
     }
 
-    u64 gcdSum(std::vector<int>& nums)
+    static u64 gcdSum(std::vector<int>& nums)
     {
         // NOLINTNEXTLINE
         return impl(

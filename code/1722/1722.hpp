@@ -97,10 +97,10 @@ public:
         return dist / 2;
     }
 
-    u32 minimumHammingDistance(
+    static u32 minimumHammingDistance(
         const std::vector<int>& source,
         const std::vector<int>& target,
-        const std::vector<std::vector<int>>& allowedSwaps) const noexcept
+        const std::vector<std::vector<int>>& allowedSwaps) noexcept
     {
         return impl(
             reinterpret_cast<const std::vector<u32>&>(source),

@@ -89,7 +89,7 @@ public:
         }
     }
 
-    std::string numberToWords(int num)
+    static std::string numberToWords(int num)
     {
         if (num == 0) return "Zero";
 

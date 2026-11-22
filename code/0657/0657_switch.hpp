@@ -4,10 +4,10 @@
 
 #include "solution_name.hpp"
 
-class LC_SOLUTION_NAME(switch)
+class LC_SOLUTION_NAME(_switch)
 {
 public:
-    [[nodiscard]] constexpr bool judgeCircle(std::string_view moves)
+    [[nodiscard]] static constexpr bool judgeCircle(std::string_view moves)
     {
         int x = 0, y = 0;
         for (char c : moves)

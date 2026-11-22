@@ -20,7 +20,7 @@ public:
         return (u32{std::bit_cast<u16>(a)} << 16) | u32{std::bit_cast<u16>(b)};
     }
 
-    int robotSim(
+    static int robotSim(
         const std::vector<int>& commands,
         std::vector<std::vector<int>>& in_obstacles)
     {

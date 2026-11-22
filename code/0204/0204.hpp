@@ -190,7 +190,7 @@ private:
 class Solution
 {
 public:
-    int32_t countPrimes(int32_t n)
+    static int32_t countPrimes(int32_t n)
     {
         // Make it static if you feel sneaky today 😏
         PrimesStorage<64 * 8> storage;

@@ -47,7 +47,7 @@ inline constexpr auto kPerfectSquares =
 class Solution
 {
 public:
-    int32_t numSquares(int32_t n)
+    static int32_t numSquares(int32_t n)
     {
         static const auto DP = []
         {

@@ -20,7 +20,7 @@ public:
         u32 next = 0;
     };
 
-    u32 minimumPairRemoval(std::vector<int>& nums) noexcept
+    static u32 minimumPairRemoval(std::vector<int>& nums) noexcept
     {
         auto arena = SolutionStorage::Instance().StartArena();
 

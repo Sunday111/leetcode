@@ -121,6 +121,9 @@ def create_leetcode_project(all_problems:dict, problem_number: int, override: bo
             patch_file(src_path, dst_dir, variables)
 
     template = leetcode_fetch.get_cpp_template(problem_details)
+    template, renamed = re.subn(r"\bclass\s+Solution\b", "class LC_SOLUTION_NAME()", template, count=1)
+    if renamed:
+        template = '#include "solution_name.hpp"\n\n' + template
     url = f"https://leetcode.com/problems/{slug}/"
     full_content = f"// {url}\n\n{template}"
     header_path.write_text(full_content)

@@ -45,7 +45,7 @@ public:
 class Solution
 {
 public:
-    u64 maxTotalValue(const std::vector<int>& nums, u32 k)
+    static u64 maxTotalValue(const std::vector<int>& nums, u32 k)
     {
         auto& a = reinterpret_cast<const std::vector<u32>&>(nums);
         u32 n = static_cast<u32>(nums.size()), qs = n - 1;

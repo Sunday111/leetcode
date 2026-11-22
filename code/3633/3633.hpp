@@ -4,7 +4,7 @@
 class Solution
 {
 public:
-    constexpr int earliestFinishTime(
+    static constexpr int earliestFinishTime(
         const std::vector<int>& landStartTime,
         const std::vector<int>& landDuration,
         const std::vector<int>& waterStartTime,

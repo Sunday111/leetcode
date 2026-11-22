@@ -9,8 +9,8 @@
 class Solution
 {
 public:
-    [[nodiscard]] u64 maximumScore(
-        const std::vector<std::vector<int>>& g) const noexcept
+    [[nodiscard]] static u64 maximumScore(
+        const std::vector<std::vector<int>>& g) noexcept
     {
         return impl(reinterpret_cast<const std::vector<std::vector<u32>>&>(g));
     }

@@ -24,7 +24,7 @@ public:
 
         return (tst(1) + tst(2) + tst(3)) & 0xF;
     }
-    u32 totalWaviness(u32 num1, u32 num2) noexcept
+    static u32 totalWaviness(u32 num1, u32 num2) noexcept
     {
         num2 = std::min(num2 + 1, 100000u);
         u32 r = 0;

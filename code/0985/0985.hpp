@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    std::vector<int> sumEvenAfterQueries(
+    static std::vector<int> sumEvenAfterQueries(
         std::vector<int>& nums,
         const std::vector<std::vector<int>>& queries)
     {

@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    int maximumProduct(const std::vector<int>& nums) noexcept
+    static int maximumProduct(const std::vector<int>& nums) noexcept
     {
         int hi[3]{-1000, -1000, -1000}, lo[2]{1000, 1000};
 

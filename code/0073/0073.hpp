@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    void setZeroes(std::vector<std::vector<int>>& matrix)
+    static void setZeroes(std::vector<std::vector<int>>& matrix)
     {
         const size_t rows = matrix.size();
         const size_t columns = matrix.front().size();

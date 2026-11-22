@@ -158,7 +158,7 @@ public:
     }(std::make_integer_sequence<u32, 74>());
 
     [[nodiscard, gnu::target("avx2,bmi2")]]
-    u32 zigZagArrays(u32 n, u32 l, u32 r) noexcept
+    static u32 zigZagArrays(u32 n, u32 l, u32 r) noexcept
     {
         if (r == l) return 0;
         return kFN[r - l - 1](n);

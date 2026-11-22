@@ -5,7 +5,7 @@ class Solution
 {
 public:
     using u32 = uint32_t;
-    int longestArithSeqLength(std::vector<int>& nums)
+    static int longestArithSeqLength(std::vector<int>& nums)
     {
         int longest = 2;
         static std::array<std::array<int, 1001>, 1001> dp;

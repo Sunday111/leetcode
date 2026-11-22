@@ -3,7 +3,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] constexpr bool checkOnesSegment(const std::string& s) noexcept
+    [[nodiscard]] static constexpr bool checkOnesSegment(const std::string& s) noexcept
     {
         auto p = s.data();
         while (*p == '1') ++p;

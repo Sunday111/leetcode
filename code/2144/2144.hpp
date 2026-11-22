@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    u32 minimumCost(std::vector<int>& cost)
+    static u32 minimumCost(std::vector<int>& cost)
     {
         std::ranges::sort(cost);
         u32 n = cast<u32>(cost.size()), k = n % 3, s = 0;

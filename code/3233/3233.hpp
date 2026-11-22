@@ -205,7 +205,7 @@ public:
         return x0;
     }
 
-    uint32_t nonSpecialCount(uint32_t l, uint32_t r)
+    static uint32_t nonSpecialCount(uint32_t l, uint32_t r)
     {
         auto in_range = [&](auto v)
         {

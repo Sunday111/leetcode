@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    int pairSum(ListNode* head) const noexcept
+    static int pairSum(ListNode* head) noexcept
     {
         int r = 0;
         auto mid = ll_reverse(ll_find_mid(head));

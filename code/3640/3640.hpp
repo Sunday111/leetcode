@@ -19,7 +19,7 @@ public:
         i64 suffix = 0;
     };
 
-    i64 maxSumTrionic(std::vector<i32>& nums) noexcept
+    static i64 maxSumTrionic(std::vector<i32>& nums) noexcept
     {
         const u32 n = static_cast<u32>(nums.size());
 

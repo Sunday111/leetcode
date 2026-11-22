@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] constexpr std::vector<std::vector<int>> shiftGrid(
+    [[nodiscard]] static constexpr std::vector<std::vector<int>> shiftGrid(
         std::vector<std::vector<int>>& grid,
         u16 k) noexcept
     {

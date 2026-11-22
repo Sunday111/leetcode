@@ -31,7 +31,7 @@ public:
         size_t hash{};
     };
 
-    Groups groupAnagrams(std::vector<std::string>& strings)
+    static Groups groupAnagrams(std::vector<std::string>& strings)
     {
         Groups groups;
         groups.reserve(strings.size());

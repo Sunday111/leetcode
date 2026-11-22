@@ -8,7 +8,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] constexpr bool canBeEqual(
+    [[nodiscard]] static constexpr bool canBeEqual(
         const std::string& s1,
         const std::string& s2) noexcept
     {

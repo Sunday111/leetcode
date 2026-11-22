@@ -21,7 +21,7 @@ struct Node
 class Solution
 {
 public:
-    void processQueries(
+    static void processQueries(
         u32 c,
         std::vector<std::vector<u32>>& connections,
         std::vector<std::vector<u32>>& queries,
@@ -139,7 +139,7 @@ public:
         }
     }
 
-    std::vector<int> processQueries(
+    static std::vector<int> processQueries(
         u32 c,
         std::vector<std::vector<int>>& connections,
         std::vector<std::vector<int>>& queries)

@@ -140,7 +140,7 @@ public:
         std::unreachable();
     }
 
-    u32 minJumps(std::vector<int>& nums) noexcept
+    static u32 minJumps(std::vector<int>& nums) noexcept
     {
         return impl(reinterpret_cast<std::vector<u32>&>(nums));
     }

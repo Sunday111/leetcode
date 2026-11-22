@@ -8,7 +8,7 @@ class Solution
     using u64 = uint64_t;
 
 public:
-    [[nodiscard]] constexpr u64 sumAndMultiply(u32 n) noexcept
+    [[nodiscard]] static constexpr u64 sumAndMultiply(u32 n) noexcept
     {
         u64 m = 1, x = 0, s = 0;
         while (n)

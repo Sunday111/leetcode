@@ -84,7 +84,7 @@ public:
         solve<0, 16, false, false>,
     };
 
-    u64 countNoZeroPairs(u64 n) noexcept
+    static u64 countNoZeroPairs(u64 n) noexcept
     {
         u8 l = 0;
         while (n)

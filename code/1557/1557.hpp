@@ -10,7 +10,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] auto findSmallestSetOfVertices(
+    [[nodiscard]] static auto findSmallestSetOfVertices(
         const u32 n,
         const std::vector<std::vector<int>>& edges)
     {

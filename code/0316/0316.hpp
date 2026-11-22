@@ -6,7 +6,7 @@ class Solution
 {
 public:
     using u32 = uint32_t;
-    std::string removeDuplicateLetters(std::string& s)
+    static std::string removeDuplicateLetters(std::string& s)
     {
         u32 f[27]{};
         u32 nr = 0, k1 = 0, n = static_cast<u32>(s.size());

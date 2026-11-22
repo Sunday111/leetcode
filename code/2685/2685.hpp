@@ -5,7 +5,7 @@ class Solution
 {
 public:
     using u64 = uint64_t;
-    int countCompleteComponents(int n, std::vector<std::vector<int>>& edges)
+    static int countCompleteComponents(int n, std::vector<std::vector<int>>& edges)
     {
         constexpr u64 z{0}, o{1};
         u64 adj[64]{}, v = ~z << n;

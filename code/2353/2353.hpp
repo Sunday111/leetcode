@@ -179,14 +179,14 @@ public:
         FoodRatingsS::Instance().Initialize(foods, cuisines, ratings);
     }
 
-    [[gnu::always_inline, gnu::hot]] inline void changeRating(
+    [[gnu::always_inline, gnu::hot]] static inline void changeRating(
         const std::string& food,
         int newRating) noexcept NO_SANITIZERS
     {
         FoodRatingsS::Instance().changeRating(food, newRating);
     }
 
-    [[gnu::always_inline, gnu::hot]] inline std::string highestRated(
+    [[gnu::always_inline, gnu::hot]] static inline std::string highestRated(
         const std::string& cuisine) noexcept NO_SANITIZERS
     {
         return FoodRatingsS::Instance().highestRated(cuisine);

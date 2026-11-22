@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    int subarraySum(const std::vector<int>& nums, int k)
+    static int subarraySum(const std::vector<int>& nums, int k)
     {
         int sum = 0, count = 0;
 

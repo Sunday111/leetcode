@@ -6,7 +6,7 @@ class Solution
 {
 public:
     using u32 = uint32_t;
-    u32 totalNumbers(const std::vector<int>& digits) noexcept
+    static u32 totalNumbers(const std::vector<int>& digits) noexcept
     {
         u32 f[10]{}, r{}, b{};
         for (int digit : digits)

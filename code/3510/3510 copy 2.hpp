@@ -19,7 +19,7 @@ public:
         u32 removed : 1 = 0;
     };
 
-    u32 minimumPairRemoval(std::vector<int>& nums) noexcept
+    static u32 minimumPairRemoval(std::vector<int>& nums) noexcept
     {
         u32 r = 0, n = static_cast<u32>(nums.size()), left_bound = 0,
             right_bound = n + 1;

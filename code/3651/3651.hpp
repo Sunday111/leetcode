@@ -109,7 +109,7 @@ public:
         return dp[k & 1][idx(r - 1, c - 1)];
     }
 
-    [[nodiscard]] u32 minCost(
+    [[nodiscard]] static u32 minCost(
         const std::vector<std::vector<int>>& grid,
         u8 k) noexcept
     {

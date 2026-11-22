@@ -29,7 +29,7 @@ class Solution
     public:
         u32 size = 0;
 
-        [[nodiscard, gnu::always_inline]] u32 time() const noexcept
+        [[nodiscard, gnu::always_inline]] static u32 time() noexcept
         {
             return data[1].time;
         }
@@ -165,10 +165,10 @@ public:
         }
     }
 
-    std::vector<int> busiestServers(
+    static std::vector<int> busiestServers(
         u32 k,
         std::vector<int>& arrival,
-        std::vector<int>& load) const noexcept
+        std::vector<int>& load) noexcept
     {
         auto& arrivals = reinterpret_cast<std::vector<u32>&>(arrival);
         auto& loads = reinterpret_cast<std::vector<u32>&>(load);

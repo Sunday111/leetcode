@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    bool stoneGameIX(const std::vector<int>& a) noexcept
+    static bool stoneGameIX(const std::vector<int>& a) noexcept
     {
         int f[3]{};
         for (int x : a) ++f[x % 3];

@@ -11,7 +11,7 @@ class Solution
 public:
     inline static std::array<std::vector<TreeNode*>, 256> dp;
 
-    const std::vector<TreeNode*>& generateTrees(u8 n, u8 s = 1) noexcept
+    static const std::vector<TreeNode*>& generateTrees(u8 n, u8 s = 1) noexcept
     {
         auto& out = dp[((n << 4) | s) & 0xff];
 

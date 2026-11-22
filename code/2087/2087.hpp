@@ -10,7 +10,7 @@ namespace xyz
 class Solution
 {
 public:
-    int minCost(
+    static int minCost(
         const std::vector<int>& s,
         const std::vector<int>& h,
         const std::vector<int>& rc,

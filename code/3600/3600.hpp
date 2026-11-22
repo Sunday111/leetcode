@@ -10,10 +10,10 @@ namespace stdr = std::ranges;
 class Solution
 {
 public:
-    [[nodiscard]] int impl(
+    [[nodiscard]] static int impl(
         u32 n,
         const std::vector<std::vector<u32>>& edges,
-        u32 k) const noexcept
+        u32 k) noexcept
     {
         using UF = UnionFind<u32>;
         using Node = typename UF::Node;
@@ -77,10 +77,10 @@ public:
         return -1;
     }
 
-    [[nodiscard]] int maxStability(
+    [[nodiscard]] static int maxStability(
         int n,
         const std::vector<std::vector<int>>& edges,
-        int k) const noexcept
+        int k) noexcept
     {
         return impl(
             static_cast<u32>(n),

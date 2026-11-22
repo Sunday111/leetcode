@@ -5,7 +5,7 @@ class Solution
 {
 public:
     using u32 = uint32_t;
-    void rotate(std::vector<std::vector<int>>& m)
+    static void rotate(std::vector<std::vector<int>>& m)
     {
         u32 n = m.size() & 0xFF;
         for (u32 ci = 0, t = n - 1, gi = n - 1; ci != n / 2; ++ci, --gi, t -= 2)

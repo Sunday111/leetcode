@@ -13,7 +13,7 @@ struct ListNode
 class Solution
 {
 public:
-    ListNode* mergeKLists(std::vector<ListNode*>& lists)
+    static ListNode* mergeKLists(std::vector<ListNode*>& lists)
     {
         constexpr auto cmp_ = [](const ListNode* a, const ListNode* b)
         {

@@ -9,7 +9,7 @@
 class Solution
 {
 public:
-    u32 maxDistance(
+    static u32 maxDistance(
         const u32 s,
         const std::vector<std::vector<int>>& points,
         const u32 k) noexcept

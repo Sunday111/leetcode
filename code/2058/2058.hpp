@@ -15,7 +15,7 @@ public:
         return (a < b && b > c) || (a > b && b < c);
     }
 
-    std::vector<int> nodesBetweenCriticalPoints(const ListNode* head) noexcept
+    static std::vector<int> nodesBetweenCriticalPoints(const ListNode* head) noexcept
     {
         const ListNode *prev = head, *curr = prev;
         int min_dist = -1, total = -1;

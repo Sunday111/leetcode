@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    u32 countCoveredBuildings(int n, std ::vector<std::vector<int>>& buildings)
+    static u32 countCoveredBuildings(int n, std ::vector<std::vector<int>>& buildings)
     {
         static std::pair<u32, u32> mx[100'001], my[100'001];
         constexpr std::pair lim{100'001, 0};

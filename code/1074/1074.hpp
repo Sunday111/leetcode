@@ -91,7 +91,7 @@ struct HashTable  // NOLINT
 class Solution
 {
 public:
-    u32 numSubmatrixSumTarget(std::vector<std::vector<int>>& orig, int target)
+    static u32 numSubmatrixSumTarget(std::vector<std::vector<int>>& orig, int target)
     {
         static i32 g[128 * 128];
 

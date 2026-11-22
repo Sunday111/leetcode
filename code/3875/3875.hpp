@@ -3,5 +3,5 @@
 class Solution
 {
 public:
-    bool uniformArray(std::vector<int>&) { return true; }
+    static bool uniformArray(std::vector<int>&) { return true; }
 };

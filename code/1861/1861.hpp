@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    void rotate(std::vector<std::vector<char>>& m)
+    static void rotate(std::vector<std::vector<char>>& m)
     {
         u32 n = cast<u32>(m.size());
         for (u32 ci = 0, t = n - 1, gi = n - 1; ci != n / 2; ++ci, --gi, t -= 2)
@@ -24,7 +24,7 @@ public:
             }
         }
     }
-    auto rotateTheBox(std::vector<std::vector<char>>& g)
+    static auto rotateTheBox(std::vector<std::vector<char>>& g)
     {
         u32 h = cast<u32>(g.size()), w = cast<u32>(g[0].size());
         for (auto& r : g)

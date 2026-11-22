@@ -22,7 +22,7 @@
 class Solution
 {
 public:
-    int32_t findTargetSumWays(std::vector<int32_t>& nums, int32_t t)
+    static int32_t findTargetSumWays(std::vector<int32_t>& nums, int32_t t)
     {
         const auto s = std::reduce(nums.begin(), nums.end());
         const auto p = (t + s) / 2;

@@ -15,7 +15,7 @@ public:
         "Tie"sv,
         "Alice"sv,
     };
-    std::string stoneGameIII(const std::vector<int>& sv) noexcept
+    static std::string stoneGameIII(const std::vector<int>& sv) noexcept
     {
         int dp[3]{}, x[2]{};
         for (int v : sv | std::views::reverse)

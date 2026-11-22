@@ -10,7 +10,7 @@ class Solution
 {
 public:
     using u64 = uint64_t;
-    u32 minJumps(std::vector<int>& a)
+    static u32 minJumps(std::vector<int>& a)
     {
         static auto pool = std::pmr::unsynchronized_pool_resource{};
         const u32 n = static_cast<u32>(a.size());

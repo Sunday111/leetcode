@@ -8,7 +8,7 @@
 class Solution
 {
 public:
-    u32 regionsBySlashes(std::vector<std::string>& g)
+    static u32 regionsBySlashes(std::vector<std::string>& g)
     {
         const u32 n = cast<u32>(g.size()), n4 = n * 4;
 

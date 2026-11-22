@@ -77,7 +77,7 @@ template <typename T, typename P = std::identity>
 class Solution
 {
 public:
-    auto maxNumOfSubstrings(std::string_view str) noexcept
+    static auto maxNumOfSubstrings(std::string_view str) noexcept
     {
         const auto s = str.data();
         const u32 n = str.size() & xxx;

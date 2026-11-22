@@ -100,8 +100,8 @@ public:
         u64 sum = 0;
     };
 
-    [[nodiscard]] auto
-    minimumCost(const std::vector<u32>& nums, u32 k, u32 dist) const noexcept
+    [[nodiscard]] static auto
+    minimumCost(const std::vector<u32>& nums, u32 k, u32 dist) noexcept
     {
         const u32 n = static_cast<u32>(nums.size()), d2 = dist + 2;
 
@@ -139,7 +139,7 @@ public:
         return nums[0] + r;
     }
 
-    [[nodiscard]] auto
+    [[nodiscard]] static auto
     minimumCost(std::vector<int>& nums, u32 k, u32 dist) noexcept
     {
         return minimumCost(reinterpret_cast<std::vector<u32>&>(nums), k, dist);

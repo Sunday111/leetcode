@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    std::vector<std::vector<int>> threeSum(std::vector<int>& nums)
+    static std::vector<std::vector<int>> threeSum(std::vector<int>& nums)
     {
         std::vector<std::vector<int>> triplets;
         std::ranges::sort(nums);

@@ -6,8 +6,8 @@
 class Solution
 {
 public:
-    [[nodiscard]] constexpr int maxSatisfaction(
-        std::vector<int>& satisfaction) const noexcept
+    [[nodiscard]] static constexpr int maxSatisfaction(
+        std::vector<int>& satisfaction) noexcept
     {
         std::ranges::sort(satisfaction, std::ranges::greater{});
 

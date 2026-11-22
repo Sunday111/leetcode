@@ -32,7 +32,7 @@ public:
         return false;
     }
 
-    std::string getDirections(TreeNode* root, int start_value, int dest_value)
+    static std::string getDirections(TreeNode* root, int start_value, int dest_value)
     {
         std::vector<TreeNode*> paths;
         paths.reserve(64);

@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] std::string maximumXor(
+    [[nodiscard]] static std::string maximumXor(
         std::string& s,
         const std::string& t) noexcept
     {

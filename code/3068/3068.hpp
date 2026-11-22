@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    int64_t maximumValueSum(
+    static int64_t maximumValueSum(
         std::vector<int>& nums,
         int k,
         [[maybe_unused]] std::vector<std::vector<int>>& edges)

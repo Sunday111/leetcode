@@ -18,7 +18,7 @@ public:
         }
     };
 
-    int robotSim(
+    static int robotSim(
         const std::vector<int>& commands,
         std::vector<std::vector<int>>& in_obstacles)
     {

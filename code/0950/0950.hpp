@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    std::vector<int> deckRevealedIncreasing(std::vector<int>& deck)
+    static std::vector<int> deckRevealedIncreasing(std::vector<int>& deck)
     {
         std::ranges::sort(deck);
 

@@ -13,7 +13,7 @@ int rand7()
 class Solution
 {
 public:
-    int rand10()
+    static int rand10()
     {
         int s = 0;
         for (int i = 0; i != 10; ++i)

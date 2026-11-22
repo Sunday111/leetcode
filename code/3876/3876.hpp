@@ -4,7 +4,7 @@
 class Solution
 {
 public:
-    bool uniformArray(const std::vector<int>& a)
+    static bool uniformArray(const std::vector<int>& a)
     {
         int lo{INT_MAX}, x{};
         for (auto v : a)

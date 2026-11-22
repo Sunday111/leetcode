@@ -33,7 +33,7 @@ public:
         .zi = 5,
     };
 
-    int slidingPuzzle(std::vector<std::vector<int>>& brd)
+    static int slidingPuzzle(std::vector<std::vector<int>>& brd)
     {
         static State q[2000];
         u32 qs = 0;

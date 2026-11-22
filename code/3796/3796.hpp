@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] int findMaxVal(
+    [[nodiscard]] static int findMaxVal(
         u32 n,
         std::vector<std::vector<int>>& rstr,
         const std::vector<int>& diff) noexcept

@@ -47,7 +47,7 @@ public:
         return {base, base + b1};
     }
 
-    [[gnu::always_inline]] inline std::pair<u8*, u8*> children(
+    [[gnu::always_inline]] static inline std::pair<u8*, u8*> children(
         u8 node_id) noexcept
     {
         u8* begin = links.data() + node_offset[node_id];
@@ -103,7 +103,7 @@ public:
         }
     }
 
-    void buildGraph(u8 n1, const std::vector<std::vector<int>>& hierarchy)
+    static void buildGraph(u8 n1, const std::vector<std::vector<int>>& hierarchy)
     {
         for (auto& edge : hierarchy)
         {

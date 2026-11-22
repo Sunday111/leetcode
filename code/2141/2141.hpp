@@ -11,7 +11,7 @@
 class Solution
 {
 public:
-    u64 maxRunTime(u32 n, std::vector<int>& batteries_)
+    static u64 maxRunTime(u32 n, std::vector<int>& batteries_)
     {
         auto batteries = reinterpret_range<u32>(batteries_);
         radix_sort<10, 3, SortOrder::Descending>(batteries);

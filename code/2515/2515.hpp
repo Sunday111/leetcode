@@ -7,8 +7,8 @@
 class Solution
 {
 public:
-    int closestTarget(std::vector<std::string>& w, std::string& t, int s)
-        const noexcept
+    static int closestTarget(std::vector<std::string>& w, std::string& t, int s)
+        noexcept
     {
         int n = cast<int>(w.size()), r = n;
         auto d = w.data();

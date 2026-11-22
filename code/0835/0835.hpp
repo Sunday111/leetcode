@@ -68,7 +68,7 @@ public:
             Interval{std::min<u32>(std::countr_zero(rh) & 31, y_end), y_end}};
     }
 
-    int largestOverlap(
+    static int largestOverlap(
         const std::vector<std::vector<int>>& img1,
         const std::vector<std::vector<int>>& img2)
     {

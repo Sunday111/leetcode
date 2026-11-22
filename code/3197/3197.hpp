@@ -22,7 +22,7 @@ struct Rect
 class Solution
 {
 public:
-    [[nodiscard]] constexpr std::pair<Rect, Rect> splitX(
+    [[nodiscard]] static constexpr std::pair<Rect, Rect> splitX(
         const Rect& rect,
         u8 t) noexcept
     {
@@ -31,7 +31,7 @@ public:
         assert(t <= rect.w());
         return {r1, r2};
     }
-    [[nodiscard]] constexpr std::pair<Rect, Rect> splitY(
+    [[nodiscard]] static constexpr std::pair<Rect, Rect> splitY(
         const Rect& rect,
         u8 t) noexcept
     {
@@ -41,7 +41,7 @@ public:
         return {r1, r2};
     }
 
-    [[nodiscard]] constexpr u32 findRectMinArea(
+    [[nodiscard]] static constexpr u32 findRectMinArea(
         const Rect& rect,
         const std::vector<std::vector<int>>& grid) noexcept
     {
@@ -73,7 +73,7 @@ public:
         return ~u32{};
     }
 
-    [[nodiscard]] constexpr u32 findTwoRectsWithMinArea(
+    [[nodiscard]] static constexpr u32 findTwoRectsWithMinArea(
         const Rect parent,
         const std::vector<std::vector<int>>& grid) noexcept
     {
@@ -97,7 +97,7 @@ public:
         return result;
     }
 
-    [[nodiscard]] constexpr u32 minimumSum(
+    [[nodiscard]] static constexpr u32 minimumSum(
         const std::vector<std::vector<int>>& grid) noexcept
     {
         const u8 h = grid.size() & 0xFF, w = grid.front().size() & 0xFF;

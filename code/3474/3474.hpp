@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    std::string generateString(
+    static std::string generateString(
         const std::string& str1,
         const std::string& str2) noexcept
     {

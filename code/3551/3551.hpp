@@ -74,7 +74,7 @@ public:
     }
 
     [[gnu::target("bmi2,avx2"), gnu::no_sanitize_address, gnu::flatten]]
-    u32 minSwaps(const std::vector<int>& nums) const noexcept
+    static u32 minSwaps(const std::vector<int>& nums) noexcept
     {
         if (nums.size() <= 65'535) return impl<65'535>(nums);
         return impl<100'000>(nums);

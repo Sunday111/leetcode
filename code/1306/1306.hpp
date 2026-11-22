@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    bool canReach(const std::vector<int>& a, u32 start)
+    static bool canReach(const std::vector<int>& a, u32 start)
     {
         u32 n = static_cast<u32>(a.size());
         std::vector<bool> vis(n + 1, false);

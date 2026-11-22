@@ -77,7 +77,7 @@ u32 tree_height(const std::vector<std::vector<u32>>& edges)
 class Solution
 {
 public:
-    u32 assignEdgeWeights(std::vector<std::vector<int>>& edges) noexcept
+    static u32 assignEdgeWeights(std::vector<std::vector<int>>& edges) noexcept
     {
         return kAns
             [tree_height(

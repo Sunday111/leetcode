@@ -8,7 +8,7 @@ using u32 = uint32_t;
 class Solution
 {
 public:
-    u32 numDistinct(std::string_view s, std::string_view t) const noexcept
+    static u32 numDistinct(std::string_view s, std::string_view t) noexcept
     {
         const u32 ns = static_cast<u32>(s.size());
         const u32 nt = static_cast<u32>(t.size());

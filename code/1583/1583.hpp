@@ -8,7 +8,7 @@ class Solution
 {
 public:
     using u16 = uint16_t;
-    u16 unhappyFriends(
+    static u16 unhappyFriends(
         int n,
         const std::vector<std::vector<int>>& preferences,
         const std::vector<std::vector<int>>& in_pairs)

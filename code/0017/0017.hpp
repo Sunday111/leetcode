@@ -10,7 +10,7 @@
 class Solution
 {
 public:
-    std::vector<std::string> letterCombinations(std::string_view digits)
+    static std::vector<std::string> letterCombinations(std::string_view digits)
     {
         if (digits.empty())
         {

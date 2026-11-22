@@ -80,7 +80,7 @@ struct SegmentTree
 class Solution
 {
 public:
-    double separateSquares(std::vector<std::vector<int>>& squares_)
+    static double separateSquares(std::vector<std::vector<int>>& squares_)
     {
         auto arena = Storage::Instance().StartArena();
 

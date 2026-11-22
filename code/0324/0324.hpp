@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    void wiggleSort(std::vector<int>& nums)
+    static void wiggleSort(std::vector<int>& nums)
     {
         std::array<uint16_t, 5001> c{};
         for (const int& v : nums) c[std::bit_cast<unsigned>(v)]++;

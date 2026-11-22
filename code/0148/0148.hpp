@@ -12,7 +12,7 @@ struct ListNode
 class Solution
 {
 public:
-    ListNode* sortList(ListNode* head)
+    static ListNode* sortList(ListNode* head)
     {
         if (head)
         {

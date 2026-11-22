@@ -148,7 +148,7 @@ private:
 class Solution
 {
 public:
-    int minDeletionSize(const std::vector<std::string>& rows)
+    static int minDeletionSize(const std::vector<std::string>& rows)
     {
         const u8 rows_count = cast<u8>(rows.size());
         const u8 columns_count = cast<u8>(rows.front().size());

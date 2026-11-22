@@ -14,5 +14,5 @@ public:
         return r;
     }
 
-    int mirrorDistance(int n) { return std::abs(n - reverse(n)); }
+    static int mirrorDistance(int n) { return std::abs(n - reverse(n)); }
 };

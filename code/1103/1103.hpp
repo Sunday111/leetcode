@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    std::vector<int> distributeCandies(int candies, int num_people)
+    static std::vector<int> distributeCandies(int candies, int num_people)
     {
         size_t n = static_cast<size_t>(num_people);
         std::vector<int> cnt(n, 0);

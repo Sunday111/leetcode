@@ -24,7 +24,7 @@ using SolutionStorage = GlobalBufferStorage<1 << 25>;
 class Solution
 {
 public:
-    size_t
+    static size_t
     latestDayToCross(u16 row, u16 col, std::vector<std::vector<int>>& cells)
     {
         auto arena = SolutionStorage::Instance().StartArena();

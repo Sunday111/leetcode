@@ -6,7 +6,7 @@ class Solution
 {
 public:
     inline static char buf[10001]{1};
-    bool isValid(std::string& s)
+    static bool isValid(std::string& s)
     {
         const size_t n = s.size();
         char inv[128]{};

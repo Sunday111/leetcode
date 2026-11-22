@@ -16,7 +16,7 @@ public:
         std::fill_n(tree, 2 * leaf_count, Node{});
     }
 
-    const Node& root() const { return tree[1]; }
+    static const Node& root() { return tree[1]; }
 
     [[gnu::no_sanitize_address]]
     void update(u32 ql, u32 qr, const typename Node::Update& value)
@@ -64,14 +64,14 @@ private:
     u32 height;
 
     [[gnu::no_sanitize_address]]
-    void push(u32 node, u32 child_len)
+    static void push(u32 node, u32 child_len)
     {
         tree[node]
             .push(tree[node * 2], tree[node * 2 + 1], child_len, child_len);
     }
 
     [[gnu::no_sanitize_address]]
-    void pull(u32 node)
+    static void pull(u32 node)
     {
         tree[node].pull(tree[node * 2], tree[node * 2 + 1]);
     }
@@ -123,7 +123,7 @@ class SegmentTreeSolution
     inline static u32 last[max_value + 1]{};
 
 public:
-    u32 sumCounts(std::vector<int>& input)
+    static u32 sumCounts(std::vector<int>& input)
     {
         auto nums = reinterpret_cast<const u32*>(input.data());
         u32 n = static_cast<u32>(input.size());

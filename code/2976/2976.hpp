@@ -10,7 +10,7 @@
 class Solution
 {
 public:
-    i64 minimumCost(
+    static i64 minimumCost(
         std::string& source,
         std::string& target,
         std::vector<char>& original,

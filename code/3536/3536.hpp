@@ -3,7 +3,7 @@
 class Solution
 {
 public:
-    int maxProduct(int n)
+    static int maxProduct(int n)
     {
         int f[10]{};
         while (n)

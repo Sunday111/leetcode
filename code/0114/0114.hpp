@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    void flatten(TreeNode* root)
+    static void flatten(TreeNode* root)
     {
         auto x = root;
         while (x)

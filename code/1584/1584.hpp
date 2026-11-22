@@ -32,7 +32,7 @@ public:
     inline static constexpr auto cmp = std::greater{};
 
     [[gnu::target("avx2,bmi2"), nodiscard]]
-    u32 minCostConnectPoints(std::vector<std::vector<int>>& points) noexcept
+    static u32 minCostConnectPoints(std::vector<std::vector<int>>& points) noexcept
     {
         const u32 n = static_cast<u32>(points.size());
         if (n < 2) return 0;

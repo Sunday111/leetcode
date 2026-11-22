@@ -5,7 +5,7 @@ class Solution
 {
 public:
     using u32 = uint32_t;
-    u32 partitionString(const std::string& s)
+    static u32 partitionString(const std::string& s)
     {
         u32 r = 1, b = 0;
         for (char c : s)

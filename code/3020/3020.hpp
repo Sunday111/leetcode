@@ -82,7 +82,7 @@ public:
         return ans;
     }
 
-    auto maximumLength(const std::vector<int>& nums) noexcept
+    static auto maximumLength(const std::vector<int>& nums) noexcept
     {
         return impl(reinterpret_cast<const std::vector<u32>&>(nums));
     }

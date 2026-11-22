@@ -174,7 +174,7 @@ public:
                    0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
-    int32_t numberOfWays(int32_t n, int32_t x)
+    static int32_t numberOfWays(int32_t n, int32_t x)
     {
         return kPrecomputedAnswers[std::bit_cast<uint32_t>(
             (x - 1) * 300 + n - 1)];

@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    std::string maxSumOfSquares(size_t n, size_t s) const noexcept
+    static std::string maxSumOfSquares(size_t n, size_t s) noexcept
     {
         if (n * 9 < s) return {};
 

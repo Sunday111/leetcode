@@ -25,7 +25,7 @@ public:
         return 'a';
     }();
 
-    u32 minimumDistance(std::string& word) const noexcept
+    static u32 minimumDistance(std::string& word) noexcept
     {
         u32 dp[2][26][26]{};
 

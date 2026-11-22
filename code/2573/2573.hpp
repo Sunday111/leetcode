@@ -9,7 +9,7 @@
 class Solution
 {
 public:
-    std::string findTheString(std::vector<std::vector<int>>& lcp)
+    static std::string findTheString(std::vector<std::vector<int>>& lcp)
     {
         auto& m = reinterpret_cast<std::vector<std::vector<u32>>&>(lcp);
 

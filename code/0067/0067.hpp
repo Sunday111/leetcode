@@ -3,7 +3,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] std::string addBinary(std::string& a, std::string& b) noexcept
+    [[nodiscard]] static std::string addBinary(std::string& a, std::string& b) noexcept
     {
         if (a.size() < b.size()) std::swap(a, b);
 

@@ -5,7 +5,7 @@ class Solution
 {
 public:
     using u32 = uint32_t;
-    int minimumDistance(std::vector<int>& nums_) noexcept
+    static int minimumDistance(std::vector<int>& nums_) noexcept
     {
         auto& nums = reinterpret_cast<const std::vector<u32>&>(nums_);
         u32 n = static_cast<u32>(nums.size()), r = 2 * n;

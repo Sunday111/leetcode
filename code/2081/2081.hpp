@@ -538,7 +538,7 @@ public:
         kMirrorT<9>,
     };
 
-    [[nodiscard, gnu::always_inline]] inline constexpr u64 kMirror(
+    [[nodiscard, gnu::always_inline]] static inline constexpr u64 kMirror(
         u8 k,
         u8 n_) noexcept
     {

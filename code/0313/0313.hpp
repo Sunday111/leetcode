@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    uint32_t nthSuperUglyNumber(uint32_t n, const std::vector<int>& primes)
+    static uint32_t nthSuperUglyNumber(uint32_t n, const std::vector<int>& primes)
     {
         std::vector<uint32_t> dp(n);
         dp[0] = 1;

@@ -135,7 +135,7 @@ public:
         return computeNumber<m>(memo, kNumValidColumns<m>, n);
     };
 
-    int colorTheGrid(int m, int n)
+    static int colorTheGrid(int m, int n)
     {
         auto fn = [&]
         {

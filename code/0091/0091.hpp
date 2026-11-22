@@ -5,7 +5,7 @@ class Solution
 public:
     using u8 = uint8_t;
     using u32 = uint32_t;
-    u32 numDecodings(std::string_view s) noexcept
+    static u32 numDecodings(std::string_view s) noexcept
     {
         u8 n = s.size() & 0xFF;
         u32 dp[2]{1, s[0] != '0'};

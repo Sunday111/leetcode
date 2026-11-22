@@ -3,7 +3,7 @@
 class Solution
 {
 public:
-    long numSub(const std::string& s)
+    static long numSub(const std::string& s)
     {
         long r = 0;
         int o = 0;

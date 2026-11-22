@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    std::string triangleType(std::vector<int>& nums)
+    static std::string triangleType(std::vector<int>& nums)
     {
         std::ranges::sort(nums);
         const int a = nums[0], b = nums[1], c = nums[2];

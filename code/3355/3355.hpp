@@ -43,7 +43,7 @@ public:
         }
     };
 
-    bool isZeroArray(
+    static bool isZeroArray(
         std::vector<int>& nums,
         std::vector<std::vector<int>>& queries)
     {

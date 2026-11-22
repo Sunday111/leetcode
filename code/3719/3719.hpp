@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    int longestBalanced(std::vector<int>& nums)
+    static int longestBalanced(std::vector<int>& nums)
     {
         static u64 seen[(100'001 / 64) + 1];
         u16 n = nums.size() & 0xFFFF, r = 0;

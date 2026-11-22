@@ -27,7 +27,7 @@ public:
     };
 
     [[gnu::no_sanitize_address, gnu::flatten, gnu::target("bmi,bmi2,avx2")]]
-    auto minCost(const std::vector<std::vector<int>>& g) const noexcept
+    static auto minCost(const std::vector<std::vector<int>>& g) noexcept
     {
         const u32 w = g[0].size() & 1023;
 

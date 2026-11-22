@@ -18,7 +18,7 @@ public:
         radix_sort<bits_per_pass, 1, SortOrder::Descending>(std::span{x});
     };
 
-    [[nodiscard]] u32 impl(std::vector<std::vector<u32>>& m) const noexcept
+    [[nodiscard]] static u32 impl(std::vector<std::vector<u32>>& m) noexcept
     {
         const u32 h = static_cast<u32>(m.size()),
                   w = static_cast<u32>(m[0].size());
@@ -76,7 +76,7 @@ public:
             std::bind(stdr::sort, std::placeholders::_1, std::greater{}));
     }
 
-    u32 largestSubmatrix(std::vector<std::vector<int>>& matrix) const noexcept
+    static u32 largestSubmatrix(std::vector<std::vector<int>>& matrix) noexcept
     {
         return impl(reinterpret_cast<std::vector<std::vector<u32>>&>(matrix));
     }

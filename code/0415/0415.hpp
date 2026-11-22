@@ -8,7 +8,7 @@
 class Solution
 {
 public:
-    std::string addStrings(std::string_view num1, std::string_view num2)
+    static std::string addStrings(std::string_view num1, std::string_view num2)
     {
         std::string r;
         r.reserve(std::max(num1.size(), num2.size()) + 1);

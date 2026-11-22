@@ -3,7 +3,7 @@
 class Solution
 {
 public:
-    void deleteNode(ListNode* node)
+    static void deleteNode(ListNode* node)
     {
         while (node->next->next)
         {

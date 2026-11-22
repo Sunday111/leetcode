@@ -15,7 +15,7 @@ public:
         return (a * b) % 12345;
     }
 
-    [[nodiscard]] auto constructProductMatrix(
+    [[nodiscard]] static auto constructProductMatrix(
         std::vector<std::vector<int>>& orig) noexcept
     {
         static u32 p[100'001];

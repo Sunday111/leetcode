@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    std::string reverseWords(std::string& s) noexcept
+    static std::string reverseWords(std::string& s) noexcept
     {
         std::ranges::reverse(s);
         char* o = s.data();

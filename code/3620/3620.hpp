@@ -113,10 +113,10 @@ public:
         return (r & -u32{r != min_edge}) - 1;
     }
 
-    u32 findMaxPathScore(
+    static u32 findMaxPathScore(
         const std::vector<std::vector<int>>& in_edges,
         const std::vector<bool>& online,
-        const u64 k) const noexcept
+        const u64 k) noexcept
     {
         const auto n = static_cast<u16>(online.size());
         u32 num_edges = 0;

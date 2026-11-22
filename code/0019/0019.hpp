@@ -9,7 +9,7 @@ struct ListNode
 class Solution
 {
 public:
-    int removeNthFromEndR(ListNode* head, int n)
+    static int removeNthFromEndR(ListNode* head, int n)
     {
         if (!head) return 0;
 
@@ -23,7 +23,7 @@ public:
         return k + 1;
     }
 
-    ListNode* removeNthFromEnd(ListNode* head, int n)
+    static ListNode* removeNthFromEnd(ListNode* head, int n)
     {
         if (removeNthFromEndR(head, n) == n)
         {

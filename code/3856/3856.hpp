@@ -14,7 +14,7 @@ public:
         return x;
     }();
 
-    std::string trimTrailingVowels(std::string& s)
+    static std::string trimTrailingVowels(std::string& s)
     {
         while (s.size() && (kVowels & (1 << (s.back() - 'a'))))
         {

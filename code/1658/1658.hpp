@@ -7,7 +7,7 @@ class Solution
 {
 public:
     using u32 = uint32_t;
-    int minOperations(const std::vector<int>& nums, u32 x) noexcept
+    static int minOperations(const std::vector<int>& nums, u32 x) noexcept
     {
         const auto a = reinterpret_cast<const u32*>(nums.data());
         const u32 n = nums.size() & ~u32{};

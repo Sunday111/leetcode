@@ -11,7 +11,7 @@ class Solution
 public:
     inline static u16 dp[2][72][72];
     [[gnu::target("avx2")]]
-    u16 cherryPickup(const std::vector<std::vector<int>>& g) noexcept
+    static u16 cherryPickup(const std::vector<std::vector<int>>& g) noexcept
     {
         const u8 w = g[0].size() & 255, height = g.size() & 255;
         std::memset(dp, 0, sizeof dp);

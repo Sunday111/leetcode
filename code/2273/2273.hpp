@@ -22,7 +22,7 @@ public:
         for (char c : s) ++v[static_cast<u8>(c - 'a')];
     }
 
-    std::vector<std::string> removeAnagrams(
+    static std::vector<std::string> removeAnagrams(
         std::vector<std::string>& words) noexcept
     {
         std::array<u64, 8> arr{};

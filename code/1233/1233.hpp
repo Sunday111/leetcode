@@ -55,7 +55,7 @@ private:
 class Solution
 {
 public:
-    std::vector<std::string> removeSubfolders(std::vector<std::string>& folders)
+    static std::vector<std::string> removeSubfolders(std::vector<std::string>& folders)
     {
         static HashSet set;
         set.init(static_cast<u32>(folders.size()));

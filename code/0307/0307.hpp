@@ -12,7 +12,7 @@
 class NumArray
 {
 public:
-    [[nodiscard]] std::vector<int>& getStaticData() noexcept
+    [[nodiscard]] static std::vector<int>& getStaticData() noexcept
     {
         static auto data = []()
         {

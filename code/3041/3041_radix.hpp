@@ -9,10 +9,10 @@
 #include "solution_name.hpp"
 #include "sync_stdio.hpp"
 
-class LC_SOLUTION_NAME(radix)
+class LC_SOLUTION_NAME(_radix)
 {
 public:
-    [[gnu::flatten, gnu::target("avx2,bmi,bmi2,lzcnt,popcnt")]] u32
+    [[gnu::flatten, gnu::target("avx2,bmi,bmi2,lzcnt,popcnt")]] static u32
     maxSelectedElements(std::vector<int>& nums) noexcept
     {
         auto* data = reinterpret_cast<u32*>(nums.data());

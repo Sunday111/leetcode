@@ -7,7 +7,7 @@ class Solution
 {
 public:
     static constexpr u32 kMOD = 1'000'000'007;
-    u32 countTrapezoids(std::vector<std::vector<int>>& points)
+    static u32 countTrapezoids(std::vector<std::vector<int>>& points)
     {
         // Sort ascending by Y
         std::array<u32, 100'001> a;  // NOLINT

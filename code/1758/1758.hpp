@@ -4,7 +4,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] constexpr int minOperations(const std::string& s) noexcept
+    [[nodiscard]] static constexpr int minOperations(const std::string& s) noexcept
     {
         using u16 = uint16_t;
         u16 t = 0, n = s.size() & 0xFFFF;

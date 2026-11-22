@@ -51,10 +51,10 @@
 //     }
 // };
 
-class LC_SOLUTION_NAME(stack)
+class LC_SOLUTION_NAME(_stack)
 {
 public:
-    std::vector<std::string> generateParenthesis(uint8_t n)
+    static std::vector<std::string> generateParenthesis(uint8_t n)
     {
         constexpr uint8_t entry = 0, try_open = 1, tried_open = 2,
                           try_closed = 3, tried_closed = 4;

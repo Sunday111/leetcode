@@ -7,9 +7,9 @@ class Solution
 {
 public:
     using u8 = uint8_t;
-    [[nodiscard]] constexpr bool areSimilar(
+    [[nodiscard]] static constexpr bool areSimilar(
         const std::vector<std::vector<int>>& mat,
-        u8 k) const noexcept
+        u8 k) noexcept
     {
         u8 w = mat[0].size() & 31;
         if ((k % w) == 0 || w == 1) return true;

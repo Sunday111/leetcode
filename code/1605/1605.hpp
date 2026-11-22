@@ -9,9 +9,9 @@
 class Solution
 {
 public:
-    [[nodiscard]] constexpr auto restoreMatrix(
+    [[nodiscard]] static constexpr auto restoreMatrix(
         const std::vector<int>& row_sum,
-        const std::vector<int>& col_sum) const noexcept
+        const std::vector<int>& col_sum) noexcept
     {
         u16 h = row_sum.size() & 0xFFFF, w = col_sum.size() & 0xFFFF;
         u64 a_words[PyramidBitset<512>::kTotalWords]{};

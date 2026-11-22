@@ -13,7 +13,7 @@ public:
 class Solution
 {
 public:
-    Node* cloneGraph(Node* old_root)
+    static Node* cloneGraph(Node* old_root)
     {
         if (!old_root) return nullptr;
 

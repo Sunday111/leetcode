@@ -3,7 +3,7 @@
 class Solution
 {
 public:
-    int smallestRepunitDivByK(const unsigned y)
+    static int smallestRepunitDivByK(const unsigned y)
     {
         unsigned p = 1 % y, s = y;
         std::bitset<100'000> seen;

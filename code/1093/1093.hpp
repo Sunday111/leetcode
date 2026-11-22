@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    std::vector<double> sampleStats(std::vector<int>& freq) noexcept
+    static std::vector<double> sampleStats(std::vector<int>& freq) noexcept
     {
         const auto f = reinterpret_cast<const u32*>(freq.data());
         u64 s = 0;

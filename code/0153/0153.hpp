@@ -3,7 +3,7 @@
 class Solution
 {
 public:
-    int findMin(const std::vector<int>& a)
+    static int findMin(const std::vector<int>& a)
     {
         auto d = a.data();
         int i[]{0, static_cast<int>(a.size() - 1)};

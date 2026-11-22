@@ -7,7 +7,7 @@ class Solution
 public:
     using u16 = uint16_t;
     using u8 = uint8_t;
-    [[nodiscard]] constexpr u16 timeRequiredToBuy(
+    [[nodiscard]] static constexpr u16 timeRequiredToBuy(
         std::vector<int>& tickets,
         u8 k) noexcept
     {

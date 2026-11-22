@@ -10,7 +10,7 @@ class Solution
 {
 public:
     using u32 = uint32_t;
-    int minFlips(const std::vector<std::vector<int>>& g) const noexcept
+    static int minFlips(const std::vector<std::vector<int>>& g) noexcept
     {
         const u32 h = g.size() & ~0u, w = g[0].size() & ~0u;
 

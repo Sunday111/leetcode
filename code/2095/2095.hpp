@@ -3,7 +3,7 @@
 class Solution
 {
 public:
-    ListNode* deleteMiddle(ListNode* head) noexcept
+    static ListNode* deleteMiddle(ListNode* head) noexcept
     {
         auto [p, m] = ll_find_mid_and_prev(head);
         if (p && m) p->next = m->next;

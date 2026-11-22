@@ -6,7 +6,7 @@ class Solution
 public:
     inline static char x[(2 << 21) + 1];  // NOLINT
     [[gnu::target("avx2,bmi2")]]
-    std::string processStr(const std::string& s) noexcept
+    static std::string processStr(const std::string& s) noexcept
     {
         int t[2];
         t[0] = t[1] = std::ranges::size(x) / 2;

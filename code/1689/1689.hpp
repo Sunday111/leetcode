@@ -4,7 +4,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] constexpr int minPartitions(std::string_view n) noexcept
+    [[nodiscard]] static constexpr int minPartitions(std::string_view n) noexcept
     {
         return std::ranges::max(n) - '0';
     }

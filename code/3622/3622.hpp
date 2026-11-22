@@ -1,7 +1,7 @@
 class Solution
 {
 public:
-    bool checkDivisibility(int n)
+    static bool checkDivisibility(int n)
     {
         int s{}, p = {1}, t = n;
         while (t)

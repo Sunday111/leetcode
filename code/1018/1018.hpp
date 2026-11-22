@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    std::vector<bool> prefixesDivBy5(const std::vector<int>& nums)
+    static std::vector<bool> prefixesDivBy5(const std::vector<int>& nums)
     {
         return std::ranges::to<std::vector>(
             nums | std::views::transform(

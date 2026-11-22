@@ -97,7 +97,7 @@ public:
         }
     }
 
-    auto distance(const std::vector<int>& nums) const noexcept
+    static auto distance(const std::vector<int>& nums) noexcept
     {
         const u32 n = cast<u32>(nums.size());
         std::vector<long long> r;

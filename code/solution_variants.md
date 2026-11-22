@@ -5,15 +5,17 @@
   a descriptive suffix:
 
   ```cpp
-  class LC_SOLUTION_NAME(radix)
+  class LC_SOLUTION_NAME(_radix)
   {
   public:
       // The problem's normal entry point.
   };
   ```
 
-- With `LC_LOCAL_BUILD`, the macro expands to `Solution_radix`; otherwise it
-  expands to the judge's `Solution`. Each variant uses a different literal suffix.
+- Use `LC_SOLUTION_NAME()` for the default class, which expands to `Solution`.
+  With `LC_LOCAL_BUILD`, `LC_SOLUTION_NAME(_radix)` expands to `Solution_radix`;
+  otherwise it expands to the judge's `Solution`. The suffix is appended exactly
+  as written, including its leading underscore. Each variant uses a different suffix.
 - Include the headers normally in `<id>_tests.cpp`. Define one `kCases` table
   and use `SolutionTests` from `solution_tests.hpp`:
 

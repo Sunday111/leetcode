@@ -8,14 +8,14 @@
 class Solution
 {
 public:
-    [[nodiscard]] std::vector<int> getBiggestThree(
+    [[nodiscard]] static std::vector<int> getBiggestThree(
         std::vector<std::vector<int>>& grid) noexcept
     {
         auto& r = impl(reinterpret_cast<std::vector<std::vector<u32>>&>(grid));
         return std::move(reinterpret_cast<std::vector<int>&>(r));
     }
 
-    [[nodiscard]] std::vector<u32>& impl(
+    [[nodiscard]] static std::vector<u32>& impl(
         std::vector<std::vector<u32>>& grid) noexcept
     {
         u8 h = grid.size() & 0xFF, w = grid[0].size() & 0xFF, w1 = w - 1;

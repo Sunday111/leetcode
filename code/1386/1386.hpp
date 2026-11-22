@@ -7,7 +7,7 @@ class Solution
 public:
     using u32 = uint32_t;
     inline static u32 sorted[10'001];
-    u32 maxNumberOfFamilies(
+    static u32 maxNumberOfFamilies(
         const u32 last_y,
         const std::vector<std::vector<int>>& seats) noexcept
     {

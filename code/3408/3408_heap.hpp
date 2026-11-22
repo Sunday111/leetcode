@@ -46,7 +46,7 @@ public:
         std::push_heap(pt, pt + pqs);  // NOLINT
     }
 
-    void rmv(u32 taskId) noexcept { pu[taskId].first = -1; }
+    static void rmv(u32 taskId) noexcept { pu[taskId].first = -1; }
 
     int execTop() noexcept
     {

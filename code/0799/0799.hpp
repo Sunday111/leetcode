@@ -3,7 +3,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] double
+    [[nodiscard]] static double
     champagneTower(double poured, unsigned qrow, unsigned qcol) noexcept
     {
         double a[2][101];

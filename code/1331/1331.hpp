@@ -9,7 +9,7 @@ class Solution
 public:
     using u32 = uint32_t;
     inline static u32 sorted[100'001];
-    std::vector<int> arrayRankTransform(std::vector<int>& a) noexcept
+    static std::vector<int> arrayRankTransform(std::vector<int>& a) noexcept
     {
         const u32 n = static_cast<u32>(a.size());
 

@@ -14,7 +14,7 @@ public:
     template <typename T>
     using Vec = BumpVector<T, SolutionStorage>;
 
-    i32 numberOfStableArrays(u16 zero, u16 one, u16 limit)
+    static i32 numberOfStableArrays(u16 zero, u16 one, u16 limit)
     {
         auto arena = SolutionStorage::Instance().StartArena();
         u16 z1 = zero + 1, o1 = one + 1, l1 = limit + 1;

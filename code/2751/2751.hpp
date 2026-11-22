@@ -55,7 +55,7 @@ public:
         }
     }
 
-    std::vector<int> survivedRobotsHealths(
+    static std::vector<int> survivedRobotsHealths(
         std::vector<int>& pos_,
         std::vector<int>& hp_,
         std::string& dir) noexcept

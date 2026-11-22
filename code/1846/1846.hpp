@@ -57,7 +57,7 @@ public:
         }
         return v;
     }
-    u32 maximumElementAfterDecrementingAndRearranging(
+    static u32 maximumElementAfterDecrementingAndRearranging(
         const std::vector<int>& nums) noexcept
     {
         return std::array{&impl<0>, &impl<1>}[nums.size() >= (1ul << 16)](nums);

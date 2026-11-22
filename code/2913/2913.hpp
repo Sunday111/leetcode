@@ -28,7 +28,7 @@ public:
     }
 
     [[gnu::no_sanitize_address, gnu::target("bmi")]]
-    u32 query(u32 l, u32 r) const
+    static u32 query(u32 l, u32 r)
     {
         return prefix_sum(r + 1) - prefix_sum(l);
     }
@@ -56,7 +56,7 @@ private:
     }
 
     [[gnu::no_sanitize_address, gnu::target("bmi")]]
-    u32 prefix_sum(u32 count) const
+    static u32 prefix_sum(u32 count)
     {
         u32 sum = 0;
         u32 weighted_sum = 0;
@@ -77,7 +77,7 @@ class Solution
 
 public:
     // Keep initialisation instrumented so zero-fills lower to memset.
-    u32 sumCounts(std::vector<int>& input)
+    static u32 sumCounts(std::vector<int>& input)
     {
         auto nums = reinterpret_cast<const u32*>(input.data());
         u32 n = static_cast<u32>(input.size());

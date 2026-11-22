@@ -46,7 +46,7 @@ struct Vec2
 class Solution
 {
 public:
-    std::vector<std::vector<int>> queensAttacktheKing(
+    static std::vector<std::vector<int>> queensAttacktheKing(
         std::vector<std::vector<int>>& in_queens,
         std::vector<int>& in_king)
     {

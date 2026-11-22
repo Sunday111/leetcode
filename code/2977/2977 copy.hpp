@@ -33,7 +33,7 @@ inline static u16 trie_idx = 0;   // NOLINT
 struct Trie
 {
     TrieNode* root;
-    TrieNode* newNode()
+    static TrieNode* newNode()
     {
         TrieNode* node = &POOL[next_node++];
         node->links.fill(nullptr);

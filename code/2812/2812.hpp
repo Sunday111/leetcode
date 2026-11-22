@@ -23,8 +23,8 @@ public:
 
     inline static constexpr u32 kInf = 0xFFFFu >> 1;
 
-    u16 maximumSafenessFactor(
-        const std::vector<std::vector<int>>& ggg) const noexcept
+    static u16 maximumSafenessFactor(
+        const std::vector<std::vector<int>>& ggg) noexcept
     {
         auto& gg = reinterpret_cast<const std::vector<std::vector<u32>>&>(ggg);
         const u32 h = static_cast<u32>(gg.size());

@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    int numberOfSpecialChars(const std::string& word) noexcept
+    static int numberOfSpecialChars(const std::string& word) noexcept
     {
         u32 p[2]{}, bad{};
         for (char c : word)

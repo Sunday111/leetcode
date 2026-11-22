@@ -4,7 +4,7 @@
 class Solution
 {
 public:
-    int minimumEffort(std::vector<std::vector<int>>& tasks)
+    static int minimumEffort(std::vector<std::vector<int>>& tasks)
     {
         std::ranges::sort(
             tasks,

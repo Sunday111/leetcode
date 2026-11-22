@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    int minOperations(std::vector<int>& nums)
+    static int minOperations(std::vector<int>& nums)
     {
         const size_t n = nums.size();
         size_t l = 0;

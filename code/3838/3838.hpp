@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] constexpr std::string mapWordWeights(
+    [[nodiscard]] static constexpr std::string mapWordWeights(
         const std::vector<std::string>& words,
         const std::vector<int>& weights) noexcept
     {

@@ -14,8 +14,8 @@ public:
     inline static u64 b_words[PyramidBitset<100'001>::kTotalWords]{};
     inline static auto b = pbs_make<100'001>(b_words);
 
-    [[nodiscard]] auto maxIceCream(const std::vector<int>& costs, u32 coins)
-        const noexcept
+    [[nodiscard]] static auto maxIceCream(const std::vector<int>& costs, u32 coins)
+        noexcept
     {
         u32 r = 0;
 

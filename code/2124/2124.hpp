@@ -5,7 +5,7 @@
 class LC_SOLUTION_NAME()
 {
 public:
-    bool checkString(std::string_view s) const noexcept
+    static bool checkString(std::string_view s) noexcept
     {
         return s.find("ba") == std::string_view::npos;
     }

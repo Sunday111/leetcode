@@ -35,7 +35,7 @@ public:
 
     static constexpr auto kInvalidDist = std::numeric_limits<uint32_t>::max();
 
-    int closestMeetingNode(std::vector<int>& edges, int node1, int node2)
+    static int closestMeetingNode(std::vector<int>& edges, int node1, int node2)
     {
         auto walk = [&edges]<typename TV>(
                         std::vector<int>& distances,

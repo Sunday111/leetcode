@@ -57,9 +57,9 @@ public:
         return true;
     };
 
-    [[nodiscard]] constexpr bool findRotation(
+    [[nodiscard]] static constexpr bool findRotation(
         const std::vector<std::vector<int>>& m1,
-        const std::vector<std::vector<int>>& m2) const noexcept
+        const std::vector<std::vector<int>>& m2) noexcept
     {
         auto f = std::bind(same, m1, m2, std::placeholders::_1);
         return f(kIntConst<0>) || f(kIntConst<1>) || f(kIntConst<2>) ||

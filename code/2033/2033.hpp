@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    int minOperations(std::vector<std::vector<int>>& g, int x)
+    static int minOperations(std::vector<std::vector<int>>& g, int x)
     {
         BitsetPriorityQueue<10'000, 100'000> b{};
 

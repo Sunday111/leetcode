@@ -77,7 +77,7 @@ public:
         }
     };
 
-    i64 minimumCost(
+    static i64 minimumCost(
         std::string_view source,
         std::string_view target,
         std::vector<std::string>& original,

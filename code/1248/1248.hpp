@@ -37,7 +37,7 @@ public:
 
         return x;
     }
-    [[nodiscard]] u32 numberOfSubarrays(std::vector<int>& nums, u32 k) noexcept
+    [[nodiscard]] static u32 numberOfSubarrays(std::vector<int>& nums, u32 k) noexcept
     {
         return impl(
             reinterpret_cast<const u32*>(nums.data()),

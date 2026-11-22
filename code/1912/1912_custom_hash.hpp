@@ -82,7 +82,7 @@ public:
     }
 
 private:
-    [[gnu::always_inline]] inline u32 hash(const K& key) const noexcept
+    [[gnu::always_inline]] static inline u32 hash(const K& key) noexcept
     {
         size_t h = Hasher{}(key);
         // MurmurHash3-style avalanche to mix bits
@@ -179,7 +179,7 @@ public:
         }
     }
 
-    const std::vector<int>& search(MovieID movie) const noexcept
+    static const std::vector<int>& search(MovieID movie) noexcept
     {
         static std::vector<int> r;
         r.clear();

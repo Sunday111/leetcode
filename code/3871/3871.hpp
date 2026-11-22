@@ -1,7 +1,7 @@
 class Solution
 {
 public:
-    auto countCommas(unsigned long n)
+    static auto countCommas(unsigned long n)
     {
         auto r = 0ul, t = 1000ul;
         n += 1;

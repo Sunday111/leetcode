@@ -8,7 +8,7 @@ class Solution
 public:
     std::optional<TreeNode*> result_;
 
-    TreeNode* lowestCommonAncestor(TreeNode* n, TreeNode* pn, TreeNode* qn)
+    static TreeNode* lowestCommonAncestor(TreeNode* n, TreeNode* pn, TreeNode* qn)
     {
         const int p = pn->val, q = qn->val;
         while (true)

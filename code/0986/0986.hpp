@@ -3,9 +3,9 @@
 class Solution
 {
 public:
-    std::vector<std::vector<int>> intervalIntersection(
+    static std::vector<std::vector<int>> intervalIntersection(
         std::vector<std::vector<int>>& l1,
-        std::vector<std::vector<int>>& l2) const noexcept
+        std::vector<std::vector<int>>& l2) noexcept
     {
         if (l2.size() > l1.size()) std::swap(l1, l2);
 

@@ -6,7 +6,7 @@ class Solution
 public:
     using u32 = uint32_t;
 
-    [[nodiscard]] constexpr u32 punishmentNumber(u32 n) noexcept
+    [[nodiscard]] static constexpr u32 punishmentNumber(u32 n) noexcept
     {
         constexpr auto kArr = []
         {

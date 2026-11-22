@@ -3,7 +3,7 @@
 #include "solution_tests.hpp"
 #include "test_cases_helpers.hpp"
 
-inline static constexpr auto kMethodToTest = &Solution_::checkString;
+inline static constexpr auto kMethodToTest = &Solution::checkString;
 inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 "aaabbb" true
 "abab"   false
@@ -17,7 +17,7 @@ inline static const auto kCases = parse_test_cases<kMethodToTest>(R"(
 "aaabba" false
 )");
 
-using t2124 = SolutionTests<Solution_, Solution_2>;
+using t2124 = SolutionTests<Solution, Solution_2>;
 
 TEST_P(t2124, Test)
 {

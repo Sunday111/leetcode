@@ -5,7 +5,7 @@ class Solution
 {
 public:
     inline static unsigned kFact[]{1, 1, 2, 6, 24, 120, 720};
-    auto permute(std::vector<int>& nums)
+    static auto permute(std::vector<int>& nums)
     {
         auto target = kFact[nums.size()];
 

@@ -67,7 +67,7 @@ inline constexpr auto kEntries = []
 class Solution
 {
 public:
-    std::vector<std::string> readBinaryWatch(u8 turned_on) noexcept
+    static std::vector<std::string> readBinaryWatch(u8 turned_on) noexcept
     {
         std::vector<std::string> r;
 

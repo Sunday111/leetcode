@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    constexpr auto partitionLabels(const std::string& s) noexcept
+    static constexpr auto partitionLabels(const std::string& s) noexcept
     {
         u32 lb = 0, rb = 0;
         u16 n = 0, freq[26]{};

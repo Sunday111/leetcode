@@ -14,7 +14,7 @@ public:
     // One sentinel and one spare slot for unconditional child writes.
     inline static Frame st[100'002];
 
-    int averageOfSubtree(const TreeNode* root) noexcept
+    static int averageOfSubtree(const TreeNode* root) noexcept
     {
         int top = root != nullptr, r = 0;
 

@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    std::vector<int> productQueries(
+    static std::vector<int> productQueries(
         uint32_t n,
         std::vector<std::vector<int>>& queries)
     {

@@ -4,7 +4,7 @@
 class Solution
 {
 public:
-    int smallestIndex(const std::vector<int>& nums) const noexcept
+    static int smallestIndex(const std::vector<int>& nums) noexcept
     {
         for (size_t i = 0; i != nums.size(); ++i)
         {

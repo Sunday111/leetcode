@@ -11,8 +11,8 @@
 class Solution
 {
 public:
-    [[nodiscard]] bool asteroidsDestroyed(u64 m, const std::vector<int>& a)
-        const noexcept
+    [[nodiscard]] static bool asteroidsDestroyed(u64 m, const std::vector<int>& a)
+        noexcept
     {
         static u64 b_words[PyramidBitset<100'001>::kTotalWords]{};
         static auto b = pbs_make<100'001>(b_words);

@@ -26,7 +26,7 @@ public:
         return dp;
     }();
 
-    [[nodiscard]] constexpr u32 countVowelStrings(u8 n) const noexcept
+    [[nodiscard]] static constexpr u32 countVowelStrings(u8 n) noexcept
     {
         return Ans[n][5];
     }

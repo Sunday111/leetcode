@@ -8,7 +8,7 @@
 class Solution
 {
 public:
-    bool containsCycle(const std::vector<std::vector<char>>& g) noexcept
+    static bool containsCycle(const std::vector<std::vector<char>>& g) noexcept
     {
         static u32 p[500 * 500];
 

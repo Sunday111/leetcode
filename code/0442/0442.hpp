@@ -12,7 +12,7 @@ public:
         return std::pair{x >> 20, ((1 << 20) - 1) & x};
     }
 
-    auto findDuplicates(std::vector<int>& aa) noexcept
+    static auto findDuplicates(std::vector<int>& aa) noexcept
     {
         auto a = aa.data();
         for (int x : aa)

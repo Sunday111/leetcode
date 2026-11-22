@@ -2,7 +2,7 @@
 
 #include "solution_name.hpp"
 
-class LC_SOLUTION_NAME(2)
+class LC_SOLUTION_NAME(_2)
 {
 public:
     static bool checkString(std::string_view s) noexcept

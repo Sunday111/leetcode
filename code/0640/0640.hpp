@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    std::string solveEquation(const std::string& s)
+    static std::string solveEquation(const std::string& s)
     {
         bool left_part = true;
         int kx = 0;

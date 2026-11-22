@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] auto minFlips(const std::string& str) noexcept
+    [[nodiscard]] static auto minFlips(const std::string& str) noexcept
     {
         auto s = reinterpret_cast<const u8*>(str.data());
         u32 n = static_cast<u32>(str.size()), f = 0;

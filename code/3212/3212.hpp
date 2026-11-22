@@ -29,7 +29,7 @@ struct Meow
 class Solution
 {
 public:
-    u32 numberOfSubmatrices(const std::vector<std::vector<char>>& orig) noexcept
+    static u32 numberOfSubmatrices(const std::vector<std::vector<char>>& orig) noexcept
     {
         Meow g[kMaxW];
 

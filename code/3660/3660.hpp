@@ -4,7 +4,7 @@
 class Solution
 {
 public:
-    auto maxValue(std::vector<int>& a) noexcept
+    static auto maxValue(std::vector<int>& a) noexcept
     {
         static int p[100000];
         auto d = a.data();

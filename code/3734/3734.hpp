@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    void complete(char* front, char* back, const size_t* f)
+    static void complete(char* front, char* back, const size_t* f)
     {
         for (size_t i = 0; i != 26; ++i)
         {
@@ -18,7 +18,7 @@ public:
         }
     }
 
-    std::string lexPalindromicPermutation(std::string& s, std::string& target)
+    static std::string lexPalindromicPermutation(std::string& s, std::string& target)
     {
         const size_t n = s.size(), n2 = n / 2;
         size_t fs[26]{}, i = 0, j = n - 1;

@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    u32 minElement(std::vector<int>& nums)
+    static u32 minElement(std::vector<int>& nums)
     {
         u32 r = 9 * 4;
 

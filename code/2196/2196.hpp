@@ -10,7 +10,7 @@
 #include "ptr_if.hpp"
 #include "solution_name.hpp"
 
-class LC_SOLUTION_NAME(flat_bitset)
+class LC_SOLUTION_NAME(_flat_bitset)
 {
     inline static TreeNode nodes[100001];
 
@@ -22,7 +22,7 @@ class LC_SOLUTION_NAME(flat_bitset)
     }();
 
 public:
-    [[nodiscard]] TreeNode* createBinaryTree(
+    [[nodiscard]] static TreeNode* createBinaryTree(
         const std::vector<std::vector<int>>& descriptions)
     {
         constexpr u32 nw = (100'001 / 64) + 1;

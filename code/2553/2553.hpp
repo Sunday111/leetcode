@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    std::vector<int> separateDigits(std::vector<int>& a) noexcept
+    static std::vector<int> separateDigits(std::vector<int>& a) noexcept
     {
         std::vector<int> r;
         r.reserve(a.size() * 6);

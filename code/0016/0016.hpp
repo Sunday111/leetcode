@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    int threeSumClosest(std::vector<int32_t>& nums, const int target)
+    static int threeSumClosest(std::vector<int32_t>& nums, const int target)
     {
         std::ranges::sort(nums);
 

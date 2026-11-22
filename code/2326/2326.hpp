@@ -12,7 +12,7 @@ struct ListNode
 class Solution
 {
 public:
-    __attribute__((no_sanitize("all"))) std::vector<std::vector<int>>
+    static __attribute__((no_sanitize("all"))) std::vector<std::vector<int>>
     spiralMatrix(unsigned height, unsigned width, ListNode* head)
     {
         std::vector matrix(height, std::vector<int>(width, -1));

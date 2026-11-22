@@ -6,7 +6,7 @@ class Solution
 {
 public:
     using u16 = uint16_t;
-    [[nodiscard]] u16 longestCommonSubsequence(
+    [[nodiscard]] static u16 longestCommonSubsequence(
         std::string_view a,
         std::string_view b) noexcept
     {

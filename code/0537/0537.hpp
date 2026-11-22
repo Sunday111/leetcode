@@ -62,7 +62,7 @@ public:
         return std::format("{}+{}i", v.real, v.imag);
     }
 
-    std::string complexNumberMultiply(
+    static std::string complexNumberMultiply(
         const std::string& num1,
         const std::string& num2)
     {

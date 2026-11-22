@@ -4,7 +4,7 @@
 class Solution
 {
 public:
-    [[nodiscard]] int repeatedNTimes(const std::vector<int>& nums) noexcept
+    [[nodiscard]] static int repeatedNTimes(const std::vector<int>& nums) noexcept
     {
         std::bitset<10000> b;
         for (int v : nums)

@@ -11,10 +11,10 @@
 #include "pyramid_bitset/pbs_remove.hpp"
 #include "solution_name.hpp"
 
-class LC_SOLUTION_NAME(pyramid_bitset)
+class LC_SOLUTION_NAME(_pyramid_bitset)
 {
 public:
-    [[nodiscard]] TreeNode* createBinaryTree(
+    [[nodiscard]] static TreeNode* createBinaryTree(
         const std::vector<std::vector<int>>& descriptions)
     {
         static TreeNode nodes[100001];

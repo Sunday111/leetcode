@@ -15,7 +15,7 @@ inline static constexpr auto all_equal_to =
 class Solution
 {
 public:
-    bool checkStrings(std::string& s1, std::string& s2)
+    static bool checkStrings(std::string& s1, std::string& s2)
     {
         int f[2][26]{};
         for (bool i = 0; auto [a, b] : std::views::zip(s1, s2))

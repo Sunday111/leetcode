@@ -9,7 +9,7 @@ public:
     using u32 = uint32_t;
     inline static u32 x[100'000];
 
-    auto firstStableIndex(std::vector<int>& nums, u32 k) noexcept
+    static auto firstStableIndex(std::vector<int>& nums, u32 k) noexcept
     {
         auto a = reinterpret_cast<const u32*>(nums.data());
         auto n = static_cast<u32>(nums.size());

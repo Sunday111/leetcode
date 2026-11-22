@@ -3,7 +3,7 @@
 
 class Solution
 {
-    [[nodiscard]] std::vector<std::vector<int>> impl(
+    [[nodiscard]] static std::vector<std::vector<int>> impl(
         const std::span<const int> nums) noexcept
     {
         if (nums.empty()) return {{}};
@@ -16,7 +16,7 @@ class Solution
     }
 
 public:
-    [[nodiscard, gnu::always_inline]] inline std::vector<std::vector<int>>
+    [[nodiscard, gnu::always_inline]] static inline std::vector<std::vector<int>>
     subsets(std::vector<int>& nums) noexcept
     {
         return impl(std::span{nums});

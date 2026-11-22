@@ -133,7 +133,7 @@ public:
                 }));
     }
 
-    std::vector<int> assignEdgeWeights(
+    static std::vector<int> assignEdgeWeights(
         const std::vector<std::vector<int>>& edges,
         const std::vector<std::vector<int>>& queries) noexcept
     {

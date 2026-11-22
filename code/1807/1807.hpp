@@ -62,7 +62,7 @@ struct HashTable : HashTableStorage
         }
     }
 
-    [[gnu::always_inline, gnu::no_sanitize_address]] Entry& slot(
+    [[gnu::always_inline, gnu::no_sanitize_address]] static Entry& slot(
         u64 key,
         bool insert = false) noexcept
     {
@@ -286,9 +286,9 @@ public:
         return fns[index](s, knowledge);
     }
 
-    [[gnu::no_sanitize_address]] std::string evaluate(
+    [[gnu::no_sanitize_address]] static std::string evaluate(
         std::string_view s,
-        const std::vector<std::vector<std::string>>& knowledge) const noexcept
+        const std::vector<std::vector<std::string>>& knowledge) noexcept
     {
         const size_t first = s.find('(');
         if (first == std::string_view::npos) return std::string{s};

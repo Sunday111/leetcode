@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    bool validateStackSequences(
+    static bool validateStackSequences(
         std::vector<int>& pushed,
         std::vector<int>& popped)
     {

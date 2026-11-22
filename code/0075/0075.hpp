@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    void sortColors(std::vector<int>& nums)
+    static void sortColors(std::vector<int>& nums)
     {
         std::array<uint16_t, 3> count{};
         for (const auto& v : nums)

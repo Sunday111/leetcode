@@ -8,7 +8,7 @@
 class Solution2
 {
 public:
-    [[nodiscard]] constexpr std::vector<std::string>
+    [[nodiscard]] static constexpr std::vector<std::string>
     getWordsInLongestSubsequence(
         std::vector<std::string>& words,
         std::vector<int>& groups)

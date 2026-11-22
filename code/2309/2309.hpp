@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    std::string greatestLetter(std::string& s)
+    static std::string greatestLetter(std::string& s)
     {
         u32 b[2]{};
         for (char c : s)

@@ -5,7 +5,7 @@ class Solution
 {
 public:
     inline static constexpr int m = 1'000'000'007;
-    auto distinctSubseqII(std::string_view s)
+    static auto distinctSubseqII(std::string_view s)
     {
         long f[32]{}, g{1};
         for (auto x : s)

@@ -14,7 +14,7 @@ using SolutionStorage = GlobalBufferStorage<1 << 25>;
 class Solution
 {
 public:
-    std::vector<long long> findXSum(std::span<const u32> nums, u32 k, u32 x)
+    static std::vector<long long> findXSum(std::span<const u32> nums, u32 k, u32 x)
     {
         SolutionStorage::Instance().Reset();
         ObjectWithoutDtor<BumpHashMap<u32, u32, SolutionStorage>> val_to_freq;
@@ -105,7 +105,7 @@ public:
         return r;
     }
 
-    std::vector<long long> findXSum(std::vector<int>& nums, u32 k, u32 x)
+    static std::vector<long long> findXSum(std::vector<int>& nums, u32 k, u32 x)
     {
         return findXSum(reinterpret_range<u32>(nums), k, x);
     }

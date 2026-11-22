@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    int numberOfSpecialChars(std::string& word)
+    static int numberOfSpecialChars(std::string& word)
     {
         u32 b[2]{};
         for (char c : word)

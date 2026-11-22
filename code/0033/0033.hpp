@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    int search(std::vector<int>& a, int x)
+    static int search(std::vector<int>& a, int x)
     {
         u32 l = 0, r = static_cast<u32>(a.size() - 1);
 

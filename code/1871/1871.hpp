@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    bool canReach(const std::string& s, u32 lo, u32 hi) noexcept
+    static bool canReach(const std::string& s, u32 lo, u32 hi) noexcept
     {
         u32 n = static_cast<u32>(s.size()), ni = 0, li = 0;
         if (s.back() == '1') return false;  // last is unreachable

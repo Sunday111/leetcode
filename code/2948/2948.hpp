@@ -10,7 +10,7 @@ public:
     inline static u32 indices_sorted_by_value[100'001];
     inline static u32 sorted_indices_buf[100'001];
     inline static u32 tmp[100'001];
-    std::vector<int> lexicographicallySmallestArray(
+    static std::vector<int> lexicographicallySmallestArray(
         std::vector<int>& nums,
         u32 limit)
     {

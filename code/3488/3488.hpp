@@ -56,7 +56,7 @@ public:
             i = iif(d[i] == 0 || d[i] == n, ~u32{}, d[i]);
         }
     }
-    std::vector<int> solveQueries(
+    static std::vector<int> solveQueries(
         std::vector<int>& nums,
         std::vector<int>& queries)
     {

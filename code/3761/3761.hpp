@@ -111,8 +111,8 @@ public:
         return r;
     }
 
-    [[nodiscard]] int minMirrorPairDistance(
-        std::vector<int>& nums) const noexcept
+    [[nodiscard]] static int minMirrorPairDistance(
+        std::vector<int>& nums) noexcept
     {
         static_assert(std::bit_width(100'000u) == 17);
 

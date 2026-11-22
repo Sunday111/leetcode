@@ -9,7 +9,7 @@ public:
     inline static constexpr u32 kMOD = 1'000'000'007;
     inline static u32 dp[2000];
 
-    u32 zigZagArrays(const u32 n, const u32 l, const u32 r) noexcept
+    static u32 zigZagArrays(const u32 n, const u32 l, const u32 r) noexcept
     {
         const u32 m = r - l + 1, m1 = m - 1, k = m / 2;
         [[assume(n > 2)]];

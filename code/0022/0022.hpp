@@ -72,14 +72,14 @@ struct Data<0>
     }
 };
 
-class LC_SOLUTION_NAME(precomputed)
+class LC_SOLUTION_NAME(_precomputed)
 {
 public:
     inline static constexpr u8 kMaxN = 8;
     inline static constexpr Data<kMaxN> data;
 
-    std::vector<std::string> generateParenthesis(
-        Data<kMaxN>::SizeIndex n) const noexcept
+    static std::vector<std::string> generateParenthesis(
+        Data<kMaxN>::SizeIndex n) noexcept
     {
         return data[n] | stdv::chunk(2 * n) |
                stdv::transform(

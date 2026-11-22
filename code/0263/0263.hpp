@@ -6,7 +6,7 @@ class Solution
 public:
     static constexpr std::array kFactors{2, 3, 5};
 
-    bool isUgly(int n)
+    static bool isUgly(int n)
     {
         if (n == 0) return false;
         for (int k : kFactors)

@@ -3,7 +3,7 @@
 class Solution
 {
 public:
-    bool hasSameDigits(std::string& s)
+    static bool hasSameDigits(std::string& s)
     {
         for (size_t o = s.size(); o > 2;)
         {

@@ -16,9 +16,9 @@
 class Solution
 {
 public:
-    [[nodiscard]] auto minAbsDiff(
+    [[nodiscard]] static auto minAbsDiff(
         std::vector<std::vector<int>>& orig,
-        const u8 k) const noexcept
+        const u8 k) noexcept
     {
         // make all values unsigned
         for (auto& v : orig | std::views::join) v += 100'000;

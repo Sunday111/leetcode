@@ -89,7 +89,7 @@ public:
         node.add = node.add + a;
     }
 
-    [[gnu::always_inline]] inline constexpr void push(
+    [[gnu::always_inline]] static inline constexpr void push(
         u32 node_id,
         Interval node_interval) noexcept
     {
@@ -111,7 +111,7 @@ public:
         }
     }
 
-    [[gnu::always_inline]] inline constexpr void update(
+    [[gnu::always_inline]] static inline constexpr void update(
         Interval change_interval,
         Interval node_interval,
         u32 node_id,
@@ -140,13 +140,13 @@ public:
         update(change_interval, r, right_node_id, mul, add);
     }
 
-    [[gnu::always_inline]] inline constexpr void
+    [[gnu::always_inline]] static inline constexpr void
     update(Interval change_interval, ModInt mul, ModInt add) noexcept
     {
         update(change_interval, all, 1, mul, add);
     }
 
-    [[gnu::always_inline]] inline constexpr void update_mul(
+    [[gnu::always_inline]] static inline constexpr void update_mul(
         Interval change_interval,
         Interval node_interval,
         u32 node_id,
@@ -174,14 +174,14 @@ public:
         update_mul(change_interval, r, right_node_id, mul);
     }
 
-    [[gnu::always_inline]] inline constexpr void update_mul(
+    [[gnu::always_inline]] static inline constexpr void update_mul(
         Interval change_interval,
         ModInt mul) noexcept
     {
         update_mul(change_interval, all, 1, mul);
     }
 
-    [[gnu::always_inline]] inline constexpr void update_add(
+    [[gnu::always_inline]] static inline constexpr void update_add(
         Interval change_interval,
         Interval node_interval,
         u32 node_id,
@@ -209,14 +209,14 @@ public:
         update_add(change_interval, r, right_node_id, add);
     }
 
-    [[gnu::always_inline]] inline constexpr void update_add(
+    [[gnu::always_inline]] static inline constexpr void update_add(
         Interval change_interval,
         ModInt add) noexcept
     {
         update_add(change_interval, all, 1, add);
     }
 
-    constexpr ModInt
+    static constexpr ModInt
     query(u32 idx, u32 node_id, Interval node_interval) noexcept
     {
         auto& node = nodes[node_id];
@@ -229,7 +229,7 @@ public:
         return query(idx, right_node_id, r);
     }
 
-    constexpr ModInt query(u32 idx) noexcept { return query(idx, 1, all); }
+    static constexpr ModInt query(u32 idx) noexcept { return query(idx, 1, all); }
 };
 
 class Fancy

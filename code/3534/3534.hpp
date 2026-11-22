@@ -110,7 +110,7 @@ public:
         }
     }
 
-    [[nodiscard, gnu::always_inline]] auto pathExistenceQueries(
+    [[nodiscard, gnu::always_inline]] static auto pathExistenceQueries(
         int n,
         std::vector<int>& nums,
         int maxDiff,

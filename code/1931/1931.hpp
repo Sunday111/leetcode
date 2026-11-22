@@ -185,7 +185,7 @@ public:
         return solve_reccurence(kTransitionMatrix<m>, cnt, n - 1);
     };
 
-    int colorTheGrid(int m, int n)
+    static int colorTheGrid(int m, int n)
     {
         auto fn = [&]
         {

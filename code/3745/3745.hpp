@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    int maximizeExpressionOfThree(std::vector<int>& nums)
+    static int maximizeExpressionOfThree(std::vector<int>& nums)
     {
         BitsetPriorityQueue<200, 100> q;
 

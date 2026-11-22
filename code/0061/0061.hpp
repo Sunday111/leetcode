@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    ListNode* rotateRight(ListNode* h, int k)
+    static ListNode* rotateRight(ListNode* h, int k)
     {
         if (!k || !h || !h->next) return h;
         auto t = h;

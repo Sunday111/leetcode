@@ -11,7 +11,7 @@ namespace stdv = std::views;
 class Solution
 {
 public:
-    std::vector<bool> pathExistenceQueries(
+    static std::vector<bool> pathExistenceQueries(
         const u32 n,
         std::vector<int>& nums,
         const int md,

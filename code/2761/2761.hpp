@@ -189,7 +189,7 @@ private:
 class Solution
 {
 public:
-    std::vector<std::vector<int>> findPrimePairs(uint32_t n)
+    static std::vector<std::vector<int>> findPrimePairs(uint32_t n)
     {
         if (n < 2) return {};
 

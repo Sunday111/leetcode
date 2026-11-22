@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    std::vector<int> xorQueries(
+    static std::vector<int> xorQueries(
         std::vector<int>& a,
         const std::vector<std::vector<int>>& q)
     {

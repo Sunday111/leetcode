@@ -4,7 +4,7 @@
 class Solution
 {
 public:
-    int minimumPushes(std::string_view w) const noexcept
+    static int minimumPushes(std::string_view w) noexcept
     {
         int f[26]{}, b{8}, r{};
         for (char c : w) ++f[c - 'a'];

@@ -9,7 +9,7 @@ namespace stdr = std::ranges;
 class Solution
 {
 public:
-    auto minDeletionSize(std::vector<std::string>& strs)
+    static auto minDeletionSize(std::vector<std::string>& strs)
     {
         auto& map = stdv::transform;
         return stdr::count_if(

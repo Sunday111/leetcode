@@ -10,7 +10,7 @@
 class Solution
 {
 public:
-    auto countSubmatrices(std::vector<std::vector<int>>& g, int k) noexcept
+    static auto countSubmatrices(std::vector<std::vector<int>>& g, int k) noexcept
     {
         constexpr auto adj = stdv::adjacent<2>;
 

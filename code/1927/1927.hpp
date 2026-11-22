@@ -4,7 +4,7 @@
 class Solution
 {
 public:
-    bool sumGame(std::string_view str)
+    static bool sumGame(std::string_view str)
     {
         const size_t n = str.size(), half = n / 2;
         int q{}, d{};

@@ -8,7 +8,7 @@
 class Solution
 {
 public:
-    int maximumJumps(std::vector<int>& nums, int target)
+    static int maximumJumps(std::vector<int>& nums, int target)
     {
         auto n = cast<u32>(nums.size());
         int dp[1000];

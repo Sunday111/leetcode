@@ -9,7 +9,7 @@ inline static constexpr u32 kMOD = 1'000'000'007;
 class Solution
 {
 public:
-    [[nodiscard, gnu::target("bmi2,avx2")]] constexpr std::vector<int>
+    [[nodiscard, gnu::target("bmi2,avx2")]] static constexpr std::vector<int>
     pathsWithMaxScore(std::vector<std::string>& board) noexcept
     {
         const u32 h = static_cast<u32>(board.size()), h1 = h - 1;

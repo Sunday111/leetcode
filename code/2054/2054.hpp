@@ -4,7 +4,7 @@
 class Solution
 {
 public:
-    int maxTwoEvents(std::vector<std::vector<int>>& events)
+    static int maxTwoEvents(std::vector<std::vector<int>>& events)
     {
         std::ranges::sort(events, std::less{});
 

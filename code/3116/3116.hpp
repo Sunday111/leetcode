@@ -42,7 +42,7 @@ public:
         return o;
     }
 
-    auto findKthSmallest(const std::vector<int>& coins, long k) noexcept
+    static auto findKthSmallest(const std::vector<int>& coins, long k) noexcept
     {
         const long hi = *std::ranges::min_element(coins) * k + 1;
         auto how_many = [lf = count_lcm(coins, hi)](long v)

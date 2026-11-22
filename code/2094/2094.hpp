@@ -7,7 +7,7 @@
 class Solution
 {
 public:
-    std::vector<int> findEvenNumbers(std::vector<int>& digits)
+    static std::vector<int> findEvenNumbers(std::vector<int>& digits)
     {
         std::array<uint8_t, 10> cnt{};
         for (auto digit : digits) cnt[static_cast<uint8_t>(digit)]++;

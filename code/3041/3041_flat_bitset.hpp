@@ -11,7 +11,7 @@
 #include "solution_name.hpp"
 #include "sync_stdio.hpp"
 
-class LC_SOLUTION_NAME(flat_bitset)
+class LC_SOLUTION_NAME(_flat_bitset)
 {
     static constexpr u32 kWords = (1'000'001 + 63) / 64;
     inline static u64 present[kWords];
@@ -43,7 +43,7 @@ class LC_SOLUTION_NAME(flat_bitset)
 
 public:
     [[gnu::flatten, gnu::target("avx2,bmi,bmi2,lzcnt,popcnt")]]
-    u32 maxSelectedElements(std::vector<int>& nums) noexcept
+    static u32 maxSelectedElements(std::vector<int>& nums) noexcept
     {
         const auto* data = reinterpret_cast<const u32*>(nums.data());
         u32 n = cast<u32>(nums.size());

@@ -6,7 +6,7 @@ class Solution
 {
 public:
     using u32 = uint32_t;
-    [[nodiscard]] u32 jump(std::span<const int> nums_) noexcept
+    [[nodiscard]] static u32 jump(std::span<const int> nums_) noexcept
     {
         const auto nums = reinterpret_cast<const u32*>(nums_.data());
         const auto target = static_cast<u32>(nums_.size() - 1);

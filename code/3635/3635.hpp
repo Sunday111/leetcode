@@ -5,11 +5,11 @@
 class Solution
 {
 public:
-    int earliestFinishTime(
+    static int earliestFinishTime(
         const std::vector<int>& landStartTime,
         const std::vector<int>& landDuration,
         const std::vector<int>& waterStartTime,
-        const std::vector<int>& waterDuration) const noexcept
+        const std::vector<int>& waterDuration) noexcept
     {
         auto calc = [] [[gnu::always_inline]] (auto&& a, auto&& b) noexcept
         {

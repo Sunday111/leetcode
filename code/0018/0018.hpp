@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    std::vector<std::vector<int>> fourSum(
+    static std::vector<std::vector<int>> fourSum(
         std::vector<int>& nums,
         const int target)
     {

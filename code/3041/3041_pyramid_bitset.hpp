@@ -15,7 +15,7 @@
 #include "solution_name.hpp"
 #include "sync_stdio.hpp"
 
-class LC_SOLUTION_NAME(pyramid_bitset)
+class LC_SOLUTION_NAME(_pyramid_bitset)
 {
     using Bits = PyramidBitset<1'000'001>;
     inline static u64 present[Bits::kTotalWords];
@@ -23,7 +23,7 @@ class LC_SOLUTION_NAME(pyramid_bitset)
 
 public:
     [[gnu::flatten, gnu::target("avx2,bmi,bmi2,lzcnt,popcnt")]]
-    u32 maxSelectedElements(std::vector<int>& nums) noexcept
+    static u32 maxSelectedElements(std::vector<int>& nums) noexcept
     {
         auto seen = pbs_make<Bits::kCapacity>(present);
         auto repeated = pbs_make<Bits::kCapacity>(duplicate);

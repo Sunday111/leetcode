@@ -10,7 +10,7 @@ public:
     using u64 = std::uint64_t;
     inline static u32 f[200'001];
 
-    [[nodiscard]] auto countMajoritySubarrays(
+    [[nodiscard]] static auto countMajoritySubarrays(
         const std::vector<int>& nums,
         int target) noexcept
     {

@@ -179,7 +179,7 @@ public:
 class Solution
 {
 public:
-    [[nodiscard]] u32 longestBalanced(std::vector<int>& nums) noexcept
+    [[nodiscard]] static u32 longestBalanced(std::vector<int>& nums) noexcept
     {
         // At most 10^5 indices
         static SegmentTree::Node nodes[num_required_nodes(100'001)];

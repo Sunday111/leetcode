@@ -15,7 +15,7 @@ public:
         u32 y;
     };
 
-    double separateSquares(const std::vector<std::vector<int>>& squares)
+    static double separateSquares(const std::vector<std::vector<int>>& squares)
     {
         const u32 n = cast<u32>(squares.size());
         static Square s[50000];

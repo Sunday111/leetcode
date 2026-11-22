@@ -25,7 +25,7 @@ public:
         }
         return r;
     }();
-    auto sequentialDigits(int low, int high) const noexcept
+    static auto sequentialDigits(int low, int high) noexcept
     {
         // g is a very small array - linear search is likely to be faster.
         size_t b = 0;

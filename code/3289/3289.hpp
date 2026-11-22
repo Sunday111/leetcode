@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    std::vector<int> getSneakyNumbers(std::vector<int>& nums)
+    static std::vector<int> getSneakyNumbers(std::vector<int>& nums)
     {
         std::bitset<101> b;
         size_t k = 0;

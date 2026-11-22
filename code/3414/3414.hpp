@@ -68,8 +68,8 @@ public:
     inline static Cell dp[100'001];
 
     [[gnu::target("avx2,bmi2")]]
-    std::vector<int> maximumWeight(
-        const std::vector<std::vector<int>>& g) const noexcept
+    static std::vector<int> maximumWeight(
+        const std::vector<std::vector<int>>& g) noexcept
     {
         const u16 n = g.size() & 0xFFFF;
         std::ranges::copy(

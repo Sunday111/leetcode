@@ -5,7 +5,7 @@
 class Solution
 {
 public:
-    int minimumCost(std::vector<int>& nums)
+    static int minimumCost(std::vector<int>& nums)
     {
         int a = nums[1], b = nums[2];
 
