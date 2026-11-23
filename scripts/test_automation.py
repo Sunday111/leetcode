@@ -3,6 +3,7 @@ import io
 import json
 from pathlib import Path
 import tempfile
+import subprocess
 import unittest
 import sys
 from unittest.mock import patch
@@ -11,7 +12,7 @@ import automation
 
 
 class EmbedIncludesTests(unittest.TestCase):
-    def embed(self, files):
+    def embed(self, files, **options):
         with tempfile.TemporaryDirectory(prefix="leetcode-embed-") as directory:
             root = Path(directory)
             for name, content in files.items():
@@ -20,7 +21,7 @@ class EmbedIncludesTests(unittest.TestCase):
                 path.write_text(content, encoding="utf-8")
             with patch.object(automation, "ROOT_DIR", root):
                 with contextlib.redirect_stderr(io.StringIO()):
-                    result = automation.embed_includes(root / "solution.hpp")
+                    result = automation.embed_includes(root / "solution.hpp", **options)
             self.assertEqual({str(p.relative_to(root)) for p in root.rglob("*")
                               if p.is_file()}, set(files))
             return result
@@ -35,6 +36,50 @@ class EmbedIncludesTests(unittest.TestCase):
                     automation.main()
             self.assertEqual(stdout.getvalue(), '#include <vector>\n\n\nint answer = 42;\n')
             self.assertIn("vector: embed", stderr.getvalue())
+            self.assertEqual(list(Path(directory).iterdir()), [source])
+
+    def test_preprocessing_is_opt_in(self):
+        source = "#define VALUE 42\nint answer = VALUE;\n"
+        result = self.embed({"solution.hpp": source})
+        self.assertIn(source, result)
+
+    def test_preprocesses_embedded_macros_before_restoring_external_includes(self):
+        result = self.embed({
+            "solution.hpp": '#include <vector>\n#include "local.hpp"\n#include "external.hpp"\n'
+                            'class LC_SOLUTION_NAME(_2) { std::vector<int> data; };\n'
+                            'int JOIN(an, swer) = VALUE;\n'
+                            '// VALUE stays in comments\n'
+                            'const char* text = "VALUE";\n',
+            "local.hpp": '#pragma once\n#include "values.hpp"\n'
+                         '#ifdef LC_LOCAL_BUILD\n#error local build selected\n#else\n'
+                         '#define LC_SOLUTION_NAME(suffix) Solution\n#endif\n'
+                         '#define JOIN(a, b) a##b\n',
+            "values.hpp": '#define VALUE (20 + \\\n22)\n',
+        }, preprocess=True)
+        self.assertTrue(result.startswith('#include "external.hpp"\n#include <vector>\n'))
+        self.assertIn('class Solution { std::vector<int> data; };', result)
+        self.assertIn('int answer = (20 + 22);', result)
+        self.assertIn('// VALUE stays in comments', result)
+        self.assertIn('"VALUE"', result)
+        for directive in ('#define', '#ifdef', '#else', '#endif', '#pragma once'):
+            self.assertNotIn(directive, result)
+
+    def test_cli_preprocessing_and_errors(self):
+        with tempfile.TemporaryDirectory(prefix="leetcode-preprocess-") as directory:
+            source = Path(directory) / "solution.hpp"
+            source.write_text('#include <vector>\n#define VALUE 42\nint answer = VALUE;\n')
+            args = [sys.executable, str(automation.SCRIPTS_DIR / "automation.py"),
+                    "embed_includes", str(source), "--preprocess"]
+            result = subprocess.run(args, text=True, capture_output=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn('#include <vector>\n', result.stdout)
+            self.assertIn('int answer = 42;', result.stdout)
+            self.assertNotIn('#define', result.stdout)
+            source.write_text('#include <vector>\n#error preprocessing failed\n')
+            result = subprocess.run(args, text=True, capture_output=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertEqual(result.stdout, '')
+            self.assertIn('preprocessing failed', result.stderr)
             self.assertEqual(list(Path(directory).iterdir()), [source])
 
     def test_nested_relative_headers_precede_template_root(self):

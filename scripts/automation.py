@@ -7,6 +7,7 @@ import re
 import json
 import sys
 import leetcode_fetch
+from preprocess_cpp import preprocess_cpp
 
 SCRIPTS_DIR = Path(__file__).parent.resolve()
 ROOT_DIR = SCRIPTS_DIR.parent
@@ -145,7 +146,7 @@ def update_projects_list():
                 f.write(f'add_subdirectory({path.name})\n')
 
 
-def embed_includes(target_file_path: Path) -> str:
+def embed_includes(target_file_path: Path, *, preprocess: bool = False) -> str:
     templates_dir = ROOT_DIR / "templates"
     if not (target_file_path.exists() and target_file_path.is_file()):
         raise FileNotFoundError()
@@ -215,8 +216,10 @@ def embed_includes(target_file_path: Path) -> str:
     lines = [f"#include {c}{val}{mirror[c]}"
              for val, c in sorted(not_included.items())]
     lines.append("")
-    lines.extend(line for line, _ in src)
-    return "\n".join(lines) + "\n"
+    body = "\n".join(line for line, _ in src) + ("\n" if src else "")
+    if preprocess:
+        body = preprocess_cpp(body)
+    return "\n".join(lines) + "\n" + body
 
 
 def leetcode_get_all_problems() -> dict:
@@ -255,6 +258,10 @@ def main():
 
     embed_includes_parser = subparsers.add_parser('embed_includes')
     embed_includes_parser.add_argument("path", type=Path)
+    embed_includes_parser.add_argument(
+        "--preprocess", action="store_true",
+        help="experimental: expand local macros with Clang before restoring external includes",
+    )
 
     args = parser.parse_args()
     command:str = args.command
@@ -272,7 +279,7 @@ def main():
         case 'update_projects_list':
             update_projects_list()
         case 'embed_includes':
-            sys.stdout.write(embed_includes(args.path.resolve()))
+            sys.stdout.write(embed_includes(args.path.resolve(), preprocess=args.preprocess))
 
 
 if __name__ == '__main__':

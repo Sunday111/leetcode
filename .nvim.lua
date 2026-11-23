@@ -35,7 +35,7 @@ local function automation_cmd(...)
     return cmd
 end
 
-vim.api.nvim_create_user_command("EmbedIncludes", function(opts)
+local function embed_includes(opts, preprocess)
     local verbose = false
 
     for _, arg in ipairs(opts.fargs) do
@@ -59,7 +59,9 @@ vim.api.nvim_create_user_command("EmbedIncludes", function(opts)
         return
     end
 
-    vim.system(automation_cmd('embed_includes', file_path), { text = true },
+    local command = automation_cmd('embed_includes', file_path)
+    if preprocess then table.insert(command, '--preprocess') end
+    vim.system(command, { text = true },
         vim.schedule_wrap(function(embedded)
             if embedded.code ~= 0 then
                 vim.notify("EmbedIncludes failed\n" .. embedded.stderr, vim.log.levels.ERROR)
@@ -86,12 +88,20 @@ vim.api.nvim_create_user_command("EmbedIncludes", function(opts)
                     end
                 end))
         end))
-end, {
+end
+
+local embed_options = {
     nargs = "*",
     complete = function()
         return { "--verbose", "-v" }
     end,
-})
+}
+vim.api.nvim_create_user_command("EmbedIncludes", function(opts)
+    embed_includes(opts, false)
+end, embed_options)
+vim.api.nvim_create_user_command("EmbedIncludesPreprocess", function(opts)
+    embed_includes(opts, true)
+end, embed_options)
 
 
 local function normalize_name(name)

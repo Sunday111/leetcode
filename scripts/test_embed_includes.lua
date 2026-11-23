@@ -4,7 +4,7 @@ vim.fn.mkdir(directory, "p")
 local source = directory .. "/solution.hpp"
 vim.fn.writefile({ "BasedOnStyle: LLVM", "IndentWidth: 7", "AllowShortFunctionsOnASingleLine: None" }, directory .. "/.clang-format")
 vim.fn.writefile({ "#pragma once", "struct Item {};" }, directory .. "/item.hpp")
-vim.fn.writefile({ '#include "item.hpp"', "", "int answer(){", "return 42;", "}" }, source)
+vim.fn.writefile({ '#include "item.hpp"', "#define VALUE 42", "", "int answer(){", "return VALUE;", "}" }, source)
 
 local copied = {}
 vim.g.clipboard = {
@@ -22,7 +22,9 @@ vim.cmd.edit(vim.fn.fnameescape(source))
 local real_system = vim.system
 vim.system = function(command, options, callback)
     if command[1] == "uv" then
-        command = { root .. "/.venv/bin/python", root .. "/scripts/automation.py", "embed_includes", source }
+        local args = { root .. "/.venv/bin/python" }
+        vim.list_extend(args, vim.list_slice(command, 5))
+        command = args
     end
     return real_system(command, options, callback)
 end
@@ -33,13 +35,22 @@ assert(#copied > 0, vim.inspect(messages))
 local formatted = table.concat(copied, "\n")
 assert(formatted:find("struct Item {};", 1, true))
 assert(formatted:find("\n\n", 1, true), "blank lines were lost")
-assert(formatted:find("       return 42;", 1, true), "source formatting rules were not used")
+assert(formatted:find("       return VALUE;", 1, true), "source formatting rules were not used")
+assert(formatted:find("#define VALUE 42", 1, true))
 assert(vim.fn.getregtype('"') == "V")
 local register_lines = vim.deepcopy(copied)
 if register_lines[#register_lines] == "" then table.remove(register_lines) end
 assert(vim.deep_equal(vim.fn.getreg('"', 1, true), register_lines))
 assert(vim.fn.glob(directory .. "/*_mono.*") == "")
 assert(#messages == 1 and messages[1][1]:find("item.hpp: embed", 1, true))
+
+copied = {}
+messages = {}
+vim.cmd.EmbedIncludesPreprocess()
+assert(vim.wait(15000, function() return #copied > 0 or #messages > 0 end, 10), "preprocessing timed out")
+formatted = table.concat(copied, "\n")
+assert(formatted:find("       return 42;", 1, true), vim.inspect(messages))
+assert(not formatted:find("#define", 1, true))
 
 for _, fail_at in ipairs({ 1, 2 }) do
     local calls = 0
