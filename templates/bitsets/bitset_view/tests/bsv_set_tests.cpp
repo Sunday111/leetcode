@@ -5,7 +5,7 @@ TEST(BitsetViews, Set)
 {
     auto check = []<typename Word, std::size_t extent>
     {
-        constexpr auto width = std::numeric_limits<Word>::digits;
+        constexpr auto width = sizeof(Word) * 8;
         std::array<Word, 3> words{};
         BitsetView<Word, extent> fixed{words.data()};
         BitsetView<Word> dynamic{words.data(), extent};

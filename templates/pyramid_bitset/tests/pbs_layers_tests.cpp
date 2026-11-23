@@ -1,4 +1,5 @@
 #include "pbs_test_support.hpp"
+#include "pyramid_bitset/pbs_layer_view.hpp"
 #include "pyramid_bitset/pbs_layers.hpp"
 
 template <typename B>
@@ -17,6 +18,9 @@ TYPED_TEST(PbsLayersTest, Operations)
         [&](auto layer)
         {
             EXPECT_EQ(layer, index++);
+            const auto view = pbs_layer_view<layer>(this->bits);
+            EXPECT_EQ(view.capacity, count);
+            EXPECT_EQ(view.words, this->bits.words + offset);
             count = (count + B::kWordSize - 1) / B::kWordSize;
             EXPECT_EQ(B::kLayersSizes[layer], count);
             EXPECT_EQ(B::offsets[layer], offset);

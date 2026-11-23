@@ -1,7 +1,9 @@
 #pragma once
 
+#include "bitsets/bitset_view/bsv_get.hpp"
+#include "bitsets/bitset_view/bsv_set_if.hpp"
+#include "pyramid_bitset/pbs_layer_view.hpp"
 #include "pyramid_bitset/pbs_layers.hpp"
-#include "pyramid_bitset/pyramid_bitset.hpp"  // IWYU pragma: export
 
 template <u32 capacity, typename Word>
 [[nodiscard, gnu::always_inline]] constexpr bool pbs_remove_ex(
@@ -14,16 +16,13 @@ template <u32 capacity, typename Word>
         [&]<size_t layer> [[gnu::always_inline]] (
             std::integral_constant<size_t, layer>) noexcept
         {
-            typename B::ValueType wi = v >> B::kShift;
-            auto& w = bits.words[B::offsets[layer] + wi];
+            const auto view = pbs_layer_view<layer>(bits);
             if constexpr (layer == 0)
             {
-                removed = (w & (Word{1} << (v & B::kMask)));
+                removed = bsv_get(view, v);
             }
-
-            w &= ~(Word{prev_empty} << (v & B::kMask));
-            v = wi;
-            prev_empty = !w;
+            prev_empty = bsv_set_if<false>(view, v, prev_empty) == 0;
+            v >>= B::kShift;
         });
 
     return removed;

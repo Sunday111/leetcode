@@ -5,8 +5,8 @@ TEST(BitsetViews, DynamicFill)
 {
     auto check = []<typename Word, std::size_t extent>
     {
-        constexpr auto width = std::numeric_limits<Word>::digits;
-        constexpr Word pattern = std::numeric_limits<Word>::max() / 3;
+        constexpr auto width = sizeof(Word) * 8;
+        constexpr Word pattern = static_cast<Word>(~Word{}) / 3;
         std::array<Word, 4> words{pattern, pattern, pattern, pattern};
         BitsetView<Word> bits{words.data(), extent};
         for (bool full : {true, false})

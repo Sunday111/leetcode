@@ -5,8 +5,8 @@ TEST(BitsetViews, Get)
 {
     auto check = []<typename Word, std::size_t extent>
     {
-        constexpr auto width = std::numeric_limits<Word>::digits;
-        constexpr Word even = std::numeric_limits<Word>::max() / 3;
+        constexpr auto width = sizeof(Word) * 8;
+        constexpr Word even = static_cast<Word>(~Word{}) / 3;
         const std::array<Word, 3> words{even, static_cast<Word>(~even), even};
         BitsetView<const Word, extent> fixed{words.data()};
         BitsetView<const Word> dynamic{words.data(), extent};

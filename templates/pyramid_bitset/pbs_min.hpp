@@ -2,10 +2,11 @@
 
 #include <cassert>
 
+#include "bitsets/ctr_zero.hpp"
 #include "cast.hpp"
 #include "pyramid_bitset/pbs_is_empty.hpp"
+#include "pyramid_bitset/pbs_layer_view.hpp"
 #include "pyramid_bitset/pbs_layers.hpp"
-#include "pyramid_bitset/pyramid_bitset.hpp"  // IWYU pragma: export
 
 template <u32 capacity, typename Word>
 [[nodiscard, gnu::always_inline]] constexpr
@@ -18,7 +19,7 @@ template <u32 capacity, typename Word>
     pbs_for_each_layer_reversed<B>(
         [&] [[gnu::always_inline]] (auto layer) noexcept
         {
-            u8 bi = std::countr_zero(bits.words[B::offsets[layer] + wi]) & 0xFF;
+            u8 bi = ::ctr_zero(pbs_layer_view<layer>(bits).words[wi]) & 0xFF;
             typename B::ValueType x =
                 cast<typename B::ValueType>(wi << B::kShift) |
                 cast<typename B::ValueType>(bi);

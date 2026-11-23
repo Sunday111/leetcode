@@ -1,13 +1,12 @@
 #pragma once
 
-#include <algorithm>
 #include <cassert>
-#include <limits>
 
+#include "bitsets/bitset_view/bsv_fill.hpp"
 #include "empty.hpp"
 #include "full.hpp"
+#include "pyramid_bitset/pbs_layer_view.hpp"
 #include "pyramid_bitset/pbs_layers.hpp"
-#include "pyramid_bitset/pyramid_bitset.hpp"  // IWYU pragma: export
 
 template <bool value, u32 capacity, typename Word>
 [[gnu::always_inline]] constexpr void pbs_initialize(
@@ -18,22 +17,24 @@ template <bool value, u32 capacity, typename Word>
     assert(end <= capacity);
     if (end == 0)
     {
-        bits.words[B::offsets[B::kNumLayers - 1]] = 0;
+        pbs_layer_view<B::kNumLayers - 1>(bits).words[0] = 0;
         return;
     }
-    constexpr auto m = value ? ~Word{} : Word{};
     pbs_for_each_layer<B>(
         [&]<size_t layer> [[gnu::always_inline]] (
             std::integral_constant<size_t, layer>) noexcept
         {
             const auto count = end;
             end = ceil_div<size_t>(end, B::kWordSize);
-            std::fill_n(bits.words + B::offsets[layer], end, m);
+            BitsetView<Word> prefix{
+                pbs_layer_view<layer>(bits).words,
+                end * B::kWordSize};
+            bsv_fill<value>(prefix);
             if constexpr (value)
             {
-                bits.words[B::offsets[layer] + end - 1] &=
-                    std::numeric_limits<Word>::max() >>
-                    ((size_t{0} - count) & B::kMask);
+                constexpr Word max_word = static_cast<Word>(~Word{});
+                prefix.words[end - 1] &=
+                    max_word >> ((size_t{0} - count) & B::kMask);
             }
         });
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstddef>
-#include <limits>
 #include <type_traits>
 
 #include "bitsets/assign_bits.hpp"
@@ -12,8 +11,8 @@ template <bool value, BitsetWord Word, std::size_t extent>
 [[gnu::always_inline]] constexpr void bsv_fill(
     BitsetView<Word, extent> bits) noexcept
 {
-    constexpr auto width = std::numeric_limits<Word>::digits;
-    constexpr auto max_word = std::numeric_limits<Word>::max();
+    constexpr auto width = sizeof(Word) * 8;
+    constexpr auto max_word = static_cast<Word>(~Word{});
     const auto full_words = bits.capacity / width;
     const auto tail = bits.capacity % width;
     for (std::size_t i = 0; i != full_words; ++i)

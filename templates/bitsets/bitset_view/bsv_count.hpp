@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstddef>
-#include <limits>
 
 #include "bitsets/bitset_view/bitset_view.hpp"  // IWYU pragma: export
 #include "bitsets/popcount.hpp"
@@ -10,8 +9,8 @@ template <BitsetWord Word, std::size_t extent>
 [[nodiscard, gnu::always_inline]] constexpr std::size_t bsv_count(
     BitsetView<Word, extent> bits) noexcept
 {
-    constexpr auto width = std::numeric_limits<Word>::digits;
-    constexpr auto max_word = std::numeric_limits<Word>::max();
+    constexpr auto width = sizeof(Word) * 8;
+    constexpr auto max_word = static_cast<Word>(~Word{});
     const auto full_words = bits.capacity / width;
 
     std::size_t count = 0;

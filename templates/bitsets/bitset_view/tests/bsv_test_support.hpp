@@ -4,12 +4,11 @@
 
 #include <array>
 #include <cstdint>
-#include <limits>
 
 template <typename Word, typename Check>
 constexpr bool bsv_check_extents(Check check)
 {
-    constexpr auto width = std::numeric_limits<Word>::digits;
+    constexpr auto width = sizeof(Word) * 8;
     return check.template operator()<Word, 0>() &&
            check.template operator()<Word, 1>() &&
            check.template operator()<Word, width - 1>() &&

@@ -1,9 +1,9 @@
 #pragma once
 
-#include <bit>
 #include <cstddef>
 #include <type_traits>
 
+#include "bitsets/ctr_zero.hpp"
 #include "ceil_div.hpp"
 #include "uint_for_value.hpp"
 
@@ -16,7 +16,7 @@ struct PyramidBitset
     using ValueType = UintForValue<capacity - 1>;
     static constexpr size_t kWordSize = sizeof(Word) * 8;
     static constexpr u8 kMask = kWordSize - 1;
-    static constexpr int kShift = std::bit_width(kMask);
+    static constexpr int kShift = ::ctr_zero(kWordSize);
     static constexpr size_t kNumLayers = []
     {
         size_t layers = 1;

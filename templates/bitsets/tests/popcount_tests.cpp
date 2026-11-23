@@ -1,7 +1,5 @@
 #include <gtest/gtest.h>
 
-#include <limits>
-
 #include "bitsets/popcount.hpp"
 
 static_assert(BitsetWord<const unsigned int>);
@@ -13,8 +11,8 @@ TEST(Bitsets, Popcount)
 {
     auto check = []<typename Word>
     {
-        constexpr Word all = std::numeric_limits<Word>::max();
-        constexpr int width = std::numeric_limits<Word>::digits;
+        constexpr Word all = static_cast<Word>(~Word{});
+        constexpr int width = sizeof(Word) * 8;
         static_assert(popcount(Word{0}) == 0);
         static_assert(popcount(all) == width);
         static_assert(popcount(static_cast<Word>(all / 3)) == width / 2);

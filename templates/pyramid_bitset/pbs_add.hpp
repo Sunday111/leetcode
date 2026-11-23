@@ -1,7 +1,8 @@
 #pragma once
 
+#include "bitsets/bitset_view/bsv_set.hpp"
+#include "pyramid_bitset/pbs_layer_view.hpp"
 #include "pyramid_bitset/pbs_layers.hpp"
-#include "pyramid_bitset/pyramid_bitset.hpp"  // IWYU pragma: export
 
 template <u32 capacity, typename Word>
 [[gnu::always_inline]] constexpr void pbs_add(
@@ -13,8 +14,7 @@ template <u32 capacity, typename Word>
         [&]<size_t layer> [[gnu::always_inline]] (
             std::integral_constant<size_t, layer>) noexcept
         {
-            typename B::ValueType wi = v >> B::kShift;
-            bits.words[B::offsets[layer] + wi] |= Word{1} << (v & B::kMask);
-            v = wi;
+            bsv_set<true>(pbs_layer_view<layer>(bits), v);
+            v >>= B::kShift;
         });
 }

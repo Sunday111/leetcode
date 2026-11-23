@@ -4,8 +4,8 @@
 #include <limits>
 
 #include "ctz.hpp"
+#include "pyramid_bitset/pbs_layer_view.hpp"
 #include "pyramid_bitset/pbs_layers.hpp"
-#include "pyramid_bitset/pyramid_bitset.hpp"  // IWYU pragma: export
 #include "uint_for_value.hpp"
 
 // Inclusive successor; returns capacity when absent.
@@ -20,7 +20,8 @@ pbs_next_inclusive(
     using Index = UintForValue<capacity>;
     constexpr Index index_mask = std::numeric_limits<Index>::max();
     assert(position < capacity);
-    typename B::WordType first_word = bits.words[position >> B::kShift];
+    typename B::WordType first_word =
+        pbs_layer_view<0>(bits).words[position >> B::kShift];
     first_word >>= position & B::kMask;
     if (first_word != 0)
     {
@@ -33,13 +34,13 @@ pbs_next_inclusive(
         [&]<size_t layer> [[gnu::always_inline]] (
             std::integral_constant<size_t, layer>) noexcept
         {
-            constexpr Index offset = B::offsets[layer];
+            const auto view = pbs_layer_view<layer>(bits);
             constexpr Index layer_size = B::kLayersSizes[layer];
             if constexpr (layer + 1 < B::kNumLayers)
             {
                 if (result < layer_size)
                 {
-                    const Word word = bits.words[offset + result];
+                    const Word word = view.words[result];
                     u8 first = B::kWordSize;
                     if (word != 0) first = ctz(word);
                     result = ((result << B::kShift) + first) & index_mask;
@@ -54,7 +55,7 @@ pbs_next_inclusive(
             const Index query = position >> (layer * B::kShift);
             const Index wi = query >> B::kShift;
             const u8 bi = query & B::kMask;
-            typename B::WordType candidates = bits.words[offset + wi];
+            typename B::WordType candidates = view.words[wi];
             // Separate shifts avoid shifting by the word width.
             constexpr u8 skip = layer != 0;
             candidates >>= bi;
