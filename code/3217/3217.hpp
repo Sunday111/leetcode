@@ -1,24 +1,22 @@
 #include <cstdint>
 #include <vector>
 
+#include "bitsets/bitset_view/bsv_get.hpp"
+#include "bitsets/bitset_view/bsv_set.hpp"
 #include "ptr_if.hpp"
-
-struct ListNode
-{
-    int val{};
-    ListNode* next{};
-};
+#include "singly_linked_list/ll_node.hpp"
 
 class Solution
 {
 public:
     using u64 = uint64_t;
     inline static u64 b[(100'001 / 64) + 1];
+    static constexpr BitsetView<u64, 100'001> bits{b};
     inline static int dirty = 0;
 
     [[nodiscard, gnu::always_inline]] inline static bool is_set(int v) noexcept
     {
-        return b[v >> 6] & (u64{1} << (v & 63));
+        return bsv_get(bits, static_cast<std::size_t>(v));
     }
 
     [[nodiscard]] static ListNode* modifiedList(
@@ -30,7 +28,7 @@ public:
 
         for (int v : nums)
         {
-            b[v >> 6] |= u64{1} << (v & 63);
+            bsv_set<true>(bits, static_cast<std::size_t>(v));
             dirty = std::max(dirty, v >> 6);
         }
 

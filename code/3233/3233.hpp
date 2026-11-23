@@ -1,65 +1,16 @@
 #pragma once
 
 #include <algorithm>
+#include <array>
+#include <bit>
 #include <cstddef>
 #include <cstdint>
 #include <span>
 #include <vector>
 
-template <size_t Size, typename Word = uint64_t>
-class Bitset
-{
-public:
-    static constexpr size_t kBitsInWord = sizeof(Word) * 8;
-    static constexpr size_t kNumFullWords = Size / kBitsInWord;
-    static constexpr size_t kNumWords =
-        (Size % kBitsInWord) ? kNumFullWords + 1 : kNumFullWords;
-
-public:
-    constexpr Bitset() {}
-
-    constexpr void reset(bool value) noexcept
-    {
-        const auto k = value ? ~uint64_t{1} : 0;
-        for (size_t i = 0; i < kNumWords; ++i)
-        {
-            words[i] = k;
-        }
-    }
-
-    constexpr bool get_at(size_t idx) const
-    {
-        size_t i = idx / 64;
-        size_t j = idx % 64;
-        auto mask = make_bit_mask(j);
-        bool r = (words[i] & mask);
-        return r;
-    }
-
-    constexpr void set_at(size_t idx, bool new_value)
-    {
-        size_t i = idx / 64;
-        size_t j = idx % 64;
-        auto mask = make_bit_mask(j);
-        if (new_value)
-        {
-            words[i] |= mask;
-        }
-        else
-        {
-            words[i] &= ~mask;
-        }
-    }
-
-private:
-    static constexpr Word make_bit_mask(size_t index)
-    {
-        return (static_cast<Word>(1) << index);
-    }
-
-private:
-    std::array<Word, kNumWords> words{};
-};
+#include "bitsets/bitset_view/bsv_fill.hpp"
+#include "bitsets/bitset_view/bsv_get.hpp"
+#include "bitsets/bitset_view/bsv_set.hpp"
 
 template <size_t segment_size = 64 * 8>
 class PrimesStorage
@@ -100,24 +51,25 @@ private:
     // fill first segment by usual Eratosthenes sieve
     constexpr void make_first_segment() noexcept
     {
-        m_segment.reset(true);
-        m_segment.set_at(0, false);
-        m_segment.set_at(1, false);
+        BitsetView<uint64_t, segment_size> segment{m_segment.data()};
+        bsv_fill<true>(segment);
+        bsv_set<false>(segment, 0);
+        bsv_set<false>(segment, 1);
 
         for (size_t i = 2; i < (segment_size / 2) + 1; ++i)
         {
-            if (m_segment.get_at(i))
+            if (bsv_get(segment, i))
             {
                 for (size_t j = i * 2; j < segment_size; j += i)
                 {
-                    m_segment.set_at(j, false);
+                    bsv_set<false>(segment, j);
                 }
             }
         }
 
         for (uint64_t i = 0; i < segment_size; ++i)
         {
-            if (m_segment.get_at(i))
+            if (bsv_get(segment, i))
             {
                 m_primes.push_back(i);
             }
@@ -151,7 +103,8 @@ private:
         const size_t msq =
             static_cast<size_t>(my_sqrt(static_cast<float>(m))) + 1;
 
-        m_segment.reset(true);
+        BitsetView<uint64_t, segment_size> segment{m_segment.data()};
+        bsv_fill<true>(segment);
 
         for (auto prime : m_primes)
         {
@@ -163,14 +116,14 @@ private:
 
             while (pos < segment_end)
             {
-                m_segment.set_at(pos % segment_size, false);
+                bsv_set<false>(segment, pos % segment_size);
                 pos += prime;
             }
         }
 
         for (size_t i = 0; i < segment_size; ++i)
         {
-            if (m_segment.get_at(i))
+            if (bsv_get(segment, i))
             {
                 m_primes.push_back(segment_begin + i);
             }
@@ -181,7 +134,8 @@ private:
     }
 
 private:
-    Bitset<segment_size> m_segment;
+    std::array<uint64_t, segment_size / 64 + (segment_size % 64 != 0)>
+        m_segment{};
     std::vector<uint64_t> m_primes;
     std::vector<size_t> m_segments;
 };
@@ -216,7 +170,7 @@ public:
         auto sqrt_l = isqrt(l);
         auto sqrt_r = isqrt(r);
 
-        PrimesStorage ps;
+        static PrimesStorage ps;
         ps.cache_primes(std::max(sqrt_l, sqrt_r));
         auto primes = ps.get_cached_primes_view();
         auto li = std::ranges::lower_bound(primes, sqrt_l);
