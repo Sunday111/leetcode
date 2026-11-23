@@ -86,11 +86,13 @@ class AssemblyComparisonTests(unittest.TestCase):
         self.assertIn("No emitted label", error)
 
     def test_aliases_are_display_only_and_can_be_disabled(self):
-        body = "first:\n    call f(std::basic_string_view<char, std::char_traits<char>>)\n"
+        body = ("first:\n    call f(std::basic_string_view<char, std::char_traits<char>>)\n"
+                "    call g(std::vector<int, std::allocator<int>> const&)\n")
         with patch.object(cmp_assembly, "render_function", return_value=body):
             status, output, error = self.compare(ASSEMBLY, ASSEMBLY)
             self.assertEqual(status, 0, error)
             self.assertIn("f(std::string_view)", output)
+            self.assertIn("g(std::vector<int> const&)", output)
             for flag in ("--no-filter-types", "--no-demangle"):
                 status, output, error = self.compare(ASSEMBLY, ASSEMBLY, options=[flag])
                 self.assertEqual(status, 0, error)

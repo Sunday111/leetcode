@@ -161,7 +161,7 @@ def add_assembly_options(parser: argparse.ArgumentParser, *, include_address=Tru
                              "(enabled by default)")
     parser.add_argument("--filter-types", action=argparse.BooleanOptionalAction,
                         default=True,
-                        help="shorten common standard-library types to their aliases "
+                        help="shorten common standard-library aliases and default allocators "
                              "in demangled output (enabled by default)")
     parser.add_argument("--flag", action="append", default=[], metavar="FLAG",
                         help="extra compiler flag; repeat as --flag=-mtune=native")

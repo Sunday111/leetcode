@@ -44,6 +44,47 @@ class AssemblyTypeTests(unittest.TestCase):
                          "f(std::string_view const&, std::wstring_view*, std::string&&) const\n"
                          "std::string_view::find+0x20\n")
 
+    def test_vector_default_allocator_and_qualifiers(self):
+        for namespace in ("std::", "std::__1::", "std::__2::", "std::__ndk1::"):
+            with self.subTest(namespace=namespace):
+                text = f"f({namespace}vector< int, {namespace}allocator< int > > const&)"
+                self.assertEqual(shorten_common_types(text), "f(std::vector<int> const&)")
+        self.assertEqual(shorten_common_types(
+            "std::vector<unsigned int, std::allocator<unsigned  int>>::size()"),
+            "std::vector<unsigned int>::size()")
+
+    def test_nested_vectors_and_element_templates(self):
+        inner = "std::vector<int, std::allocator<int> >"
+        self.assertEqual(shorten_common_types(f"std::vector<{inner}, std::allocator<{inner}> >"),
+                         "std::vector<std::vector<int>>")
+        for element in ("std::pair<int, long>", "void (*)(int, long)",
+                        "std::array<int, (1 << 2)>", "std::integral_constant<char, '>'>"):
+            with self.subTest(element=element):
+                text = f"std::vector<{element}, std::allocator<{element}> >"
+                self.assertEqual(shorten_common_types(text), f"std::vector<{element}>")
+        string = "std::basic_string<char, std::char_traits<char>, std::allocator<char>>"
+        self.assertEqual(shorten_common_types(f"std::vector<{string}, std::allocator<{string}>>"),
+                         "std::vector<std::string>")
+
+    def test_preserves_nondefault_and_malformed_vectors(self):
+        for text in (
+            "std::vector<int, CustomAllocator<int>>",
+            "std::vector<int, std::pmr::polymorphic_allocator<int>>",
+            "std::vector<int, std::allocator<long>>",
+            "std::vector<unsigned int, std::allocator<unsignedint>>",
+            "std::vector<int, std::allocator<int>, Extra>",
+            "std::vector<int, std::allocator<int>",
+            "std::vector<int, std::allocator<int>\n>",
+            "std::vector<int, std::allocator<int> const>",
+            "std::vector<, std::allocator<>>",
+            "std::vector<int, std::allocator<int)>",
+            "other::std::vector<int, std::allocator<int>>",
+            "mystd::vector<int, std::allocator<int>>",
+            "std::__custom::vector<int, std::allocator<int>>",
+        ):
+            with self.subTest(text=text):
+                self.assertEqual(shorten_common_types(text), text)
+
     def test_preserves_custom_or_mismatched_arguments(self):
         for text in (
             "std::basic_string<char, CustomTraits, std::allocator<char>>",
