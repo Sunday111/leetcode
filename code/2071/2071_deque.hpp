@@ -5,8 +5,8 @@
 #include <ranges>
 #include <vector>
 
-#include "bump_allocator.hpp"
-#include "radix_sorter.hpp"
+#include "bump/bump_allocator.hpp"
+#include "radix_sort/radix_sorter.hpp"
 
 template <typename To>
 [[nodiscard, gnu::always_inline]] inline static constexpr To to(auto v) noexcept

@@ -2,7 +2,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "bump_hash_map.hpp"
+#include "bump/bump_hash_map.hpp"
 #include "integral_aliases.hpp"
 #include "negate_if.hpp"
 

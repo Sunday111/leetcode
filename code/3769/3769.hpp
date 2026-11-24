@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <vector>
 
-#include "reverse_bits_32.hpp"
+#include "bitsets/reverse_bits_32.hpp"
 
 class Solution
 {

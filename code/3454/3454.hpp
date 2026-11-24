@@ -1,10 +1,10 @@
 #include <algorithm>
 #include <vector>
 
-#include "bump_allocator.hpp"
-#include "bump_map.hpp"
-#include "bump_set.hpp"
-#include "bump_vector.hpp"
+#include "bump/bump_allocator.hpp"
+#include "bump/bump_map.hpp"
+#include "bump/bump_set.hpp"
+#include "bump/bump_vector.hpp"
 #include "cast.hpp"
 #include "integral_aliases.hpp"
 

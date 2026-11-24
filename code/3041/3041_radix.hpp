@@ -5,7 +5,7 @@
 
 #include "3041_distinct_dp.hpp"
 #include "cast.hpp"
-#include "radix_sorter.hpp"
+#include "radix_sort/radix_sorter.hpp"
 #include "solution_name.hpp"
 #include "sync_stdio.hpp"
 

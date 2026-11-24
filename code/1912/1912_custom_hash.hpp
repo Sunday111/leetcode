@@ -2,7 +2,7 @@
 #include <cassert>
 #include <vector>
 
-#include "bump_set.hpp"
+#include "bump/bump_set.hpp"
 
 using ShopID = u32;   // [1; 3 * 10^5]
 using MovieID = u16;  // [1; 10^4]

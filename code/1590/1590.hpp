@@ -2,7 +2,7 @@
 #include <integral_aliases.hpp>
 #include <vector>
 
-#include "bump_vector.hpp"
+#include "bump/bump_vector.hpp"
 #include "cast.hpp"
 #include "reinterpret_range.hpp"
 

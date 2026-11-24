@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 
-#include "bump_allocator.hpp"
+#include "bump/bump_allocator.hpp"
 
 template <
     typename Key,

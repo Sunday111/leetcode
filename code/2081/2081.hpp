@@ -6,8 +6,8 @@
 #include <ranges>
 #include <span>
 
+#include "bitsets/reverse_bits_32.hpp"
 #include "integral_aliases.hpp"
-#include "reverse_bits_32.hpp"
 
 class Solution
 {

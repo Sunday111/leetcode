@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "bump_set.hpp"
+#include "bump/bump_set.hpp"
 #include "integral_aliases.hpp"
 
 using ShopID = u32;   // [1; 3 * 10^5]

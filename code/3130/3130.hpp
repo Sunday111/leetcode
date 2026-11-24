@@ -1,7 +1,7 @@
 #include <vector>
 
-#include "bump_allocator.hpp"
-#include "bump_vector.hpp"
+#include "bump/bump_allocator.hpp"
+#include "bump/bump_vector.hpp"
 #include "integral_aliases.hpp"
 #include "signed_integral_aliases.hpp"
 

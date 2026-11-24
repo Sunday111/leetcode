@@ -2,7 +2,7 @@
 #include <cassert>
 #include <vector>
 
-#include "bump_allocator.hpp"
+#include "bump/bump_allocator.hpp"
 #include "heap_with_erase.hpp"
 #include "integral_aliases.hpp"
 

@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "ncr.hpp"
-#include "next_with_same_popcount.hpp"
+#include "bitsets/next_with_same_popcount.hpp"
 
 class Solution
 {

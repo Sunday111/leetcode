@@ -3,7 +3,7 @@
 #include <set>
 #include <vector>
 
-#include "bump_set.hpp"
+#include "bump/bump_set.hpp"
 
 class Solution
 {

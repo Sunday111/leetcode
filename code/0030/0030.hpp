@@ -4,8 +4,8 @@
 #include <string_view>
 #include <vector>
 
-#include "bump_allocator.hpp"
-#include "bump_hash_map.hpp"
+#include "bump/bump_allocator.hpp"
+#include "bump/bump_hash_map.hpp"
 #include "integral_aliases.hpp"
 #include "sync_stdio.hpp"
 

@@ -2,7 +2,7 @@
 
 #include <unordered_set>
 
-#include "bump_allocator.hpp"
+#include "bump/bump_allocator.hpp"
 
 template <
     typename Value,

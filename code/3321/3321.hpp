@@ -4,8 +4,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "bump_hash_map.hpp"
-#include "bump_set.hpp"
+#include "bump/bump_hash_map.hpp"
+#include "bump/bump_set.hpp"
 #include "reinterpret_range.hpp"
 #include "signed_integral_aliases.hpp"
 

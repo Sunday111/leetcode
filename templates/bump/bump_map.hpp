@@ -2,7 +2,7 @@
 
 #include <map>
 
-#include "bump_allocator.hpp"
+#include "bump/bump_allocator.hpp"
 
 template <typename K, typename V, typename Storage, typename Cmp = std::less<K>>
 using BumpMap =

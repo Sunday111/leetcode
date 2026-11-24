@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "gtest/gtest.h"
-#include "radix_sort_indices_by.hpp"
+#include "radix_sort/radix_sort_indices_by.hpp"
 
 TEST(RadixSortIndicesBy, DefaultsToFullKeyWidth)
 {

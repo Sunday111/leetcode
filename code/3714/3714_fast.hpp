@@ -3,7 +3,7 @@
 #include <string>
 #include <utility>
 
-#include "bump_allocator.hpp"
+#include "bump/bump_allocator.hpp"
 #include "int_if.hpp"
 
 using SolutionStorage = GlobalBufferStorage<1 << 23>;

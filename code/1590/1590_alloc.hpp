@@ -2,8 +2,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "bump_hash_map.hpp"
-#include "bump_vector.hpp"
+#include "bump/bump_hash_map.hpp"
+#include "bump/bump_vector.hpp"
 #include "cast.hpp"
 #include "reinterpret_range.hpp"
 

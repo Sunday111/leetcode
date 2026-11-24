@@ -1,11 +1,12 @@
 #pragma once
 
+#include <immintrin.h>
+
+#include "bitsets/next_with_same_popcount.hpp"
 #include "integral_aliases.hpp"
-#include "next_with_same_popcount.hpp"
-#include "with_bmi2.hpp"
 
 // Returns value >= v such that popcount(value) == x
-[[nodiscard, gnu::always_inline]] inline WITH_BMI2 u32
+[[nodiscard, gnu::always_inline, gnu::target("bmi2")]] inline constexpr u32
 next_with_x_popcount(u32 v, u8 x) noexcept
 {
     u32 vp = std::popcount(v) & 0xFF;

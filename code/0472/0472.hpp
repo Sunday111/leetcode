@@ -6,7 +6,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include "bump_hash_set.hpp"
+#include "bump/bump_hash_set.hpp"
 
 // 1 <= words.length <= 10^4
 // 1 <= words[i].length <= 30

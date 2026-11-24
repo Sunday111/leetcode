@@ -4,9 +4,9 @@
 #include <utility>
 #include <vector>
 
-#include "bump_allocator.hpp"
-#include "bump_hash_map.hpp"
-#include "bump_set.hpp"
+#include "bump/bump_allocator.hpp"
+#include "bump/bump_hash_map.hpp"
+#include "bump/bump_set.hpp"
 #include "cast.hpp"
 #include "ceil_div.hpp"
 #include "empty.hpp"

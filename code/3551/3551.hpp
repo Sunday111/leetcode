@@ -2,7 +2,7 @@
 #include <array>
 #include <vector>
 
-#include "adaptive_sort_indices_by.hpp"
+#include "radix_sort/adaptive_sort_indices_by.hpp"
 #include "integral_aliases.hpp"
 #include "sync_stdio.hpp"
 #include "uint_for_value.hpp"

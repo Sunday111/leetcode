@@ -3,8 +3,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "bump_hash_map.hpp"
-#include "bump_vector.hpp"
+#include "bump/bump_hash_map.hpp"
+#include "bump/bump_vector.hpp"
 #include "integral_aliases.hpp"
 
 struct Vec2

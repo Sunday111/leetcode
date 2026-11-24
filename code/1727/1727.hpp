@@ -5,7 +5,7 @@
 #include "minmax/upd_max.hpp"
 #include "minmax/upd_min.hpp"
 #include "namespaces.hpp"  // IWYU pragma: keep
-#include "radix_sorter.hpp"
+#include "radix_sort/radix_sorter.hpp"
 
 // https://leetcode.com/problems/largest-submatrix-with-rearrangements/
 

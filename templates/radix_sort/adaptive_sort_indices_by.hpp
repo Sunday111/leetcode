@@ -7,7 +7,7 @@
 #include <type_traits>
 
 #include "integral_aliases.hpp"
-#include "radix_sort_indices_by.hpp"
+#include "radix_sort/radix_sort_indices_by.hpp"
 
 template <
     u32 key_bits,

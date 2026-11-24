@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "bump_multiset.hpp"
+#include "bump/bump_multiset.hpp"
 #include "integral_aliases.hpp"
 
 using SolutionStorage = GlobalBufferStorage<1u << 25>;
