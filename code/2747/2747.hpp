@@ -13,8 +13,7 @@ public:
     inline static constexpr u32 kCapacity = 100'000;
     inline static constexpr u32 kIndexBits = 17;
     inline static constexpr u32 kIndexMask = (1u << kIndexBits) - 1;
-    inline static auto& srv_cnt =
-        RadixSortStorage::scratch<u32, kCapacity + 1>;
+    inline static auto& srv_cnt = RadixSortStorage::scratch<u32, kCapacity + 1>;
     inline static u64 sorted_logs[kCapacity];
     inline static u32 sorted_q[kCapacity];
 
@@ -57,11 +56,19 @@ public:
             }
             else if (used_bits < (1u << 10))
             {
-                radix_sort_indices_by<10, 1, kCapacity + 1>(values, size, key);
+                radix_sort_indices_by<
+                    10,
+                    10,
+                    SortOrder::Ascending,
+                    kCapacity + 1>(values, size, key);
             }
             else
             {
-                radix_sort_indices_by<10, 2, kCapacity + 1>(values, size, key);
+                radix_sort_indices_by<
+                    20,
+                    10,
+                    SortOrder::Ascending,
+                    kCapacity + 1>(values, size, key);
             }
         };
         sort(

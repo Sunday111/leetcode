@@ -7,13 +7,8 @@
 
 #include "integral_aliases.hpp"
 #include "radix_sort/radix_sort_storage.hpp"
+#include "sort_order.hpp"
 #include "uint_for_value.hpp"
-
-enum class SortOrder : u8
-{
-    Ascending,
-    Descending
-};
 
 // Stably sort by the low key_bits bits. Full-width signed keys use signed
 // order.

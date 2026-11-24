@@ -29,22 +29,24 @@ adaptive_sort_indices_by(I* indices, u32 n, Proj proj) noexcept
     else if (n < 1280)
     {
         radix_sort_indices_by<
-            std::min(8u, key_bits),
-            (key_bits + 7) / 8,
+            key_bits,
+            8,
+            SortOrder::Ascending,
             std::min(capacity, 1279u)>(indices, n, proj);
     }
     else if (n < 8192)
     {
         radix_sort_indices_by<
-            std::min(10u, key_bits),
-            (key_bits + 9) / 10,
+            key_bits,
+            10,
+            SortOrder::Ascending,
             std::min(capacity, 8191u)>(indices, n, proj);
     }
     else
     {
-        radix_sort_indices_by<
-            std::min(13u, key_bits),
-            (key_bits + 12) / 13,
-            capacity>(indices, n, proj);
+        radix_sort_indices_by<key_bits, 13, SortOrder::Ascending, capacity>(
+            indices,
+            n,
+            proj);
     }
 }

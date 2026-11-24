@@ -80,7 +80,7 @@ public:
             intervals);
 
         std::ranges::copy(std::views::iota(u16{}, n), sorted);
-        radix_sort_indices_by<8>(
+        radix_sort_indices_by<32, 8>(
             sorted,
             n,
             [](u16 index) { return intervals[index].r; });
