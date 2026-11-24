@@ -1,13 +1,12 @@
 #pragma once
 
-#include <array>
-
+#include "bitsets/ctr_zero.hpp"
 #include "integral_aliases.hpp"
 
 class Bitset128
 {
 public:
-    std::array<u64, 2> words{};
+    u64 words[2]{};
 
     [[nodiscard, gnu::always_inline]] inline constexpr u8 countr_zero()
         const noexcept
@@ -15,7 +14,7 @@ public:
         const u64 lo = words[0];
         const u64 hi = words[1];
         const u8 lo_zero = (lo == 0);
-        return (std::countr_zero(lo) + lo_zero * std::countr_zero(hi)) & 0xFF;
+        return (::ctr_zero(lo) + lo_zero * ::ctr_zero(hi)) & 0xFF;
     }
 
     [[gnu::always_inline]] inline constexpr void set_bit(
@@ -24,7 +23,8 @@ public:
         words[index >> 6] |= (u64{1} << (index & 63));
     }
 
-    constexpr void remove_bit(std::uint32_t index) noexcept
+    [[gnu::always_inline]] constexpr void remove_bit(
+        std::uint32_t index) noexcept
     {
         const u64 bit = u64{1} << (index & 63);
         const u64 lane = index >> 6;

@@ -1,9 +1,14 @@
 #pragma once
 
-#include <functional>
+#include <type_traits>
 
 #include "max2.hpp"
 #include "upd.hpp"
 
 inline static constexpr auto upd_max =
-    std::bind(upd, std::placeholders::_1, std::placeholders::_2, max2);
+    []<typename T> [[gnu::always_inline]] (
+        T& x,
+        const std::type_identity_t<T>& another) noexcept -> T&
+{
+    return upd(x, another, max2);
+};

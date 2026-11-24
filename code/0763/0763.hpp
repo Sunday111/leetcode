@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 
-#include "bit_manipultaion/clear_bit.hpp"
+#include "bitsets/bitset_view/bsv_set_if.hpp"
 #include "integral_aliases.hpp"
 
 class Solution
@@ -10,6 +10,7 @@ public:
     static constexpr auto partitionLabels(const std::string& s) noexcept
     {
         u32 lb = 0, rb = 0;
+        const BitsetView<u32, 26> remaining{&rb};
         u16 n = 0, freq[26]{};
         std::vector<int> r;
 
@@ -24,7 +25,7 @@ public:
         {
             u8 i = (c - 'a') & 31;
 
-            rb = clear_bit(rb, i, !--freq[i]);
+            bsv_set_if<false>(remaining, i, !--freq[i]);
             lb |= (1u << i);
             ++n;
 

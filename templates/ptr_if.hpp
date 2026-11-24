@@ -1,4 +1,6 @@
-#include <bit>
+#pragma once
+
+#include <cstdint>
 #include <type_traits>
 
 #include "int_if.hpp"
@@ -8,6 +10,15 @@ template <typename T>
 [[nodiscard, gnu::always_inline]] constexpr T
 ptrif(bool c, T a, std::type_identity_t<T> b) noexcept
 {
-    return std::bit_cast<T>(
-        iif(c, std::bit_cast<std::size_t>(a), std::bit_cast<std::size_t>(b)));
+    if consteval
+    {
+        return c ? a : b;
+    }
+    else
+    {
+        return reinterpret_cast<T>(
+            iif(c,
+                reinterpret_cast<std::uintptr_t>(a),
+                reinterpret_cast<std::uintptr_t>(b)));
+    }
 }

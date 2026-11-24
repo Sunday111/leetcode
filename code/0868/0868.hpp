@@ -1,8 +1,8 @@
-#include "assign_max.hpp"
-#include "bit_manipultaion/clear_bit.hpp"
-#include "bit_manipultaion/rightmost_one.hpp"
+#include "bitsets/assign_bits.hpp"
+#include "bitsets/ctr_zero.hpp"
 #include "exch.hpp"
 #include "integral_aliases.hpp"
+#include "upd_max.hpp"
 
 class Solution
 {
@@ -10,8 +10,9 @@ public:
     template <std::unsigned_integral T>
     [[nodiscard]] static constexpr u8 removeLastBit(T& x) noexcept
     {
-        auto i = rightmost_one(x);
-        x = clear_bit(x, i);
+        const u8 i = ::ctr_zero(x) & 0xFF;
+        const T lowest_bit = static_cast<T>(x & -x);
+        x = assign_bits<false>(x, lowest_bit);
         return i;
     }
 
@@ -21,7 +22,7 @@ public:
         while (n)
         {
             auto curr = removeLastBit(n);
-            assign_max(r, curr - exch(prev, curr));
+            upd_max(r, curr - exch(prev, curr));
         }
         return r;
     }

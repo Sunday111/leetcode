@@ -1,3 +1,4 @@
+#include <functional>
 #include <vector>
 
 #include "integral_aliases.hpp"

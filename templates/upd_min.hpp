@@ -1,9 +1,14 @@
 #pragma once
 
-#include <functional>
+#include <type_traits>
 
 #include "min2.hpp"
 #include "upd.hpp"
 
 inline static constexpr auto upd_min =
-    std::bind(upd, std::placeholders::_1, std::placeholders::_2, min2);
+    []<typename T> [[gnu::always_inline]] (
+        T& x,
+        const std::type_identity_t<T>& another) noexcept -> T&
+{
+    return upd(x, another, min2);
+};
