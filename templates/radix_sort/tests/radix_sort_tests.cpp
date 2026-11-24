@@ -2,7 +2,7 @@
 #include <random>
 
 #include "gtest/gtest.h"
-#include "radix_sort/radix_sorter.hpp"
+#include "radix_sort/radix_sort.hpp"
 
 template <typename T>
 class UnstableRadixSortTest : public ::testing::Test

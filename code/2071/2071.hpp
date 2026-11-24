@@ -3,7 +3,7 @@
 #include <ranges>
 #include <vector>
 
-#include "radix_sort/radix_sorter.hpp"
+#include "radix_sort/radix_sort.hpp"
 
 template <typename To>
 [[nodiscard, gnu::always_inline]] inline static constexpr To to(auto v) noexcept

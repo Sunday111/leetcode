@@ -5,7 +5,7 @@
 
 #include "bisect.hpp"
 #include "integral_aliases.hpp"
-#include "radix_sort/radix_sorter.hpp"
+#include "radix_sort/radix_sort.hpp"
 #include "sum.hpp"
 
 class Solution

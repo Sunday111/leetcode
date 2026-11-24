@@ -6,7 +6,7 @@
 
 #include "int_if.hpp"
 #include "integral_aliases.hpp"
-#include "radix_sort/radix_sorter.hpp"
+#include "radix_sort/radix_sort.hpp"
 #include "reinterpret_range.hpp"
 
 class Solution

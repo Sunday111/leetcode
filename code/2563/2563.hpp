@@ -1,5 +1,5 @@
 #include "no_sanitizers.hpp"
-#include "radix_sort/radix_sorter.hpp"
+#include "radix_sort/radix_sort.hpp"
 #include "signed_integral_aliases.hpp"
 
 class Solution

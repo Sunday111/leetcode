@@ -2,7 +2,7 @@
 #include <climits>
 #include <vector>
 
-#include "radix_sort/radix_sorter.hpp"
+#include "radix_sort/radix_sort.hpp"
 #include "reinterpret_range.hpp"
 
 using u32 = uint32_t;
