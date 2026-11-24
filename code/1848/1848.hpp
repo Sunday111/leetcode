@@ -2,7 +2,7 @@
 #include <vector>
 
 #include "int_if.hpp"
-#include "upd_min.hpp"
+#include "minmax/upd_min.hpp"
 
 class Solution
 {

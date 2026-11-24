@@ -2,7 +2,8 @@
 
 #include <type_traits>
 
-#include "max2.hpp"
+#include "minmax/max2.hpp"
+#include "minmax/ref/max2_ref.hpp"
 #include "upd.hpp"
 
 inline static constexpr auto upd_max =
@@ -10,5 +11,8 @@ inline static constexpr auto upd_max =
         T& x,
         const std::type_identity_t<T>& another) noexcept -> T&
 {
-    return upd(x, another, max2);
+    if constexpr (std::is_scalar_v<T>)
+        return upd(x, another, max2);
+    else
+        return upd(x, another, max2_ref);
 };

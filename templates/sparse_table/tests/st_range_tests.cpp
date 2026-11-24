@@ -6,8 +6,8 @@
 
 #include "gtest/gtest.h"
 #include "integral_aliases.hpp"
-#include "max2.hpp"
-#include "min2.hpp"
+#include "minmax/max2.hpp"
+#include "minmax/min2.hpp"
 #include "signed_integral_aliases.hpp"
 #include "sparse_table/st_make.hpp"
 #include "sparse_table/st_range.hpp"

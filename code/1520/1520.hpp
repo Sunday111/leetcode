@@ -1,6 +1,6 @@
-#include <algorithm>
 #include <unistd.h>
 
+#include <algorithm>
 #include <bit>
 #include <cassert>
 #include <functional>
@@ -9,8 +9,8 @@
 #include <string>
 #include <vector>
 
-#include "upd_max.hpp"
-#include "upd_min.hpp"
+#include "minmax/upd_max.hpp"
+#include "minmax/upd_min.hpp"
 
 using u32 = uint32_t;
 

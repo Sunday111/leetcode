@@ -3,7 +3,7 @@
 #include <string>
 
 #include "integral_aliases.hpp"
-#include "upd_min.hpp"
+#include "minmax/upd_min.hpp"
 
 class Solution
 {

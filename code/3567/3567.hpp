@@ -4,13 +4,13 @@
 #include "cast.hpp"
 #include "int_if.hpp"
 #include "integral_aliases.hpp"
+#include "minmax/upd_min.hpp"
 #include "pyramid_bitset/pbs_add_ex.hpp"
 #include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_max.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
 #include "pyramid_bitset/pbs_required_buffer_words.hpp"
-#include "upd_min.hpp"
 
 // https://leetcode.com/problems/minimum-absolute-difference-in-sliding-submatrix/
 

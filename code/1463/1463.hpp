@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "integral_aliases.hpp"
-#include "max2.hpp"
+#include "minmax/max2.hpp"
 #include "sync_stdio.hpp"
 
 class Solution

@@ -3,8 +3,8 @@
 #include <vector>
 
 #include "int_if.hpp"
-#include "max2.hpp"
-#include "min2.hpp"
+#include "minmax/max2.hpp"
+#include "minmax/min2.hpp"
 
 class Solution
 {

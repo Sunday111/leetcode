@@ -2,8 +2,8 @@
 #include <vector>
 
 #include "integral_aliases.hpp"
+#include "minmax/upd_min.hpp"
 #include "union_find.hpp"
-#include "upd_min.hpp"
 
 namespace stdr = std::ranges;
 

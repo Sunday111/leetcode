@@ -1,17 +1,10 @@
 #pragma once
 
-#include <concepts>
 #include <utility>
 #include <vector>
 
-#include "max2.hpp"
-
-template <std::integral T>
-[[nodiscard, gnu::always_inline, gnu::hot]] inline constexpr T
-iif(bool c, T a, T b) noexcept
-{
-    return (a & static_cast<T>(-c)) + (b & static_cast<T>(~static_cast<T>(-c)));
-}
+#include "int_if.hpp"
+#include "minmax/max2.hpp"
 
 class Solution
 {

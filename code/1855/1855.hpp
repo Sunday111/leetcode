@@ -2,7 +2,7 @@
 
 #include "cast.hpp"
 #include "integral_aliases.hpp"
-#include "upd_max.hpp"
+#include "minmax/upd_max.hpp"
 
 class Solution
 {

@@ -5,7 +5,7 @@
 #include <type_traits>
 #include <utility>
 
-#include "min2.hpp"
+#include "minmax/min2.hpp"
 #include "sparse_table/st_make.hpp"
 #include "sparse_table/st_range.hpp"
 

@@ -1,6 +1,7 @@
 #include <vector>
 
 #include "integral_aliases.hpp"
+#include "minmax/upd_max.hpp"
 #include "pyramid_bitset/pbs_add_ex.hpp"
 #include "pyramid_bitset/pbs_get.hpp"
 #include "pyramid_bitset/pbs_make.hpp"
@@ -8,7 +9,6 @@
 #include "pyramid_bitset/pbs_remove.hpp"
 #include "pyramid_bitset/pbs_remove_ex.hpp"
 #include "pyramid_bitset/pbs_required_buffer_words.hpp"
-#include "upd_max.hpp"
 
 class Solution
 {

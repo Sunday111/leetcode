@@ -1,7 +1,7 @@
 #include <cstdint>
 #include <vector>
 
-#include "max4.hpp"
+#include "minmax/max4.hpp"
 
 class Solution
 {

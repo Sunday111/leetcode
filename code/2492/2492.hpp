@@ -3,8 +3,8 @@
 #include <numeric>
 #include <vector>
 
+#include "minmax/upd_min.hpp"
 #include "sync_stdio.hpp"
-#include "upd_min.hpp"
 
 class Solution
 {

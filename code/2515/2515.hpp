@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "cast.hpp"
-#include "upd_min.hpp"
+#include "minmax/upd_min.hpp"
 
 class Solution
 {

@@ -3,11 +3,10 @@
 #include <vector>
 
 #include "integral_aliases.hpp"
-#include "max4.hpp"
-#include "min4.hpp"
+#include "minmax/max4.hpp"
+#include "minmax/min4.hpp"
 #include "namespaces.hpp"  // IWYU pragma: keep
 #include "signed_integral_aliases.hpp"
-// https://leetcode.com/problems/maximum-non-negative-product-in-a-matrix/
 
 class Solution
 {

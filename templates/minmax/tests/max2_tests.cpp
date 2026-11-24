@@ -4,7 +4,7 @@
 #include <random>
 #include <type_traits>
 
-#include "max2.hpp"
+#include "minmax/max2.hpp"
 
 // === Typed test fixture ===
 template <typename T>

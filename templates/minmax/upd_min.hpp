@@ -2,7 +2,8 @@
 
 #include <type_traits>
 
-#include "min2.hpp"
+#include "minmax/min2.hpp"
+#include "minmax/ref/min2_ref.hpp"
 #include "upd.hpp"
 
 inline static constexpr auto upd_min =
@@ -10,5 +11,8 @@ inline static constexpr auto upd_min =
         T& x,
         const std::type_identity_t<T>& another) noexcept -> T&
 {
-    return upd(x, another, min2);
+    if constexpr (std::is_scalar_v<T>)
+        return upd(x, another, min2);
+    else
+        return upd(x, another, min2_ref);
 };

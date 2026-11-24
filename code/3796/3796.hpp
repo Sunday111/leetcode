@@ -1,8 +1,8 @@
 #include <vector>
 
 #include "integral_aliases.hpp"
-#include "upd_max.hpp"
-#include "upd_min.hpp"
+#include "minmax/upd_max.hpp"
+#include "minmax/upd_min.hpp"
 
 class Solution
 {
