@@ -18,6 +18,7 @@
 #include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_max.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
+#include "pyramid_bitset/pbs_required_buffer_words.hpp"
 
 inline static const Factorizer<1'000'001, 100'001> factorizer;
 
@@ -74,9 +75,9 @@ public:
 
         static u64 visited_words[ceil_div(100'000, 64)];
         std::fill_n(visited_words, ceil_div(n, 64), 0);
-        u64 a_words[PyramidBitset<100'000>::kTotalWords]{};
+        u64 a_words[pbs_required_buffer_words<100'000>()]{};
         auto a = pbs_make<100'000>(a_words);
-        u64 b_words[PyramidBitset<100'000>::kTotalWords]{};
+        u64 b_words[pbs_required_buffer_words<100'000>()]{};
         auto b = pbs_make<100'000>(b_words);
         pbs_initialize(a, kEmpty, n);
         pbs_initialize(b, kEmpty, n);

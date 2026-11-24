@@ -34,6 +34,6 @@ TYPED_TEST(PbsLayersTest, Operations)
     if constexpr (B::kNumLayers > 1)
         EXPECT_GT(B::kLayersSizes[B::kNumLayers - 2], 1);
 }
-static_assert(PyramidBitset<64>::kNumLayers == 1);
-static_assert(PyramidBitset<4096>::kNumLayers == 2);
-static_assert(PyramidBitset<4097>::kNumLayers == 3);
+static_assert(PyramidBitset<128, u128>::kNumLayers == 1);
+static_assert(PyramidBitset<16384, u128>::kNumLayers == 2);
+static_assert(PyramidBitset<16385, u128>::kNumLayers == 3);

@@ -9,6 +9,7 @@
 #include "pyramid_bitset/pbs_max.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
+#include "pyramid_bitset/pbs_required_buffer_words.hpp"
 #include "upd_min.hpp"
 
 // https://leetcode.com/problems/minimum-absolute-difference-in-sliding-submatrix/
@@ -28,7 +29,7 @@ public:
         const u8 h = cast<u8>(grid.size()), w = cast<u8>(grid[0].size());
         const u8 hh = h + 1 - k, ww = w + 1 - k;
 
-        static u64 bs_words[PyramidBitset<200'001>::kTotalWords]{};
+        static u64 bs_words[pbs_required_buffer_words<200'001>()]{};
 
         static auto bs = pbs_make<200'001>(bs_words);
 

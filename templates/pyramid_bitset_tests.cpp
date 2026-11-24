@@ -21,6 +21,7 @@
 #include "pyramid_bitset/pbs_prev.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
 #include "pyramid_bitset/pbs_remove_ex.hpp"
+#include "pyramid_bitset/pbs_required_buffer_words.hpp"
 #include "pyramid_bitset/pbs_set.hpp"
 
 static_assert(PyramidBitset<1 << 20>::kTotalWords == 16384 + 256 + 4 + 1);
@@ -59,7 +60,9 @@ TYPED_TEST(PyramidBitsetTypedFuzzyTest, NonEmptyMin)
     using Bitset = TypeParam;
     using ValueType = typename Bitset::ValueType;
     constexpr auto capacity = Bitset::kCapacity;
-    typename Bitset::WordType storage[Bitset::kTotalWords]{};
+    typename Bitset::WordType storage[pbs_required_buffer_words<
+        Bitset::kCapacity,
+        typename Bitset::WordType>()]{};
     const auto bs = pbs_make<Bitset::kCapacity>(storage);
 
     EXPECT_TRUE(pbs_is_empty(bs));
@@ -75,7 +78,9 @@ TYPED_TEST(PyramidBitsetTypedFuzzyTest, FreeOperations)
     using Bitset = TypeParam;
     using ValueType = typename Bitset::ValueType;
     constexpr auto last = cast<ValueType>(Bitset::kCapacity - 1);
-    typename Bitset::WordType storage[Bitset::kTotalWords]{};
+    typename Bitset::WordType storage[pbs_required_buffer_words<
+        Bitset::kCapacity,
+        typename Bitset::WordType>()]{};
     const auto bs = pbs_make<Bitset::kCapacity>(storage);
     pbs_add_if(bs, last, false);
     EXPECT_TRUE(pbs_is_empty(bs));
@@ -111,7 +116,9 @@ TYPED_TEST(PyramidBitsetTypedFuzzyTest, Fuzzy)
     constexpr u32 min_size = capacity / 2;
     std::mt19937 rnd{seed};
 
-    typename Bitset::WordType storage[Bitset::kTotalWords]{};
+    typename Bitset::WordType storage[pbs_required_buffer_words<
+        Bitset::kCapacity,
+        typename Bitset::WordType>()]{};
     const auto bs = pbs_make<Bitset::kCapacity>(storage);
     std::set<ValueType> std_set;
     std::uniform_int_distribution<u32> size_distr(min_size, capacity - 1);
@@ -153,7 +160,9 @@ TYPED_TEST(PyramidBitsetTypedFuzzyTest, NeighbourSearch)
     using Bitset = TypeParam;
     using ValueType = typename Bitset::ValueType;
     constexpr auto capacity = Bitset::kCapacity;
-    typename Bitset::WordType storage[Bitset::kTotalWords]{};
+    typename Bitset::WordType storage[pbs_required_buffer_words<
+        Bitset::kCapacity,
+        typename Bitset::WordType>()]{};
     const auto bs = pbs_make<Bitset::kCapacity>(storage);
     std::set<ValueType> reference;
     auto check = [&](ValueType v)
@@ -243,7 +252,9 @@ TYPED_TEST(PyramidBitsetInclusiveNextTest, BoundariesAndSentinel)
     constexpr auto capacity = Bitset::kCapacity;
     constexpr ValueType last = capacity - 1;
     static constexpr
-        typename Bitset::WordType empty_words[Bitset::kTotalWords]{};
+        typename Bitset::WordType empty_words[pbs_required_buffer_words<
+            Bitset::kCapacity,
+            typename Bitset::WordType>()]{};
     constexpr auto empty = pbs_make<capacity>(empty_words);
     static_assert(std::is_same_v<
                   decltype(pbs_next_inclusive(empty, ValueType{})),
@@ -251,7 +262,9 @@ TYPED_TEST(PyramidBitsetInclusiveNextTest, BoundariesAndSentinel)
     static_assert(pbs_next_inclusive(empty, ValueType{}) == capacity);
     static_assert(pbs_next_inclusive(empty, last) == capacity);
 
-    typename Bitset::WordType storage[Bitset::kTotalWords]{};
+    typename Bitset::WordType storage[pbs_required_buffer_words<
+        Bitset::kCapacity,
+        typename Bitset::WordType>()]{};
     const auto bs = pbs_make<Bitset::kCapacity>(storage);
     EXPECT_EQ(pbs_next_inclusive(bs, 0), capacity);
     EXPECT_EQ(pbs_next_inclusive(bs, last), capacity);

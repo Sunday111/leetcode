@@ -6,6 +6,7 @@
 #include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
+#include "pyramid_bitset/pbs_required_buffer_words.hpp"
 
 class Solution
 {
@@ -14,7 +15,7 @@ public:
         const u32 n,
         const std::vector<std::vector<int>>& edges)
     {
-        static u64 is_root_words[PyramidBitset<100'001>::kTotalWords]{};
+        static u64 is_root_words[pbs_required_buffer_words<100'001>()]{};
         static auto is_root = pbs_make<100'001>(is_root_words);
         pbs_initialize(is_root, kFull, n + 1);
 

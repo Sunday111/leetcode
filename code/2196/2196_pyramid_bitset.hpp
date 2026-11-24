@@ -9,6 +9,7 @@
 #include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
+#include "pyramid_bitset/pbs_required_buffer_words.hpp"
 #include "solution_name.hpp"
 
 class LC_SOLUTION_NAME(_pyramid_bitset)
@@ -18,9 +19,9 @@ public:
         const std::vector<std::vector<int>>& descriptions)
     {
         static TreeNode nodes[100001];
-        u64 initialized_words[PyramidBitset<100001>::kTotalWords]{};
+        u64 initialized_words[pbs_required_buffer_words<100001>()]{};
         auto initialized = pbs_make<100001>(initialized_words);
-        u64 roots_words[PyramidBitset<100001>::kTotalWords]{};
+        u64 roots_words[pbs_required_buffer_words<100001>()]{};
         auto roots = pbs_make<100001>(roots_words);
 
         auto get_node = [&] [[gnu::always_inline]] (u32 id) -> TreeNode&

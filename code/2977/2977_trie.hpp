@@ -13,6 +13,7 @@
 #include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
+#include "pyramid_bitset/pbs_required_buffer_words.hpp"
 #include "signed_integral_aliases.hpp"
 
 class Solution
@@ -60,7 +61,7 @@ public:
         u16 max_len = 0;
 
         // Reset bitsets
-        static u64 bitset_words[200][PyramidBitset<256>::kTotalWords]{};
+        static u64 bitset_words[200][pbs_required_buffer_words<256>()]{};
         PyramidBitset<256> bitsets[200];
         for (u32 i = 0; i != 200; ++i)
         {
@@ -105,10 +106,10 @@ public:
                 auto& bi = bitsets[i];
                 if (!pbs_get(bi, k)) continue;
 
-                u64 snapshot[PyramidBitset<256>::kTotalWords];
+                u64 snapshot[pbs_required_buffer_words<256>()];
                 std::copy_n(
                     bitsets[k].words,
-                    PyramidBitset<256>::kTotalWords,
+                    pbs_required_buffer_words<256>(),
                     snapshot);
                 for (auto bk = pbs_make<256>(snapshot); !pbs_is_empty(bk);)
                 {

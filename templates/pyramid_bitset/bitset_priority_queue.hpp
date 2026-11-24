@@ -7,6 +7,7 @@
 #include "pyramid_bitset/pbs_max.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
+#include "pyramid_bitset/pbs_required_buffer_words.hpp"
 
 template <size_t max_value, size_t max_count>
 class BitsetPriorityQueue
@@ -16,7 +17,7 @@ public:
     using ValueType = B::ValueType;
     using FrequencyType = UintForValue<max_count>;
     FrequencyType freq[max_value + 1]{};
-    u64 words[B::kTotalWords]{};
+    typename B::WordType words[pbs_required_buffer_words<B::kCapacity>()]{};
 
     [[gnu::always_inline]] constexpr void add(ValueType v) noexcept
     {

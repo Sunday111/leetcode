@@ -4,6 +4,7 @@
 #include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
+#include "pyramid_bitset/pbs_required_buffer_words.hpp"
 #include "pyramid_bitset/pbs_set.hpp"
 
 class Solution
@@ -12,7 +13,7 @@ public:
     [[nodiscard]] static constexpr auto toggleLightBulbs(
         const std::vector<int>& bulbs) noexcept
     {
-        u64 b_words[PyramidBitset<128>::kTotalWords]{};
+        u64 b_words[pbs_required_buffer_words<128>()]{};
         auto b = pbs_make<128>(b_words);
 
         u8 n = 0;

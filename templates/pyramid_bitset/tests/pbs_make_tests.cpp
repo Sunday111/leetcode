@@ -1,5 +1,6 @@
 #include "pbs_test_support.hpp"
 #include "pyramid_bitset/pbs_make.hpp"
+#include "pyramid_bitset/pbs_required_buffer_words.hpp"
 
 template <typename B>
 class PbsMakeTest : public PbsTest<B>
@@ -31,15 +32,16 @@ TYPED_TEST(PbsMakeTest, Operations)
 static_assert(
     []
     {
-        u64 words[PyramidBitset<65>::kTotalWords]{17, 0, 1};
-        const auto bits = pbs_make<65>(words);
+        u128 words[pbs_required_buffer_words<129, u128>()]{17, 0, 1};
+        const auto bits = pbs_make<129>(words);
         const auto alias = bits;
         alias.words[0] = 23;
         return bits.words == words && words[0] == 23 && words[2] == 1;
     }());
 
-using LargestPbs = PyramidBitset<std::numeric_limits<u32>::max()>;
+using LargestPbs = PyramidBitset<std::numeric_limits<u32>::max(), u128>;
+static_assert(std::is_same_v<LargestPbs::WordType, u128>);
 static_assert(LargestPbs::kCapacity == 0xFFFF'FFFFu);
-static_assert(LargestPbs::kLayersSizes[0] == (u32{1} << 26));
-static_assert(LargestPbs::kNumLayers == 6);
-static_assert(LargestPbs::kTotalWords == 68'174'085);
+static_assert(LargestPbs::kLayersSizes[0] == (u32{1} << 25));
+static_assert(LargestPbs::kNumLayers == 5);
+static_assert(LargestPbs::kTotalWords == 33'818'641);

@@ -12,14 +12,17 @@
 #include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_max.hpp"
 #include "pyramid_bitset/pbs_prev.hpp"
+#include "pyramid_bitset/pbs_required_buffer_words.hpp"
 #include "solution_name.hpp"
 #include "sync_stdio.hpp"
 
 class LC_SOLUTION_NAME(_pyramid_bitset)
 {
     using Bits = PyramidBitset<1'000'001>;
-    inline static u64 present[Bits::kTotalWords];
-    inline static u64 duplicate[Bits::kTotalWords];
+    inline static Bits::WordType
+        present[pbs_required_buffer_words<Bits::kCapacity>()];
+    inline static Bits::WordType
+        duplicate[pbs_required_buffer_words<Bits::kCapacity>()];
 
 public:
     [[gnu::flatten, gnu::target("avx2,bmi,bmi2,lzcnt,popcnt")]]

@@ -9,6 +9,7 @@
 #include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_next.hpp"
 #include "pyramid_bitset/pbs_prev.hpp"
+#include "pyramid_bitset/pbs_required_buffer_words.hpp"
 #include "sync_stdio.hpp"
 
 inline constexpr u32 kNullNode = 1023;
@@ -37,7 +38,7 @@ public:
     {
         nodes[0] = {};
         nodes[0].v = nums[0] & 1023;
-        u64 inserted_words[PyramidBitset<1001>::kTotalWords]{};
+        u64 inserted_words[pbs_required_buffer_words<1001>()]{};
         auto inserted = pbs_make<1001>(inserted_words);
         // A missing neighbour selects the root (the earliest inserted node).
         node_id_map[inserted.kCapacity] = 0;

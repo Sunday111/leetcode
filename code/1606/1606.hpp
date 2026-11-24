@@ -10,13 +10,14 @@
 #include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_next_inclusive.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
+#include "pyramid_bitset/pbs_required_buffer_words.hpp"
 #include "sync_stdio.hpp"
 
 class Solution
 {
     static constexpr u32 kCapacity = 100'000;
 
-    inline static u64 free_words[PyramidBitset<kCapacity>::kTotalWords];
+    inline static u64 free_words[pbs_required_buffer_words<kCapacity>()];
 
     class BusyHeap
     {

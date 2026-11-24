@@ -6,12 +6,13 @@
 #include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
+#include "pyramid_bitset/pbs_required_buffer_words.hpp"
 
 class Solution
 {
 public:
     inline static u32 freq[100'001];
-    inline static u64 b_words[PyramidBitset<100'001>::kTotalWords]{};
+    inline static u64 b_words[pbs_required_buffer_words<100'001>()]{};
     inline static auto b = pbs_make<100'001>(b_words);
 
     [[nodiscard]] static auto maxIceCream(const std::vector<int>& costs, u32 coins)

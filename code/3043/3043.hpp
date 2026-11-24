@@ -7,6 +7,7 @@
 #include "pyramid_bitset/pbs_min.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
 #include "pyramid_bitset/pbs_remove_ex.hpp"
+#include "pyramid_bitset/pbs_required_buffer_words.hpp"
 #include "upd_max.hpp"
 
 class Solution
@@ -25,7 +26,7 @@ public:
         const std::vector<u32>& a,
         const std::vector<u32>& b) noexcept
     {
-        static u64 bs_words[PyramidBitset<100'000'001>::kTotalWords]{};
+        static u64 bs_words[pbs_required_buffer_words<100'000'001>()]{};
         static auto bs = pbs_make<100'000'001>(bs_words);
         u8 max_digits = 0;
         u32 num_unique = 0;

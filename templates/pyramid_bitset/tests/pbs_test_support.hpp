@@ -6,6 +6,7 @@
 
 #include "gtest/gtest.h"
 #include "pyramid_bitset/pbs_make.hpp"
+#include "pyramid_bitset/pbs_required_buffer_words.hpp"
 
 template <typename B>
 class PbsTest : public ::testing::Test
@@ -15,7 +16,7 @@ public:
     using Index = typename B::ValueType;
     static constexpr u32 capacity = B::kCapacity;
     static constexpr Index index_mask = std::numeric_limits<Index>::max();
-    Word storage[B::kTotalWords + 2]{};
+    Word storage[pbs_required_buffer_words<capacity, Word>() + 2]{};
     bool expected[capacity]{};
     const B bits = pbs_make<B::kCapacity>(storage + 1);
     std::mt19937 random{1606};
@@ -121,4 +122,8 @@ using PbsTypes = ::testing::Types<
     PyramidBitset<4096, u64>,
     PyramidBitset<4097, u64>,
     PyramidBitset<65536, u64>,
-    PyramidBitset<100000, u64>>;
+    PyramidBitset<100000, u64>,
+    PyramidBitset<127, u128>,
+    PyramidBitset<128, u128>,
+    PyramidBitset<129, u128>,
+    PyramidBitset<16385, u128>>;

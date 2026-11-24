@@ -3,7 +3,7 @@
 #include <cassert>
 #include <limits>
 
-#include "ctz.hpp"
+#include "bitsets/ctr_zero.hpp"
 #include "pyramid_bitset/pbs_layer_view.hpp"
 #include "pyramid_bitset/pbs_layers.hpp"
 #include "uint_for_value.hpp"
@@ -25,7 +25,8 @@ pbs_next_inclusive(
     first_word >>= position & B::kMask;
     if (first_word != 0)
     {
-        Index result = (Index{position} + ctz(first_word)) & index_mask;
+        const u8 first = ::ctr_zero(first_word) & 0xFF;
+        Index result = (Index{position} + first) & index_mask;
         if (result > capacity) result = capacity;
         return result;
     }
@@ -41,8 +42,7 @@ pbs_next_inclusive(
                 if (result < layer_size)
                 {
                     const Word word = view.words[result];
-                    u8 first = B::kWordSize;
-                    if (word != 0) first = ctz(word);
+                    const u8 first = ::ctr_zero(word) & 0xFF;
                     result = ((result << B::kShift) + first) & index_mask;
                 }
                 else
@@ -60,8 +60,7 @@ pbs_next_inclusive(
             constexpr u8 skip = layer != 0;
             candidates >>= bi;
             candidates >>= skip;
-            u8 first = B::kWordSize;
-            if (candidates != 0) first = ctz(candidates);
+            const u8 first = ::ctr_zero(candidates) & 0xFF;
             const Index candidate = (query + skip + first) & index_mask;
             const Index mask = (Index{0} - Index{candidates != 0}) & index_mask;
             result ^= (result ^ candidate) & mask;

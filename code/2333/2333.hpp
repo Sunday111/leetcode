@@ -10,6 +10,7 @@
 #include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_max.hpp"
 #include "pyramid_bitset/pbs_remove.hpp"
+#include "pyramid_bitset/pbs_required_buffer_words.hpp"
 #include "sync_stdio.hpp"
 
 class Solution
@@ -19,7 +20,7 @@ class Solution
     inline static std::array<u32, kMaxDiff + 1> frequency{};
     inline static std::array<u64, kNumBlocks> occupied_values{};
     inline static u64
-        occupied_blocks_words[PyramidBitset<kNumBlocks>::kTotalWords]{};
+        occupied_blocks_words[pbs_required_buffer_words<kNumBlocks>()]{};
     inline static auto occupied_blocks =
         pbs_make<kNumBlocks>(occupied_blocks_words);
 

@@ -4,6 +4,7 @@
 #include "pyramid_bitset/pbs_is_empty.hpp"
 #include "pyramid_bitset/pbs_make.hpp"
 #include "pyramid_bitset/pbs_min.hpp"
+#include "pyramid_bitset/pbs_required_buffer_words.hpp"
 #include "pyramid_bitset/pbs_set.hpp"
 
 class Solution
@@ -14,9 +15,9 @@ public:
         const std::vector<int>& col_sum) noexcept
     {
         u16 h = row_sum.size() & 0xFFFF, w = col_sum.size() & 0xFFFF;
-        u64 a_words[PyramidBitset<512>::kTotalWords]{};
+        u64 a_words[pbs_required_buffer_words<512>()]{};
         auto a = pbs_make<512>(a_words);
-        u64 b_words[PyramidBitset<512>::kTotalWords]{};
+        u64 b_words[pbs_required_buffer_words<512>()]{};
         auto b = pbs_make<512>(b_words);
         auto src = &a, dst = &b;
 
