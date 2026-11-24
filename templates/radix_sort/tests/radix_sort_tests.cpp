@@ -1,5 +1,7 @@
+#include <algorithm>
 #include <limits>
 #include <random>
+#include <vector>
 
 #include "gtest/gtest.h"
 #include "radix_sort/radix_sort.hpp"
@@ -36,7 +38,9 @@ protected:
             custom_sorted = values;
             std_sorted = values;
 
-            radix_sort<4>(std::span{custom_sorted});
+            radix_sort<4>(
+                custom_sorted.data(),
+                static_cast<u32>(custom_sorted.size()));
             std::ranges::sort(std_sorted, std::less{});
             ASSERT_EQ(custom_sorted, std_sorted);
 
@@ -45,7 +49,8 @@ protected:
             std_sorted = values;
 
             radix_sort<4, 0xFFFFFFFF, SortOrder::Descending>(
-                std::span{custom_sorted});
+                custom_sorted.data(),
+                static_cast<u32>(custom_sorted.size()));
             std::ranges::sort(std_sorted, std::greater{});
             ASSERT_EQ(custom_sorted, std_sorted);
         }
@@ -77,10 +82,12 @@ TYPED_TEST(RadixSortValueTest, EmptySingletonAndLimits)
     {
         auto expected = values;
         std::ranges::sort(expected);
-        radix_sort<4>(std::span{values});
+        radix_sort<4>(values.data(), static_cast<u32>(values.size()));
         ASSERT_EQ(values, expected);
         std::ranges::reverse(expected);
-        radix_sort<4, 0xFFFFFFFF, SortOrder::Descending>(std::span{values});
+        radix_sort<4, 0xFFFFFFFF, SortOrder::Descending>(
+            values.data(),
+            static_cast<u32>(values.size()));
         ASSERT_EQ(values, expected);
     }
 }
@@ -92,7 +99,7 @@ TEST(RadixSort, MoreElementsThanTheValueTypeCanCount)
     for (auto& value : values) value = remaining-- & 0xFFFF;
     auto expected = values;
     std::ranges::sort(expected);
-    radix_sort<4>(std::span{values});
+    radix_sort<4>(values.data(), static_cast<u32>(values.size()));
     ASSERT_EQ(values, expected);
 }
 
@@ -103,6 +110,22 @@ TEST(RadixSort, ExactSmallCapacity)
     std::ranges::sort(expected);
     radix_sort<4, 8, SortOrder::Ascending, 10>(values.data(), 10);
     ASSERT_EQ(values, expected);
+}
+
+TEST(RadixSort, ReusesHistogramAcrossDigitAndCountWidths)
+{
+    u16 narrow[]{0xFFFF, 0, 0xFF00, 1};
+    u32 wide[]{0x1FFFF, 0, 0x10000, 1};
+    for (int run = 0; run != 2; ++run)
+    {
+        radix_sort<16, 1, SortOrder::Descending, 4>(narrow, 4);
+        EXPECT_TRUE(std::ranges::is_sorted(narrow, std::greater{}));
+        radix_sort<8, 4>(wide, 4);
+        EXPECT_TRUE(std::ranges::is_sorted(wide));
+        radix_sort<17, 1, SortOrder::Descending>(wide, 4);
+        EXPECT_TRUE(std::ranges::is_sorted(wide, std::greater{}));
+        std::ranges::reverse(narrow);
+    }
 }
 
 template <auto kBitsPerPass, auto kNumPasses>
@@ -176,7 +199,8 @@ protected:
             constexpr auto kMask = u32{0xFFFFFFFF} >> kSizeB;
 
             radix_sort<T::bits_per_pass(), T::num_passes()>(
-                reinterpret_range<u32>(std::span{custom_sorted}));
+                custom_sorted.data(),
+                static_cast<u32>(custom_sorted.size()));
             std::ranges::stable_sort(
                 std_sorted,
                 mask_and_compare<kMask, std::less>);
@@ -190,7 +214,8 @@ protected:
                 T::bits_per_pass(),
                 T::num_passes(),
                 SortOrder::Descending>(
-                reinterpret_range<u32>(std::span{custom_sorted}));
+                custom_sorted.data(),
+                static_cast<u32>(custom_sorted.size()));
             std::ranges::stable_sort(
                 std_sorted,
                 mask_and_compare<kMask, std::greater>);

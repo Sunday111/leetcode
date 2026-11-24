@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <span>
 #include <vector>
 
 #include "radix_sort/radix_sort.hpp"
@@ -11,10 +10,11 @@ public:
         std::vector<int>& _nums,
         u32 k) noexcept
     {
-        const std::span<u32> nums = reinterpret_range<u32>(_nums);
-        radix_sort<10, 2, SortOrder::Descending>(nums);
+        auto* nums = reinterpret_cast<u32*>(_nums.data());
+        const auto n = static_cast<u32>(_nums.size());
+        radix_sort<10, 2, SortOrder::Descending>(nums, n);
 
-        auto i = nums.begin(), j = i, e = nums.end();
+        auto i = nums, j = i, e = nums + n;
         u32 r = 0;
         while (j != e && std::distance(i, e) > r)
         {

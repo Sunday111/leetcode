@@ -4,6 +4,8 @@
 #include <vector>
 
 #include "radix_sort/radix_sort.hpp"
+#include "reinterpret_range.hpp"
+#include "signed_integral_aliases.hpp"
 
 class Solution
 {
@@ -32,7 +34,9 @@ public:
         }
 
         auto numbers = std::span{results}.first(num_results);
-        radix_sort<u32, SortOrder::Ascending, 8>(numbers);
+        radix_sort<8, 4, SortOrder::Ascending, results.size()>(
+            results.data(),
+            num_results);
         return numbers.size() - std::ranges::unique(numbers).size();
     }
 };

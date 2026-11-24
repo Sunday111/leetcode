@@ -1,5 +1,7 @@
 #include <algorithm>
 #include <ranges>
+#include <tuple>
+#include <utility>
 #include <vector>
 
 #include "integral_aliases.hpp"
@@ -21,7 +23,7 @@ public:
             rstr[nr++] = {t[0], t[1]};
         }
 
-        radix_sort<10, 3>(std::span{reinterpret_cast<u64*>(rstr), nr});
+        radix_sort<10, 3>(reinterpret_cast<u64*>(rstr), nr);
 
         u32 i = 1, i_max = 0;
         for (auto& [k, k_max] : rstr | std::views::take(nr))

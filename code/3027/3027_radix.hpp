@@ -39,8 +39,7 @@ public:
             };
         }
 
-        radix_sort<u64, SortOrder::Ascending, 8>(
-            reinterpret_range<uint64_t>(std::span{points}.first(n)));
+        radix_sort<8>(reinterpret_cast<u64*>(points.data()), n);
 
         for (Index i = 0; i != n; ++i)
         {

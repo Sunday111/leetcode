@@ -1,21 +1,14 @@
 #pragma once
 
-#include <algorithm>
 #include <cassert>
 #include <concepts>
 #include <cstring>
 #include <type_traits>
+#include <utility>
 
 #include "integral_aliases.hpp"
+#include "radix_sort/radix_sort_storage.hpp"
 #include "uint_for_value.hpp"
-
-struct RadixSortIndicesByStorage
-{
-    template <std::unsigned_integral I, u32 capacity>
-    inline static I scratch[capacity];
-
-    alignas(u32) inline static u8 counts[sizeof(u32) << 16];
-};
 
 template <
     u8 bits_per_pass,
@@ -38,10 +31,10 @@ radix_sort_indices_by(I* indices, u32 n, Proj proj) noexcept
     constexpr u32 passes = num_passes == 0xFFFFFFFF ? max_passes : num_passes;
     static_assert(passes <= max_passes);
 
-    auto* counts = reinterpret_cast<Count*>(RadixSortIndicesByStorage::counts);
+    auto* counts = reinterpret_cast<Count*>(RadixSortStorage::counts<16>);
     assert(n <= capacity);  // NOLINT
     I* src = indices;
-    I* dst = RadixSortIndicesByStorage::scratch<I, capacity>;
+    I* dst = RadixSortStorage::scratch<I, capacity>;
 
     for (u32 pass = 0; pass < passes; ++pass)
     {

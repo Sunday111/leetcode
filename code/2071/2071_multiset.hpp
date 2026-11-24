@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "bump/bump_allocator.hpp"
+#include "cast.hpp"
 #include "radix_sort/radix_sort.hpp"
 
 template <typename To>
@@ -82,10 +83,12 @@ public:
         const u32 pills,
         const int strength) noexcept
     {
-        radix_sort<u32, SortOrder::Ascending, 8, 4>(
-            reinterpret_range<u32>(tasks));
-        radix_sort<u32, SortOrder::Ascending, 8, 4>(
-            reinterpret_range<u32>(workers));
+        radix_sort<8, 4>(
+            reinterpret_cast<u32*>(tasks.data()),
+            static_cast<u32>(tasks.size()));
+        radix_sort<8, 4>(
+            reinterpret_cast<u32*>(workers.data()),
+            static_cast<u32>(workers.size()));
 
         InitPrefixSumCheck(tasks, workers);
 

@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "radix_sort/radix_sort_indices_by.hpp"
+#include "radix_sort/radix_sort_storage.hpp"
 #include "sync_stdio.hpp"
 
 class Solution
@@ -13,7 +14,7 @@ public:
     inline static constexpr u32 kIndexBits = 17;
     inline static constexpr u32 kIndexMask = (1u << kIndexBits) - 1;
     inline static auto& srv_cnt =
-        RadixSortIndicesByStorage::scratch<u32, kCapacity + 1>;
+        RadixSortStorage::scratch<u32, kCapacity + 1>;
     inline static u64 sorted_logs[kCapacity];
     inline static u32 sorted_q[kCapacity];
 

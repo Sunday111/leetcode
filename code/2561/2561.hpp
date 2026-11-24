@@ -2,6 +2,7 @@
 #include <array>
 #include <optional>
 #include <span>
+#include <utility>
 #include <vector>
 
 #include "radix_sort/radix_sort.hpp"
@@ -9,17 +10,14 @@
 
 class Solution
 {
-    [[nodiscard]] static std::optional<u64> minCost(
-        std::span<u32> basket1,
-        std::span<u32> basket2) noexcept
+    [[nodiscard]] static std::optional<u64>
+    minCost(u32* basket1, u32* basket2, u32 n) noexcept
     {
         // need 30 bits to represent range [1; 10^9]
-        radix_sort<10, 3>(basket1);
-        radix_sort<10, 3>(basket2);
+        radix_sort<10, 3>(basket1, n);
+        radix_sort<10, 3>(basket2, n);
 
-        const u32 n = static_cast<u32>(basket1.size());
-        const u32 min_fruit_cost =
-            std::min(basket1.front(), basket2.front()) * 2;
+        const u32 min_fruit_cost = std::min(basket1[0], basket2[0]) * 2;
 
         u32 num_unique = 0, to_swap = 0;
 
@@ -81,8 +79,9 @@ public:
         std::vector<i32>& basket2) noexcept
     {
         if (auto r = minCost(
-                reinterpret_range<u32>(basket1),
-                reinterpret_range<u32>(basket2)))
+                reinterpret_cast<u32*>(basket1.data()),
+                reinterpret_cast<u32*>(basket2.data()),
+                static_cast<u32>(basket1.size())))
         {
             return static_cast<i64>(*r);
         }

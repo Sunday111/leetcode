@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ranges>
+#include <span>
 #include <vector>
 
 #include "bisect.hpp"
@@ -13,9 +14,11 @@ class Solution
 public:
     static u64 maxRunTime(u32 n, std::vector<int>& batteries_)
     {
-        auto batteries = reinterpret_range<u32>(batteries_);
-        radix_sort<10, 3, SortOrder::Descending>(batteries);
+        auto* data = reinterpret_cast<u32*>(batteries_.data());
+        const auto size = static_cast<u32>(batteries_.size());
+        radix_sort<10, 3, SortOrder::Descending>(data, size);
 
+        const std::span batteries{data, size};
         const std::span<const u32> active = batteries.first(n);
         const std::span<const u32> swaps = batteries.last(batteries.size() - n);
         if (swaps.empty()) return active.back();

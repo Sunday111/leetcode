@@ -1,9 +1,13 @@
 #pragma once
 
 #include <algorithm>
+#include <array>
+#include <bit>
 #include <span>
+#include <utility>
 #include <vector>
 
+#include "cast.hpp"
 #include "int_if.hpp"
 #include "integral_aliases.hpp"
 #include "radix_sort/radix_sort.hpp"
@@ -43,7 +47,7 @@ public:
         std::array<u64, 2>& bs,
         u8 idx) noexcept
     {
-        bs[idx > 63] |= u64{1} << iif<u8>(idx > 63, idx - 64, idx);
+        bs[idx > 63] |= u64{1} << iif(idx > 63, static_cast<u8>(idx - 64), idx);
     }
 
     [[gnu::always_inline]] inline static constexpr u8 bitsetFindFirstZero(
@@ -76,7 +80,7 @@ public:
         // Choose between the std::sort (expect nlogn) and
         // different sets of parameters for radix sort
         {
-            using SortFn = void (*)(std::span<u64>);
+            using SortFn = void (*)(u64*, u32);
 
             auto radix_sort_weight =
                 [num_meetings](u32 bits_per_pass, u32 num_passes)
@@ -87,21 +91,18 @@ public:
             using WeightAndFn = std::pair<u32, SortFn>;
             std::array<WeightAndFn, 6> fns{{
                 {num_meetings * cast<u32>(32 - std::countl_zero(num_meetings)),
-                 [](std::span<u64> x) { std::ranges::sort(x); }},
-                {radix_sort_weight(6, 7),
-                 [](std::span<u64> x) { radix_sort<7, 6>(x); }},
-                {radix_sort_weight(7, 6),
-                 [](std::span<u64> x) { radix_sort<7, 6>(x); }},
-                {radix_sort_weight(8, 5),
-                 [](std::span<u64> x) { radix_sort<8, 5>(x); }},
-                {radix_sort_weight(10, 4),
-                 [](std::span<u64> x) { radix_sort<10, 4>(x); }},
-                {radix_sort_weight(13, 3),
-                 [](std::span<u64> x) { radix_sort<13, 3>(x); }},
+                 [](u64* x, u32 n) { std::sort(x, x + n); }},
+                {radix_sort_weight(6, 7), radix_sort<7, 6>},
+                {radix_sort_weight(7, 6), radix_sort<7, 6>},
+                {radix_sort_weight(8, 5), radix_sort<8, 5>},
+                {radix_sort_weight(10, 4), radix_sort<10, 4>},
+                {radix_sort_weight(13, 3), radix_sort<13, 3>},
             }};
 
             std::ranges::min(fns, std::less{}, &WeightAndFn::first)
-                .second(reinterpret_range<u64>(meetings));
+                .second(
+                    reinterpret_cast<u64*>(meettings_arr.data()),
+                    num_meetings);
         }
 
         if (auto n = num_meetings, log_n = cast<u32>(32 - std::countl_zero(n));
@@ -111,7 +112,9 @@ public:
         }
         else
         {
-            radix_sort<8, 5>(reinterpret_range<u64>(meetings));
+            radix_sort<8, 5>(
+                reinterpret_cast<u64*>(meettings_arr.data()),
+                num_meetings);
         }
 
         Booking* const heap_arr = reinterpret_cast<Booking*>(meetings.data());

@@ -1,3 +1,6 @@
+#include <algorithm>
+#include <vector>
+
 #include "int_if.hpp"
 #include "radix_sort/radix_sort.hpp"
 
@@ -8,7 +11,9 @@ public:
         std::vector<int>& nums,
         int k) noexcept
     {
-        radix_sort<8, 4, SortOrder::Ascending>(std::span{nums});
+        radix_sort<8, 4, SortOrder::Ascending>(
+            nums.data(),
+            static_cast<u32>(nums.size()));
         int t = nums.back() + k + 1, r = 0;
         int stop = nums.front() - k;
         for (u32 i = static_cast<u32>(nums.size()); i-- && t > stop;)

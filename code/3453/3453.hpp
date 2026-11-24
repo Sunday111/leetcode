@@ -4,7 +4,6 @@
 #include "cast.hpp"
 #include "integral_aliases.hpp"
 #include "radix_sort/radix_sort.hpp"
-#include "reinterpret_range.hpp"
 
 class Solution
 {
@@ -34,7 +33,7 @@ public:
             end_y = std::max(end_y, u64{y} + u64{l});
         }
 
-        radix_sort<8, 8>(reinterpret_range<u64>(std::span{s}.first(n)));
+        radix_sort<8, 8>(reinterpret_cast<u64*>(s), n);
 
         const double target_area = cast<double>(total_area) / 2;
         double left = cast<double>(begin_y), right = cast<double>(end_y);

@@ -8,8 +8,9 @@ public:
     [[nodiscard]] static constexpr int largestPerimeter(
         std::vector<int>& nums) noexcept
     {
-        radix_sort<u32, SortOrder::Ascending, 10, 2>(
-            reinterpret_range<u32>(nums));
+        radix_sort<10, 2>(
+            reinterpret_cast<u32*>(nums.data()),
+            static_cast<u32>(nums.size()));
         for (size_t n = nums.size(), i = 0; i != n - 2; ++i)
         {
             if (size_t j = i + 1, k = j + 1; nums[i] < nums[j] + nums[k])

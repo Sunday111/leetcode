@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <functional>
 #include <vector>
 
@@ -14,9 +15,11 @@ class Solution
 public:
     template <size_t bits_per_pass>
     inline static constexpr auto rad_sort =
-        [] [[gnu::always_inline, gnu::hot]] (std::vector<u32> & x) noexcept
+        [] [[gnu::always_inline, gnu::hot]] (std::vector<u32>& x) noexcept
     {
-        radix_sort<bits_per_pass, 1, SortOrder::Descending>(std::span{x});
+        radix_sort<bits_per_pass, 1, SortOrder::Descending>(
+            x.data(),
+            static_cast<u32>(x.size()));
     };
 
     [[nodiscard]] static u32 impl(std::vector<std::vector<u32>>& m) noexcept
@@ -84,4 +87,3 @@ public:
 };
 
 #include "sync_stdio.hpp"
-

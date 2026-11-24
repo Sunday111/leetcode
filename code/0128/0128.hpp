@@ -1,6 +1,8 @@
 #pragma once
 
+#include <algorithm>
 #include <unordered_set>
+#include <vector>
 
 #include "integral_aliases.hpp"
 #include "radix_sort/radix_sort.hpp"
@@ -11,7 +13,7 @@ public:
     [[nodiscard]] static constexpr int longestConsecutive(
         std::vector<int>& nums) noexcept
     {
-        radix_sort<8>(std::span{nums});
+        radix_sort<8>(nums.data(), static_cast<u32>(nums.size()));
 
         if (nums.empty()) return 0;
 

@@ -1,14 +1,18 @@
+#include <vector>
+
 #include "radix_sort/radix_sort.hpp"
 
 class Solution
 {
 public:
-    [[nodiscard]] static u32 getMaximumConsecutive(std::vector<int>& coins_) noexcept
+    [[nodiscard]] static u32 getMaximumConsecutive(
+        std::vector<int>& coins_) noexcept
     {
-        auto coins = reinterpret_range<u32>(coins_);
-        radix_sort<8, 2>(coins);
+        auto* coins = reinterpret_cast<u32*>(coins_.data());
+        const auto n = static_cast<u32>(coins_.size());
+        radix_sort<8, 2>(coins, n);
         u32 x = 0, i = 0;
-        while (i != coins.size() && coins[i] <= x + 1) x += coins[i++];
+        while (i != n && coins[i] <= x + 1) x += coins[i++];
         return x + 1;
     }
 };

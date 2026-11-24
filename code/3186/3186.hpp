@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <array>
 #include <span>
+#include <utility>
 #include <vector>
 
 #include "radix_sort/radix_sort.hpp"
@@ -13,21 +14,22 @@ public:
 
     static u64 maximumTotalDamage(std::vector<int>& power_) noexcept
     {
-        const std::span<u32> power = reinterpret_range<u32>(power_);
+        auto* power = reinterpret_cast<u32*>(power_.data());
+        const auto size = static_cast<u32>(power_.size());
 
-        if (power.size() < 10'000)
+        if (size < 10'000)
         {
-            radix_sort<6, 5>(power);
+            radix_sort<6, 5>(power, size);
         }
         else
         {
-            radix_sort<15, 2>(power);
+            radix_sort<15, 2>(power, size);
         }
 
         static std::array<u64, 100'001> arr;
 
         u32 n = 0xFFFFFFFF, h = 0;
-        for (u32 v : power)
+        for (u32 v : std::span{power, size})
         {
             n += v != h;
             power[n] = v;

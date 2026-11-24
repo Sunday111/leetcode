@@ -1,9 +1,10 @@
 #include <algorithm>
+#include <bit>
 #include <climits>
+#include <tuple>
 #include <vector>
 
 #include "radix_sort/radix_sort.hpp"
-#include "reinterpret_range.hpp"
 
 using u32 = uint32_t;
 using u64 = uint64_t;
@@ -43,8 +44,8 @@ public:
         }
         robots[nr + 1] = pack(INT_MAX, 0);
 
-        radix_sort<10, 3>(std::span{robots + 1, nr});
-        radix_sort<10, 3>(reinterpret_range<u32>(std::span{walls}));
+        radix_sort<10, 3>(robots + 1, nr);
+        radix_sort<10, 3>(reinterpret_cast<u32*>(walls.data()), nw);
 
         int* we = walls.data() + nw;
         int *a = walls.data(), *c = a;
