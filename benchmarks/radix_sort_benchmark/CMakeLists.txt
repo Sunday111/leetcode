@@ -1,0 +1,5 @@
+add_executable(radix_sort_benchmark radix_sort_benchmark.cpp)
+target_include_directories(radix_sort_benchmark PRIVATE ${PROJECT_SOURCE_DIR}/templates)
+target_link_libraries(radix_sort_benchmark PRIVATE benchmark::benchmark)
+target_compile_options(radix_sort_benchmark PRIVATE -O2 -fsanitize=address)
+target_link_options(radix_sort_benchmark PRIVATE -fsanitize=address)

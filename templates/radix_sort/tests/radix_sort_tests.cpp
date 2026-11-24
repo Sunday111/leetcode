@@ -5,7 +5,7 @@
 #include "radix_sort/radix_sort.hpp"
 
 template <typename T>
-class UnstableRadixSortTest : public ::testing::Test
+class RadixSortValueTest : public ::testing::Test
 {
 protected:
     static constexpr unsigned seed = 1234;
@@ -54,14 +54,14 @@ protected:
 
 using TestTypes =
     ::testing::Types<int16_t, int32_t, int64_t, uint16_t, uint32_t, uint64_t>;
-TYPED_TEST_SUITE(UnstableRadixSortTest, TestTypes);
+TYPED_TEST_SUITE(RadixSortValueTest, TestTypes);
 
-TYPED_TEST(UnstableRadixSortTest, RandomizedCorrectness)
+TYPED_TEST(RadixSortValueTest, RandomizedCorrectness)
 {
     this->run_sort_tests();
 }
 
-TYPED_TEST(UnstableRadixSortTest, EmptySingletonAndLimits)
+TYPED_TEST(RadixSortValueTest, EmptySingletonAndLimits)
 {
     using T = TypeParam;
     for (std::vector<T> values :
@@ -175,7 +175,7 @@ protected:
 
             constexpr auto kMask = u32{0xFFFFFFFF} >> kSizeB;
 
-            stable_radix_sort<T::bits_per_pass(), T::num_passes()>(
+            radix_sort<T::bits_per_pass(), T::num_passes()>(
                 reinterpret_range<u32>(std::span{custom_sorted}));
             std::ranges::stable_sort(
                 std_sorted,
@@ -186,7 +186,7 @@ protected:
             custom_sorted = values;
             std_sorted = values;
 
-            stable_radix_sort<
+            radix_sort<
                 T::bits_per_pass(),
                 T::num_passes(),
                 SortOrder::Descending>(

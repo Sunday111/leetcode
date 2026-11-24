@@ -15,10 +15,10 @@ enum class SortOrder : u8
     Descending
 };
 
+// Stable in both sort orders. Each pass appends equal digits in input order.
 template <
     std::integral T,
     SortOrder order,
-    bool stable,
     u8 bits_per_pass,
     u32 num_passes = ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass),
     u32 capacity = 100'001>
@@ -58,51 +58,20 @@ class RadixSorter
             ++count[(v >> shift) & mask];
         }
 
-        if constexpr (order == SortOrder::Ascending)
+        Count sum = 0;
+        for (u32 i = 0; i != base; ++i)
         {
-            if constexpr (stable)
-            {
-                for (u32 i = 1; i != base; ++i) count[i] += count[i - 1];
-
-                for (u32 i = n; i--;)
-                {
-                    UT digit = (data[i] >> shift) & mask;
-                    output[--count[digit]] = data[i] ^ post_sign_mask;
-                }
-            }
-            else
-            {
-                Count sum = 0;
-                for (u32 i = 0; i != base; ++i)
-                {
-                    Count frequency = count[i];
-                    count[i] = sum;
-                    sum += frequency;
-                }
-
-                for (u32 j = 0; j != n; ++j)
-                {
-                    UT v = data[j];
-                    output[count[(v >> shift) & mask]++] = v ^ post_sign_mask;
-                }
-            }
+            const u32 digit = order == SortOrder::Ascending ? i : base - 1 - i;
+            const Count frequency = count[digit];
+            count[digit] = sum;
+            sum += frequency;
         }
-        else  // Descending
-        {
-            // Compute descending start positions
-            Count sum = 0;
-            for (u32 i = base; i--;)
-            {
-                Count frequency = count[i];
-                count[i] = sum;
-                sum += frequency;
-            }
 
-            for (u32 i = 0; i != n; ++i)
-            {
-                UT v = (data[i] >> shift) & mask;
-                output[count[v]++] = data[i] ^ post_sign_mask;
-            }
+        for (u32 i = 0; i != n; ++i)
+        {
+            const UT value = data[i];
+            const UT digit = (value >> shift) & mask;
+            output[count[digit]++] = value ^ post_sign_mask;
         }
     }
 
@@ -148,7 +117,7 @@ template <
         num_passes == 0xFFFFFFFF
             ? ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)
             : num_passes;
-    RadixSorter<T, order, false, bits_per_pass, np, capacity>::sort(data, n);
+    RadixSorter<T, order, bits_per_pass, np, capacity>::sort(data, n);
 }
 
 template <
@@ -160,34 +129,6 @@ template <
 [[gnu::always_inline]] inline void radix_sort(std::span<T> arr) noexcept
 {
     radix_sort<bits_per_pass, num_passes, order, capacity>(
-        arr.data(),
-        cast<u32>(arr.size()));
-}
-
-template <
-    u8 bits_per_pass,
-    u32 num_passes = 0xFFFFFFFF,
-    SortOrder order = SortOrder::Ascending,
-    u32 capacity = 100'001,
-    std::integral T>
-[[gnu::always_inline]] inline void stable_radix_sort(T* data, u32 n) noexcept
-{
-    constexpr u32 np =
-        num_passes == 0xFFFFFFFF
-            ? ((sizeof(T) * 8 + bits_per_pass - 1) / bits_per_pass)
-            : num_passes;
-    RadixSorter<T, order, true, bits_per_pass, np, capacity>::sort(data, n);
-}
-
-template <
-    u8 bits_per_pass,
-    u32 num_passes = 0xFFFFFFFF,
-    SortOrder order = SortOrder::Ascending,
-    u32 capacity = 100'001,
-    std::integral T>
-[[gnu::always_inline]] inline void stable_radix_sort(std::span<T> arr) noexcept
-{
-    stable_radix_sort<bits_per_pass, num_passes, order, capacity>(
         arr.data(),
         cast<u32>(arr.size()));
 }
