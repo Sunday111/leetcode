@@ -21,10 +21,10 @@ public:
         const u32 pills,
         const int strength) noexcept
     {
-        radix_sort<8>(
+        radix_sort<32, 8>(
             reinterpret_cast<u32*>(tasks.data()),
             static_cast<u32>(tasks.size()));
-        radix_sort<8>(
+        radix_sort<32, 8>(
             reinterpret_cast<u32*>(workers.data()),
             static_cast<u32>(workers.size()));
 

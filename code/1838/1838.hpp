@@ -12,7 +12,7 @@ public:
     {
         auto* nums = reinterpret_cast<u32*>(_nums.data());
         const auto n = static_cast<u32>(_nums.size());
-        radix_sort<10, 2, SortOrder::Descending>(nums, n);
+        radix_sort<20, 10, SortOrder::Descending>(nums, n);
 
         auto i = nums, j = i, e = nums + n;
         u32 r = 0;

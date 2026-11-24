@@ -11,7 +11,7 @@ public:
         std::vector<int>& nums,
         int k) noexcept
     {
-        radix_sort<8, 4, SortOrder::Ascending>(
+        radix_sort<32, 8, SortOrder::Ascending>(
             nums.data(),
             static_cast<u32>(nums.size()));
         int t = nums.back() + k + 1, r = 0;

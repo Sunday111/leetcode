@@ -11,10 +11,10 @@ public:
         std::vector<int>& players,
         std::vector<int>& trainers) noexcept
     {
-        radix_sort<6, 3, SortOrder::Descending>(
+        radix_sort<18, 6, SortOrder::Descending>(
             reinterpret_cast<u32*>(players.data()),
             static_cast<u32>(players.size()));
-        radix_sort<8, 4, SortOrder::Descending>(
+        radix_sort<32, 8, SortOrder::Descending>(
             reinterpret_cast<u32*>(trainers.data()),
             static_cast<u32>(trainers.size()));
 

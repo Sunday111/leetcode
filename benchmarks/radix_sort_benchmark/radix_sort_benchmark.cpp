@@ -19,7 +19,7 @@ enum class Input : u8
 template <u8 bits>
 [[gnu::noinline, gnu::no_sanitize_address]] void sort_values(u32* values, u32 n)
 {
-    radix_sort<bits, 32 / bits>(values, n);
+    radix_sort<bits == 10 ? 30 : 32, bits>(values, n);
 }
 
 template <u8 bits>

@@ -9,7 +9,7 @@ public:
         std::vector<u32>& nums,
         u32 k) noexcept
     {
-        radix_sort<10, 3>(nums.data(), static_cast<u32>(nums.size()));
+        radix_sort<30>(nums.data(), static_cast<u32>(nums.size()));
         u32 n = static_cast<u32>(nums.size()), x = 1;
         u64 lim = 0;
         for (u32 i = ~u32{}, j = 0; j != n; ++j)

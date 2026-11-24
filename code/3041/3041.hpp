@@ -100,7 +100,7 @@ public:
         u32 first = low >> 6, last = high >> 6;
         if (n < 32'768 && last - first + 1 > n / 4)
         {
-            radix_sort<10, 2>(data, n);
+            radix_sort<20>(data, n);
             return sorted(data, n);
         }
 

@@ -92,11 +92,11 @@ public:
             std::array<WeightAndFn, 6> fns{{
                 {num_meetings * cast<u32>(32 - std::countl_zero(num_meetings)),
                  [](u64* x, u32 n) { std::sort(x, x + n); }},
-                {radix_sort_weight(6, 7), radix_sort<7, 6>},
-                {radix_sort_weight(7, 6), radix_sort<7, 6>},
-                {radix_sort_weight(8, 5), radix_sort<8, 5>},
-                {radix_sort_weight(10, 4), radix_sort<10, 4>},
-                {radix_sort_weight(13, 3), radix_sort<13, 3>},
+                {radix_sort_weight(6, 7), radix_sort<42, 7>},
+                {radix_sort_weight(7, 6), radix_sort<42, 7>},
+                {radix_sort_weight(8, 5), radix_sort<40, 8>},
+                {radix_sort_weight(10, 4), radix_sort<40>},
+                {radix_sort_weight(13, 3), radix_sort<39, 13>},
             }};
 
             std::ranges::min(fns, std::less{}, &WeightAndFn::first)
@@ -112,7 +112,7 @@ public:
         }
         else
         {
-            radix_sort<8, 5>(
+            radix_sort<40, 8>(
                 reinterpret_cast<u64*>(meettings_arr.data()),
                 num_meetings);
         }

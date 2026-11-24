@@ -6,6 +6,16 @@
 #include "gtest/gtest.h"
 #include "radix_sort/radix_sort.hpp"
 
+template <typename T, u32 key_bits, u8 bits_per_pass>
+concept CanRadixSort =
+    requires(T* data) { radix_sort<key_bits, bits_per_pass>(data, 1); };
+
+static_assert(CanRadixSort<u16, 16, 10>);
+static_assert(CanRadixSort<u32, 0, 10>);
+static_assert(!CanRadixSort<u8, 8, 4>);
+static_assert(!CanRadixSort<u32, 25, 0>);
+static_assert(!CanRadixSort<u16, 17, 10>);
+
 template <typename T>
 class RadixSortValueTest : public ::testing::Test
 {
@@ -38,7 +48,7 @@ protected:
             custom_sorted = values;
             std_sorted = values;
 
-            radix_sort<4>(
+            radix_sort<sizeof(T) * 8, 4>(
                 custom_sorted.data(),
                 static_cast<u32>(custom_sorted.size()));
             std::ranges::sort(std_sorted, std::less{});
@@ -48,7 +58,7 @@ protected:
             custom_sorted = values;
             std_sorted = values;
 
-            radix_sort<4, 0xFFFFFFFF, SortOrder::Descending>(
+            radix_sort<sizeof(T) * 8, 4, SortOrder::Descending>(
                 custom_sorted.data(),
                 static_cast<u32>(custom_sorted.size()));
             std::ranges::sort(std_sorted, std::greater{});
@@ -82,10 +92,12 @@ TYPED_TEST(RadixSortValueTest, EmptySingletonAndLimits)
     {
         auto expected = values;
         std::ranges::sort(expected);
-        radix_sort<4>(values.data(), static_cast<u32>(values.size()));
+        radix_sort<sizeof(T) * 8, 4>(
+            values.data(),
+            static_cast<u32>(values.size()));
         ASSERT_EQ(values, expected);
         std::ranges::reverse(expected);
-        radix_sort<4, 0xFFFFFFFF, SortOrder::Descending>(
+        radix_sort<sizeof(T) * 8, 4, SortOrder::Descending>(
             values.data(),
             static_cast<u32>(values.size()));
         ASSERT_EQ(values, expected);
@@ -99,8 +111,40 @@ TEST(RadixSort, MoreElementsThanTheValueTypeCanCount)
     for (auto& value : values) value = remaining-- & 0xFFFF;
     auto expected = values;
     std::ranges::sort(expected);
-    radix_sort<4>(values.data(), static_cast<u32>(values.size()));
+    radix_sort<16, 4>(values.data(), static_cast<u32>(values.size()));
     ASSERT_EQ(values, expected);
+}
+
+TEST(RadixSort, TenBitPassesOnThirtyTwoBitKeys)
+{
+    const std::vector<u32> input{0x80000001, 0xC0000000, 0x40000001, 0, 1};
+    auto values = input;
+    radix_sort<32>(values.data(), 5);
+    EXPECT_EQ(
+        values,
+        (std::vector<u32>{0, 1, 0x40000001, 0x80000001, 0xC0000000}));
+
+    values = input;
+    radix_sort<30>(values.data(), 5);
+    EXPECT_EQ(
+        values,
+        (std::vector<u32>{0xC0000000, 0, 0x80000001, 0x40000001, 1}));
+}
+
+TEST(RadixSort, DefaultDigitWidthSortsExactlyTwentyFiveLowBits)
+{
+    std::vector<int32_t> values{-1, 1 << 25, 1 << 24, 0, INT32_MIN, 1};
+    radix_sort<25>(values.data(), 6);
+    EXPECT_EQ(
+        values,
+        (std::vector<int32_t>{1 << 25, 0, INT32_MIN, 1, 1 << 24, -1}));
+}
+
+TEST(RadixSort, ShortFinalPassIncludesSignBit)
+{
+    std::vector<int32_t> values{0, INT32_MIN, -1, INT32_MAX, 1};
+    radix_sort<32, 11, SortOrder::Descending>(values.data(), 5);
+    EXPECT_EQ(values, (std::vector<int32_t>{INT32_MAX, 1, 0, -1, INT32_MIN}));
 }
 
 TEST(RadixSort, ExactSmallCapacity)
@@ -108,7 +152,7 @@ TEST(RadixSort, ExactSmallCapacity)
     std::vector<u32> values{9, 1, 5, 3, 7, 0, 8, 2, 6, 4};
     auto expected = values;
     std::ranges::sort(expected);
-    radix_sort<4, 8, SortOrder::Ascending, 10>(values.data(), 10);
+    radix_sort<32, 4, SortOrder::Ascending, 10>(values.data(), 10);
     ASSERT_EQ(values, expected);
 }
 
@@ -118,34 +162,21 @@ TEST(RadixSort, ReusesHistogramAcrossDigitAndCountWidths)
     u32 wide[]{0x1FFFF, 0, 0x10000, 1};
     for (int run = 0; run != 2; ++run)
     {
-        radix_sort<16, 1, SortOrder::Descending, 4>(narrow, 4);
+        radix_sort<16, 16, SortOrder::Descending, 4>(narrow, 4);
         EXPECT_TRUE(std::ranges::is_sorted(narrow, std::greater{}));
-        radix_sort<8, 4>(wide, 4);
+        radix_sort<32, 8>(wide, 4);
         EXPECT_TRUE(std::ranges::is_sorted(wide));
-        radix_sort<17, 1, SortOrder::Descending>(wide, 4);
+        radix_sort<17, 17, SortOrder::Descending>(wide, 4);
         EXPECT_TRUE(std::ranges::is_sorted(wide, std::greater{}));
         std::ranges::reverse(narrow);
     }
 }
 
-template <auto kBitsPerPass, auto kNumPasses>
+template <u32 key_bits, u8 digit_bits>
 struct StableSortParams
 {
-    [[nodiscard, gnu::always_inline]] inline static constexpr auto
-    num_sorted_bits() noexcept
-    {
-        return kBitsPerPass * kNumPasses;
-    }
-    [[nodiscard, gnu::always_inline]] inline static constexpr auto
-    bits_per_pass() noexcept
-    {
-        return kBitsPerPass;
-    }
-    [[nodiscard, gnu::always_inline]] inline static constexpr auto
-    num_passes() noexcept
-    {
-        return kNumPasses;
-    }
+    static constexpr u8 bits_per_pass = digit_bits;
+    static constexpr u32 num_sorted_bits = key_bits;
 };
 
 template <typename T>
@@ -159,7 +190,7 @@ protected:
     std::mt19937 rnd{seed};
     std::uniform_int_distribution<u32> distr;
 
-    static constexpr u32 kSizeA = T::num_sorted_bits();
+    static constexpr u32 kSizeA = T::num_sorted_bits;
     static constexpr u32 kSizeB = 32 - kSizeA;
 
     std::vector<u32> values;
@@ -198,7 +229,7 @@ protected:
 
             constexpr auto kMask = u32{0xFFFFFFFF} >> kSizeB;
 
-            radix_sort<T::bits_per_pass(), T::num_passes()>(
+            radix_sort<T::num_sorted_bits, T::bits_per_pass>(
                 custom_sorted.data(),
                 static_cast<u32>(custom_sorted.size()));
             std::ranges::stable_sort(
@@ -211,8 +242,8 @@ protected:
             std_sorted = values;
 
             radix_sort<
-                T::bits_per_pass(),
-                T::num_passes(),
+                T::num_sorted_bits,
+                T::bits_per_pass,
                 SortOrder::Descending>(
                 custom_sorted.data(),
                 static_cast<u32>(custom_sorted.size()));
@@ -225,9 +256,10 @@ protected:
 };
 
 using StableTestTypes = ::testing::Types<
-    StableSortParams<3, 2>,
-    StableSortParams<7, 2>,
-    StableSortParams<4, 5>>;
+    StableSortParams<6, 3>,
+    StableSortParams<14, 7>,
+    StableSortParams<20, 4>,
+    StableSortParams<25, 10>>;
 
 TYPED_TEST_SUITE(StableRadixSortTest, StableTestTypes);
 

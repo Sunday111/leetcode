@@ -17,7 +17,7 @@ public:
     {
         auto* data = reinterpret_cast<u32*>(nums.data());
         u32 n = cast<u32>(nums.size());
-        radix_sort<10, 2>(data, n);
+        radix_sort<20>(data, n);
 
         lc3041::DistinctDP dp;
         for (u32 i = n; i != 0;)

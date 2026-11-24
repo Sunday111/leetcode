@@ -17,7 +17,7 @@ public:
     inline static constexpr auto rad_sort =
         [] [[gnu::always_inline, gnu::hot]] (std::vector<u32>& x) noexcept
     {
-        radix_sort<bits_per_pass, 1, SortOrder::Descending>(
+        radix_sort<bits_per_pass, bits_per_pass, SortOrder::Descending>(
             x.data(),
             static_cast<u32>(x.size()));
     };

@@ -13,7 +13,7 @@ public:
     [[nodiscard]] static constexpr int longestConsecutive(
         std::vector<int>& nums) noexcept
     {
-        radix_sort<8>(nums.data(), static_cast<u32>(nums.size()));
+        radix_sort<32, 8>(nums.data(), static_cast<u32>(nums.size()));
 
         if (nums.empty()) return 0;
 

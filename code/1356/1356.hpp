@@ -18,7 +18,7 @@ public:
             x = (static_cast<u32>(std::popcount(x)) << 16) | x;
         }
 
-        radix_sort<8>(data, n);
+        radix_sort<32, 8>(data, n);
 
         for (u32& x : au)
         {

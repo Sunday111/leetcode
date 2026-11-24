@@ -9,7 +9,7 @@ public:
     long long maximumHappinessSum(std::vector<int>& happiness, u32 k)
     {
         auto* h = reinterpret_cast<u32*>(happiness.data());
-        radix_sort<9, 3, SortOrder::Descending, 200'001>(
+        radix_sort<27, 9, SortOrder::Descending, 200'001>(
             h,
             static_cast<u32>(happiness.size()));
         i64 r = 0;

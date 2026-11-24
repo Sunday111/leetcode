@@ -14,8 +14,8 @@ class Solution
     minCost(u32* basket1, u32* basket2, u32 n) noexcept
     {
         // need 30 bits to represent range [1; 10^9]
-        radix_sort<10, 3>(basket1, n);
-        radix_sort<10, 3>(basket2, n);
+        radix_sort<30>(basket1, n);
+        radix_sort<30>(basket2, n);
 
         const u32 min_fruit_cost = std::min(basket1[0], basket2[0]) * 2;
 

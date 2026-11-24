@@ -39,7 +39,7 @@ public:
             };
         }
 
-        radix_sort<8>(reinterpret_cast<u64*>(points.data()), n);
+        radix_sort<64, 8>(reinterpret_cast<u64*>(points.data()), n);
 
         for (Index i = 0; i != n; ++i)
         {

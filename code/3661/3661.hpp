@@ -44,8 +44,8 @@ public:
         }
         robots[nr + 1] = pack(INT_MAX, 0);
 
-        radix_sort<10, 3>(robots + 1, nr);
-        radix_sort<10, 3>(reinterpret_cast<u32*>(walls.data()), nw);
+        radix_sort<30>(robots + 1, nr);
+        radix_sort<30>(reinterpret_cast<u32*>(walls.data()), nw);
 
         int* we = walls.data() + nw;
         int *a = walls.data(), *c = a;

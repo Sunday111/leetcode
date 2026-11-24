@@ -18,7 +18,7 @@ public:
     {
         auto* data = reinterpret_cast<u32*>(nums_.data());  // NOLINT
         const auto size = static_cast<u32>(nums_.size());
-        radix_sort<7, 3>(data, size);
+        radix_sort<21, 7>(data, size);
         const std::span nums{data, size};
 
         u32 r = 0;

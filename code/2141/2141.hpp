@@ -16,7 +16,7 @@ public:
     {
         auto* data = reinterpret_cast<u32*>(batteries_.data());
         const auto size = static_cast<u32>(batteries_.size());
-        radix_sort<10, 3, SortOrder::Descending>(data, size);
+        radix_sort<30, 10, SortOrder::Descending>(data, size);
 
         const std::span batteries{data, size};
         const std::span<const u32> active = batteries.first(n);

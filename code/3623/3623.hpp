@@ -17,7 +17,7 @@ public:
             a[i] = static_cast<u32>(points[i][1] + 100000000);
         }
 
-        radix_sort<8, 4>(a.data(), static_cast<u32>(points.size()));
+        radix_sort<32, 8>(a.data(), static_cast<u32>(points.size()));
 
         // All points are unique, so do no care about actual x positions
         // - just the number of them witin the same y

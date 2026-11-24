@@ -19,11 +19,11 @@ public:
 
         if (size < 10'000)
         {
-            radix_sort<6, 5>(power, size);
+            radix_sort<30, 6>(power, size);
         }
         else
         {
-            radix_sort<15, 2>(power, size);
+            radix_sort<30, 15>(power, size);
         }
 
         static std::array<u64, 100'001> arr;

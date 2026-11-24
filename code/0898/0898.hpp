@@ -34,7 +34,7 @@ public:
         }
 
         auto numbers = std::span{results}.first(num_results);
-        radix_sort<8, 4, SortOrder::Ascending, results.size()>(
+        radix_sort<32, 8, SortOrder::Ascending, results.size()>(
             results.data(),
             num_results);
         return numbers.size() - std::ranges::unique(numbers).size();
