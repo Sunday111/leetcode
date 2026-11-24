@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.25)
+project(templates_tests LANGUAGES CXX)
+
+if(PROJECT_IS_TOP_LEVEL)
+    set(CMAKE_CXX_STANDARD 23)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    set(CMAKE_CXX_EXTENSIONS OFF)
+    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../cmake")
+    find_package(GTest CONFIG REQUIRED)
+    add_subdirectory(../templates templates)
+    add_subdirectory(../test_utility test_utility)
+    enable_testing()
+endif()
+
+file(GLOB_RECURSE test_sources CONFIGURE_DEPENDS "*.cpp")
+list(FILTER test_sources EXCLUDE REGEX "/CMakeFiles/")
+add_executable(lc_templates_tests ${test_sources})
+target_link_libraries(lc_templates_tests PRIVATE lc_templates test_utility)
+
+include(GoogleTest)
+gtest_discover_tests(lc_templates_tests)

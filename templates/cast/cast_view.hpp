@@ -2,7 +2,7 @@
 
 #include <ranges>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 
 template <typename To>
 inline static constexpr auto cast_view = std::views::transform(cast<To>);

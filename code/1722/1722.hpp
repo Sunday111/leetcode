@@ -4,7 +4,7 @@
 #include "bump/bump_allocator.hpp"
 #include "bump/bump_hash_map.hpp"
 #include "bump/bump_vector.hpp"
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "integral_aliases.hpp"
 #include "namespaces.hpp"
 #include "swap_if.hpp"

@@ -5,7 +5,7 @@
 #include <span>
 #include <vector>
 
-#include "factorizer.hpp"
+#include "math/factorizer.hpp"
 #include "int_if.hpp"
 
 struct Node  // NOLINT

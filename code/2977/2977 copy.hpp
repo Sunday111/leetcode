@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "bump/bump_hash_map.hpp"
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "integral_aliases.hpp"
 #include "pyramid_bitset/pbs_add.hpp"
 #include "pyramid_bitset/pbs_get.hpp"

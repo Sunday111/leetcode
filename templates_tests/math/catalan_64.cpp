@@ -1,4 +1,4 @@
-#include "catalan_64.hpp"
+#include "math/catalan_64.hpp"
 
 static_assert(kCatalan64.front() == 1);
 static_assert(kCatalan64.at(8) == 1430);

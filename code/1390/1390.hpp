@@ -1,7 +1,7 @@
 #include <array>
 #include <vector>
 
-#include "factorizer.hpp"
+#include "math/factorizer.hpp"
 
 inline static const Factorizer<50'000, 5200> kFactorizer;
 

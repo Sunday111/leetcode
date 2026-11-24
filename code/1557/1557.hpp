@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "integral_aliases.hpp"
 #include "pyramid_bitset/pbs_initialize.hpp"
 #include "pyramid_bitset/pbs_make.hpp"

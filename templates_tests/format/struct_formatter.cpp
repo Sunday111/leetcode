@@ -1,8 +1,8 @@
 #include <print>
 
 #include "gtest/gtest.h"
-#include "property_writer.hpp"
-#include "quoted.hpp"
+#include "format/property_writer.hpp"
+#include "format/quoted.hpp"
 
 using namespace format_utils;  // NOLINT
 

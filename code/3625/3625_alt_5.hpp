@@ -4,7 +4,7 @@
 
 #include "bump/bump_allocator.hpp"
 #include "integral_aliases.hpp"
-#include "negate_if.hpp"
+#include "math/negate_if.hpp"
 #include "signed_integral_aliases.hpp"
 
 template <typename Key, u32 capacity, typename Storage>

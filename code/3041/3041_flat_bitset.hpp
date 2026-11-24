@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "3041_distinct_dp.hpp"
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "solution_name.hpp"
 #include "sync_stdio.hpp"
 

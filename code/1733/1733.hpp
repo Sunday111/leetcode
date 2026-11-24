@@ -4,7 +4,7 @@
 #include <span>
 #include <vector>
 
-#include "ceil_div.hpp"
+#include "math/ceil_div.hpp"
 #include "integral_aliases.hpp"
 #include "remove_if.hpp"
 

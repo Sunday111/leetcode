@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-#include "ncr.hpp"
+#include "math/ncr.hpp"
 #include "bitsets/next_with_same_popcount.hpp"
 
 class Solution

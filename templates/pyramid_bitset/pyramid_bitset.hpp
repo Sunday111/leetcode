@@ -4,7 +4,7 @@
 #include <type_traits>
 
 #include "bitsets/ctr_zero.hpp"
-#include "ceil_div.hpp"
+#include "math/ceil_div.hpp"
 #include "uint_for_value.hpp"
 
 template <u32 capacity, typename Word = u64>

@@ -5,7 +5,7 @@
 #include <set>
 #include <type_traits>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "gtest/gtest.h"
 #include "pyramid_bitset/pbs_add.hpp"
 #include "pyramid_bitset/pbs_add_ex.hpp"

@@ -6,7 +6,7 @@
 #include <string_view>
 #include <vector>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 
 template <typename T>
 concept UnidirectedGraphNodeConcept = requires(T a, int x) {

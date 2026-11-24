@@ -2,7 +2,7 @@
 
 #include "0030.hpp"
 #include "benchmark/benchmark.h"
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "test_cases_helpers.hpp"
 
 inline static constexpr auto kMethodToTest = &Solution::findSubstring;

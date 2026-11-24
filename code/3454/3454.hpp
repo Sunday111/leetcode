@@ -5,7 +5,7 @@
 #include "bump/bump_map.hpp"
 #include "bump/bump_set.hpp"
 #include "bump/bump_vector.hpp"
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "integral_aliases.hpp"
 
 using Storage = GlobalBufferStorage<1u << 25>;

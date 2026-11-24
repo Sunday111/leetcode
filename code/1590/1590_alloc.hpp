@@ -4,8 +4,8 @@
 
 #include "bump/bump_hash_map.hpp"
 #include "bump/bump_vector.hpp"
-#include "cast.hpp"
-#include "reinterpret_range.hpp"
+#include "cast/cast.hpp"
+#include "cast/reinterpret_range.hpp"
 
 class Solution
 {

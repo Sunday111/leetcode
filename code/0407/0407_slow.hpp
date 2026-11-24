@@ -1,7 +1,7 @@
 
 #include <vector>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "integral_aliases.hpp"
 
 class Solution

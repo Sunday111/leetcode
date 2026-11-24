@@ -1,7 +1,7 @@
 #pragma once
 
 #include "bitsets/ctl_zero.hpp"
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "pyramid_bitset/pbs_layer_view.hpp"
 #include "pyramid_bitset/pbs_layers.hpp"
 

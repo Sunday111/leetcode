@@ -7,7 +7,7 @@ file(GLOB_RECURSE test_utility_hdr CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR
 file(GLOB_RECURSE test_utility_src CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
 add_library(${target_name} STATIC ${test_utility_hdr} ${test_utility_src})
-target_link_libraries(${target_name} PUBLIC gtest lc_templates)
+target_link_libraries(${target_name} PUBLIC GTest::gtest lc_templates)
 target_include_directories(${target_name} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 set_generic_compiler_options(${target_name} PUBLIC)
 

@@ -3,7 +3,7 @@
 #include <ranges>
 #include <vector>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "int_if.hpp"
 
 class Solution

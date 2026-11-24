@@ -4,7 +4,7 @@
 #include <cstring>
 #include <vector>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "integral_aliases.hpp"
 #include "radix_sort/radix_sort.hpp"
 #include "solution_name.hpp"

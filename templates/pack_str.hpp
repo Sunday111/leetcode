@@ -4,7 +4,8 @@
 
 #include <string>
 
-#include "cast.hpp"
+#include "bitsets/bswap.hpp"
+#include "cast/cast.hpp"
 #include "integral_aliases.hpp"
 
 // NOLINTBEGIN
@@ -20,7 +21,7 @@ inline u64 packStr(const std::string& s) noexcept
     {
         const u64 qw = *reinterpret_cast<const u64*>(c8) - BIAS;
         sh -= 40;
-        r += _pext_u64(__builtin_bswap64(qw), EXT) << sh;
+        r += _pext_u64(bswap(qw), EXT) << sh;
         c8 += 8;
         n8 -= 8;
     }
@@ -28,7 +29,7 @@ inline u64 packStr(const std::string& s) noexcept
     {
         const u32 dw = *reinterpret_cast<const u32*>(c8) - (BIAS & 0xFFFFFFFFu);
         sh -= 20;
-        r += u64{_pext_u32(__builtin_bswap32(dw), EXT & 0xFFFFFFFFu)} << sh;
+        r += u64{_pext_u32(bswap(dw), EXT & 0xFFFFFFFFu)} << sh;
         c8 += 4;
         n8 -= 4;
     }
@@ -36,7 +37,7 @@ inline u64 packStr(const std::string& s) noexcept
     {
         const u16 w = *reinterpret_cast<const u16*>(c8) - (BIAS & 0xFFFFu);
         sh -= 10;
-        r += u64{_pext_u32(__builtin_bswap32(w) >> 16, EXT & 0xFFFFu)} << sh;
+        r += u64{_pext_u32(bswap(w), EXT & 0xFFFFu)} << sh;
         c8 += 2;
         n8 -= 2;
     }
@@ -55,13 +56,10 @@ inline std::string unpackStr(const u64 v) noexcept
 {
     std::string r(10, '\0');
     char* c8 = r.data();
-    *reinterpret_cast<u64*>(c8) =
-        __builtin_bswap64(_pdep_u64(v >> 10, EXT)) + BIAS;
-    *reinterpret_cast<u16*>(c8 + 8u) =
-        __builtin_bswap32(
-            cast<u32>(_pdep_u32(cast<u32>(v), EXT & 0xFFFFu) + (BIAS & 0xFFFFu))
-            << 16) &
-        0xFFFF;
+    *reinterpret_cast<u64*>(c8) = bswap(_pdep_u64(v >> 10, EXT)) + BIAS;
+    *reinterpret_cast<u16*>(c8 + 8u) = bswap(
+        static_cast<u16>(
+            _pdep_u32(cast<u32>(v), EXT & 0xFFFFu) + (BIAS & 0xFFFFu)));
     const auto end = r.find(BIAS & 0xFFu);
     if (end != std::string::npos) r.resize(end);
     return r;

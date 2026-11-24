@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "binary_tree/lc_tree_node.hpp"
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "pyramid_bitset/pbs_add.hpp"
 #include "pyramid_bitset/pbs_get.hpp"
 #include "pyramid_bitset/pbs_make.hpp"

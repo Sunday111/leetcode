@@ -1,9 +1,9 @@
 #include <vector>
 
-#include "cast_view.hpp"
-#include "ceil_div.hpp"
+#include "cast/cast_view.hpp"
+#include "math/ceil_div.hpp"
 #include "integral_aliases.hpp"
-#include "sum.hpp"
+#include "math/sum.hpp"
 
 namespace stdv = std::views;
 

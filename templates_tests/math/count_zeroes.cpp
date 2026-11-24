@@ -1,4 +1,4 @@
-#include "count_zeroes.hpp"
+#include "math/count_zeroes.hpp"
 
 #include "gtest/gtest.h"
 

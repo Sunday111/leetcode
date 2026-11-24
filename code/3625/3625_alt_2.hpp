@@ -4,7 +4,7 @@
 
 #include "bump/bump_hash_map.hpp"
 #include "integral_aliases.hpp"
-#include "negate_if.hpp"
+#include "math/negate_if.hpp"
 
 using SolutionStorage = GlobalBufferStorage<1 << 25>;
 class Solution

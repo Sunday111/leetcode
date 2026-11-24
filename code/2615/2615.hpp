@@ -3,8 +3,8 @@
 #include <bit>
 #include <vector>
 
-#include "cast.hpp"
-#include "ceil_div.hpp"
+#include "cast/cast.hpp"
+#include "math/ceil_div.hpp"
 #include "integral_aliases.hpp"
 
 template <typename Value>

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "3041_distinct_dp.hpp"
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "pyramid_bitset/pbs_add_ex.hpp"
 #include "pyramid_bitset/pbs_add_if.hpp"
 #include "pyramid_bitset/pbs_get.hpp"

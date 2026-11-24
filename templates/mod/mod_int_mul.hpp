@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "mod/mod_int.hpp"  // IWYU pragma: export
 
 [[gnu::always_inline]] constexpr ModInt& operator*=(

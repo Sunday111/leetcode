@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "integral_aliases.hpp"
 #include "minmax/upd_max.hpp"
 

@@ -5,8 +5,8 @@
 
 #include "bisect.hpp"
 #include "integral_aliases.hpp"
-#include "reinterpret_range.hpp"
-#include "sum.hpp"
+#include "cast/reinterpret_range.hpp"
+#include "math/sum.hpp"
 
 class Solution
 {

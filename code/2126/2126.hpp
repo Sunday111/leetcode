@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "cast_view.hpp"
+#include "cast/cast_view.hpp"
 #include "exch.hpp"
 #include "pyramid_bitset/pbs_add.hpp"
 #include "pyramid_bitset/pbs_is_empty.hpp"

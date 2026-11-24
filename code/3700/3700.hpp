@@ -3,7 +3,7 @@
 #include <bit>
 #include <utility>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "mod/mod_int_add.hpp"
 
 template <size_t k>

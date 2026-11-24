@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "bump/bump_allocator.hpp"
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "radix_sort/radix_sort.hpp"
 
 template <typename To>

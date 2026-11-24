@@ -4,7 +4,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "integral_aliases.hpp"
 
 inline static constexpr std::string_view kSampleInput = R"(

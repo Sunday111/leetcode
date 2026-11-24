@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <vector>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "int_if.hpp"
 #include "integral_aliases.hpp"
 

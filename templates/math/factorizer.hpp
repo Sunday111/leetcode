@@ -2,7 +2,7 @@
 
 #include <array>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "integral_aliases.hpp"
 
 template <u32 n, u32 primes_capacity>

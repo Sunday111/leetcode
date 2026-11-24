@@ -2,8 +2,8 @@
 #include <thread>
 
 #include "gtest/gtest.h"
-#include "profiling.hpp"
-#include "speedscope_json.hpp"
+#include "profiling/profiling.hpp"
+#include "profiling/speedscope_json.hpp"
 
 constexpr inline auto curr_frame = []() -> const profiling::Frame&
 {

@@ -3,7 +3,7 @@
 #include <ranges>
 #include <vector>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "radix_sort/radix_sort.hpp"
 
 template <typename To>

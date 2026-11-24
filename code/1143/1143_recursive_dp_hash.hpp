@@ -2,7 +2,7 @@
 #include <string_view>
 #include <unordered_map>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "integral_aliases.hpp"
 
 class Solution

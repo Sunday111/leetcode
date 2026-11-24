@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "pyramid_bitset/bitset_priority_queue.hpp"
-#include "reinterpret_range.hpp"
+#include "cast/reinterpret_range.hpp"
 
 class Solution
 {

@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "minmax/upd_min.hpp"
 
 class Solution

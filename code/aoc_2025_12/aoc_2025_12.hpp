@@ -13,7 +13,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "integral_aliases.hpp"
 #include "swap_if_greater.hpp"
 

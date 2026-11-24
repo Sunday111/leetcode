@@ -1,6 +1,6 @@
 #include <cmath>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 
 class Solution
 {

@@ -3,7 +3,7 @@
 #include <array>
 #include <vector>
 
-#include "cast.hpp"
+#include "cast/cast.hpp"
 #include "integral_aliases.hpp"
 
 struct Vec2

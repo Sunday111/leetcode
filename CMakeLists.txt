@@ -59,6 +59,9 @@ target_compile_options(benchmark_main PUBLIC -Wno-c2y-extensions)
 
 add_subdirectory(templates)
 add_subdirectory(test_utility)
+if(BUILD_TESTING)
+    add_subdirectory(templates_tests)
+endif()
 add_subdirectory(code)
 add_subdirectory(benchmarks)
 
