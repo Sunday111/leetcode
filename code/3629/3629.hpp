@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <array>
 #include <set>
 #include <unordered_map>
 #include <utility>
@@ -8,10 +9,10 @@
 #include "bump/bump_hash_map.hpp"
 #include "bump/bump_set.hpp"
 #include "cast/cast.hpp"
-#include "math/ceil_div.hpp"
 #include "empty.hpp"
-#include "math/factorizer.hpp"
 #include "integral_aliases.hpp"
+#include "math/ceil_div.hpp"
+#include "math/linear_sieve.hpp"
 #include "pyramid_bitset/pbs_add.hpp"
 #include "pyramid_bitset/pbs_add_ex.hpp"
 #include "pyramid_bitset/pbs_initialize.hpp"
@@ -20,7 +21,13 @@
 #include "pyramid_bitset/pbs_remove.hpp"
 #include "pyramid_bitset/pbs_required_buffer_words.hpp"
 
-inline static const Factorizer<1'000'001, 100'001> factorizer;
+inline static const auto smallest_prime_factors = []
+{
+    std::array<u32, 1'000'002> spf{};
+    u32 primes[100'001];
+    linear_sieve<1'000'001>(spf.data(), primes, std::size(primes));
+    return spf;
+}();
 
 using SolutionStorage = GlobalBufferStorage<1 << 25>;
 
@@ -57,13 +64,14 @@ public:
             ObjectWithoutDtor<BumpSet<u32, SolutionStorage>>,
             SolutionStorage>>
             edges;
+        const auto* spf = smallest_prime_factors.data();
         for (u32 i = 0; i != n; ++i)
         {
             u32 v = nums[i];
 
             for (u32 x = v; x > 1;)
             {
-                u32 prime = factorizer.spf[x];
+                u32 prime = spf[x];
                 while (!(x % prime)) x /= prime;
 
                 if (head->contains(prime))

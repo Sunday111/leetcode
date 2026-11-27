@@ -3,10 +3,12 @@
 #include <algorithm>
 #include <array>
 #include <span>
+#include <utility>
 #include <vector>
 
-#include "math/factorizer.hpp"
 #include "int_if.hpp"
+#include "math/for_each_prime_factor.hpp"
+#include "math/linear_sieve.hpp"
 
 struct Node  // NOLINT
 {
@@ -30,13 +32,16 @@ public:
 
     inline static auto kernels = []()  // NOLINT
     {
-        Factorizer<100'001, 10'001> factorizer{};
+        u32 spf[100'001];
+        u32 primes[10'001];
+        linear_sieve<100'000>(spf, primes, std::size(primes));
         std::array<u32, 100'001> result{};
 
         for (u32 x = 1; x != result.size(); ++x)
         {
             u32& kernel = result[x] = 1u;
-            factorizer.factorize(
+            for_each_prime_factor(
+                spf,
                 x,
                 [&](u32 prime, u32 power)
                 {
