@@ -10,15 +10,18 @@
 #include "sort_order.hpp"
 #include "uint_for_value.hpp"
 
-// Stably sort by the low key_bits bits. Full-width signed keys use signed
-// order.
+// Stably sort by key_bits bits starting at skip_bits. Full-width signed keys
+// use signed order.
 template <
     u32 key_bits,
     u8 bits_per_pass = 10,
     SortOrder order = SortOrder::Ascending,
     u32 capacity = 100'001,
+    u32 skip_bits = 0,
     std::integral T>
-    requires(sizeof(T) > 1 && bits_per_pass > 0 && key_bits <= sizeof(T) * 8)
+    requires(
+        sizeof(T) > 1 && bits_per_pass > 0 &&
+        u64{skip_bits} + key_bits <= sizeof(T) * 8)
 [[gnu::always_inline]] inline void radix_sort(T* data, u32 n) noexcept
 {
     using UT = std::make_unsigned_t<T>;
@@ -31,8 +34,9 @@ template <
     auto* temp = RadixSortStorage::scratch<UT, capacity>;
     const auto do_pass = [=]<u8 pass_index> [[gnu::always_inline]] () noexcept
     {
-        constexpr u32 shift = pass_index * bits_per_pass;
-        constexpr u32 remaining = key_bits - shift;
+        constexpr u32 processed = pass_index * bits_per_pass;
+        constexpr u32 shift = skip_bits + processed;
+        constexpr u32 remaining = key_bits - processed;
         constexpr u32 digit_bits =
             remaining < bits_per_pass ? remaining : bits_per_pass;
         static_assert(digit_bits < 32);

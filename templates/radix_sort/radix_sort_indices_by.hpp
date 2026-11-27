@@ -11,22 +11,24 @@
 #include "sort_order.hpp"
 #include "uint_for_value.hpp"
 
-// Stably sort indices by the low key_bits bits of proj(index).
+// Stably sort indices by key_bits bits starting at skip_bits of proj(index).
 // Full-width signed keys use signed order.
 template <
     u32 key_bits,
     u8 bits_per_pass = 10,
     SortOrder order = SortOrder::Ascending,
     u32 capacity = 100'001,
+    u32 skip_bits = 0,
     std::unsigned_integral I,
     typename Proj>
     requires(
         bits_per_pass > 0 &&
         std::integral<
             std::remove_cvref_t<std::invoke_result_t<Proj&, const I&>>> &&
-        key_bits <= sizeof(std::invoke_result_t<Proj&, const I&>) * 8)
+        u64{skip_bits} + key_bits <=
+            sizeof(std::invoke_result_t<Proj&, const I&>) * 8)
 [[gnu::always_inline]] inline void
-radix_sort_indices_by(I* indices, u32 n, Proj proj) noexcept
+    radix_sort_indices_by(I* indices, u32 n, Proj proj) noexcept
 {
     using Key = std::remove_cvref_t<std::invoke_result_t<Proj&, const I&>>;
     using Count = UintForValue<capacity>;
@@ -36,8 +38,9 @@ radix_sort_indices_by(I* indices, u32 n, Proj proj) noexcept
     auto* temp = RadixSortStorage::scratch<I, capacity>;
     const auto do_pass = [&]<u8 pass_index> [[gnu::always_inline]] () noexcept
     {
-        constexpr u32 shift = pass_index * bits_per_pass;
-        constexpr u32 remaining = key_bits - shift;
+        constexpr u32 processed = pass_index * bits_per_pass;
+        constexpr u32 shift = skip_bits + processed;
+        constexpr u32 remaining = key_bits - processed;
         constexpr u32 digit_bits =
             remaining < bits_per_pass ? remaining : bits_per_pass;
         static_assert(digit_bits < 32);

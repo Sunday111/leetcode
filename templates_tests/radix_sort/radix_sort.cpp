@@ -1,10 +1,12 @@
+#include "radix_sort/radix_sort.hpp"
+
 #include <algorithm>
+#include <array>
 #include <limits>
 #include <random>
 #include <vector>
 
 #include "gtest/gtest.h"
-#include "radix_sort/radix_sort.hpp"
 
 template <typename T, u32 key_bits, u8 bits_per_pass>
 concept CanRadixSort =
@@ -266,4 +268,18 @@ TYPED_TEST_SUITE(StableRadixSortTest, StableTestTypes);
 TYPED_TEST(StableRadixSortTest, RandomizedCorrectness)
 {
     this->run_sort_tests();
+}
+
+TEST(RadixSort, StableAcrossIgnoredBitsOnBothSides)
+{
+    u64 values[]{0xF1200000009, 0x20200000003, 0x11200000001, 0x01000000004};
+    radix_sort<5, 3, SortOrder::Ascending, 4, 32>(values, 4);
+    EXPECT_TRUE(
+        std::ranges::equal(
+            values,
+            std::array<u64, 4>{
+                0x20200000003,
+                0x01000000004,
+                0xF1200000009,
+                0x11200000001}));
 }

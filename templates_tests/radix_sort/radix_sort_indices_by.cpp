@@ -1,3 +1,5 @@
+#include "radix_sort/radix_sort_indices_by.hpp"
+
 #include <algorithm>
 #include <array>
 #include <bit>
@@ -8,7 +10,6 @@
 #include <vector>
 
 #include "gtest/gtest.h"
-#include "radix_sort/radix_sort_indices_by.hpp"
 
 template <u32 bits, u8 digit_bits, typename I, typename Proj>
 concept CanRadixSortIndices = requires(I* data, Proj proj) {
@@ -198,4 +199,15 @@ TEST(RadixSortIndicesBy, MatchesStableSortOfProjectedKeys)
     check.template operator()<int32_t, 25, 10>();
     check.template operator()<int64_t, 64, 17>();
     check.template operator()<u64, 37, 5>();
+}
+
+TEST(RadixSortIndicesBy, StableDescendingHighField)
+{
+    const u64 keys[]{0x1200000009, 0x0200000003, 0x1200000001, 0x1000000004};
+    u32 indices[]{2, 1, 0, 3};
+    radix_sort_indices_by<32, 7, SortOrder::Descending, 4, 32>(
+        indices,
+        4,
+        [&](u32 i) { return keys[i]; });
+    EXPECT_TRUE(std::ranges::equal(indices, std::array<u32, 4>{2, 0, 3, 1}));
 }
